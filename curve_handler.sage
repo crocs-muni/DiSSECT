@@ -274,3 +274,6 @@ def timeout(func, args=(), kwargs={}, timeout_duration = 10):
     def my_new_func():
         return func(*args, **kwargs)
     return my_new_func()
+
+curve_db = import_curve_db('../curves_json')
+curves = sorted(custom_curves(curve_db))
