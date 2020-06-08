@@ -43,4 +43,6 @@ def pretty_print_results(test_name, result_names, captions, head = 2^100, curve_
     
     if save_to_txt:
         with open(outfile, "w") as f:
+            f.write(str(param_table))
+            f.write('\n\n')
             f.write(str(t))
