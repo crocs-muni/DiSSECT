@@ -1,4 +1,4 @@
-def pretty_print_general_results(result_names, captions, trim, curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True, infile = path, outfile = path_txt):
+def pretty_print_general_results(result_names, captions, head = 2^100, curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True, infile = path, outfile = path_txt):
     total = load_from_json(infile)
     params = total['parameters']
     param_table = PrettyTable(['parameter', 'value'])
@@ -21,7 +21,7 @@ def pretty_print_general_results(result_names, captions, trim, curve_list = curv
         if name in names_computed:
             res_sorted = []
             for res in result_names:
-                res_sorted.append(sorted(results[name][res], key = res_sort_key)[-trim:])
+                res_sorted.append(sorted(results[name][res], key = res_sort_key)[:head])
         else:
             res_sorted = ["Not computed"] * cols
         row = [name, order_bits]
