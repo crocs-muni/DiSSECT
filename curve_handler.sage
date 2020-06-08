@@ -276,5 +276,12 @@ def timeout(func, args=(), kwargs={}, timeout_duration = 10):
         return func(*args, **kwargs)
     return my_new_func()
 
-curve_db = import_curve_db('../curves_json')
-curves = sorted(custom_curves(curve_db))
+try:
+    curve_db
+except NameError:
+    curve_db = import_curve_db('../curves_json')
+
+try:
+    curves
+except NameError:
+    curves = sorted(custom_curves(curve_db))
