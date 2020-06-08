@@ -4,6 +4,13 @@ def init_test(test_name):
     path_txt = os.path.splitext(path_json)[0] + ".txt"
     return path_json, path_progress, path_txt
 
+#https://ask.sagemath.org/question/10112/kill-the-thread-in-a-long-computation/
+def timeout(func, args=(), kwargs={}, timeout_duration = 10):
+    @fork(timeout=timeout_duration, verbose=False)
+    def my_new_func():
+        return func(*args, **kwargs)
+    return my_new_func()
+
 def pretty_print_results(test_name, result_names, captions, head = 2^100, curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True):
     infile, _, outfile = init_test(test_name)
     total = load_from_json(infile)
@@ -46,3 +53,9 @@ def pretty_print_results(test_name, result_names, captions, head = 2^100, curve_
             f.write(str(param_table))
             f.write('\n\n')
             f.write(str(t))
+
+def ints_before_strings(x):
+    try:
+        return ZZ(x)
+    except:
+        return oo

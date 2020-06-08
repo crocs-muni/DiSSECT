@@ -263,19 +263,6 @@ def embedding_degree(E, r):
     q = (E.base_field()).order()
     return embedding_degree_q(q, r)
 
-def ints_before_strings(x):
-    try:
-        return ZZ(x)
-    except:
-        return oo
-
-#https://ask.sagemath.org/question/10112/kill-the-thread-in-a-long-computation/
-def timeout(func, args=(), kwargs={}, timeout_duration = 10):
-    @fork(timeout=timeout_duration, verbose=False)
-    def my_new_func():
-        return func(*args, **kwargs)
-    return my_new_func()
-
 try:
     curve_db
 except NameError:
