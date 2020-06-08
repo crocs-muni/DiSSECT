@@ -4,7 +4,7 @@ def init_test(test_name):
     path_txt = os.path.splitext(path_json)[0] + ".txt"
     return path_json, path_progress, path_txt
 
-def pretty_print_results(test_name, result_names, captions, trim, curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True):
+def pretty_print_results(test_name, result_names, captions, head = 2^100, curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True):
     infile, _, outfile = init_test(test_name)
     total = load_from_json(infile)
     params = total['parameters']
