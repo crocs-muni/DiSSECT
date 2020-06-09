@@ -1,6 +1,7 @@
 {
   "name": "x962_sim_256",
   "desc": "simulated curves generated according to the X9.62 standard using the initial seed C49D360886E704936A6678E1139D26B7819F7E90",
+  "count": "50000 curves tried",
   "curves": [
     {
       "name": "x962_sim_256_rel_seed_-36",
