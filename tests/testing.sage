@@ -11,6 +11,33 @@ def timeout(func, args=(), kwargs={}, timeout_duration = 10):
         return func(*args, **kwargs)
     return my_new_func()
 
+# parameters = {'l_max': 100}
+def compute_results(test_name, parameters, curve_list = curves, order_bound = 256):
+    jsonfile, progressfile, _ = init_test(test_name)
+    def feedback(text, outfile = progressfile):
+        print(text)
+        with open(outfile, 'a') as f:
+            f.write(text)
+
+    total = {'parameters': {}, 'results': {}}
+    total['parameters'] = parameters
+    # parameters = {'l_max': 100}
+    param_list = list(parameters.values())
+    results = {}
+    for curve in curve_list:
+        feedback("Processing curve " + curve.name + ":\t")
+        
+        if curve.order.nbits() > order_bound:
+            feedback("Too large order\n")
+            continue
+        # TODO: add timeout support
+
+        results[curve.name] = get_curve_results(curve, *param_list)
+        feedback("Done\n")
+        
+        total['results'] = results
+        save_into_json(total, jsonfile, 'w')
+
 def pretty_print_results(test_name, result_names, captions, head = 2^100, curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True):
     infile, _, outfile = init_test(test_name)
     total = load_from_json(infile)
