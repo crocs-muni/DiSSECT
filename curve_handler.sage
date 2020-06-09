@@ -92,7 +92,7 @@ class IntegerEncoder(json.JSONEncoder):
         
 def save_into_json(results, fname, mode = 'a'):
     with open(fname, mode) as f:
-        json.dump(results, f, cls = IntegerEncoder)
+        json.dump(results, f, indent = 2, cls = IntegerEncoder)
         
 def load_from_json(fname):
     with open(fname, 'r') as f:
