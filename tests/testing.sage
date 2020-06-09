@@ -88,3 +88,6 @@ def ints_before_strings(x):
         return ZZ(x)
     except:
         return oo
+
+def remove_values_from_list(l, val):
+   return [value for value in l if value != val]
