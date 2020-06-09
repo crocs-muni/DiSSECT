@@ -11,8 +11,11 @@ def timeout(func, args=(), kwargs={}, timeout_duration = 10):
         return func(*args, **kwargs)
     return my_new_func()
 
-def compute_results(test_name, parameters, curve_list = curves, order_bound = 256):
+def compute_results(test_name, parameters, curve_list = curves, order_bound = 256, overwrite = False):
     jsonfile, logfile, _ = init_test(test_name)
+    if os.path.exists(jsonfile) and not overwrite:
+        print("The result file already exists! Aborting...")
+        return
     def feedback(text, frmt = '{:s}', outfile = logfile):
         print(text)
         with open(outfile, 'a') as f:
@@ -30,7 +33,7 @@ def compute_results(test_name, parameters, curve_list = curves, order_bound = 25
         if curve.order.nbits() > order_bound:
             feedback("Too large order\n")
             continue
-        
+
         results[curve.name] = get_curve_results(curve, *param_list)
         feedback("Done\n")
         
