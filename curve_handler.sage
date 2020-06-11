@@ -19,6 +19,9 @@ def import_curve_db(root = './curves_json'):
         source = path.split("/")[-1]
         suffix = ""
         for file in files:
+            if os.path.splitext(file)[-1] != ".json":
+                continue
+
             if "sim" in path:
                 suffix = "-" + str(re.findall(r'\d+', file)[0])
             with open(os.path.join(path, file)) as f:
