@@ -12,9 +12,9 @@ def a2_curve_function(curve):
     curve_results['max_conductor'] = ZZ(sqrt(d/d.squarefree_part()))
     return curve_results
 
-def compute_a2_results(order_bound = 256, overwrite = False):
+def compute_a2_results(order_bound = 256, overwrite = False, curve_list = curves):
     parameters = {}
-    compute_results('a2', a2_curve_function, parameters, order_bound, overwrite)
+    compute_results('a2', a2_curve_function, parameters, order_bound, overwrite, curve_list = curve_list)
 
 def pretty_print_a2_results(save_to_txt = True):
     pretty_print_results('a2', [['factorization'], ['max_conductor']], ['CM disc factorization', 'max conductor'], save_to_txt = save_to_txt)
