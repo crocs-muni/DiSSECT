@@ -27,6 +27,10 @@ def compute_results(test_name, curve_function, parameters, order_bound = 256, ov
     total['parameters'] = parameters
     param_list = list(parameters.values())
     results = {}
+
+    start_time = time.time()
+    total_time = 0
+
     for curve in curve_list:
         feedback("Processing curve " + curve.name, '{:.<45}')
         
@@ -35,10 +39,17 @@ def compute_results(test_name, curve_function, parameters, order_bound = 256, ov
             continue
 
         results[curve.name] = curve_function(curve, *param_list)
-        feedback("Done\n")
+
+        end_time = time.time()
+        diff_time = end_time - start_time
+        total_time += diff_time
+
+        feedback("Finished, total time elapsed: " + str(diff_time) + "\n")
         
         total['results'] = results
         save_into_json(total, jsonfile, 'w')
+        start_time = time.time()
+    feedback("Total time elapsed: " + str(total_time))
 
 def pretty_print_results(test_name, result_names, captions, head = 2^100, curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True):
     infile, _, outfile = init_test(test_name)
