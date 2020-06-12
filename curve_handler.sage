@@ -276,3 +276,13 @@ try:
     curves
 except NameError:
     curves = sorted(custom_curves(curve_db))
+
+try:
+    curves_sample
+except NameError:
+    curves_sample = [c for c in curves if c.name in ["secp112r1", "secp192r1", "secp256r1"]]
+
+try:
+    curves_sim
+except NameError:
+    curves_sim = [c for c in curves if "sim" in c.name]
