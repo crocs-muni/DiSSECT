@@ -3,7 +3,10 @@ load("test_interface.sage")
 
 def mult_ord_gen(order, l_max):
     for l in prime_range(l_max):
-        yield Mod(l, order).multiplicative_order()
+    	try:
+        	yield Mod(l, order).multiplicative_order()
+        except TypeError as e:
+        	yield None
 
 def a12_curve_function(curve, l_max):
     curve_results = {}
