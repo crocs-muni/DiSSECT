@@ -78,7 +78,10 @@ def pretty_print_results(test_name, result_names, captions, head = 2^100, curve_
                 data = results[name]
                 for r in res:
                     data = data[r]
-                res_sorted.append(sorted(data, key = res_sort_key)[:head])
+                try:
+                    res_sorted.append(sorted(data, key = res_sort_key)[:head])
+                except TypeError as e:
+                    res_sorted.append(data)
         else:
             res_sorted = ["Not computed"] * cols
         row = [name, order_bits]
