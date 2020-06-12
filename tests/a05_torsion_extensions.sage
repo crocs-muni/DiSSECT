@@ -22,7 +22,7 @@ def ext_card(E, deg):
     return card_high
 
 def extend(E, deg):
-    '''returns curve over deg-th relative extension'''
+    '''returns curve over deg-th relative extension; does not seem to work for binary curves'''
     q = E.base_field().order()
     R.<x> = E.base_field()[]
     pol = R.irreducible_element(deg)
@@ -77,7 +77,7 @@ def a5_curve_function(curve, l_max):
     for l in prime_range(l_max):
         try:
             least, full, relative = find_torsions(E, l)
-        except (ArithmeticError, TypeError) as e:
+        except (ArithmeticError, TypeError, ValueError) as e:
             least, full, relative = None, None, None
         
         curve_results['least'].append(least)
