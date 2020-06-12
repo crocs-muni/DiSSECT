@@ -210,6 +210,9 @@ class CustomCurve:
         else:
             self.EC = "Not implemented"
 
+        self.q = self.EC.base_field().order()
+        self.trace = self.q + 1 - self.order * self.cofactor
+
     def __repr__(self):
         return self.name + ": " + str(self.nbits) + "-bit curve in " + self.form + " form over " + self.field['type'] + " field" 
     
