@@ -17,7 +17,7 @@ def compute_results(test_name, curve_function, parameters, order_bound = 256, ov
         print("The result file already exists! Aborting...")
         return
     def feedback(text, frmt = '{:s}', outfile = logfile):
-        print(text)
+        print(frmt.format(text), end = '')
         with open(outfile, 'a') as f:
             f.write(frmt.format(text))
     with open(logfile, 'w'):
@@ -44,12 +44,12 @@ def compute_results(test_name, curve_function, parameters, order_bound = 256, ov
         diff_time = end_time - start_time
         total_time += diff_time
 
-        feedback("Finished, total time elapsed: " + str(diff_time) + "\n")
+        feedback("Done, time elapsed: " + str(diff_time) + "\n")
         
         total['results'] = results
         save_into_json(total, jsonfile, 'w')
         start_time = time.time()
-    feedback("Total time elapsed: " + str(total_time))
+    feedback(90 * '.' + "\n" + "Finished, total time elapsed: " + str(total_time))
 
 def pretty_print_results(test_name, result_names, captions, head = 2^100, curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True):
     infile, _, outfile = init_test(test_name)
