@@ -23,7 +23,7 @@ A19) lokální výšky
 A20) S-integrální body
 A21) Galoisovy grupy různých polynomů
 A22) torzní lístky (rozklady division polynomů) 
-A24) rozklady modulárních polynomů
+A24) rozšíření, kde se objevují isogenie (i1, i2)
 A23) výška a stupeň vulkánu
 
 "informatické":
