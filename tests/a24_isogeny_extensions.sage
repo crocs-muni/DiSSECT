@@ -45,6 +45,7 @@ def eigenvalues(E, l, s=1):
 # Returns i2, i1
 def i_finder(E, l):
     eig = eigenvalues(E, l)
+    # Case with no eigenvalues
     if not eig:
         eig = eigenvalues(E, l, s=2)
         a, b = eig[0][0], eig[1][0]
@@ -53,18 +54,21 @@ def i_finder(E, l):
         return i2, i1
 
     a = eig[0][0]
+    # Case with 2 eigenvalues
     if len(eig) == 2:
         b = eig[1][0]
         i1 = 1
         i2 = (a * b ** (-1)).multiplicative_order()
         return i2, i1
-
+    # Case with 1 eigenvalue
     i1 = 1
     i2 = 1
     if is_torsion_cyclic(E, l, a.multiplicative_order()):
         i2 *= l
     return i2, i1
 
+# Computes i2,i1 (see i_finder) for all l<l_max
+# Returns a dictionary (keys: 'least' (i1), 'full' (i2), 'relative' (i2/i1))
 def a24_curve_function(curve, l_max):
     E = curve.EC
     curve_results = {'least': [], 'full': [], 'relative': []}

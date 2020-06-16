@@ -8,6 +8,8 @@ def attempt_factor(n, t):
         factorization = None
     return factorization
 
+# Factorizations (lists of prime factors) of k*n+-1 where k=1,..,k_max
+# Returns list of lists
 def near_order_factorizations(n, sign = '+', k_max = 10, t = 10):
     factorizations = []
     assert sign in ['+', '-']

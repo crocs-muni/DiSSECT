@@ -1,6 +1,8 @@
 load("../curve_handler.sage")
 load("test_interface.sage")
 
+# Computes the depth of volcano and the degree of the crater subgraph containing E
+# Returns a dictionary (keys: 'crater_degree', 'depth')
 def a23_curve_function(curve,l):
     E = curve.EC
     t = curve.trace
