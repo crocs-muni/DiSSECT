@@ -1,0 +1,56 @@
+Nápady na testy:
+
+"algebraické":
+A1) grupová struktura křivky v rozšířeních
+A2) maximální konduktor a jeho faktorizace
+A3) distribuce a velikosti tříd isogenií
+A4) faktorizace čísel tvaru kn\pm1, kde n je řád křivky
+A5) stupně rozšíření, kde se nachází částečná/celá l-torze pro malé l
+A6) CM diskriminanty v rozšířeních a dekompozice malých prvočísel vůči nim
+A7) lifty křivek (nad Q, číselnými tělesy nebo lokálními tělesy) - minimální diskriminant, špatná redukce a její typ, homogenní prostory, Tate-Shafarevichova grupa, regulátor,...
+A8) grupy tříd ideálů 
+A9) existence pairing-friendly cyklů
+A10) existence faktorizačních bází
+A11) minimální kódová slova v eliptických kódech
+A12) řády malých prvočísel modulo řád křivky
+A13) obrazy různých párování
+A14) konduktor, modularita
+A15) mřížka asociovaná křivce nad C
+A16) Neronův model (Silverman II, 448)
+A17) L-series
+A18) invariantní diferenciál
+A19) lokální výšky
+A20) S-integrální body
+A21) Galoisovy grupy různých polynomů
+A22) výška a stupeň vulkánu
+
+"informatické":
+I1) křivky, které vzniknou pár bitflipy parametrů
+I2) křivky se stejným j-invariantem/počtem bodů, ale jiným p
+I3) počet modulárních redukcí v některých výpočtech
+I4) souřadnice speciálních skalárních násobků
+I5) zranitelnost vůči rho, kangaroo
+I6) čtvercové faktory 4p-1, 4n-1
+I7) vzdálenost řádu k nejbližší mocnině dvojky
+
+"statistické":
+S1) division polynomy; obecně vlastnosti skalárního násobení (související - půlení bodů: https://arxiv.org/pdf/0706.4379.pdf)
+S2) distribuce souřadnic bodů v různých intervalech
+S3) jiné modely křivek
+S4) modulární polynomy v daném j-invariantu
+S5) obrazy generátorů pod isogeniemi
+S6) sumační polynomy
+S7) distribuce křivek s podobnými vlastnostmi
+S8) jak vypadá funkce posun o generátor?
+Hodně věcí dává smysl testovat i pro twisty/isogenní/isomorfní křivky.
+Zajímavé zdroje: 
+https://github.com/scipr-lab/ecfactory/tree/master/ecfactory
+https://doc.sagemath.org/html/en/reference/curves/sage/schemes/elliptic_curves/ell_rational_field.html
+
+Aktuálně:
+Hotová základní infrastruktura pro práci s křivkami všech forem, ukládání výsledků do JSONu a následnou vizualizaci.
+Hotové funkci pro generování a zpracování simulovaných křivek (v základním nastavení).
+A12) Nízké periody operace násobení malým skalárem by mohly být zajímavé.
+Hotovo pro prvočísla <100 a n <= 300 bitů.
+A4) Vynásobení bodu na křivce (v SW formě) číslem tvaru kn+-1 zachovává x-ovou souřadnici. Je-li takové číslo hladké, mohlo by to být užitečné. Proto dává smysl zkoumat, zda jsou takováto číslo hladší, než očekáváme. Nedokončeno
+Výtky k X9.62: chyba ve verifikaci r (floor vs ceiling), nedostatečná specifikace r_min

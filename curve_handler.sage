@@ -146,23 +146,40 @@ def twisted_edwards_to_short_weierstrass(F, aa, d, x, y, composition = False):
 class CustomCurve:
     
     def __init__(self, db_curve):
+        '''the "fixed" part of attributes'''
         self.name = db_curve['name']
         self.order = ZZ(db_curve['order'])
         self.source = db_curve['category']
         self.field = db_curve['field']
         self.form = db_curve['form']
         self.params = db_curve['params']
-        self.x = ZZ(db_curve['generator']['x'])
-        self.y = ZZ(db_curve['generator']['y'])
         self.desc = db_curve['desc']
         self.cofactor = ZZ(db_curve['cofactor'])
         self.nbits =  self.order.nbits()
-#         self.characteristics = db_curve['characteristics']
-        self.set()
+        self.EC = None
+        self.generator = None
+        '''the "variable" part of attributes'''    
         try:
             self.seed = db_curve['seed']
-        except:
-            pass
+        except KeyError:
+            self.seed = None
+        try:
+            self.x = ZZ(db_curve['generator']['x'])
+            self.y = ZZ(db_curve['generator']['y'])
+        except TypeError:
+            self.x = None
+            self.y = None
+    #         self.characteristics = db_curve['characteristics']
+        self.set()
+
+    def set_generator(self, coord1, coord2, binary = False):
+        if self.x == None or self.y == None:
+            self.generator = None
+        else:
+            if binary:
+                self.generator = self.EC(K.fetch_int(coord1), K.fetch_int(coord2))
+            else:
+                self.generator = self.EC(coord1, coord2)
 
     def set(self):
         x = self.x
@@ -173,7 +190,7 @@ class CustomCurve:
             if self.field['type'] == "Prime":
                 p = ZZ(self.field['p'])
                 self.EC = EllipticCurve(GF(p), [a,b])
-                self.generator = self.EC(x,y)
+                self.set_generator(x,y)
             elif self.field['type'] == "Binary":
                 exponents = list(self.field['poly'].values())
                 exponents.append(0)
@@ -184,7 +201,11 @@ class CustomCurve:
                 m = ZZ(self.field['poly']['m'])
                 K = GF(2^m, 'w', modulus)
                 self.EC = EllipticCurve(K, [1,K.fetch_int(ZZ(a)),0,0,K.fetch_int(ZZ(b))]) #xy, x^2, y, x, 1
-                self.generator = self.EC(K.fetch_int(x), K.fetch_int(y))
+                # print(self.EC)
+                self.generator = None
+                # self.set_generator(x,y)
+                # needs fixing, originally:
+                # self.generator = self.EC(K.fetch_int(x), K.fetch_int(y))
 
         elif self.form == "Montgomery":
             A = ZZ(self.params['a'])
@@ -193,7 +214,7 @@ class CustomCurve:
             F = GF(p)
             a, b, u, v = montgomery_to_short_weierstrass(F, A, B, x, y)
             self.EC = EllipticCurve(F, [a,b])
-            self.generator = self.EC(u, v)
+            self.set_generator(u,v)
 
         elif self.form in ["Edwards", "TwistedEdwards"]:
             #we assume c=1
@@ -206,7 +227,7 @@ class CustomCurve:
             F = GF(p)
             a, b, xx, yy = twisted_edwards_to_short_weierstrass(F, aa, d, x, y)
             self.EC = EllipticCurve(F, [a,b])
-            self.generator = self.EC(xx, yy)
+            self.set_generator(xx,yy)
         else:
             self.EC = "Not implemented"
 
@@ -273,7 +294,7 @@ def embedding_degree(E, r):
 try:
     curve_db
 except NameError:
-    curve_db = import_curve_db('../curves_json')
+    curve_db = import_curve_db('./curves_json')
 
 try:
     curves
