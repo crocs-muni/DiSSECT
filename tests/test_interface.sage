@@ -32,7 +32,7 @@ def compute_results(test_name, curve_function, parameters, order_bound = 256, ov
     total_time = 0
 
     for curve in curve_list:
-        feedback("Processing curve " + curve.name, '{:.<45}')
+        feedback("Processing curve " + curve.name, '{:.<60}')
         
         if curve.order.nbits() > order_bound:
             feedback("Too large order\n")
