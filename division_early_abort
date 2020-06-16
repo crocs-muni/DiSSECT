@@ -1,0 +1,30 @@
+========256 bit========
+_______iter(p)__f(p)
+1/2	0,1	3/2
+1/3	0,17	1/2
+1/5	0,25	1/5
+1/7	0,35	12/105
+
+
+0,03 overhead contained in all iterations
+	- polynomial ring generation
+
+
+f(p) = (1-1/2)(1-1/3)...1/p*3
+	- order computation
+
+iter(p)
+	- division polynomial generation
+	- root finding
+	- y-coordinate computation omitted (fast)
+
+interesting cases:
+	iter(p)<f(p)
+
+========112,192 bit==========
+2-division polynomial is barely useful
+
+
+
+	
+
