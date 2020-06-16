@@ -22,7 +22,9 @@ A18) invariantní diferenciál
 A19) lokální výšky
 A20) S-integrální body
 A21) Galoisovy grupy různých polynomů
-A22) výška a stupeň vulkánu
+A22) torzní lístky (rozklady division polynomů) 
+A24) rozklady modulárních polynomů
+A23) výška a stupeň vulkánu
 
 "informatické":
 I1) křivky, které vzniknou pár bitflipy parametrů
