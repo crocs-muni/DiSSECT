@@ -30,14 +30,18 @@ def extend(E, deg):
     EE = E.base_extend(Fext)
     return EE
 
+# Computes the smallest extension which contains a nontrivial r-torsion point
+# Returns the degree
 def find_least_torsion(E, r):
-    print(r)
+#    print(r)
+    # Trial and error through divisors of r^2-1
     for deg in divisors(r^2-1):
         if ext_card(E, deg) % r == 0:
 #             assert deg in [1, (r-1)/2, (r^2-1)/2]
             return deg
     return None
 
+# True if the r-torsion is cyclic and False otherwise (bycyclic)
 def is_torsion_cyclic(E, r, deg):
     card = ext_card(E, deg)
     assert card % r^2 == 0
@@ -49,19 +53,25 @@ def is_torsion_cyclic(E, r, deg):
             return True
     return False
 
+# Computes the smallest extension which contains full r-torsion subgroup
+# Least is the result of find_least_torsion
+# Returns the degree
 def find_full_torsion(E, r, least):
     p = E.base_field().order()
     q = p^least
     k = embedding_degree_q(q, r)
-    if k > 1:
+    # k satisfies r|a^k-1 where a,1 are eigenvalues of Frobenius of extended E
+    if k > 1: #i.e. a!=1
         return k * least
-    else:
+    else: #i.e. a==1, we have two options for the geometric multiplicity
         card = ext_card(E, least)
-        if (card % r^2) == 0 and not is_torsion_cyclic(E, r, least):
+        if (card % r^2) == 0 and not is_torsion_cyclic(E, r, least): # geom. multiplicity is 2
             return least
-        else:
-            return r * least
+        else: # geom. multiplicity is 1
+            return r * least 
 
+# Computes k1,k2, k2/k1 where k2(k1) is the smallest extension containing all(some) r-torsion points
+# Returns a triple
 def find_torsions(E, r):
     least = find_least_torsion(E, r)
     if least == r^2-1:
@@ -70,6 +80,7 @@ def find_torsions(E, r):
         full = find_full_torsion(E, r, least)
     return (least, full, ZZ(full/least))
 
+# Computes find_torsions for all r<l_max and returns a dictionary
 def a5_curve_function(curve, l_max):
     E = curve.EC
     curve_results = {'least': [], 'full': [], 'relative': []}

@@ -1,6 +1,8 @@
 load("../curve_handler.sage")
 load("test_interface.sage")
 
+# Computation of d_K (cm_disc), v (max_conductor) and factorization of D where D=t^2-4q = v^2*d_K
+# Returns a dictionary (keys: 'cm_disc', 'factorization', 'max_conductor') 
 def a2_curve_function(curve):
     E = curve.EC
     t = curve.trace
