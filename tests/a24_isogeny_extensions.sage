@@ -33,21 +33,21 @@ def is_torsion_cyclic(E, r, deg):
     return False
 
 # Computes the eigenvalues of Frobenius endomorphism in F_l, or in F_l if s=2
-def eigenvalues(E, l, s=1):
-    t = E.trace_of_frobenius()
+def eigenvalues(curve, l, s=1):
     x = PolynomialRing(GF(l ** s), 'x').gen()
-    q = E.base_field().order()
+    q = curve.q
+    t = curve.trace
     f = x ** 2 - t * x + q
     return f.roots()
 
 # Finds the minimal degrees i_2,i_1 of extension of curve E/F_q where
 # E/F_q**(i_2) - all l+1 isogenies are rational, E/F_q**(i_1) - at least 1 isogeny is rational
 # Returns i2, i1
-def i_finder(E, l):
-    eig = eigenvalues(E, l)
+def i_finder(curve, l):
+    eig = eigenvalues(curve, l)
     # Case with no eigenvalues
     if not eig:
-        eig = eigenvalues(E, l, s=2)
+        eig = eigenvalues(curve, l, s=2)
         a, b = eig[0][0], eig[1][0]
         i2 = (a * b ** (-1)).multiplicative_order()
         i1 = i2
@@ -63,19 +63,23 @@ def i_finder(E, l):
     # Case with 1 eigenvalue
     i1 = 1
     i2 = 1
-    if is_torsion_cyclic(E, l, a.multiplicative_order()):
+    deg = a.multiplicative_order()
+    E = curve.EC
+    card = ext_card(E, deg)
+    if card % r^2 != 0 or is_torsion_cyclic(E, l, deg):
         i2 *= l
     return i2, i1
 
-# Computes i2,i1 (see i_finder) for all l<l_max
+# Computes i2,i1 (see i_finder) for all primes l<l_max
 # Returns a dictionary (keys: 'least' (i1), 'full' (i2), 'relative' (i2/i1))
 def a24_curve_function(curve, l_max):
     E = curve.EC
+    t = curve.trace
     curve_results = {'least': [], 'full': [], 'relative': []}
 
     for l in prime_range(l_max):
         try:
-            i2,i1 = i_finder(E,l)
+            i2,i1 = i_finder(curve, l)
             least, full, relative = i2,i1,i2//i1
         except (ArithmeticError, TypeError, ValueError) as e:
             least, full, relative = None, None, None
@@ -85,9 +89,9 @@ def a24_curve_function(curve, l_max):
         curve_results['relative'].append(relative)
     return curve_results
 
-def compute_24_results(l_max = 20, order_bound = 256, overwrite = False, curve_list = curves):
+def compute_a24_results(l_max = 20, order_bound = 256, overwrite = False, curve_list = curves):
     parameters = {'l_max': l_max}
     compute_results('a24', a24_curve_function, parameters, order_bound, overwrite, curve_list = curve_list)
 
-def pretty_print_24_results(save_to_txt = True):
-    pretty_print_results('24', [['least'], ['full'], ['relative']], ['first isogeny', 'all isogenies', 'relative ratio'], save_to_txt = save_to_txt, res_sort_key = lambda x: 1)
+def pretty_print_a24_results(save_to_txt = True):
+    pretty_print_results('a24', [['least'], ['full'], ['relative']], ['first isogeny', 'all isogenies', 'relative ratio'], save_to_txt = save_to_txt, res_sort_key = lambda x: 1)
