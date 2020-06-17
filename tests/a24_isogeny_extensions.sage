@@ -75,7 +75,7 @@ def a24_curve_function(curve, l_max):
 
     for l in prime_range(l_max):
         try:
-	    i2,i1 = i_finder(E,l)
+            i2,i1 = i_finder(E,l)
             least, full, relative = i2,i1,i2//i1
         except (ArithmeticError, TypeError, ValueError) as e:
             least, full, relative = None, None, None
