@@ -312,3 +312,8 @@ try:
     curves_sim
 except NameError:
     curves_sim = [c for c in curves if "sim" in c.name]
+
+try:
+    curves_std
+except NameError:
+    curves_std = [c for c in curves if not "sim" in c.name]
