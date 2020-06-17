@@ -158,6 +158,8 @@ class CustomCurve:
         self.nbits =  self.order.nbits()
         self.EC = None
         self.generator = None
+        self.q
+        self.trace
         '''the "variable" part of attributes'''    
         try:
             self.seed = db_curve['seed']
