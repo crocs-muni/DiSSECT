@@ -21,10 +21,10 @@ def extend(E, deg):
     EE = E.base_extend(Fext)
     return EE
 
-def is_torsion_cyclic(E, r, deg):
+def is_torsion_cyclic(E, l, deg):
     card = ext_card(E, deg)
-    assert card % r^2 == 0
-    m = ZZ(card / r)
+    assert card % l^2 == 0
+    m = ZZ(card / l)
     EE = extend(E, deg)
     for j in [1..5]:
         P = EE.random_element()

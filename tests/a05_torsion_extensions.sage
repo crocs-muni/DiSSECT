@@ -1,14 +1,14 @@
 load("../curve_handler.sage")
 load("test_interface.sage")
 
-def embedding_degree_q(q, r):
+def embedding_degree_q(q, l):
     '''returns embedding degree with respect to q'''
-    return Mod(q,r).multiplicative_order()
+    return Mod(q,l).multiplicative_order()
 
-def embedding_degree(E, r):
+def embedding_degree(E, l):
     '''returns relative embedding degree with respect to E'''
     q = (E.base_field()).order()
-    return embedding_degree_q(q, r)
+    return embedding_degree_q(q, l)
 
 def ext_card(E, deg):
     '''returns curve cardinality over deg-th relative extension'''
@@ -30,22 +30,22 @@ def extend(E, deg):
     EE = E.base_extend(Fext)
     return EE
 
-# Computes the smallest extension which contains a nontrivial r-torsion point
+# Computes the smallest extension which contains a nontrivial l-torsion point
 # Returns the degree
-def find_least_torsion(E, r):
+def find_least_torsion(E, l):
 #    print(r)
-    # Trial and error through divisors of r^2-1
-    for deg in divisors(r^2-1):
-        if ext_card(E, deg) % r == 0:
-#             assert deg in [1, (r-1)/2, (r^2-1)/2]
+    # Trial and error through divisors of l^2-1
+    for deg in divisors(l^2-1):
+        if ext_card(E, deg) % l == 0:
+#             assert deg in [1, (l-1)/2, (l^2-1)/2]
             return deg
     return None
 
-# True if the r-torsion is cyclic and False otherwise (bycyclic)
-def is_torsion_cyclic(E, r, deg):
+# True if the l-torsion is cyclic and False otherwise (bycyclic)
+def is_torsion_cyclic(E, l, deg):
     card = ext_card(E, deg)
-    assert card % r^2 == 0
-    m = ZZ(card / r)
+    assert card % l^2 == 0
+    m = ZZ(card / l)
     EE = extend(E, deg)
     for j in [1..5]:
         P = EE.random_element()
@@ -53,34 +53,34 @@ def is_torsion_cyclic(E, r, deg):
             return True
     return False
 
-# Computes the smallest extension which contains full r-torsion subgroup
+# Computes the smallest extension which contains full l-torsion subgroup
 # Least is the result of find_least_torsion
 # Returns the degree
-def find_full_torsion(E, r, least):
+def find_full_torsion(E, l, least):
     p = E.base_field().order()
     q = p^least
-    k = embedding_degree_q(q, r)
-    # k satisfies r|a^k-1 where a,1 are eigenvalues of Frobenius of extended E
+    k = embedding_degree_q(q, l)
+    # k satisfies l|a^k-1 where a,1 are eigenvalues of Frobenius of extended E
     if k > 1: #i.e. a!=1
         return k * least
     else: #i.e. a==1, we have two options for the geometric multiplicity
         card = ext_card(E, least)
-        if (card % r^2) == 0 and not is_torsion_cyclic(E, r, least): # geom. multiplicity is 2
+        if (card % l^2) == 0 and not is_torsion_cyclic(E, l, least): # geom. multiplicity is 2
             return least
         else: # geom. multiplicity is 1
-            return r * least 
+            return l * least 
 
-# Computes k1,k2, k2/k1 where k2(k1) is the smallest extension containing all(some) r-torsion points
+# Computes k1,k2, k2/k1 where k2(k1) is the smallest extension containing all(some) l-torsion points
 # Returns a triple
-def find_torsions(E, r):
-    least = find_least_torsion(E, r)
-    if least == r^2-1:
+def find_torsions(E, l):
+    least = find_least_torsion(E, l)
+    if least == l^2-1:
         full = least
     else:
-        full = find_full_torsion(E, r, least)
+        full = find_full_torsion(E, l, least)
     return (least, full, ZZ(full/least))
 
-# Computes find_torsions for all r<l_max and returns a dictionary
+# Computes find_torsions for all l<l_max and returns a dictionary
 def a5_curve_function(curve, l_max):
     E = curve.EC
     curve_results = {'least': [], 'full': [], 'relative': []}
