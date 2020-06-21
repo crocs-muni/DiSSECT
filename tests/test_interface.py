@@ -1,17 +1,20 @@
+from sage.all_cmdline import *   # import sage library
+from curve_analyzer.tests.curve_handler import curves as curves
+
 def init_test(test_name):
     path_json = '../results/' + test_name + '.json'
-    path_log = os.path.splitext(path_json)[0] + ".log"
-    path_txt = os.path.splitext(path_json)[0] + ".txt"
+    path_log = os.path.splitext(path_json)[0 ] + ".log"
+    path_txt = os.path.splitext(path_json)[0 ] + ".txt"
     return path_json, path_log, path_txt
 
 #https://ask.sagemath.org/question/10112/kill-the-thread-in-a-long-computation/
-def timeout(func, args=(), kwargs={}, timeout_duration = 10):
+def timeout(func, args=(), kwargs={}, timeout_duration = 10 ):
     @fork(timeout=timeout_duration, verbose=False)
     def my_new_func():
         return func(*args, **kwargs)
     return my_new_func()
 
-def compute_results(test_name, curve_function, parameters, order_bound = 256, overwrite = False, curve_list = curves):
+def compute_results(test_name, curve_function, parameters, order_bound = 256 , overwrite = False, curve_list = curves):
     jsonfile, logfile, _ = init_test(test_name)
     if os.path.exists(jsonfile) and not overwrite:
         print("The result file already exists! Aborting...")
@@ -29,7 +32,7 @@ def compute_results(test_name, curve_function, parameters, order_bound = 256, ov
     results = {}
 
     start_time = time.time()
-    total_time = 0
+    total_time = 0 
 
     for curve in curve_list:
         feedback("Processing curve " + curve.name, '{:.<60}')
@@ -49,9 +52,9 @@ def compute_results(test_name, curve_function, parameters, order_bound = 256, ov
         total['results'] = results
         save_into_json(total, jsonfile, 'w')
         start_time = time.time()
-    feedback(90 * '.' + "\n" + "Finished, total time elapsed: " + str(total_time))
+    feedback(90  * '.' + "\n" + "Finished, total time elapsed: " + str(total_time))
 
-def pretty_print_results(test_name, result_names, captions, head = 2^100, curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True):
+def pretty_print_results(test_name, result_names, captions, head = 2 **100 , curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True):
     infile, _, outfile = init_test(test_name)
     total = load_from_json(infile)
     params = total['parameters']
@@ -104,4 +107,5 @@ def ints_before_strings(x):
         return oo
 
 def remove_values_from_list(l, val):
-   return [value for value in l if value != val]
+    return [value for value in l if value != val]
+
