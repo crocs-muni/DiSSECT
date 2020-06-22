@@ -1,0 +1,5 @@
+before_script:
+
+tests:
+  script:
+    - sage --python3 -m unittest discover tests/unit_tests/
