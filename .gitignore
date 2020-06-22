@@ -1,5 +1,6 @@
 local/
 *.log
+*.pyc
 .ipynb_checkpoints/ 
 tests/.ipynb_checkpoints
 tests/test_launcher.ipynb
