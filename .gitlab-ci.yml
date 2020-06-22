@@ -7,6 +7,6 @@ test:
     - shared-fi
   before_script:
     - python -V
-    - python setup.py develop
   script:
+    - python setup.py develop
     - python -m unittest discover tests/unit_tests/
