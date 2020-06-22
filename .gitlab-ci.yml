@@ -1,5 +1,11 @@
-before_script:
+image: python:latest
 
-tests:
+stages:
+  - test
+test:
+  tags:
+    - shared-fi
+  before_script:
+    - python -V
   script:
-    - sage --python3 -m unittest discover tests/unit_tests/
+    - python -m unittest discover tests/unit_tests/
