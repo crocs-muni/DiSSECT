@@ -16,7 +16,7 @@ def init_test(test_name):
 def compute_results(test_name, curve_function, parameters, order_bound = 256 , overwrite = False, curve_list = curves):
     jsonfile, tmpfile, logfile, _ = init_test(test_name)
     if not os.path.exists(jsonfile):
-        save_into_json({'parameters': {}, 'results': {}}, jsonfile, 'w')
+        save_into_json({}, jsonfile, 'w')
     assert os.path.exists(jsonfile)
 
     def feedback(text, frmt = '{:s}', outfile = logfile):
@@ -58,14 +58,20 @@ def compute_results(test_name, curve_function, parameters, order_bound = 256 , o
 
     feedback(90  * '.' + "\n" + "Finished, total time elapsed: " + str(total_time))
 
-    save_into_json(results, tmpfile, 'w')
+    save_into_json(results, tmpfile, 'w', indent = 1)
     os.remove(jsonfile)
     os.rename(tmpfile, jsonfile)
 
-def pretty_print_results(test_name, result_names, captions, head = 2 **100 , curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True):
+def pretty_print_results(test_name, result_names, captions, parameters, head = 2 **100 , curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True):
     infile, _, _, outfile = init_test(test_name)
     results = load_from_json(infile)
-    params = list(results.values())[0][0]
+    param_index = 0
+    for i, pair in enumerate(list(results.values())[0]):
+        if pair[0] == parameters:
+            param_index = i
+            break
+
+    params = list(results.values())[0][param_index][0]
     param_table = PrettyTable(['parameter', 'value'])
     for param in params.keys():
         param_table.add_row([param, params[param]])
@@ -81,12 +87,15 @@ def pretty_print_results(test_name, result_names, captions, head = 2 **100 , cur
     
     for curve in curve_list:
         name = curve.name
-        order_bits = curve.order.nbits()
+        order_bits = curve.nbits
         if name in names_computed:
             res_sorted = []
             for res in result_names:
-                data = results[name]
+                data = results[name][param_index][1]
                 for r in res:
+                    # print(param_index)
+                    # print(data)
+                    # print(r)
                     data = data[r]
                 try:
                     res_sorted.append(sorted(data, key = res_sort_key)[:head])

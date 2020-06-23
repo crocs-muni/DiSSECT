@@ -9,9 +9,9 @@ class IntegerEncoder(json.JSONEncoder):
          # Let the base class default method raise the TypeError
         return json.JSONEncoder.default(self, obj)
         
-def save_into_json(results, fname, mode = 'a'):
+def save_into_json(results, fname, mode = 'a', indent = 2):
     with open(fname, mode) as f:
-        json.dump(results, f, indent = 2 , cls = IntegerEncoder)
+        json.dump(results, f, indent = indent , cls = IntegerEncoder)
         
 def load_from_json(fname):
     with open(fname, 'r') as f:
