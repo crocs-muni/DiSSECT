@@ -8,7 +8,7 @@ def a22_curve_function(curve, l_max):
     curve_results = {'degs_list': [], 'lens': []}
 
     for l in prime_range(l_max):
-        pol = c.EC.division_polynomial(l)
+        pol = curve.EC.division_polynomial(l)
         fact = list(factor(pol))
         degs = [x.degree() for x,_ in fact]
         curve_results['degs_list'].append(degs)
