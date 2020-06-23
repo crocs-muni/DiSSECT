@@ -1,6 +1,6 @@
 from sage.all_cmdline import *   # import sage library
 from curve_analyzer.tests.curve_handler import curves
-import curve_analyzer.tests.test_interface
+from curve_analyzer.tests.test_interface import *
 
 # Computation of number of prime degree divisors of trace
 # Returns a dictionary (key: 'trace') 

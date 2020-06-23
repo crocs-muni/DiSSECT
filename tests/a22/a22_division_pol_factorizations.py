@@ -1,7 +1,7 @@
 from sage.all_cmdline import *   # import sage library
 
 from curve_analyzer.tests.curve_handler import curves
-import curve_analyzer.tests.test_interface
+from curve_analyzer.tests.test_interface import *
 
 def a22_curve_function(curve, l_max):
     E = curve.EC

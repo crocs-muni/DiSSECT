@@ -1,6 +1,6 @@
 from sage.all_cmdline import *   # import sage library
 from curve_analyzer.tests.curve_handler import curves
-import curve_analyzer.tests.test_interface
+from curve_analyzer.tests.test_interface import *
 
 def embedding_degree_q(q, l):
     '''returns embedding degree with respect to q'''

@@ -1,6 +1,6 @@
 from sage.all_cmdline import *   # import sage library
 from curve_analyzer.tests.curve_handler import curves
-import curve_analyzer.tests.test_interface
+from curve_analyzer.tests.test_interface import *
 
 # Computes the depth of volcano and the degree of the crater subgraph containing E
 # Returns a dictionary (keys: 'crater_degree', 'depth')

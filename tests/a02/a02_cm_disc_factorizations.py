@@ -1,6 +1,6 @@
 from sage.all_cmdline import *   # import sage library
 from curve_analyzer.tests.curve_handler import curves
-import curve_analyzer.tests.test_interface
+from curve_analyzer.tests.test_interface import *
 
 # Computation of d_K (cm_disc), v (max_conductor) and factorization of D where D=t^2-4q = v^2*d_K
 # Returns a dictionary (keys: 'cm_disc', 'factorization', 'max_conductor') 
