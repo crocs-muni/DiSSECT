@@ -1,3 +1,5 @@
+from sage.all_cmdline import *   # import sage library
+
 def montgomery_to_short_weierstrass(F, A, B, x, y):
     a = F( (3 -A**2 )/(3 *B**2 ) )
     b = F( (2 *A**3  - 9 *A)/(27 *B**3 ) )

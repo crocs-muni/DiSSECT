@@ -1,6 +1,8 @@
 from sage.all_cmdline import *   # import sage library
-from curve_analyzer.tests.curve_handler import curves as curves
-from curve_analyzer.definitions import ROOT_DIR, CURVE_PATH, FILTER_PATH, TEST_PATH
+from curve_analyzer.utils.curve_handler import *
+from curve_analyzer.utils.json_handler import *
+from curve_analyzer.definitions import ROOT_DIR, CURVE_PATH, TEST_PATH
+from prettytable import PrettyTable   # http://zetcode.com/python/prettytable/
 import time
 
 def init_test(test_name):

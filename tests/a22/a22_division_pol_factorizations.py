@@ -1,6 +1,6 @@
 from sage.all_cmdline import *   # import sage library
 
-from curve_analyzer.tests.curve_handler import curves
+from curve_analyzer.utils.curve_handler import *
 from curve_analyzer.tests.test_interface import *
 
 def a22_curve_function(curve, l_max):
