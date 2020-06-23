@@ -1,8 +1,9 @@
 from sage.all_cmdline import *   # import sage library
 from curve_analyzer.tests.curve_handler import curves as curves
+from curve_analyzer.definitions import ROOT_DIR, CURVE_PATH, FILTER_PATH, TEST_PATH
 
 def init_test(test_name):
-    path_json = '../results/' + test_name + '.json'
+    path_json = TEST_PATH + '/' + test_name + '/' + test_name + '.json'
     path_log = os.path.splitext(path_json)[0 ] + ".log"
     path_txt = os.path.splitext(path_json)[0 ] + ".txt"
     return path_json, path_log, path_txt

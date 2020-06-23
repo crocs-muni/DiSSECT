@@ -1,4 +1,5 @@
 from sage.all_cmdline import *   # import sage library
+from curve_analyzer.definitions import ROOT_DIR, CURVE_PATH, FILTER_PATH, TEST_PATH
 
 # importing nbs:
 # https://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Importing%20Notebooks.html
@@ -12,9 +13,6 @@ import hashlib
 import re
 from prettytable import PrettyTable
 # http://zetcode.com/python/prettytable/
-
-CURVE_PATH = '../curves_json'
-FILTER_PATH = '../filters/ord_to_name.json'
 
 def import_curve_db(root = CURVE_PATH):
     curve_db = {}
