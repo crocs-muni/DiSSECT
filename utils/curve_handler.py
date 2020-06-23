@@ -1,5 +1,5 @@
 from sage.all_cmdline import *   # import sage library
-from curve_analyzer.definitions import ROOT_DIR, CURVE_PATH, TEST_PATH
+from curve_analyzer.definitions import CURVE_PATH
 from curve_analyzer.utils.custom_curve import *
 import json
 import os

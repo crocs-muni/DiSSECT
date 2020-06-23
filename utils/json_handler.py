@@ -1,3 +1,4 @@
+from sage.all_cmdline import *   # import sage library
 import json
 
 class IntegerEncoder(json.JSONEncoder):
