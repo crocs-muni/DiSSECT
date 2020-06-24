@@ -93,9 +93,6 @@ def pretty_print_results(test_name, result_names, captions, parameters, head = 2
             for res in result_names:
                 data = results[name][param_index][1]
                 for r in res:
-                    # print(param_index)
-                    # print(data)
-                    # print(r)
                     data = data[r]
                 try:
                     res_sorted.append(sorted(data, key = res_sort_key)[:head])

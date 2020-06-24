@@ -1,0 +1,124 @@
++-----------+-------+
+| parameter | value |
++-----------+-------+
+|   l_max   |   12  |
++-----------+-------+
+
++-----------------+------+-----------------------------------------------------------+
+|       name      | bits | Number of irreducible factors of l-th division polynomial |
++-----------------+------+-----------------------------------------------------------+
+|    secp112r2    | 110  |                        Not computed                       |
+|    secp112r1    | 112  |                      [1, 1, 3, 5, 1]                      |
+|    secp128r2    | 126  |                        Not computed                       |
+|    secp128r1    | 128  |                        Not computed                       |
+|       mnt1      | 156  |                        Not computed                       |
+|      bn158      | 158  |                        Not computed                       |
+|      mnt2/1     | 159  |                        Not computed                       |
+|      mnt2/2     | 159  |                        Not computed                       |
+| brainpoolP160r1 | 160  |                        Not computed                       |
+| brainpoolP160t1 | 160  |                        Not computed                       |
+|      mnt3/1     | 160  |                        Not computed                       |
+|      mnt3/2     | 160  |                        Not computed                       |
+|      mnt3/3     | 160  |                        Not computed                       |
+|    secp160k1    | 161  |                        Not computed                       |
+|    secp160r1    | 161  |                        Not computed                       |
+|    secp160r2    | 161  |                        Not computed                       |
+|    sect163r1    | 162  |                        Not computed                       |
+|      B-163      | 163  |                        Not computed                       |
+|      K-163      | 163  |                        Not computed                       |
+|    sect163k1    | 163  |                        Not computed                       |
+|    sect163r2    | 163  |                        Not computed                       |
+|      bn190      | 190  |                        Not computed                       |
+|      P-192      | 192  |                        Not computed                       |
+| brainpoolP192r1 | 192  |                        Not computed                       |
+| brainpoolP192t1 | 192  |                        Not computed                       |
+|    prime192v1   | 192  |                        Not computed                       |
+|    prime192v2   | 192  |                        Not computed                       |
+|    prime192v3   | 192  |                        Not computed                       |
+|    secp192k1    | 192  |                        Not computed                       |
+|    secp192r1    | 192  |                      [1, 1, 2, 1, 2]                      |
+|    Curve22103   | 218  |                        Not computed                       |
+|      M-221      | 219  |                        Not computed                       |
+|      E-222      | 220  |                        Not computed                       |
+|      bn222      | 222  |                        Not computed                       |
+|    Curve4417    | 224  |                        Not computed                       |
+|     Fp224BN     | 224  |                        Not computed                       |
+|      P-224      | 224  |                        Not computed                       |
+| brainpoolP224r1 | 224  |                        Not computed                       |
+| brainpoolP224t1 | 224  |                        Not computed                       |
+|    secp224r1    | 224  |                        Not computed                       |
+|    secp224k1    | 225  |                        Not computed                       |
+|      K-233      | 232  |                        Not computed                       |
+|    sect233k1    | 232  |                        Not computed                       |
+|      B-233      | 233  |                        Not computed                       |
+|    sect233r1    | 233  |                        Not computed                       |
+|    sect239k1    | 238  |                        Not computed                       |
+|    prime239v1   | 239  |                        Not computed                       |
+|    prime239v2   | 239  |                        Not computed                       |
+|    prime239v3   | 239  |                        Not computed                       |
+|       mnt4      | 240  |                        Not computed                       |
+|      mnt5/1     | 240  |                        Not computed                       |
+|      mnt5/2     | 240  |                        Not computed                       |
+|      mnt5/3     | 240  |                        Not computed                       |
+|    Curve1174    | 249  |                        Not computed                       |
+|    Curve25519   | 253  |                        Not computed                       |
+|     Ed25519     | 253  |                        Not computed                       |
+|     Fp254BNa    | 254  |                        Not computed                       |
+|     Fp254BNb    | 254  |                        Not computed                       |
+|      bn254      | 254  |                        Not computed                       |
+|    BLS12-381    | 255  |                        Not computed                       |
+|     FRP256v1    | 256  |                        Not computed                       |
+|     Fp256BN     | 256  |                        Not computed                       |
+|      P-256      | 256  |                        Not computed                       |
+| brainpoolP256r1 | 256  |                        Not computed                       |
+| brainpoolP256t1 | 256  |                        Not computed                       |
+|     gost256     | 256  |                        Not computed                       |
+|    prime256v1   | 256  |                        Not computed                       |
+|    secp256k1    | 256  |                        Not computed                       |
+|    secp256r1    | 256  |                      [1, 2, 4, 3, 12]                     |
+|      K-283      | 281  |                        Not computed                       |
+|    sect283k1    | 281  |                        Not computed                       |
+|      B-283      | 282  |                        Not computed                       |
+|    sect283r1    | 282  |                        Not computed                       |
+|      bn286      | 286  |                        Not computed                       |
+|    BLS12-446    | 299  |                        Not computed                       |
+|    BLS12-455    | 305  |                        Not computed                       |
+|      bn318      | 318  |                        Not computed                       |
+| brainpoolP320r1 | 320  |                        Not computed                       |
+| brainpoolP320t1 | 320  |                        Not computed                       |
+|      bn350      | 350  |                        Not computed                       |
+|    Curve67254   | 380  |                        Not computed                       |
+|      M-383      | 381  |                        Not computed                       |
+|      bn382      | 382  |                        Not computed                       |
+|    BLS24-477    | 383  |                        Not computed                       |
+|     Fp384BN     | 384  |                        Not computed                       |
+|      P-384      | 384  |                        Not computed                       |
+| brainpoolP384r1 | 384  |                        Not computed                       |
+| brainpoolP384t1 | 384  |                        Not computed                       |
+|    secp384r1    | 384  |                        Not computed                       |
+|      K-409      | 407  |                        Not computed                       |
+|    sect409k1    | 407  |                        Not computed                       |
+|      B-409      | 409  |                        Not computed                       |
+|    sect409r1    | 409  |                        Not computed                       |
+|      bn414      | 414  |                        Not computed                       |
+|    BLS12-638    | 427  |                        Not computed                       |
+|      Ed448      | 446  |                        Not computed                       |
+|      bn446      | 446  |                        Not computed                       |
+|      bn478      | 478  |                        Not computed                       |
+|      M-511      | 509  |                        Not computed                       |
+|      bn510      | 510  |                        Not computed                       |
+|     gost512     | 511  |                        Not computed                       |
+|     Fp512BN     | 512  |                        Not computed                       |
+| brainpoolP512r1 | 512  |                        Not computed                       |
+| brainpoolP512t1 | 512  |                        Not computed                       |
+|      P-521      | 521  |                        Not computed                       |
+|    secp521r1    | 521  |                        Not computed                       |
+|      bn542      | 542  |                        Not computed                       |
+|      B-571      | 570  |                        Not computed                       |
+|      K-571      | 570  |                        Not computed                       |
+|    sect571k1    | 570  |                        Not computed                       |
+|    sect571r1    | 570  |                        Not computed                       |
+|      bn574      | 574  |                        Not computed                       |
+|      bn606      | 606  |                        Not computed                       |
+|      bn638      | 638  |                        Not computed                       |
++-----------------+------+-----------------------------------------------------------+
