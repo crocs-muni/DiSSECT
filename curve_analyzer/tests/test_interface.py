@@ -4,79 +4,115 @@ from curve_analyzer.utils.json_handler import *
 from curve_analyzer.definitions import TEST_PATH
 from prettytable import PrettyTable  # http://zetcode.com/python/prettytable/
 from collections import OrderedDict
-import itertools
+from datetime import datetime
 import time
+import pytz
+import itertools
 import os
 import ast
 
-def feedback(text, outfile, frmt = '{:s}', newlines = 0):
-    print(frmt.format(text), end = newlines * "\n")
-    with open(outfile, 'a') as f:
-        f.write(frmt.format(text))
-        f.write(newlines * "\n")
+def get_timestamp():
+    cest = pytz.timezone('Europe/Prague')
+    now = datetime.now()
+    now = cest.localize(now)
+    return datetime.isoformat(now, sep = '_', timespec = 'seconds')[:-6]
 
-def init_test(test_name):
+class Logs:
+    def __init__(self, test_name, desc = ''):
+        self.desc = desc
+        self.init_log_paths(test_name)
+        self.create_logs(test_name)
+
+    def init_log_paths(self, test_name):
+        self.main_log_file = TEST_PATH + '/' + test_name + '/' + test_name + ".log"
+        self.log_dir = TEST_PATH + '/' + test_name + '/logs/'
+        timestamp = get_timestamp()
+        if not self.desc == '':
+            timestamp = timestamp + "_" + self.desc
+        self.current_log_file = self.log_dir + timestamp + '.log'
+
+    def create_logs(self, test_name):
+        if not os.path.isdir(self.log_dir):
+            os.mkdir(self.log_dir)
+        if not os.path.exists(self.main_log_file):
+            with open(self.main_log_file, 'w'):
+                pass
+        self.main_log = open(self.main_log_file, 'a')
+        self.current_log = open(self.current_log_file, 'w')
+
+    def write_to_logs(self, text, frmt = '{:s}', newlines = 0):
+        print(frmt.format(text), end = newlines * "\n")
+        for f in [self.main_log, self.current_log]:
+            f.write(frmt.format(text))
+            f.write(newlines * "\n")
+
+    def close_logs(self):
+        for f in [self.main_log, self.current_log]:
+            f.close()
+   
+def init_json_paths(test_name):
     path_json = TEST_PATH + '/' + test_name + '/' + test_name + '.json'
     path_tmp = TEST_PATH + '/' + test_name + '/' + 'tmp.json'
-    path_log = os.path.splitext(path_json)[0 ] + ".log"
-    path_txt = os.path.splitext(path_json)[0 ] + ".txt"
-    return path_json, path_tmp, path_log, path_txt
+    if not os.path.exists(path_json):
+        save_into_json({}, path_json, 'w')
+    return path_json, path_tmp
 
-def handle_files(test_name):
-    # assert the folder exists
-    jsonfile, tmpfile, logfile, _ = init_test(test_name)
-    if not os.path.exists(jsonfile):
-        save_into_json({}, jsonfile, 'w')
-    assert os.path.exists(jsonfile)
-    with open(logfile, 'w'):
-        pass
-    return jsonfile, tmpfile, logfile
-
-def update_curve_results(curve, curve_function, params_global, params_local_names, order_bound, results, logfile):
-    feedback("Processing curve " + curve.name + ":", outfile = logfile, newlines = 1)
+def update_curve_results(curve, curve_function, params_global, params_local_names, order_bound, results, log_obj):
+    log_obj.write_to_logs("Processing curve " + curve.name + ":", newlines = 1)
     if not curve.name in results:
         results[curve.name] = {}
 
     if curve.nbits > order_bound:
-        feedback("Too large order\n", outfile = logfile)
+        log_obj.write_to_logs("Too large order\n")
         return results[curve.name]
 
     for params_local_values in itertools.product(*params_global.values()):
         params_local = dict(zip(params_local_names, params_local_values))
-        feedback("\tProcessing params " + str(params_local), outfile = logfile, frmt = '{:.<60}')
+        log_obj.write_to_logs("\tProcessing params " + str(params_local), frmt = '{:.<60}')
         if str(params_local) in results[curve.name]:
-            feedback("Already computed", outfile = logfile, newlines = 1)
+            log_obj.write_to_logs("Already computed", newlines = 1)
             continue
         else:
-            results[curve.name][str(params_local)] = [curve_function(curve, params_local_names, *params_local_values)]
-            feedback("Done", outfile = logfile, newlines = 1)
+            results[curve.name][str(params_local)] = [curve_function(curve, *params_local_values)]
+            log_obj.write_to_logs("Done", newlines = 1)
     return results[curve.name]
 
-def compute_results(test_name, curve_function, params_global, params_local_names, order_bound = 256 , overwrite = False, curve_list = curves):
-    jsonfile, tmpfile, logfile = handle_files(test_name)
+def compute_results(test_name, curve_function, params_global, params_local_names, order_bound = 256, overwrite = False, curve_list = curves, desc = ''):
+    json_file, tmp_file = init_json_paths(test_name)
+    log_obj = Logs(test_name, desc)
+    # , main_log_file, current_log_file = create_files(test_name)
     param_list = list(params_global.values())
-    results = load_from_json(jsonfile)
-
-    start_time = time.time()
+    results = load_from_json(json_file)
+    
     total_time = 0
+    timestamp = get_timestamp()
+
+    log_obj.write_to_logs("Current datetime: " + timestamp, newlines = 1)
+    log_obj.write_to_logs("Running test " + str(test_name) + " with global parameters:\n" + str(params_global), newlines = 2)
 
     for curve in curve_list:
-        results[curve.name] = update_curve_results(curve, curve_function, params_global, params_local_names, order_bound, results, logfile)
-        save_into_json(results, tmpfile, 'w', indent = 1)
+        start_time = time.time()
+
+        results[curve.name] = update_curve_results(curve, curve_function, params_global, params_local_names, order_bound, results, log_obj)
 
         end_time = time.time()
         diff_time = end_time - start_time
         total_time += diff_time
 
-        feedback("Done, time elapsed: " + str(diff_time), outfile = logfile, newlines = 2)
-        start_time = time.time()
+        log_obj.write_to_logs("Done, time elapsed: " + str(diff_time), newlines = 2)
+        save_into_json(results, tmp_file, 'w', indent = 1)
 
-    feedback(50  * '.' + "\n" + "Finished, total time elapsed: " + str(total_time), outfile = logfile) 
-    os.remove(jsonfile)
-    os.rename(tmpfile, jsonfile)
+    log_obj.write_to_logs(80  * '.' + "\n" + "Finished, total time elapsed: " + str(total_time) + "\n\n" + 80  * '#', newlines = 3) 
+    os.remove(json_file)
+    os.rename(tmp_file, json_file)
+
+#################################################################################################################
+
+def init_txt_paths(test_name):
+    return os.path.splitext(path_json)[0 ] + ".txt"
 
 def pretty_print_results(test_name, result_names, captions, parameters, head = 2 **100 , curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True):
-    infile, _, _, outfile = init_test(test_name)
+    infile, _, _, outfile = init_test_paths(test_name)
     results = load_from_json(infile)
     param_index = 0
     for i, pair in enumerate(list(results.values())[0]):
@@ -141,23 +177,3 @@ def ints_before_strings(x):
 
 def remove_values_from_list(l, val):
     return [value for value in l if value != val]
-
-# def parameter_gen(params_global_dic, cu_name):
-#   var_names = params_global_dic.keys()
-#   var_names_local = [var_name ar_name in var_names]
-#   for ntuple in itertools.product(params_global_dic.values()):
-
-
-# def delete_local_params_from_global(params_global, params_local):
-#   '''Assumes that params_global is a dictionary of lists (without duplicities)'''
-#   # assert len(list(params_global.keys())) == len(list((ast.literal_eval(params_local)).keys()))
-#   local_keys = params_local.keys()
-#   for local_key in local_keys:
-#       local_key_dict = ast.literal_eval(local_key)
-#       local_key_dict_keys = local_key_dict.keys()
-#       for local_key_dict_key in local_key_dict_keys:
-#           globname = str(local_key_dict_key) + "_globlist"
-#           assert globname in params_global
-#           local_value = local_key_dict[local_key_dict_key]
-#           params_global[globname]=remove_values_from_list(params_global[globname], local_value)
-#   return params_global
