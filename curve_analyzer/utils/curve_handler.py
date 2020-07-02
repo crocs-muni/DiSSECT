@@ -5,7 +5,7 @@ import json
 import os
 import re
 
-def import_curve_db(root = CURVE_PATH):
+def import_curve_db(root = CURVE_PATH, ignore_sim = True):
     curve_db = {}
     for path, dirs, files in os.walk(root):
         if dirs != [] and '.ipynb_checkpoints' not in dirs:
@@ -17,6 +17,8 @@ def import_curve_db(root = CURVE_PATH):
                 continue
 
             if "sim" in path:
+                if ignore_sim:
+                    continue
                 suffix = "-" + str(re.findall(r'\d+', file)[0 ])
             with open(os.path.join(path, file)) as f:
                 curve_db[source + suffix] = json.load(f)
@@ -35,6 +37,7 @@ def custom_curves(curve_db):
 def custom_curves_sorted_by_name(curve_db):
     return sorted(custom_curves(curve_db), key = lambda item: item.name)
 
+# def init_curve_db():
 curve_db = import_curve_db(CURVE_PATH)
 curves = sorted(custom_curves(curve_db))
 curves_sample = [c for c in curves if c.name in ["secp112r1", "secp192r1", "secp256r1"]]
