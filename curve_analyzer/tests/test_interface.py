@@ -75,7 +75,7 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
             log_obj.write_to_logs("Already computed", newlines = 1)
             continue
         else:
-            results[curve.name][str(params_local)] = curve_function(curve, *params_local_values)]
+            results[curve.name][str(params_local)] = curve_function(curve, *params_local_values)
             log_obj.write_to_logs("Done", newlines = 1)
     return results[curve.name]
 
@@ -115,25 +115,11 @@ def init_txt_paths(test_name, desc = ''):
         name += "_" + desc    
     return name + '.txt'
 
-def pretty_print_results(test_name, result_names, captions, parameters, head = 2 **100 , curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True):
-    path_json, _ = init_json_paths
+def pretty_print_results(test_name, get_captions, select_results, curve_list = curves, curve_sort_key = "bits", save_to_txt = True):
+    path_json, _ = init_json_paths(test_name)
     results = load_from_json(path_json)
-    # param_index = 0
 
-    # for i, pair in enumerate(list(results.values())[0]):
-    #     if pair[0] == parameters:
-    #         param_index = i
-    #         break
-
-    params = list(results.values())[0][param_index][0]
-    param_table = PrettyTable(['parameter', 'value'])
-    for param in params.keys():
-        param_table.add_row([param, params[param]])
-    print(param_table, '\n\n')
-    
-    assert len(result_names) == len(captions)
-    cols = len(result_names)
-    names_computed = results.keys()
+    captions = get_captions(results)
     headlines = ['name', 'bits']
     for caption in captions:
         headlines.append(caption)
@@ -141,31 +127,20 @@ def pretty_print_results(test_name, result_names, captions, parameters, head = 2
     
     for curve in curve_list:
         name = curve.name
+        if not name in results.keys():
+            continue
         order_bits = curve.nbits
-        if name in names_computed:
-            res_sorted = []
-            for res in result_names:
-                data = results[name][param_index][1]
-                for r in res:
-                    data = data[r]
-                try:
-                    res_sorted.append(sorted(data, key = res_sort_key)[:head])
-                except TypeError as e:
-                    res_sorted.append(data)
-        else:
-            res_sorted = ["Not computed"] * cols
         row = [name, order_bits]
-        for res in res_sorted:
-            row.append(res)
+        for result in select_results(results[name].values()):
+            row.append(result)
         t.add_row(row)
+
     t.sortby = curve_sort_key
     print(t)
     
     if save_to_txt:
-        path_txt = init_test_paths(test_name)
+        path_txt = init_txt_paths(test_name)
         with open(path_txt, "w") as f:
-            f.write(str(param_table))
-            f.write('\n\n')
             f.write(str(t))
 
 #https://ask.sagemath.org/question/10112/kill-the-thread-in-a-long-computation/
