@@ -1,6 +1,8 @@
 curve_analyzer/local/
+local/
 *.log
 *.pyc
+.ipynb_checkpoints/
 curve_analyzer/.ipynb_checkpoints/ 
 curve_analyzer/tests/.ipynb_checkpoints
 curve_analyzer/tests/test_launcher.ipynb
