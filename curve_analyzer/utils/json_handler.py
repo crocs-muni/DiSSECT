@@ -3,8 +3,11 @@ import json
 
 class IntegerEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, Integer):
+        if isinstance(obj, sage.rings.integer.Integer):
             return int(obj)
+
+        if isinstance(obj,sage.rings.polynomial.polynomial_modn_dense_ntl.Polynomial_dense_mod_p):
+            return str(obj)
 
          # Let the base class default method raise the TypeError
         return json.JSONEncoder.default(self, obj)
