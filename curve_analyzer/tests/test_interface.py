@@ -28,8 +28,10 @@ class Logs:
         self.log_dir = TEST_PATH + '/' + test_name + '/logs/'
         timestamp = get_timestamp()
         if not self.desc == '':
-            timestamp = timestamp + "_" + self.desc
-        self.current_log_file = self.log_dir + timestamp + '.log'
+            name = timestamp + "_" + self.desc
+        else:
+            name = timestamp
+        self.current_log_file = self.log_dir + name + '.log'
 
     def create_logs(self, test_name):
         if not os.path.isdir(self.log_dir):
@@ -73,14 +75,13 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
             log_obj.write_to_logs("Already computed", newlines = 1)
             continue
         else:
-            results[curve.name][str(params_local)] = [curve_function(curve, *params_local_values)]
+            results[curve.name][str(params_local)] = curve_function(curve, *params_local_values)]
             log_obj.write_to_logs("Done", newlines = 1)
     return results[curve.name]
 
 def compute_results(test_name, curve_function, params_global, params_local_names, order_bound = 256, overwrite = False, curve_list = curves, desc = ''):
     json_file, tmp_file = init_json_paths(test_name)
     log_obj = Logs(test_name, desc)
-    # , main_log_file, current_log_file = create_files(test_name)
     param_list = list(params_global.values())
     results = load_from_json(json_file)
     
@@ -108,17 +109,21 @@ def compute_results(test_name, curve_function, params_global, params_local_names
 
 #################################################################################################################
 
-def init_txt_paths(test_name):
-    return os.path.splitext(path_json)[0 ] + ".txt"
+def init_txt_paths(test_name, desc = ''):
+    name = TEST_PATH + '/' + test_name + '/' + test_name 
+    if not desc == '':
+        name += "_" + desc    
+    return name + '.txt'
 
 def pretty_print_results(test_name, result_names, captions, parameters, head = 2 **100 , curve_list = curves, res_sort_key = lambda x: x, curve_sort_key = "bits", save_to_txt = True):
-    infile, _, _, outfile = init_test_paths(test_name)
-    results = load_from_json(infile)
-    param_index = 0
-    for i, pair in enumerate(list(results.values())[0]):
-        if pair[0] == parameters:
-            param_index = i
-            break
+    path_json, _ = init_json_paths
+    results = load_from_json(path_json)
+    # param_index = 0
+
+    # for i, pair in enumerate(list(results.values())[0]):
+    #     if pair[0] == parameters:
+    #         param_index = i
+    #         break
 
     params = list(results.values())[0][param_index][0]
     param_table = PrettyTable(['parameter', 'value'])
@@ -157,7 +162,8 @@ def pretty_print_results(test_name, result_names, captions, parameters, head = 2
     print(t)
     
     if save_to_txt:
-        with open(outfile, "w") as f:
+        path_txt = init_test_paths(test_name)
+        with open(path_txt, "w") as f:
             f.write(str(param_table))
             f.write('\n\n')
             f.write(str(t))
