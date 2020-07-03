@@ -89,7 +89,15 @@ def compute_results(test_name, curve_function, params_global, params_local_names
     timestamp = get_timestamp()
 
     log_obj.write_to_logs("Current datetime: " + timestamp, newlines = 1)
-    log_obj.write_to_logs("Running test " + str(test_name) + " with global parameters:\n" + str(params_global), newlines = 2)
+    std_count = 0
+    sim_count = 0
+    for curve in curve_list:
+        if "sim" in curve.name:
+            sim_count +=1
+        else:
+            std_count +=1
+    log_obj.write_to_logs("Running test " + str(test_name) + " on " + str(std_count) + " std curves and " + str(sim_count) + " sim curves with global parameters:\n" + str(params_global), newlines = 2)
+
 
     for curve in curve_list:
         start_time = time.time()
@@ -106,8 +114,6 @@ def compute_results(test_name, curve_function, params_global, params_local_names
     log_obj.write_to_logs(80  * '.' + "\n" + "Finished, total time elapsed: " + str(total_time) + "\n\n" + 80  * '#', newlines = 3) 
     os.remove(json_file)
     os.rename(tmp_file, json_file)
-
-#################################################################################################################
 
 def init_txt_paths(test_name, desc = ''):
     name = TEST_PATH + '/' + test_name + '/' + test_name 
