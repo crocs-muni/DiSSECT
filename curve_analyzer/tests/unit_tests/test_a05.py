@@ -1,6 +1,7 @@
 import unittest
-from curve_analyzer.tests.a05_torsion_extensions import a5_curve_function
-from curve_analyzer.tests.curve_handler import CustomCurve
+from curve_analyzer.tests.a05.a05_torsion_extensions import a5_curve_function
+from curve_analyzer.utils.custom_curve import CustomCurve
+
 
 
 E1 = CustomCurve({'name': 'secp192k1',

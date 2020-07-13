@@ -1,7 +1,5 @@
 from sage.all_cmdline import *   # import sage library
-
-from curve_analyzer.utils.curve_handler import *
-from curve_analyzer.tests.test_interface import *
+from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 def a22_curve_function(curve, l):
     pol = curve.EC.division_polynomial(l)
@@ -11,7 +9,10 @@ def a22_curve_function(curve, l):
     curve_results = {'factorization': fact, 'degs_list': degs, 'len': len(degs)}
     return curve_results
 
-def compute_a22_results(l_max = 20, order_bound = 256, overwrite = False, curve_list = curves, desc = ''):
+def compute_a22_results(l_max = 20, order_bound = 256, overwrite = False, curve_list = None, desc = ''):
+    if curve_list == None:
+    	from curve_analyzer.utils.curve_handler import curves
+    	curve_list = curves
     global_params = {'l_range': prime_range(l_max)}
     params_local_names = ['l']
     #Add Ordered dict
@@ -27,5 +28,8 @@ def select_a22_results(curve_results):
     selected_results = [degs_lists, lens]
     return selected_results
 
-def pretty_print_a22_results(save_to_txt = True):
-    pretty_print_results('a22', get_a22_captions, select_a22_results, save_to_txt = save_to_txt)
+def pretty_print_a22_results(save_to_txt = True, curve_list = None):
+    if curve_list == None:
+    	from curve_analyzer.utils.curve_handler import curves
+    	curve_list = curves
+    pretty_print_results('a22', get_a22_captions, select_a22_results, save_to_txt = save_to_txt, curve_list = curves)

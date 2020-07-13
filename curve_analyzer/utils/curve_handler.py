@@ -1,6 +1,6 @@
 from sage.all_cmdline import *   # import sage library
 from curve_analyzer.definitions import CURVE_PATH
-from curve_analyzer.utils.custom_curve import *
+from curve_analyzer.utils.custom_curve import CustomCurve
 import json
 import os
 import re
@@ -38,6 +38,7 @@ def custom_curves_sorted_by_name(curve_db):
     return sorted(custom_curves(curve_db), key = lambda item: item.name)
 
 # def init_curve_db():
+print("importing database")
 curve_db = import_curve_db(CURVE_PATH)
 curves = sorted(custom_curves(curve_db))
 curves_sample = [c for c in curves if c.name in ["secp112r1", "secp192r1", "secp256r1"]]
