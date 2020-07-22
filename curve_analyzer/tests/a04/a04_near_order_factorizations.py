@@ -41,16 +41,10 @@ def a4_curve_function(curve, k_max, t):
     curve_results['minus']['min_largest_factor_bitlen'] = min(remove_values_from_list(curve_results['minus']['largest_factor_bitlens'],'-'))
     return curve_results
 
-def compute_a4_results(k_max = 10 , t = 10 , order_bound = 256 , overwrite = False, curve_list = None):
-    if curve_list == None:
-    	from curve_analyzer.utils.curve_handler import curves
-    	curve_list = curves
+def compute_a4_results(curve_list, k_max = 10 , t = 10 , order_bound = 256 , overwrite = False):
     parameters = {'k_max': k_max, 't': t}
     compute_results('a4', a4_curve_function, parameters, order_bound, overwrite, curve_list = curve_list)
         
-def pretty_print_a4_results(save_to_txt = True, curves_list = None):
-    if curve_list == None:
-    	from curve_analyzer.utils.curve_handler import curves
-    	curve_list = curves
+def pretty_print_a4_results(curve_list, save_to_txt = True):
     pretty_print_results('a4', [['plus','largest_factor_bitlens'], ['minus', 'largest_factor_bitlens']], ['largest_factor_bitlens (+)', 'largest_factor_bitlens (-)'], res_sort_key = ints_before_strings, save_to_txt = save_to_txt, curves_list = curves)
 

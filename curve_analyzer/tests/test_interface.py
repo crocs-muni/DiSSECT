@@ -78,7 +78,7 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
             log_obj.write_to_logs("Done", newlines = 1)
     return results[curve.name]
 
-def compute_results(test_name, curve_function, params_global, params_local_names, order_bound = 256, overwrite = False, curve_list = None, desc = ''):
+def compute_results(curve_list, test_name, curve_function, params_global, params_local_names, order_bound = 256, overwrite = False, desc = ''):
     json_file, tmp_file = init_json_paths(test_name)
     log_obj = Logs(test_name, desc)
     param_list = list(params_global.values())
@@ -120,7 +120,7 @@ def init_txt_paths(test_name, desc = ''):
         name += "_" + desc    
     return name + '.txt'
 
-def pretty_print_results(test_name, get_captions, select_results, curve_list = None, curve_sort_key = "bits", save_to_txt = True):
+def pretty_print_results(curve_list, test_name, get_captions, select_results, curve_sort_key = "bits", save_to_txt = True):
     path_json, _ = init_json_paths(test_name)
     results = load_from_json(path_json)
 

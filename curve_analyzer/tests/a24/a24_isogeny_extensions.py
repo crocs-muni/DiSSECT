@@ -1,7 +1,6 @@
 from sage.all_cmdline import *   # import sage library
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
-
 def ext_card(E,order, deg):
     '''returns curve cardinality over deg-th relative extension'''
     card_low = order
@@ -90,16 +89,9 @@ def a24_curve_function(curve, l_max):
         curve_results['relative'].append(relative)
     return curve_results
 
-def compute_a24_results(l_max = 20 , order_bound = 256 , overwrite = False, curve_list = None):
-    if curve_list == None:
-    	from curve_analyzer.utils.curve_handler import curves
-    	curve_list = curves
+def compute_a24_results(curve_list, l_max = 20 , order_bound = 256 , overwrite = False):
     parameters = {'l_max': l_max}
     compute_results('a24', a24_curve_function, parameters, order_bound, overwrite, curve_list = curve_list)
 
-def pretty_print_a24_results(save_to_txt = True, curve_list = None):
-    if curve_list == None:
-    	from curve_analyzer.utils.curve_handler import curves
-    	curve_list = curves
-    pretty_print_results('a24', [['least'], ['full'], ['relative']], ['first isogeny', 'all isogenies', 'relative ratio'], save_to_txt = save_to_txt, res_sort_key = lambda x: 1, curve_list = curve_list )
-
+def pretty_print_a24_results(curve_list, save_to_txt = True):
+    pretty_print_results('a24', [['least'], ['full'], ['relative']], ['first isogeny', 'all isogenies', 'relative ratio'], save_to_txt = save_to_txt, res_sort_key = lambda x: 1, curve_list = curve_list)

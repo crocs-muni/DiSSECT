@@ -18,17 +18,10 @@ def a2_curve_function(curve):
     curve_results['max_conductor'] = ZZ(sqrt(D/disc))
     return curve_results
 
-def compute_a2_results(order_bound = 256 , overwrite = False, curve_list = None):
-    if curve_list == None:
-    	from curve_analyzer.utils.curve_handler import curves
-    	curve_list = curves
+def compute_a2_results(curve_list, order_bound = 256 , overwrite = False):
     parameters = {}
     compute_results('a2', a2_curve_function, parameters, order_bound, overwrite, curve_list = curve_list)
 
-def pretty_print_a2_results(save_to_txt = True, curve_list = None):
-    if curve_list == None:
-    	from curve_analyzer.utils.curve_handler import curves
-    	curve_list = curves
-    pretty_print_results('a2', [['factorization'], ['max_conductor']], ['CM disc factorization', 'max conductor'], curve_list = curve_list, save_to_txt = save_to_txt)
-    # pretty_print_results('a2', [['max_conductor']], ['max conductor'], save_to_txt = save_to_txt)
+def pretty_print_a2_results(curve_list, save_to_txt = True):
+    pretty_print_results(curve_list = curve_list, 'a2', [['factorization'], ['max_conductor']], ['CM disc factorization', 'max conductor'], save_to_txt = save_to_txt)
 

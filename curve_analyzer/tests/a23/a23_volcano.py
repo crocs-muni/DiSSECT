@@ -3,7 +3,7 @@ from curve_analyzer.tests.test_interface import pretty_print_results, compute_re
 
 # Computes the depth of volcano and the degree of the crater subgraph containing E
 # Returns a dictionary (keys: 'crater_degree', 'depth')
-def a23_curve_function(curve,l):
+def a23_curve_function(curve, l):
     E = curve.EC
     t = curve.trace
     q = curve.q
