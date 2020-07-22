@@ -8,6 +8,8 @@ stages:
 test:
   tags:
     - shared-fi
+  before_script:
+    - sage --pip3 install Ptable
   script:
     - sage --python3 setup.py install
     - sage --python3 -m unittest discover curve_analyzer/tests/unit_tests
