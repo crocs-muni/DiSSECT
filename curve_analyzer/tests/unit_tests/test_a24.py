@@ -1,6 +1,7 @@
 import unittest
-from curve_analyzer.tests.a24_isogeny_extensions import a24_curve_function
-from curve_analyzer.tests.curve_handler import CustomCurve
+from curve_analyzer.tests.a24.a24_isogeny_extensions import a24_curve_function
+from curve_analyzer.utils.custom_curve import CustomCurve
+
 
 
 E1 = CustomCurve({'name': 'gost512',

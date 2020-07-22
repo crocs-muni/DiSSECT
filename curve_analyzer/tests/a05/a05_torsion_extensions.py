@@ -1,6 +1,5 @@
 from sage.all_cmdline import *   # import sage library
-from curve_analyzer.utils.curve_handler import *
-from curve_analyzer.tests.test_interface import *
+from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 def embedding_degree_q(q, l):
     '''returns embedding degree with respect to q'''
@@ -103,10 +102,16 @@ def a5_curve_function(curve, l_max):
        
     return curve_results
 
-def compute_a5_results(l_max = 20 , order_bound = 256 , overwrite = False, curve_list = curves):
+def compute_a5_results(l_max = 20 , order_bound = 256 , overwrite = False, curve_list = None):
+    if curve_list == None:
+    	from curve_analyzer.utils.curve_handler import curves
+    	curve_list = curves
     parameters = {'l_max': l_max}
     compute_results('a5', a5_curve_function, parameters, order_bound, overwrite, curve_list = curve_list)
 
-def pretty_print_a5_results(save_to_txt = True):
-    pretty_print_results('a5', [['least'], ['full'], ['relative']], ['least torsion', 'full torsion', 'relative ratio'], save_to_txt = save_to_txt, res_sort_key = lambda x: 1 )
+def pretty_print_a5_results(save_to_txt = True, curves_list = None):
+    if curve_list == None:
+    	from curve_analyzer.utils.curve_handler import curves
+    	curve_list = curves
+    pretty_print_results('a5', [['least'], ['full'], ['relative']], ['least torsion', 'full torsion', 'relative ratio'], save_to_txt = save_to_txt, res_sort_key = lambda x: 1 , curves_list = curves_list)
 

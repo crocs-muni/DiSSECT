@@ -1,6 +1,6 @@
 import unittest
-from curve_analyzer.tests.a02_cm_disc_factorizations import a2_curve_function
-from curve_analyzer.tests.curve_handler import CustomCurve
+from curve_analyzer.tests.a02.a02_cm_disc_factorizations import a2_curve_function
+from curve_analyzer.utils.custom_curve import CustomCurve
 
 
 E1 = CustomCurve({'name': 'secp112r2',

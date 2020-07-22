@@ -1,6 +1,5 @@
 from sage.all_cmdline import *   # import sage library
-from curve_analyzer.utils.curve_handler import *
-from curve_analyzer.tests.test_interface import *
+from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 # Computes the depth of volcano and the degree of the crater subgraph containing E
 # Returns a dictionary (keys: 'crater_degree', 'depth')
@@ -28,10 +27,16 @@ def a23_curve_function(curve,l):
             curve_results['depth'] = e//2-1
     return curve_results
 
-def compute_a23_results(order_bound = 256 , overwrite = False, curve_list = curves):
+def compute_a23_results(order_bound = 256 , overwrite = False, curve_list = None):
+    if curve_list == None:
+    	from curve_analyzer.utils.curve_handler import curves
+    	curve_list = curves
     parameters = {}
     test_interface.compute_results('a23', a23_curve_function, parameters, order_bound, overwrite, curve_list = curve_list)
 
-def pretty_print_a23_results(save_to_txt = True):
-    test_interface.pretty_print_results('a23', [['crater_degree'], ['depth']], ['crater_degree', 'depth'], save_to_txt = save_to_txt)
+def pretty_print_a23_results(save_to_txt = True, curve_list = None):
+    if curve_list == None:
+    	from curve_analyzer.utils.curve_handler import curves
+    	curve_list = curves
+    test_interface.pretty_print_results('a23', [['crater_degree'], ['depth']], ['crater_degree', 'depth'], save_to_txt = save_to_txt, curve_list = curve_list)
 
