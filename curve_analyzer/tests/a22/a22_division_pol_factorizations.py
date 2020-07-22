@@ -13,7 +13,7 @@ def compute_a22_results(curve_list, l_max = 20, order_bound = 256, overwrite = F
     global_params = {'l_range': prime_range(l_max)}
     params_local_names = ['l']
     #Add Ordered dict
-    compute_results('a22', a22_curve_function, global_params, params_local_names, order_bound, overwrite, curve_list = curve_list, desc = desc)
+    compute_results(curve_list,'a22', a22_curve_function, global_params, params_local_names, order_bound, overwrite, desc = desc)
 
 def get_a22_captions(results):
     captions = ['degs_lists', 'lens']
@@ -26,4 +26,4 @@ def select_a22_results(curve_results):
     return selected_results
 
 def pretty_print_a22_results(curve_list, save_to_txt = True):
-    pretty_print_results('a22', get_a22_captions, select_a22_results, save_to_txt = save_to_txt, curve_list = curves)
+    pretty_print_results('a22', get_a22_captions, select_a22_results, save_to_txt = save_to_txt, curve_list = curve_list)
