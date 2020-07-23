@@ -85,7 +85,7 @@ def find_torsions(E, q, order, l):
 
 
 # Computes find_torsions for all l<l_max and returns a dictionary
-def a5_curve_function(curve, l_max):
+def a05_curve_function(curve, l_max):
     E = curve.EC
     q = curve.q
     order = curve.order * curve.cofactor
@@ -109,11 +109,24 @@ def a5_curve_function(curve, l_max):
     return curve_results
 
 
-def compute_a5_results(curve_list, l_max=20, order_bound=256, overwrite=False):
-    parameters = {'l_max': l_max}
-    compute_results(curve_list, 'a5', a5_curve_function, parameters, order_bound, overwrite)
+def compute_a05_results(curve_list, l_max=20, order_bound=256, overwrite=False, desc=''):
+    global_params = {'l_range': prime_range(l_max)}
+    params_local_names = ['l']
+    compute_results(curve_list, 'a05', a05_curve_function, global_params, params_local_names, order_bound, overwrite,
+                    desc=desc)
 
 
-def pretty_print_a5_results(curve_list, save_to_txt=True):
-    pretty_print_results(curve_list, 'a5', [['least'], ['full'], ['relative']],
-                         ['least torsion', 'full torsion', 'relative ratio'], save_to_txt=save_to_txt)
+def get_a05_captions(results):
+    captions = ['least', 'full', 'relative']
+    return captions
+
+
+def select_a05_results(curve_results):
+    selected_results = []
+    for key in curve_results.keys():
+        selected_results.append(curve_results[key])
+    return selected_results
+
+
+def pretty_print_a05_results(curve_list, save_to_txt=True):
+    pretty_print_results(curve_list, 'a05', get_a05_captions, select_a05_results, save_to_txt=save_to_txt)
