@@ -1,4 +1,4 @@
-from sage.all import kronecker, ZZ
+from sage.all import kronecker, ZZ, prime_range
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 
@@ -29,17 +29,24 @@ def a23_curve_function(curve, l):
     return curve_results
 
 
-def compute_a23_results(order_bound=256, overwrite=False, curve_list=None):
-    if curve_list == None:
-        from curve_analyzer.utils.curve_handler import curves
-        curve_list = curves
-    parameters = {}
-    compute_results(curve_list, 'a23', a23_curve_function, parameters, order_bound, overwrite)
+def compute_a23_results(curve_list, l_max=20, order_bound=256, overwrite=False, desc=''):
+    global_params = {'l_range': prime_range(l_max)}
+    params_local_names = ['l']
+    compute_results(curve_list, 'a23', a23_curve_function, global_params, params_local_names, order_bound, overwrite,
+                    desc=desc)
 
 
-def pretty_print_a23_results(save_to_txt=True, curve_list=None):
-    if curve_list == None:
-        from curve_analyzer.utils.curve_handler import curves
-        curve_list = curves
-    pretty_print_results(curve_list, 'a23', [['crater_degree'], ['depth']], ['crater_degree', 'depth'],
-                         save_to_txt=save_to_txt)
+def get_a23_captions(results):
+    captions = ['crater_degree', 'depth']
+    return captions
+
+
+def select_a23_results(curve_results):
+    degs_lists = [x['crater_degree'] for x in curve_results]
+    depths = [x['depth'] for x in curve_results]
+    selected_results = [degs_lists, depths]
+    return selected_results
+
+
+def pretty_print_a22_results(curve_list, save_to_txt=True):
+    pretty_print_results(curve_list, 'a23', get_a23_captions, select_a23_results, save_to_txt=save_to_txt)
