@@ -1,7 +1,4 @@
-from sage.misc.functional import squarefree_part  # import sage library
-from sage.arith.misc import factor
-from sage.rings.all import Integers as ZZ
-from sage.functions.other import sqrt
+from sage.all import ZZ, sqrt, factor, squarefree_part
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 
