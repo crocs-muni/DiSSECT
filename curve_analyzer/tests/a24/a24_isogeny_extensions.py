@@ -97,11 +97,24 @@ def a24_curve_function(curve, l_max):
     return curve_results
 
 
-def compute_a24_results(curve_list, l_max=20, order_bound=256, overwrite=False):
-    parameters = {'l_max': l_max}
-    compute_results(curve_list, 'a24', a24_curve_function, parameters, order_bound, overwrite)
+def compute_a24_results(curve_list, l_max=20, order_bound=256, overwrite=False, desc=''):
+    global_params = {'l_range': prime_range(l_max)}
+    params_local_names = ['l']
+    compute_results(curve_list, 'a24', a24_curve_function, global_params, params_local_names, order_bound, overwrite,
+                    desc=desc)
+
+
+def get_a24_captions(results):
+    captions = ['least', 'full', 'relative']
+    return captions
+
+
+def select_a24_results(curve_results):
+    selected_results = []
+    for key in curve_results.keys():
+        selected_results.append(curve_results[key])
+    return selected_results
 
 
 def pretty_print_a24_results(curve_list, save_to_txt=True):
-    pretty_print_results(curve_list, 'a24', [['least'], ['full'], ['relative']],
-                         ['first isogeny', 'all isogenies', 'relative ratio'], save_to_txt=save_to_txt)
+    pretty_print_results(curve_list, 'a24', get_a24_captions, select_a24_results, save_to_txt=save_to_txt)
