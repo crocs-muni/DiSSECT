@@ -6,5 +6,7 @@ local/
 curve_analyzer/.ipynb_checkpoints/ 
 curve_analyzer/tests/.ipynb_checkpoints
 curve_analyzer/tests/test_launcher.ipynb
+curve_analyzer/tests/test_launcher.py
+curve_analyzer/tests/sample_curves.py
 curve_analyzer/tests/.*
 .idea/
