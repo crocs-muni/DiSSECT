@@ -1,4 +1,3 @@
-from sage.all_cmdline import *   # import sage library
 from curve_analyzer.definitions import CURVE_PATH
 from curve_analyzer.utils.custom_curve import CustomCurve
 import json

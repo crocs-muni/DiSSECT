@@ -18,8 +18,13 @@ def get_timestamp():
 class Logs:
     def __init__(self, test_name, desc=''):
         self.desc = desc
+        self.main_log_file = None
+        self.main_log = None
+        self.log_dir = None
+        self.current_log_file = None
+        self.current_log = None
         self.init_log_paths(test_name)
-        self.create_logs(test_name)
+        self.create_logs()
 
     def init_log_paths(self, test_name):
         self.main_log_file = TEST_PATH + '/' + test_name + '/' + test_name + ".log"
@@ -31,7 +36,7 @@ class Logs:
             name = timestamp
         self.current_log_file = self.log_dir + name + '.log'
 
-    def create_logs(self, test_name):
+    def create_logs(self):
         if not os.path.isdir(self.log_dir):
             os.mkdir(self.log_dir)
         if not os.path.exists(self.main_log_file):
@@ -61,7 +66,7 @@ def init_json_paths(test_name):
 
 def update_curve_results(curve, curve_function, params_global, params_local_names, order_bound, results, log_obj):
     log_obj.write_to_logs("Processing curve " + curve.name + ":", newlines=1)
-    if not curve.name in results:
+    if curve.name not in results:
         results[curve.name] = {}
 
     if curve.nbits > order_bound:
@@ -80,11 +85,9 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
     return results[curve.name]
 
 
-def compute_results(curve_list, test_name, curve_function, params_global, params_local_names, order_bound=256,
-                    overwrite=False, desc=''):
+def compute_results(curve_list, test_name, curve_function, params_global, params_local_names, order_bound=256, overwrite = False, desc=''):
     json_file, tmp_file = init_json_paths(test_name)
     log_obj = Logs(test_name, desc)
-    param_list = list(params_global.values())
     results = load_from_json(json_file)
 
     total_time = 0
@@ -139,7 +142,7 @@ def pretty_print_results(curve_list, test_name, get_captions, select_results, cu
 
     for curve in curve_list:
         name = curve.name
-        if not name in results.keys():
+        if name not in results.keys():
             continue
         order_bits = curve.nbits
         row = [name, order_bits]
@@ -157,6 +160,7 @@ def pretty_print_results(curve_list, test_name, get_captions, select_results, cu
 
 
 # https://ask.sagemath.org/question/10112/kill-the-thread-in-a-long-computation/
+# stops the function func after 'timeout_duration' seconds
 def timeout(func, args=(), kwargs={}, timeout_duration=10):
     @fork(timeout=timeout_duration, verbose=False)
     def my_new_func():

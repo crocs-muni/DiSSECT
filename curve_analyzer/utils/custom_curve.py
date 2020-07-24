@@ -1,4 +1,4 @@
-from sage.all_cmdline import *   # import sage library
+from sage.all import EllipticCurve, ZZ, GF  # import sage library
 
 def montgomery_to_short_weierstrass(F, A, B, x, y):
     a = F( (3 -A**2 )/(3 *B**2 ) )
