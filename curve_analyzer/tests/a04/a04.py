@@ -41,11 +41,10 @@ def largest_factor_bitlen(factorization):
 # Returns a dictionary
 def a04_curve_function(curve, k):
     t = TIME
-    curve_results = {'plus': {}, 'minus': {}}
-    curve_results['plus']['factorization'] = near_order_factorizations(curve.order, '+', k, t)
-    curve_results['plus']['largest_factor_bitlen'] = largest_factor_bitlen(curve_results['plus']['factorization'])
-    curve_results['minus']['factorization'] = near_order_factorizations(curve.order, '-', k, t)
-    curve_results['minus']['largest_factor_bitlen'] = largest_factor_bitlen(curve_results['minus']['factorization'])
+    curve_results = {('(+)'+'factorization'): near_order_factorizations(curve.order, '+', k, t)}
+    curve_results[('(+)'+'largest_factor_bitlen')] = largest_factor_bitlen(curve_results[('(+)'+'factorization')])
+    curve_results[('(-)'+'factorization')] = near_order_factorizations(curve.order, '-', k, t)
+    curve_results[('(-)'+'largest_factor_bitlen')] = largest_factor_bitlen(curve_results[('(-)'+'factorization')])
     return curve_results
 
 
@@ -57,15 +56,16 @@ def compute_a04_results(curve_list, k_max=10, order_bound=256, overwrite=False, 
 
 
 def get_a04_captions(results):
-    captions = [['plus', 'largest_factor_bitlen'], ['minus', 'largest_factor_bitlen']], ['largest_factor_bitlen (+)',
-                                                                                         'largest_factor_bitlen (-)']
+    captions = ['factorization (+)', 'largest_factor_bitlen (+)', ' factorization (-)','largest_factor_bitlen (-)']
     return captions
 
 
 def select_a04_results(curve_results):
+    keys = [('(+)'+'factorization'),('(+)'+'largest_factor_bitlen'),('(-)'+'factorization'),('(-)'+'largest_factor_bitlen')]
     selected_results = []
-    for key in curve_results.keys():
-        selected_results.append(curve_results[key])
+    for key in keys:
+        for x in curve_results:
+            selected_results.append(x[key])
     return selected_results
 
 

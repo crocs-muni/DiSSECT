@@ -30,12 +30,15 @@ def compute_a02_results(curve_list, order_bound=256, overwrite=False, desc=''):
 def get_a02_captions(results):
     return ['max_conductor', 'factorization', 'cm_disc']
 
-W
+
 def select_a02_results(curve_results):
+    keys = ['max_conductor', 'factorization', 'cm_disc']
     selected_results = []
-    for key in curve_results.keys():
-        selected_results.append(curve_results[key])
+    for key in keys:
+        for x in curve_results:
+            selected_results.append(x[key])
     return selected_results
+
 
 
 def pretty_print_a02_results(curve_list, save_to_txt=True):

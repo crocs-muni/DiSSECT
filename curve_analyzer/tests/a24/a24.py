@@ -110,9 +110,11 @@ def get_a24_captions(results):
 
 
 def select_a24_results(curve_results):
+    keys = ['least', 'full', 'relative']
     selected_results = []
-    for key in curve_results.keys():
-        selected_results.append(curve_results[key])
+    for key in keys:
+        for x in curve_results:
+            selected_results.append(x[key])
     return selected_results
 
 
