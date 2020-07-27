@@ -1,6 +1,6 @@
 import unittest
 from sage.all_cmdline import *
-from curve_analyzer.tests.a22.a22_division_pol_factorizations import a22_curve_function
+from curve_analyzer.tests.a22.a22 import a22_curve_function
 from curve_analyzer.utils.custom_curve import CustomCurve
 
 
