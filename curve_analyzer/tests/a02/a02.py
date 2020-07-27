@@ -30,7 +30,7 @@ def compute_a02_results(curve_list, order_bound=256, overwrite=False, desc=''):
 def get_a02_captions(results):
     return ['max_conductor', 'factorization', 'cm_disc']
 
-W
+
 def select_a02_results(curve_results):
     selected_results = []
     for key in curve_results.keys():
