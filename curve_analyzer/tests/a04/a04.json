@@ -8,80 +8,35 @@
      3,
      247315845838539709805105085697163
     ],
-    "largest_factor_bitlens": [
-     2,
-     2,
-     2,
-     108
-    ]
+    "largest_factor_bitlen": 108
    },
    "minus": {
-    "factorizations": [
+    "factorization": [
      2,
      2,
      41,
      859,
      31600025732514514725658675307
     ],
-    "largest_factor_bitlens": [
-     2,
-     2,
-     6,
-     10,
-     95
-    ]
+    "largest_factor_bitlen": 95
    }
   }
  },
  "secp192r1": {
   "{'k': 1}": {
    "plus": {
-    "factorization": "NO DATA (timed out)",
-    "largest_factor_bitlens": [
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-"
-    ]
+    "factorization": [
+     2,
+     3,
+     41,
+     116696426742853568300653,
+     218658569360579814643606926178439
+    ],
+    "largest_factor_bitlen": 108
    },
    "minus": {
-    "factorizations": "NO DATA (timed out)",
-    "largest_factor_bitlens": [
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-",
-     "-"
-    ]
+    "factorization": "NO DATA (timed out)",
+    "largest_factor_bitlen": "-"
    }
   }
  },
@@ -95,16 +50,10 @@
      176337611,
      34946779280882916835155272231706129710560967816144871596921775673
     ],
-    "largest_factor_bitlens": [
-     2,
-     3,
-     11,
-     28,
-     215
-    ]
+    "largest_factor_bitlen": 215
    },
    "minus": {
-    "factorizations": [
+    "factorization": [
      2,
      2,
      2,
@@ -121,23 +70,7 @@
      1002328039319,
      2624747550333869278416773953
     ],
-    "largest_factor_bitlens": [
-     2,
-     2,
-     2,
-     2,
-     2,
-     7,
-     8,
-     9,
-     12,
-     15,
-     16,
-     28,
-     30,
-     40,
-     92
-    ]
+    "largest_factor_bitlen": 92
    }
   }
  }

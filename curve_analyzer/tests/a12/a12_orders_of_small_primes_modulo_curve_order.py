@@ -1,7 +1,8 @@
 from sage.all import prime_range, Integers, ZZ
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
-
+# Computes the order of l (small prime) modulo curve order and bit length of the index of <l>
+# Returns a dictionary
 def a12_curve_function(curve, l):
     mul_ord = (Integers(curve.order)(l)).multiplicative_order()
     curve_results = {'order': mul_ord}

@@ -4,6 +4,8 @@ from curve_analyzer.tests.test_interface import pretty_print_results, compute_re
 
 TIME = 10
 
+
+# Factors 'n' in time 't'
 def attempt_factor(n, t):
     try:
         factorization = timeout(ecm.factor, [n], timeout_duration=t)
@@ -12,8 +14,8 @@ def attempt_factor(n, t):
     return factorization
 
 
+# Computer factorization of k*n+1 (k*n-1) if 'sign' is "+" ("-") in time 't'
 def near_order_factorizations(n, sign='+', k=10, t=10):
-
     assert sign in ['+', '-']
 
     if sign == '+':
@@ -24,43 +26,39 @@ def near_order_factorizations(n, sign='+', k=10, t=10):
         return attempt_factor(m, t)
     except:
         return None
-    return factorizations
 
 
+# Computes bit length of largest factor(last item of list) of 'factorization'
 def largest_factor_bitlen(factorization):
     try:
-        bitlen = factorization.nbits()
+        bitlen = factorization[-1].nbits()
     except:
         bitlen = '-'
     return bitlen
 
 
+# Computes factorization of ord*k+1 and ord*k-1 and bit lengths of their largest factors
+# Returns a dictionary
 def a04_curve_function(curve, k):
     t = TIME
     curve_results = {'plus': {}, 'minus': {}}
     curve_results['plus']['factorization'] = near_order_factorizations(curve.order, '+', k, t)
-    curve_results['plus']['largest_factor_bitlens'] = list(
-        map(largest_factor_bitlen, curve_results['plus']['factorization']))
-    #curve_results['plus']['min_largest_factor_bitlen'] = min(
-    #    remove_values_from_list(curve_results['plus']['largest_factor_bitlens'], '-'))
-    curve_results['minus']['factorizations'] = near_order_factorizations(curve.order, '-', k, t)
-    curve_results['minus']['largest_factor_bitlens'] = list(
-        map(largest_factor_bitlen, curve_results['minus']['factorizations']))
-    #curve_results['minus']['min_largest_factor_bitlen'] = min(
-    #    remove_values_from_list(curve_results['minus']['largest_factor_bitlens'], '-'))
+    curve_results['plus']['largest_factor_bitlen'] = largest_factor_bitlen(curve_results['plus']['factorization'])
+    curve_results['minus']['factorization'] = near_order_factorizations(curve.order, '-', k, t)
+    curve_results['minus']['largest_factor_bitlen'] = largest_factor_bitlen(curve_results['minus']['factorization'])
     return curve_results
 
 
 def compute_a04_results(curve_list, k_max=10, order_bound=256, overwrite=False, desc=''):
-    global_params = {"k_max": range(1,k_max + 1)}
+    global_params = {"k_max": range(1, k_max + 1)}
     params_local_names = ["k"]
     compute_results(curve_list, 'a04', a04_curve_function, global_params, params_local_names, order_bound, overwrite,
                     desc=desc)
 
 
 def get_a04_captions(results):
-    captions = [['plus', 'largest_factor_bitlens'], ['minus', 'largest_factor_bitlens']], ['largest_factor_bitlens (+)',
-                                                                                           'largest_factor_bitlens (-)']
+    captions = [['plus', 'largest_factor_bitlen'], ['minus', 'largest_factor_bitlen']], ['largest_factor_bitlen (+)',
+                                                                                         'largest_factor_bitlen (-)']
     return captions
 
 
