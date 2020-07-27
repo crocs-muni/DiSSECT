@@ -16,14 +16,16 @@ def compute_a25_results(curve_list, order_bound=256, overwrite=False, desc=''):
 
 
 def get_a25_captions(results):
-    captions = ['factorization']
+    captions = ['trace']
     return captions
 
 
 def select_a25_results(curve_results):
+    keys = ['trace']
     selected_results = []
-    for key in curve_results.keys():
-        selected_results.append(curve_results[key])
+    for key in keys:
+        for x in curve_results:
+            selected_results.append(x[key])
     return selected_results
 
 

@@ -23,7 +23,7 @@ def compute_a22_results(curve_list, l_max=20, order_bound=256, overwrite=False, 
                     desc=desc)
 
 
-def get_a22_captions():
+def get_a22_captions(results):
     return ['degs_lists', 'lens']
 
 
