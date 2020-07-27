@@ -21,15 +21,9 @@ def twisted_edwards_to_montgomery(F, a, d, u, v, scaling = True):
         return (A, 1 , x, y/s)
     return (A, B, x, y)
 
-def twisted_edwards_to_short_weierstrass(F, aa, d, x, y, composition = False):
-    if composition:
-        A, B, x, y = twisted_edwards_to_montgomery(F, a, d, u, v, True)
-        a, b, u, v = montgomery_to_short_weierstrass(F, A, B, x, y)
-    else:
-        a = F((aa**2  + 14  * aa * d + d**2 ) )/F(-48)
-        b = F((aa+d) * (-aa**2  + 34  * aa * d - d**2 ) )/F(864 )
-        u = (5 *aa + aa*y - 5 *d*y - d)/(12  - 12 *y)
-        v = (aa + aa*y - d*y -d)/(4 *x - 4 *x*y)
+def twisted_edwards_to_short_weierstrass(F, aa, d, x, y):
+    A, B, x, y = twisted_edwards_to_montgomery(F, aa, d, x, y, True)
+    a, b, u, v = montgomery_to_short_weierstrass(F, A, B, x, y)
     assert (u, v) in EllipticCurve(F, [a,b])
     return (a, b, u, v)
 
