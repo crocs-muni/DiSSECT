@@ -1,6 +1,9 @@
 from sage.all import factor, prime_range
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
+
+
+
 # Computation factorization of l-th division polynomial
 # Returns a dictionary (keys: 'factorization', 'degs_list', 'len' )
 def a22_curve_function(curve, l):
@@ -20,9 +23,8 @@ def compute_a22_results(curve_list, l_max=20, order_bound=256, overwrite=False, 
                     desc=desc)
 
 
-def get_a22_captions(results):
-    captions = ['degs_lists', 'lens']
-    return captions
+def get_a22_captions():
+    return ['degs_lists', 'lens']
 
 
 def select_a22_results(curve_results):

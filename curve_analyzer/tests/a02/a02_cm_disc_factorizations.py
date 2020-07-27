@@ -8,7 +8,7 @@ def a02_curve_function(curve):
     E = curve.EC
     t = curve.trace
     q = curve.q
-    curve_results = {'cm_disc': {}, 'factorization': {}}
+    curve_results = {}
     D = t ** 2 - 4 * q
     d = squarefree_part(D)
     disc = d
@@ -28,10 +28,9 @@ def compute_a02_results(curve_list, order_bound=256, overwrite=False, desc=''):
 
 
 def get_a02_captions(results):
-    captions = results.keys()
-    return captions
+    return ['max_conductor', 'factorization', 'cm_disc']
 
-
+W
 def select_a02_results(curve_results):
     selected_results = []
     for key in curve_results.keys():
