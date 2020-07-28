@@ -86,6 +86,9 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
 
 
 def compute_results(curve_list, test_name, curve_function, params_global, params_local_names, order_bound=256, overwrite = False, desc=''):
+    if curve_list == []:
+        print("No input curves found, terminating the test.")
+        return
     json_file, tmp_file = init_json_paths(test_name)
     log_obj = Logs(test_name, desc)
     results = load_from_json(json_file)
@@ -101,7 +104,7 @@ def compute_results(curve_list, test_name, curve_function, params_global, params
             sim_count += 1
         else:
             std_count += 1
-    log_obj.write_to_logs("Running test " + str(test_name) + " on " + str(std_count) + " std curves and " + str(
+    log_obj.write_to_logs("Hold on to your hat! Running test " + str(test_name) + " on " + str(std_count) + " std curves and " + str(
         sim_count) + " sim curves with global parameters:\n" + str(params_global), newlines=2)
 
     for curve in curve_list:
