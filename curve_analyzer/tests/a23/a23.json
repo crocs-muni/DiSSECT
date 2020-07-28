@@ -19,6 +19,18 @@
   "{'l': 11}": {
    "crater_degree": 0,
    "depth": 0
+  },
+  "{'l': 13}": {
+   "crater_degree": 0,
+   "depth": 0
+  },
+  "{'l': 17}": {
+   "crater_degree": 2,
+   "depth": 0
+  },
+  "{'l': 19}": {
+   "crater_degree": 0,
+   "depth": 0
   }
  },
  "secp192r1": {
@@ -41,6 +53,18 @@
   "{'l': 11}": {
    "crater_degree": 1,
    "depth": 0
+  },
+  "{'l': 13}": {
+   "crater_degree": 2,
+   "depth": 0
+  },
+  "{'l': 17}": {
+   "crater_degree": 0,
+   "depth": 0
+  },
+  "{'l': 19}": {
+   "crater_degree": 0,
+   "depth": 0
   }
  },
  "secp256r1": {
@@ -62,6 +86,18 @@
   },
   "{'l': 11}": {
    "crater_degree": 2,
+   "depth": 0
+  },
+  "{'l': 13}": {
+   "crater_degree": 2,
+   "depth": 0
+  },
+  "{'l': 17}": {
+   "crater_degree": 2,
+   "depth": 0
+  },
+  "{'l': 19}": {
+   "crater_degree": 0,
    "depth": 0
   }
  }

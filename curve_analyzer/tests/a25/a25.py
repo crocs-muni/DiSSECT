@@ -24,8 +24,10 @@ def select_a25_results(curve_results):
     keys = ['trace']
     selected_results = []
     for key in keys:
+        selected_key = []
         for x in curve_results:
-            selected_results.append(x[key])
+            selected_key.append(x[key])
+        selected_results.append(selected_key)
     return selected_results
 
 

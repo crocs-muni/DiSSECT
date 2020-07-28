@@ -11,7 +11,7 @@ def a12_curve_function(curve, l):
     return curve_results
 
 
-def compute_a12_results(curve_list, l_max=100, order_bound=256, overwrite=False, desc=''):
+def compute_a12_results(curve_list, l_max=15, order_bound=256, overwrite=False, desc=''):
     global_params = {'l_max': prime_range(l_max)}
     params_local_names = ['l']
     compute_results(curve_list, 'a12', a12_curve_function, global_params, params_local_names, order_bound, overwrite,
@@ -24,9 +24,13 @@ def get_a12_captions(results):
 
 
 def select_a12_results(curve_results):
+    keys = ['order', 'complement_bit_length']
     selected_results = []
-    for key in curve_results.keys():
-        selected_results.append(curve_results[key])
+    for key in keys:
+        selected_key = []
+        for x in curve_results:
+            selected_key.append(x[key])
+        selected_results.append(selected_key)
     return selected_results
 
 
