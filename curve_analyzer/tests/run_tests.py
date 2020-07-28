@@ -9,6 +9,7 @@ parser.add_argument('test_name', metavar='test_name', type=str, nargs=1, action=
 parser.add_argument('curve_type', metavar='curve_type', type=str, nargs=1, help='the type of curves to be tested; must be one of the following: std (all standard curves), sim (all simulated curves), sample (curves secp112r1, secp192r1, secp256r1), all (all curves in the database)')
 parser.add_argument('-v', '--verbosity', action='store_true', help='verbosity flag (default: False)')
 parser.add_argument('-b', action='store', type=int, metavar='order_bound', help ='upper bound for curve order bitsize (default: 256)')
+parser.add_argument('-d', action='store', type=str, metavar='description', help ='custom text description of the current test run for logs (default: "")')
 
 args = parser.parse_args()
 tn = args.test_name[0]
@@ -29,6 +30,12 @@ if args.b == None:
 	order_bound = 256
 else:
 	order_bound = args.b
+
+if args.d== None:
+	description = ""
+else:
+	description = args.d
+
 curves_list = import_curves(ct, order_bound, args.verbosity)
 print("")
-test_function(curves_list)
+test_function(curves_list, desc = description)
