@@ -1,0 +1,8 @@
+{
+  "params_global": {
+    "k_range": "range(1, 10)"
+  },
+  "params_local_names": [
+    "k"
+  ]
+}

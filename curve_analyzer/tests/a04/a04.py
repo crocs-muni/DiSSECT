@@ -48,10 +48,8 @@ def a04_curve_function(curve, k):
     return curve_results
 
 
-def compute_a04_results(curve_list, k_max=10, desc=''):
-    global_params = {"k_max": range(1, k_max + 1)}
-    params_local_names = ["k"]
-    compute_results(curve_list, 'a04', a04_curve_function, global_params, params_local_names, desc=desc)
+def compute_a04_results(curve_list, desc=''):
+    compute_results(curve_list, 'a04', a04_curve_function, desc=desc)
 
 
 def get_a04_captions(results):
