@@ -100,9 +100,7 @@ class CustomCurve:
                 self.EC = EllipticCurve(K, [1, K.fetch_int(ZZ(a)), 0, 0, K.fetch_int(ZZ(b))])  # xy, x^2, y, x, 1
                 self.generator = None
                 self.field = K
-                # self.set_generator(x,y)
-                # needs fixing, originally:
-                # self.generator = self.EC(K.fetch_int(x), K.fetch_int(y))
+                self.set_generator(x,y,True)
 
         elif self.form == "Montgomery":
             A = ZZ(self.params['a'])

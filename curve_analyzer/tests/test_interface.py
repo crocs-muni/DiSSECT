@@ -82,7 +82,7 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
 
 
 def compute_results(curve_list, test_name, curve_function, params_global, params_local_names, desc=''):
-    if curve_list == []:
+    if not curve_list:
         print("No input curves found, terminating the test.")
         return
     json_file, tmp_file = init_json_paths(test_name)
