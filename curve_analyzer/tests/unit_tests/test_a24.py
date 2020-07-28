@@ -21,16 +21,30 @@ E1 = CustomCurve({'name': 'gost512',
   'j_invariant': '610900649669533983695054775734306011088557592049408816983490905302782604532556561056354879375964032515423415363590524121501491460792551618405795037507769',
   'trace_of_frobenius': '33317690176989408428354063686744165122149707869071609401230178415964786752661'}})
 
-I1 = {'least': [3, 2, 1], 'full': [3, 2, 4], 'relative': [1, 1, 4]}
+I2 = {'least': 3, 'full': 3, 'relative': 1}
+I3 = {'least': 2, 'full': 2, 'relative': 1}
+I5 = {'least': 1, 'full': 4, 'relative': 4}
 
 
 class Test_a24(unittest.TestCase):
     
-    def test_up_to_5(self):
-        result = a24_curve_function(E1,6)
-        self.assertEqual(result['least'], I1['least'], "Should be "+str(I1['least']))
-        self.assertEqual(result['full'], I1['full'], "Should be "+str(I1['full']))
-        self.assertEqual(result['relative'], I1['relative'], "Should be "+str(I1['relative']))
+    def test_2(self):
+        result = a24_curve_function(E1,2)
+        self.assertEqual(result['least'], I2['least'], "Should be "+str(I2['least']))
+        self.assertEqual(result['full'], I2['full'], "Should be "+str(I2['full']))
+        self.assertEqual(result['relative'], I2['relative'], "Should be "+str(I2['relative']))
+
+    def test_3(self):
+        result = a24_curve_function(E1,3)
+        self.assertEqual(result['least'], I3['least'], "Should be "+str(I3['least']))
+        self.assertEqual(result['full'], I3['full'], "Should be "+str(I3['full']))
+        self.assertEqual(result['relative'], I3['relative'], "Should be "+str(I3['relative']))
+
+    def test_5(self):
+        result = a24_curve_function(E1,5)
+        self.assertEqual(result['least'], I5['least'], "Should be "+str(I5['least']))
+        self.assertEqual(result['full'], I5['full'], "Should be "+str(I5['full']))
+        self.assertEqual(result['relative'], I5['relative'], "Should be "+str(I5['relative']))
        
 
         
