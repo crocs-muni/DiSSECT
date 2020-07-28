@@ -79,21 +79,17 @@ def i_finder(curve, l):
 
 # Computes i2,i1 (see i_finder) for all primes l<l_max
 # Returns a dictionary (keys: 'least' (i1), 'full' (i2), 'relative' (i2/i1))
-def a24_curve_function(curve, l_max):
-    E = curve.EC
-    order = curve.order
-    curve_results = {'least': [], 'full': [], 'relative': []}
+def a24_curve_function(curve, l):
+    curve_results = {}
+    try:
+        i2, i1 = i_finder(curve, l)
+        least, full, relative = i1, i2, i2 // i1
+    except (ArithmeticError, TypeError, ValueError) as e:
+        least, full, relative = None, None, None
 
-    for l in prime_range(l_max):
-        try:
-            i2, i1 = i_finder(curve, l)
-            least, full, relative = i1, i2, i2 // i1
-        except (ArithmeticError, TypeError, ValueError) as e:
-            least, full, relative = None, None, None
-
-        curve_results['least'].append(least)
-        curve_results['full'].append(full)
-        curve_results['relative'].append(relative)
+    curve_results['least'] = least
+    curve_results['full'] = full
+    curve_results['relative'] = relative
     return curve_results
 
 
@@ -113,8 +109,10 @@ def select_a24_results(curve_results):
     keys = ['least', 'full', 'relative']
     selected_results = []
     for key in keys:
+        selected_key = []
         for x in curve_results:
-            selected_results.append(x[key])
+            selected_key.append(x[key])
+        selected_results.append(selected_key)
     return selected_results
 
 
