@@ -1,6 +1,6 @@
 # Curve analysis
 
-[![pipeline status](https://gitlab.fi.muni.cz/x408178/curve_analyzer/badges/refactoring/pipeline.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/commits/refactoring)
+[![pipeline status](https://gitlab.fi.muni.cz/x408178/curve_analyzer/badges/master/pipeline.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/commits/master)
 
 For setup, run
 
