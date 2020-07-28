@@ -1,5 +1,6 @@
 from curve_analyzer.definitions import CURVE_PATH
 from curve_analyzer.utils.custom_curve import CustomCurve
+from sage.all import ZZ
 import json
 import os
 import re
@@ -23,33 +24,32 @@ def import_curve_db(root = CURVE_PATH, ignore_sim = True):
                 curve_db[source + suffix] = json.load(f)
     return curve_db
 
-def curve_gen(curve_db, type, verbose = False):
+def curve_gen(curve_db, curve_type, order_bound, verbose):
     sources = curve_db.keys()
     for source in sources:
         curves = curve_db[source]['curves']
         for curve in curves:
+            if ZZ(curve['order']).nbits() > order_bound:
+                continue
             name = curve['name']
-            if type == "std" and "sim" in name:
+            if curve_type == "std" and "sim" in name:
                 continue
-            if type == "sim" and not "sim" in name:
+            if curve_type == "sim" and not "sim" in name:
                 continue
-            if type == "sample" and not name in ["secp112r1", "secp192r1", "secp256r1"]:
+            if curve_type == "sample" and not name in ["secp112r1", "secp192r1", "secp256r1"]:
                 continue
             if verbose:
                 print(curve['name'])
             yield CustomCurve(curve)
 
-def custom_curves(curve_db, type, verbose = False):
-    return [c for c in curve_gen(curve_db, type, verbose)]
+def custom_curves(curve_db, curve_type, order_bound, verbose):
+    return [c for c in curve_gen(curve_db, curve_type, order_bound, verbose)]
 
-def custom_curves_sorted_by_name(curve_db):
-    return sorted(custom_curves(curve_db), key = lambda item: item.name)
-
-def import_curves(type = "sample", verbose = False):
-    print("Importing database...")
+def import_curves(curve_type = "sample", order_bound = 256, verbose = False):
+    print("Importing " + curve_type + " curves of sizes up to " + str(order_bound) + " bits from the database...")
     ignore_sim = True
-    if type in ["sim", "all"]:
+    if curve_type in ["sim", "all"]:
         ignore_sim = False
     curve_db = import_curve_db(CURVE_PATH, ignore_sim)
-    curve_list = sorted(custom_curves(curve_db, type, verbose))
+    curve_list = sorted(custom_curves(curve_db, curve_type, order_bound, verbose), key = lambda item: item.name)
     return curve_list
