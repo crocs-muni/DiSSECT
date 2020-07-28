@@ -85,7 +85,7 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
     return results[curve.name]
 
 
-def compute_results(curve_list, test_name, curve_function, params_global, params_local_names, order_bound=256, overwrite = False, desc=''):
+def compute_results(curve_list, test_name, curve_function, params_global, params_local_names, order_bound=256, desc=''):
     if curve_list == []:
         print("No input curves found, terminating the test.")
         return

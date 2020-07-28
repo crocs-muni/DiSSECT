@@ -15,12 +15,11 @@ def a22_curve_function(curve, l):
     return curve_results
 
 
-def compute_a22_results(curve_list, l_max=20, order_bound=256, overwrite=False, desc=''):
+def compute_a22_results(curve_list, l_max=20, order_bound=256, desc=''):
     global_params = {'l_range': prime_range(l_max)}
     params_local_names = ['l']
     # Add Ordered dict
-    compute_results(curve_list, 'a22', a22_curve_function, global_params, params_local_names, order_bound, overwrite,
-                    desc=desc)
+    compute_results(curve_list, 'a22', a22_curve_function, global_params, params_local_names, order_bound, desc=desc)
 
 
 def get_a22_captions(results):

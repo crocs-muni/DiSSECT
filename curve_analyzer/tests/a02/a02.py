@@ -20,11 +20,10 @@ def a02_curve_function(curve):
     return curve_results
 
 
-def compute_a02_results(curve_list, order_bound=256, overwrite=False, desc=''):
+def compute_a02_results(curve_list, order_bound=256, desc=''):
     global_params = {}
     params_local_names = []
-    compute_results(curve_list, 'a02', a02_curve_function, global_params, params_local_names, order_bound, overwrite,
-                    desc=desc)
+    compute_results(curve_list, 'a02', a02_curve_function, global_params, params_local_names, order_bound, desc=desc)
 
 
 def get_a02_captions(results):

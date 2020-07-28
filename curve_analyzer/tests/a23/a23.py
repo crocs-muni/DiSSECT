@@ -29,11 +29,10 @@ def a23_curve_function(curve, l):
     return curve_results
 
 
-def compute_a23_results(curve_list, l_max=20, order_bound=256, overwrite=False, desc=''):
+def compute_a23_results(curve_list, l_max=20, order_bound=256, desc=''):
     global_params = {'l_range': prime_range(l_max)}
     params_local_names = ['l']
-    compute_results(curve_list, 'a23', a23_curve_function, global_params, params_local_names, order_bound, overwrite,
-                    desc=desc)
+    compute_results(curve_list, 'a23', a23_curve_function, global_params, params_local_names, order_bound, desc=desc)
 
 
 def get_a23_captions(results):

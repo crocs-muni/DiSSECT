@@ -8,11 +8,10 @@ def a25_curve_function(curve):
     return {'trace': len(list(factor(curve.trace)))}
 
 
-def compute_a25_results(curve_list, order_bound=256, overwrite=False, desc=''):
+def compute_a25_results(curve_list, order_bound=256, desc=''):
     global_params = {}
     params_local_names = []
-    compute_results(curve_list, 'a25', a25_curve_function, global_params, params_local_names, order_bound, overwrite,
-                    desc=desc)
+    compute_results(curve_list, 'a25', a25_curve_function, global_params, params_local_names, order_bound, desc=desc)
 
 
 def get_a25_captions(results):
