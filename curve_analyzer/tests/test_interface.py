@@ -7,14 +7,14 @@ import pytz
 import itertools
 import os
 
-
+# Returns the current datetime as CEST
 def get_timestamp():
     cest = pytz.timezone('Europe/Prague')
     now = datetime.now()
     now = cest.localize(now)
     return datetime.isoformat(now, sep='_', timespec='seconds')[:-6]
 
-
+# Class for managing logs for each curve test
 class Logs:
     def __init__(self, test_name, desc=''):
         self.desc = desc
@@ -55,15 +55,16 @@ class Logs:
         for f in [self.main_log, self.current_log]:
             f.close()
 
-
+# Deduces paths to JSON files from the test name
 def init_json_paths(test_name):
     path_json = TEST_PATH + '/' + test_name + '/' + test_name + '.json'
     path_tmp = TEST_PATH + '/' + test_name + '/' + 'tmp.json'
+    path_params = TEST_PATH + '/' + test_name + '/' + test_name + '.params'
     if not os.path.exists(path_json):
         save_into_json({}, path_json, 'w')
-    return path_json, path_tmp
+    return path_json, path_tmp, path_params
 
-
+# Tries to run tests for each individual curve; called by compute_results
 def update_curve_results(curve, curve_function, params_global, params_local_names, results, log_obj):
     log_obj.write_to_logs("Processing curve " + curve.name + ":", newlines=1)
     if curve.name not in results:
@@ -80,15 +81,19 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
             log_obj.write_to_logs("Done", newlines=1)
     return results[curve.name]
 
-
+# A universal function for running tests on curve lists; it is called by each test file which has its own curve function.
+# Each test is assumed to have a params file in its folder; the results and logs are created there as well.
 def compute_results(curve_list, test_name, curve_function, desc=''):
     if curve_list == []:
         print("No input curves found, terminating the test.")
         return
-    json_file, tmp_file = init_json_paths(test_name)
+    json_file, tmp_file, params_file = init_json_paths(test_name)
     log_obj = Logs(test_name, desc)
     results = load_from_json(json_file)
-    params = load_from_json(TEST_PATH + '/' + test_name + '/' + test_name + '.params')
+    if not os.path.exists(path_params):
+        print("No parameter file found, terminating the test.")
+        return
+    params = load_from_json(path_params)
     for key in params["params_global"].keys():
         params["params_global"][key] = sage_eval(params["params_global"][key])
     params_global = params["params_global"]
@@ -132,7 +137,7 @@ def init_txt_paths(test_name, desc=''):
         name += "_" + desc
     return name + '.txt'
 
-
+# Visualizes test results from the relevant JSON; the functions get_captions are select_results are provided by each test separately
 def pretty_print_results(curve_list, test_name, get_captions, select_results, curve_sort_key="bits", save_to_txt=True):
     path_json, _ = init_json_paths(test_name)
     results = load_from_json(path_json)

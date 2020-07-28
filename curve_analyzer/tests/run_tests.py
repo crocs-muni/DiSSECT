@@ -1,5 +1,7 @@
 #!/usr/bin/env sage
 
+# A script for running individual tests from the command line.
+
 import argparse
 import sys
 from curve_analyzer.utils.curve_handler import import_curves
