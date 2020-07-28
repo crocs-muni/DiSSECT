@@ -9,9 +9,7 @@ def a25_curve_function(curve):
 
 
 def compute_a25_results(curve_list, desc=''):
-    global_params = {}
-    params_local_names = []
-    compute_results(curve_list, 'a25', a25_curve_function, global_params, params_local_names, desc=desc)
+    compute_results(curve_list, 'a25', a25_curve_function, desc=desc)
 
 
 def get_a25_captions(results):

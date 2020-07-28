@@ -109,10 +109,8 @@ def a05_curve_function(curve, l_max):
     return curve_results
 
 
-def compute_a05_results(curve_list, l_max=20, desc=''):
-    global_params = {'l_range': prime_range(l_max)}
-    params_local_names = ['l']
-    compute_results(curve_list, 'a05', a05_curve_function, global_params, params_local_names, desc=desc)
+def compute_a05_results(curve_list, desc=''):
+    compute_results(curve_list, 'a05', a05_curve_function, desc=desc)
 
 
 def get_a05_captions(results):

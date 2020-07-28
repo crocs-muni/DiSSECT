@@ -1,0 +1,8 @@
+{
+  "params_global": {
+    "l_range": "prime_range(15)"
+  },
+  "params_local_names": [
+    "l"
+  ]
+}

@@ -21,9 +21,8 @@ def a02_curve_function(curve):
 
 
 def compute_a02_results(curve_list, desc=''):
-    global_params = {}
     params_local_names = []
-    compute_results(curve_list, 'a02', a02_curve_function, global_params, params_local_names, desc=desc)
+    compute_results(curve_list, 'a02', a02_curve_function, desc=desc)
 
 
 def get_a02_captions(results):

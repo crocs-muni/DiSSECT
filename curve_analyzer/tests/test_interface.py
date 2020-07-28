@@ -81,13 +81,19 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
     return results[curve.name]
 
 
-def compute_results(curve_list, test_name, curve_function, params_global, params_local_names, desc=''):
-    if not curve_list:
+
+def compute_results(curve_list, test_name, curve_function, desc=''):
+    if curve_list == []:
         print("No input curves found, terminating the test.")
         return
     json_file, tmp_file = init_json_paths(test_name)
     log_obj = Logs(test_name, desc)
     results = load_from_json(json_file)
+    params = load_from_json(TEST_PATH + '/' + test_name + '/' + test_name + '.params')
+    for key in params["params_global"].keys():
+        params["params_global"][key] = sage_eval(params["params_global"][key])
+    params_global = params["params_global"]
+    params_local_names = params["params_local_names"]
 
     total_time = 0
     timestamp = get_timestamp()
