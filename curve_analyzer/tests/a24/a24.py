@@ -93,10 +93,10 @@ def a24_curve_function(curve, l):
     return curve_results
 
 
-def compute_a24_results(curve_list, l_max=20, order_bound=256, desc=''):
+def compute_a24_results(curve_list, l_max=20, desc=''):
     global_params = {'l_range': prime_range(l_max)}
     params_local_names = ['l']
-    compute_results(curve_list, 'a24', a24_curve_function, global_params, params_local_names, order_bound, desc=desc)
+    compute_results(curve_list, 'a24', a24_curve_function, global_params, params_local_names, desc=desc)
 
 
 def get_a24_captions(results):

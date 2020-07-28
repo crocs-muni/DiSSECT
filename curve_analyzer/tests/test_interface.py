@@ -64,14 +64,10 @@ def init_json_paths(test_name):
     return path_json, path_tmp
 
 
-def update_curve_results(curve, curve_function, params_global, params_local_names, order_bound, results, log_obj):
+def update_curve_results(curve, curve_function, params_global, params_local_names, results, log_obj):
     log_obj.write_to_logs("Processing curve " + curve.name + ":", newlines=1)
     if curve.name not in results:
         results[curve.name] = {}
-
-    if curve.nbits > order_bound:
-        log_obj.write_to_logs("Too large order\n")
-        return results[curve.name]
 
     for params_local_values in itertools.product(*params_global.values()):
         params_local = dict(zip(params_local_names, params_local_values))
@@ -85,7 +81,7 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
     return results[curve.name]
 
 
-def compute_results(curve_list, test_name, curve_function, params_global, params_local_names, order_bound=256, desc=''):
+def compute_results(curve_list, test_name, curve_function, params_global, params_local_names, desc=''):
     if curve_list == []:
         print("No input curves found, terminating the test.")
         return
@@ -110,8 +106,7 @@ def compute_results(curve_list, test_name, curve_function, params_global, params
     for curve in curve_list:
         start_time = time.time()
 
-        results[curve.name] = update_curve_results(curve, curve_function, params_global, params_local_names,
-                                                   order_bound, results, log_obj)
+        results[curve.name] = update_curve_results(curve, curve_function, params_global, params_local_names, results, log_obj)
 
         end_time = time.time()
         diff_time = end_time - start_time

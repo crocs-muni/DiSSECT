@@ -11,10 +11,10 @@ def a12_curve_function(curve, l):
     return curve_results
 
 
-def compute_a12_results(curve_list, l_max=15, order_bound=256, desc=''):
+def compute_a12_results(curve_list, l_max=15, desc=''):
     global_params = {'l_max': prime_range(l_max)}
     params_local_names = ['l']
-    compute_results(curve_list, 'a12', a12_curve_function, global_params, params_local_names, order_bound, desc=desc)
+    compute_results(curve_list, 'a12', a12_curve_function, global_params, params_local_names, desc=desc)
 
 
 def get_a12_captions(results):
