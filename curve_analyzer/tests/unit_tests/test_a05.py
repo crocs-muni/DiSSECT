@@ -31,16 +31,30 @@ E1 = CustomCurve({'name': 'secp192k1',
                                                           {'r': 11, 'least': 4, 'full': 4},
                                                           {'r': 13, 'least': 3, 'full': 12}]}})
 
-K1 = {'least': [3, 2, 24], 'full': [3, 6, 24], 'relative': [1, 3, 1]}
+K2 = {'least': 3, 'full': 3, 'relative': 1}
+K3 = {'least': 2, 'full': 6, 'relative': 3}
+K5 = {'least': 24, 'full': 24, 'relative': 1}
 
 
 class Test_a05(unittest.TestCase):
 
-    def test_up_to_5(self):
-        result = a05_curve_function(E1, 6)
-        self.assertEqual(result['least'], K1['least'], "Should be " + str(K1['least']))
-        self.assertEqual(result['full'], K1['full'], "Should be " + str(K1['full']))
-        self.assertEqual(result['relative'], K1['relative'], "Should be " + str(K1['relative']))
+    def test_2(self):
+        result = a05_curve_function(E1, 2)
+        self.assertEqual(result['least'], K2['least'], "Should be " + str(K2['least']))
+        self.assertEqual(result['full'], K2['full'], "Should be " + str(K2['full']))
+        self.assertEqual(result['relative'], K2['relative'], "Should be " + str(K2['relative']))
+
+    def test_3(self):
+        result = a05_curve_function(E1, 3)
+        self.assertEqual(result['least'], K3['least'], "Should be " + str(K3['least']))
+        self.assertEqual(result['full'], K3['full'], "Should be " + str(K3['full']))
+        self.assertEqual(result['relative'], K3['relative'], "Should be " + str(K3['relative']))
+
+    def test_5(self):
+        result = a05_curve_function(E1, 5)
+        self.assertEqual(result['least'], K5['least'], "Should be " + str(K5['least']))
+        self.assertEqual(result['full'], K5['full'], "Should be " + str(K5['full']))
+        self.assertEqual(result['relative'], K5['relative'], "Should be " + str(K5['relative']))
 
 
 if __name__ == '__main__':

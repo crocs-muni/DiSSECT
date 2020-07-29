@@ -85,26 +85,22 @@ def find_torsions(E, q, order, l):
 
 
 # Computes find_torsions for all l<l_max and returns a dictionary
-def a05_curve_function(curve, l_max):
+def a05_curve_function(curve, l):
     E = curve.EC
     q = curve.q
     order = curve.order * curve.cofactor
-    curve_results = {'least': [], 'full': [], 'relative': []}
+    curve_results = {}
 
-    for l in prime_range(l_max):
+    try:
 
-        try:
+        least, full, relative = find_torsions(E, q, order, l)
 
-            least, full, relative = find_torsions(E, q, order, l)
+    except (ArithmeticError, TypeError, ValueError) as e:
+        least, full, relative = None, None, None
 
-        except (ArithmeticError, TypeError, ValueError) as e:
-            raise (e)
-            least, full, relative = None, None, None
-
-        curve_results['least'].append(least)
-
-        curve_results['full'].append(full)
-        curve_results['relative'].append(relative)
+    curve_results['least'] = least
+    curve_results['full'] = full
+    curve_results['relative'] = relative
 
     return curve_results
 
