@@ -7,12 +7,14 @@ import pytz
 import itertools
 import os
 
+
 # Returns the current datetime as CEST
 def get_timestamp():
     cest = pytz.timezone('Europe/Prague')
     now = datetime.now()
     now = cest.localize(now)
     return datetime.isoformat(now, sep='_', timespec='seconds')[:-6]
+
 
 # Class for managing logs for each curve test
 class Logs:
@@ -55,6 +57,7 @@ class Logs:
         for f in [self.main_log, self.current_log]:
             f.close()
 
+
 # Deduces paths to JSON files from the test name
 def init_json_paths(test_name):
     path_json = TEST_PATH + '/' + test_name + '/' + test_name + '.json'
@@ -63,6 +66,7 @@ def init_json_paths(test_name):
     if not os.path.exists(path_json):
         save_into_json({}, path_json, 'w')
     return path_json, path_tmp, path_params
+
 
 # Tries to run tests for each individual curve; called by compute_results
 def update_curve_results(curve, curve_function, params_global, params_local_names, results, log_obj):
@@ -80,6 +84,7 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
             results[curve.name][str(params_local)] = curve_function(curve, *params_local_values)
             log_obj.write_to_logs("Done", newlines=1)
     return results[curve.name]
+
 
 # A universal function for running tests on curve lists; it is called by each test file which has its own curve function.
 # Each test is assumed to have a params file in its folder; the results and logs are created there as well.
@@ -110,13 +115,15 @@ def compute_results(curve_list, test_name, curve_function, desc=''):
             sim_count += 1
         else:
             std_count += 1
-    log_obj.write_to_logs("Hold on to your hat! Running test " + str(test_name) + " on " + str(std_count) + " std curves and " + str(
-        sim_count) + " sim curves with global parameters:\n" + str(params_global), newlines=2)
+    log_obj.write_to_logs(
+        "Hold on to your hat! Running test " + str(test_name) + " on " + str(std_count) + " std curves and " + str(
+            sim_count) + " sim curves with global parameters:\n" + str(params_global), newlines=2)
 
     for curve in curve_list:
         start_time = time.time()
 
-        results[curve.name] = update_curve_results(curve, curve_function, params_global, params_local_names, results, log_obj)
+        results[curve.name] = update_curve_results(curve, curve_function, params_global, params_local_names, results,
+                                                   log_obj)
 
         end_time = time.time()
         diff_time = end_time - start_time
@@ -137,9 +144,10 @@ def init_txt_paths(test_name, desc=''):
         name += "_" + desc
     return name + '.txt'
 
+
 # Visualizes test results from the relevant JSON; the functions get_captions are select_results are provided by each test separately
 def pretty_print_results(curve_list, test_name, get_captions, select_results, curve_sort_key="bits", save_to_txt=True):
-    path_json, _ = init_json_paths(test_name)
+    path_json, _, _ = init_json_paths(test_name)
     results = load_from_json(path_json)
 
     captions = get_captions(results)
