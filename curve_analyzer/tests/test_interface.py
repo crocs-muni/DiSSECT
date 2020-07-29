@@ -90,10 +90,10 @@ def compute_results(curve_list, test_name, curve_function, desc=''):
     json_file, tmp_file, params_file = init_json_paths(test_name)
     log_obj = Logs(test_name, desc)
     results = load_from_json(json_file)
-    if not os.path.exists(path_params):
+    if not os.path.exists(params_file):
         print("No parameter file found, terminating the test.")
         return
-    params = load_from_json(path_params)
+    params = load_from_json(params_file)
     for key in params["params_global"].keys():
         params["params_global"][key] = sage_eval(params["params_global"][key])
     params_global = params["params_global"]
