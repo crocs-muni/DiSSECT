@@ -10,4 +10,4 @@ curve_analyzer/tests/test_launcher.py
 curve_analyzer/tests/sample_curves.py
 curve_analyzer/tests/.*
 .idea/
-*/tmp.json
+curve_analyzer/tests/*/tmp.json
