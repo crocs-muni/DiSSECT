@@ -7,9 +7,8 @@ def embedding_degree_q(q, l):
     return (Integers(l)(q)).multiplicative_order()
 
 
-def ext_card(E, q, order, deg):
+def ext_card(E, q, card_low, deg):
     '''returns curve cardinality over deg-th relative extension'''
-    card_low = order
     tr = q + 1 - card_low
     s_old, s_new = 2, tr
     for i in range(2, deg + 1):
@@ -84,7 +83,7 @@ def find_torsions(E, q, order, l):
     return least, full, ZZ(full / least)
 
 
-# Computes find_torsions for all l<l_max and returns a dictionary
+# Computes find_torsions for given l and returns a dictionary
 def a05_curve_function(curve, l):
     E = curve.EC
     q = curve.q
@@ -92,7 +91,6 @@ def a05_curve_function(curve, l):
     curve_results = {}
 
     try:
-
         least, full, relative = find_torsions(E, q, order, l)
 
     except (ArithmeticError, TypeError, ValueError) as e:
