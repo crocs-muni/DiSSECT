@@ -12,7 +12,7 @@ Run `sage --python3 -m unittest discover` in directory `tests/unit_tests/`.
 
 ## Testing the curves
 
-Run `./run_tests.py` in directory `tests`.
+Run `./run_tests.py` in directory `tests`. Use the `-h` flag to get the help menu.
 
 ### Example usage
 
