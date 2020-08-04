@@ -40,10 +40,11 @@ def largest_factor_bitlen(factorization):
 # Computes factorization of ord*k+1 and ord*k-1 and bit lengths of their largest factors
 # Returns a dictionary
 def a04_curve_function(curve, k):
+    card = curve.cardinality
     t = TIME
-    curve_results = {('(+)'+'factorization'): near_order_factorizations(curve.order, '+', k, t)}
+    curve_results = {('(+)'+'factorization'): near_order_factorizations(card, '+', k, t)}
     curve_results[('(+)'+'largest_factor_bitlen')] = largest_factor_bitlen(curve_results[('(+)'+'factorization')])
-    curve_results[('(-)'+'factorization')] = near_order_factorizations(curve.order, '-', k, t)
+    curve_results[('(-)'+'factorization')] = near_order_factorizations(card, '-', k, t)
     curve_results[('(-)'+'largest_factor_bitlen')] = largest_factor_bitlen(curve_results[('(-)'+'factorization')])
     return curve_results
 
