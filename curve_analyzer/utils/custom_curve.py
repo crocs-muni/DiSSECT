@@ -129,6 +129,7 @@ class CustomCurve:
 
         self.q = self.EC.base_field().order()
         self.cardinality = self.order * self.cofactor
+        self.EC.set_order(self.cardinality)
         self.trace = self.q + 1 - self.cardinality
 
     def __repr__(self):
