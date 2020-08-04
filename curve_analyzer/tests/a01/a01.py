@@ -5,13 +5,14 @@ def a01_curve_function(curve, deg):
     '''returns the orders of the two generators of the curve over the deg-th relative extension'''
     E = curve.EC
     q = curve.q
+    curve_results = {}
     E_ext = E.base_extend(GF(q ** deg))
-    ord1 = E_ext.gens()[0].order()
+    curve_results['ord1'] = E_ext.gens()[0].order()
     if len(E_ext.gens()) < 2:
-        ord2 = 1
+        curve_results['ord2'] = 1
     else:
-        ord2 = E_ext.gens()[1].order()
-    return ord1, ord2
+        curve_results['ord2'] = E_ext.gens()[1].order()
+    return curve_results['ord1'], curve_results['ord2']
 
 def compute_a01_results(curve_list, desc=''):
     compute_results(curve_list, 'a01', a01_curve_function, desc=desc)
