@@ -12,7 +12,7 @@ def a01_curve_function(curve, deg):
         curve_results['ord2'] = 1
     else:
         curve_results['ord2'] = E_ext.gens()[1].order()
-    return curve_results['ord1'], curve_results['ord2']
+    return curve_results
 
 def compute_a01_results(curve_list, desc=''):
     compute_results(curve_list, 'a01', a01_curve_function, desc=desc)

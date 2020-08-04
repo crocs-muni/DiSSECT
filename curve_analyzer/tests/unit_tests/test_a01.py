@@ -33,26 +33,26 @@ E1 = CustomCurve({'name': 'secp112r2',
                                                           {'r': 17, 'least': 288, 'full': 288},
                                                           {'r': 19, 'least': 360, 'full': 360}]}})
 
-ext1 = {'ord1': 4451685225093714699870930859147564,
+deg1 = {'ord1': 4451685225093714699870930859147564,
         'ord2': 1}
 
-ext2 = {'ord1': 4954375335829419489378819906834738371045091138035760026994594331172,
+deg2 = {'ord1': 4954375335829419489378819906834738371045091138035760026994594331172,
         'ord2': 4}
 
 
 class Test_a01(unittest.TestCase):
 
     def test_1(self):
-        result = a01_curve_function(E1)
-        self.assertEqual(result['ord1'], ext1['ord1'],
-                         "Should be " + str(ext1['ord1']))
-        self.assertEqual(result['ord2'], ext1['ord2'],
-                         "Should be " + str(ext1['ord1']))
-        self.assertEqual(result['ord1'], ext1['ord1'],
-                         "Should be " + str(ext2['ord1']))
-        self.assertEqual(result['ord2'], ext1['ord2'],
-                         "Should be " + str(ext2['ord1']))
+        result = a01_curve_function(E1, 1)
+        self.assertEqual(result['ord1'], deg1['ord1'],
+                         "Should be " + str(deg1['ord1']))
+        self.assertEqual(result['ord2'], deg1['ord2'],
+                         "Should be " + str(deg1['ord1']))
 
+    def test_2(self):
+        result = a01_curve_function(E1, 2)
+        self.assertEqual(result, deg2,
+                         "Should be " + str(deg2))
 
 
 if __name__ == '__main__':
