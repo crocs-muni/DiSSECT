@@ -49,7 +49,7 @@ class Test_a12(unittest.TestCase):
         result = a12_curve_function(E1, 3)
         self.assertEqual(result, l3, "Should be " + str(l3))
 
-    def test_3(self):
+    def test_5(self):
         result = a12_curve_function(E1, 5)
         self.assertEqual(result, l5, "Should be " + str(l5))
 
