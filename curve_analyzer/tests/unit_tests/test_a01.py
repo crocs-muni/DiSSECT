@@ -44,15 +44,11 @@ class Test_a01(unittest.TestCase):
 
     def test_1(self):
         result = a01_curve_function(E1, 1)
-        self.assertEqual(result['ord1'], deg1['ord1'],
-                         "Should be " + str(deg1['ord1']))
-        self.assertEqual(result['ord2'], deg1['ord2'],
-                         "Should be " + str(deg1['ord1']))
+        self.assertEqual(result, deg1, "Should be " + str(deg1))
 
     def test_2(self):
         result = a01_curve_function(E1, 2)
-        self.assertEqual(result, deg2,
-                         "Should be " + str(deg2))
+        self.assertEqual(result, deg2, "Should be " + str(deg2))
 
 
 if __name__ == '__main__':

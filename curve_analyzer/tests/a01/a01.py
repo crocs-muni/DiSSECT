@@ -6,13 +6,15 @@ def a01_curve_function(curve, deg):
     E = curve.EC
     q = curve.q
     curve_results = {}
+
     E_ext = E.base_extend(GF(q ** deg))
-    curve_results['ord1'] = E_ext.gens()[0].order()
+    curve_results['ord1'] = E_ext.abelian_group().gens()[0].order()
     if len(E_ext.gens()) < 2:
         curve_results['ord2'] = 1
     else:
-        curve_results['ord2'] = E_ext.gens()[1].order()
+        curve_results['ord2'] = E_ext.abelian_group().gens()[1].order()
     return curve_results
+
 
 def compute_a01_results(curve_list, desc=''):
     compute_results(curve_list, 'a01', a01_curve_function, desc=desc)
