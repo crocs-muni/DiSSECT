@@ -47,6 +47,7 @@ class CustomCurve:
         self.params = db_curve['params']
         self.desc = db_curve['desc']
         self.cofactor = ZZ(db_curve['cofactor'])
+        self.cardinality = self.order * self.cofactor
         self.nbits = self.order.nbits()
         self.field = None
         self.EC = None
@@ -128,7 +129,6 @@ class CustomCurve:
             self.EC = "Not implemented"
 
         self.q = self.EC.base_field().order()
-        self.cardinality = self.order * self.cofactor
         self.EC.set_order(self.cardinality)
         self.trace = self.q + 1 - self.cardinality
 
