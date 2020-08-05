@@ -1,7 +1,7 @@
 from sage.all import ecm
-from curve_analyzer.tests.test_interface import pretty_print_results, compute_results, remove_values_from_list, timeout, \
-    ints_before_strings
+from curve_analyzer.tests.test_interface import pretty_print_results, compute_results, timeout
 
+# global time for one factorization 
 TIME = 10
 
 
