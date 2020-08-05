@@ -27,11 +27,13 @@ To run test a22 on standard curves of bitsizes up to 192 in verbose mode, run `.
 
 ### Overview of available tests
 
-- a02_cm_disc_factorizations
-- a04_near_order_factorizations
-- a05_torsion_extensions
-- a12_orders_of_small_primes_modulo_curve_order
-- a22_division_pol_factorizations
-- a23_volcano
-- a24_isogeny_extensions
-- a25_trace_factorization
+- a01 group_stucture_in_extensions
+- a02 cm_disc_factorizations
+- a04 near_order_factorizations
+- a05 torsion_extensions
+- a06 prime_decomposition_wrt_cm_discs_in_extensions
+- a12 orders_of_small_primes_modulo_curve_order
+- a22 division_pol_factorizations
+- a23 volcano
+- a24 isogeny_extensions
+- a25 trace_factorization
