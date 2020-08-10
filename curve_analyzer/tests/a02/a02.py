@@ -21,7 +21,6 @@ def a02_curve_function(curve):
 
 
 def compute_a02_results(curve_list, desc=''):
-    params_local_names = []
     compute_results(curve_list, 'a02', a02_curve_function, desc=desc)
 
 
