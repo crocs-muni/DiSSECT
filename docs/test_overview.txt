@@ -23,8 +23,9 @@ A19) lokální výšky
 A20) S-integrální body
 A21) Galoisovy grupy různých polynomů
 A22) torzní lístky (rozklady division polynomů) 
-A24) rozšíření, kde se objevují isogenie (i1, i2)
 A23) výška a stupeň vulkánu
+A24) rozšíření, kde se objevují isogenie (i1, i2)
+A25) faktorizace stopy mocnin Frobenia
 
 "informatické":
 I1) křivky, které vzniknou pár bitflipy parametrů
