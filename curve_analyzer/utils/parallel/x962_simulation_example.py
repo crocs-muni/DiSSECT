@@ -10,11 +10,9 @@ After experiment is finished, the script writes results to the output file.
 
 import json
 import argparse
-from simulations import generate_x962_curves
-from sage.all import ZZ
 from sage.all import *
-import sage
-# from ..curve_analyzer.curve_analyzer.misc.simulations import generate_x962_curves
+from curve_analyzer.utils.json_handler import IntegerEncoder
+from curve_analyzer.utils.simulations import generate_x962_curves
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Sage experiment runner')
@@ -35,17 +33,6 @@ if __name__ == '__main__':
 
     # print(args)
     r = generate_x962_curves(count, p, seed)
-
-    class IntegerEncoder(json.JSONEncoder):
-        def default(self, obj):
-            if isinstance(obj, sage.rings.integer.Integer):
-                return int(obj)
-
-            if isinstance(obj, sage.rings.polynomial.polynomial_modn_dense_ntl.Polynomial_dense_mod_p):
-                return str(obj)
-
-            # Let the base class default method raise the TypeError
-            return json.JSONEncoder.default(self, obj)
 
     # Save results to the output file
     with open(args.outfile, 'w+') as fh:
