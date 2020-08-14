@@ -60,8 +60,8 @@ class CustomCurve:
         except KeyError:
             self.seed = None
         try:
-            self.x = ZZ(db_curve['generator']['x'])
-            self.y = ZZ(db_curve['generator']['y'])
+            self.x = ZZ(db_curve['generator']['x']["raw"])
+            self.y = ZZ(db_curve['generator']['y']["raw"])
         except TypeError:
             self.x = None
             self.y = None
@@ -80,8 +80,8 @@ class CustomCurve:
         x = self.x
         y = self.y
         if self.form == "Weierstrass":
-            a = ZZ(self.params['a'])
-            b = ZZ(self.params['b'])
+            a = ZZ(self.params['a']["raw"])
+            b = ZZ(self.params['b']["raw"])
             if self.field_desc['type'] == "Prime":
                 p = ZZ(self.field_desc['p'])
                 F = GF(p)
@@ -89,14 +89,12 @@ class CustomCurve:
                 self.field = F
                 self.set_generator(x, y)
             elif self.field_desc['type'] == "Binary":
-                exponents = list(self.field_desc['poly'].values())
-                exponents.append(0)
                 F = GF(2)['w']
                 (w,) = F._first_ngens(1)
                 modulus = 0
-                for e in exponents:
-                    modulus += w ** e
-                m = ZZ(self.field_desc['poly']['m'])
+                for mono in self.field_desc["poly"]:
+                    modulus += ZZ(mono["coeff"]) * w ** ZZ(mono["power"])
+                m = ZZ(self.field_desc['degree'])
                 K = GF(2 ** m, 'w', modulus)
                 self.EC = EllipticCurve(K, [1, K.fetch_int(ZZ(a)), 0, 0, K.fetch_int(ZZ(b))])  # xy, x^2, y, x, 1
                 self.generator = None
