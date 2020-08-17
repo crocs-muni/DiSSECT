@@ -84,6 +84,8 @@ class CustomCurve:
         self.set()
 
     def get_xy(self, extension=False):
+        if self.generator_desc == None:
+            return (None, None)
         if extension:
             x = get_poly(self.generator_desc['x']['poly'], self.field)
             y = get_poly(self.generator_desc['y']['poly'], self.field)
