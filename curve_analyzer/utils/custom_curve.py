@@ -102,8 +102,8 @@ class CustomCurve:
                 self.set_generator(x,y,True)
 
         elif self.form == "Montgomery":
-            A = ZZ(self.params['a'])
-            B = ZZ(self.params['b'])
+            A = ZZ(self.params['a']['raw'])
+            B = ZZ(self.params['b']['raw'])
             p = ZZ(self.field_desc['p'])
             F = GF(p)
             self.field = F
@@ -116,8 +116,8 @@ class CustomCurve:
             if self.form == "Edwards":
                 aa = 1
             if self.form == "TwistedEdwards":
-                aa = ZZ(self.params['a'])
-            d = ZZ(self.params['d'])
+                aa = ZZ(self.params['a']['raw'])
+            d = ZZ(self.params['d']['raw'])
             p = ZZ(self.field_desc['p'])
             F = GF(p)
             a, b, xx, yy = twisted_edwards_to_short_weierstrass(F, aa, d, x, y)
