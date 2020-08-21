@@ -40,13 +40,12 @@ def parameters(config_path, num_bits=112, total_count=40, count=16, resdir=None)
 
 def main():
     parser = argparse.ArgumentParser(description='Experiment parallelizer')
-    parser.add_argument('--tasks', type=int, default=1,
+    parser.add_argument('--tasks', type=int, default=10,
                         help='Number of tasks to run in parallel')
     parser.add_argument('-s', '--sage', default='sage',
                         help='Path to the sage')
     parser.add_argument('--resdir', dest='resdir', default='./results',
                         help='Where to store experiment results')
-
     parser.add_argument('-c', '--count', type=int, default=10,
                         help='')
     parser.add_argument('-t', '--totalcount', dest='total_count', type=int, default=100,
@@ -56,11 +55,12 @@ def main():
     parser.add_argument('-p', '--configpath', default='parameters.json',
                         help='')
     args = parser.parse_args()
+    print(args)
 
     os.makedirs(args.resdir, exist_ok=True)  # make sure resdir exists
 
     script_path = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
-    wrapper_path = os.path.join(script_path, 'x962_simulation_example.py')
+    wrapper_path = os.path.join(script_path, 'simulations_x962_wrapper.py')
 
     pr = ParallelRunner()
     pr.parallel_tasks = args.tasks
