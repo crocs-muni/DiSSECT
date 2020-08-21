@@ -226,7 +226,7 @@ def generate_x962_curves(count, p, curve_seed, seed_offset=0, increment_step=1, 
         if has_points:
             continue
 
-        secure, h, n = verify_security(E, r_min_bits)
+        secure, h, n = verify_security(E)
         if not secure:
             continue
         assert h * n == E.order()  # might not be needed
