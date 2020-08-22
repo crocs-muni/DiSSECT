@@ -1,5 +1,4 @@
 from hashlib import sha1
-from time import time
 
 from sage.all import Mod
 
@@ -174,10 +173,10 @@ def verify_security(E, embedding_degree_bound=20, verbose=False):
 def generate_x962_curves(count, p, seed, l_max=20):
     bits = p.nbits()
     sim_curves = {"name": "x962_sim_" + str(bits), "desc": "simulated curves generated according to the X9.62 standard",
-                  "initial_seed": seed, "curves_tried": count, "curves": []}
+                  "initial_seed": seed, "seeds_tried": count, "curves": []}
 
-     # bitlens, primes and corresponding seeds, case a=-3 (curves r1, prime fields only)
-     # https://www.secg.org/sec2-v2.pdf
+    # bitlens, primes and corresponding seeds, case a=-3 (curves r1, prime fields only)
+    # https://www.secg.org/sec2-v2.pdf
     with open('x962/parameters_x962.json', 'r') as f:
         params = json.load(f)
         original_seed = params[str(bits)][1]
@@ -188,7 +187,7 @@ def generate_x962_curves(count, p, seed, l_max=20):
         b = get_b_from_r(r, p)
         a = -3
 
-        #check if r gives rise to an elliptic curve
+        # check if r gives rise to an elliptic curve
         if b == None or 4 * a ** 3 + 27 * b ** 2 == 0:
             continue
         E = EllipticCurve(GF(p), [a, b])
@@ -213,10 +212,17 @@ def generate_x962_curves(count, p, seed, l_max=20):
             },
             "form": "Weierstrass",
             "params": {
-                "a": str(hex(-3)),
-                "b": str(hex(b))
+                "a": {"raw": str(hex(-3))},
+                "b": {"raw": str(hex(b))}
             },
-            "generator": None,
+            "generator": {
+                "x": {
+                    "raw": ""
+                },
+                "y": {
+                    "raw": ""
+                }
+            },
             "order": n,
             "cofactor": h,
             "characteristics": None,
@@ -224,5 +230,6 @@ def generate_x962_curves(count, p, seed, l_max=20):
             "seed_diff": seed_diff
         }
         sim_curves["curves"].append(sim_curve)
+        sim_curves["seeds_successful"] = len(sim_curves["curves"])
 
     return sim_curves
