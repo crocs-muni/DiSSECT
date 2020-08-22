@@ -45,8 +45,6 @@ def main():
                         help='Number of tasks to run in parallel')
     parser.add_argument('-s', '--sage', default='sage',
                         help='Path to the sage')
-    parser.add_argument('--resdir', dest='resdir', default='./results/x962',
-                        help='Where to store experiment results')
     parser.add_argument('-c', '--count', type=int, default=16,
                         help='')
     parser.add_argument('-t', '--totalcount', dest='total_count', type=int, default=32,
@@ -55,6 +53,9 @@ def main():
                         help='')
     parser.add_argument('-o', '--offset', type=int, default=0,
                         help='')
+    parser.add_argument('--resdir', dest='resdir',
+                        default=os.path.join('./results/x962', str(parser.parse_args().bits)),
+                        help='Where to store experiment results')
     parser.add_argument('-p', '--configpath', default='x962/parameters_x962.json',
                         help='')
     args = parser.parse_args()
