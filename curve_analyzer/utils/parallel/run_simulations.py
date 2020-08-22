@@ -1,12 +1,14 @@
-import json
-import os
 import argparse
+import json
 import logging
+import os
+
 from job_manager.manager import ParallelRunner, Task, TaskResult
 from sage.all import ZZ
 
 try:
     import coloredlogs
+
     coloredlogs.install(level=logging.INFO)
 except Exception as e:
     print('E: Package coloredlogs is not installed. No logs will be displayed')
@@ -20,7 +22,7 @@ def get_file_name(params, resdir=None):
     return fname if resdir is None else os.path.join(resdir, fname)
 
 
-def load_x962_parameters(config_path, num_bits, total_count, count, resdir=None):
+def load_x962_parameters(config_path, num_bits, total_count, count, offset, resdir=None):
     with open(config_path, 'r') as f:
         params = json.load(f)
         p, curve_seed = params['%s' % num_bits]
@@ -34,7 +36,7 @@ def load_x962_parameters(config_path, num_bits, total_count, count, resdir=None)
             yield {'count': count, 'prime': p, 'seed': curve_seed, 'outfile': file_name}
 
         total_count -= count
-        curve_seed = str.format('{:040X}', int(curve_seed, 16) - count)
+        curve_seed = str.format('{:040X}', int(curve_seed, 16) - count - offset)
 
 
 def main():
@@ -50,6 +52,8 @@ def main():
     parser.add_argument('-t', '--totalcount', dest='total_count', type=int, default=32,
                         help='')
     parser.add_argument('-b', '--bits', type=int, default=128,
+                        help='')
+    parser.add_argument('-o', '--offset', type=int, default=0,
                         help='')
     parser.add_argument('-p', '--configpath', default='x962/parameters_x962.json',
                         help='')
@@ -78,7 +82,8 @@ def main():
         The function also has an access to `pr` so it can adapt to job already being done.
         The function can also store its own state.
         """
-        for p in load_x962_parameters(args.configpath, args.bits, args.total_count, args.count, args.resdir):
+        for p in load_x962_parameters(args.configpath, args.bits, args.total_count, args.count, args.offset,
+                                      args.resdir):
             cli = ' '.join(['--%s=%s' % (k, p[k]) for k in p.keys()])
             t = Task(args.sage, '%s %s' % (wrapper_path, cli))
             yield t
