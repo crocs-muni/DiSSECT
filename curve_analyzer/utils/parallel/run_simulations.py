@@ -6,13 +6,14 @@ import os
 from job_manager.manager import ParallelRunner, Task, TaskResult
 from sage.all import ZZ
 
+from curve_analyzer.utils.parallel.x962.simulations_x962 import increment_seed
+
 try:
     import coloredlogs
 
     coloredlogs.install(level=logging.INFO)
 except Exception as e:
     print('E: Package coloredlogs is not installed. No logs will be displayed')
-
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +27,7 @@ def load_x962_parameters(config_path, num_bits, total_count, count, offset, resd
     with open(config_path, 'r') as f:
         params = json.load(f)
         p, curve_seed = params['%s' % num_bits]
+    curve_seed = increment_seed(curve_seed, -offset)
 
     while total_count > 0:
         if total_count < count:
@@ -36,7 +38,7 @@ def load_x962_parameters(config_path, num_bits, total_count, count, offset, resd
             yield {'count': count, 'prime': p, 'seed': curve_seed, 'outfile': file_name}
 
         total_count -= count
-        curve_seed = str.format('{:040X}', int(curve_seed, 16) - count - offset)
+        curve_seed = str.format('{:040X}', int(curve_seed, 16) - count)
 
 
 def main():
