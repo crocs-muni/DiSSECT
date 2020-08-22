@@ -173,7 +173,7 @@ def verify_security(E, embedding_degree_bound=20, verbose=False):
 def generate_x962_curves(count, p, seed, l_max=20):
     bits = p.nbits()
     sim_curves = {"name": "x962_sim_" + str(bits), "desc": "simulated curves generated according to the X9.62 standard",
-                  "initial_seed": seed, "seeds_tried": count, "curves": []}
+                  "initial_seed": seed, "seeds_tried": count, "curves": [], "seeds_successful": 0}
 
     # bitlens, primes and corresponding seeds, case a=-3 (curves r1, prime fields only)
     # https://www.secg.org/sec2-v2.pdf
@@ -230,6 +230,6 @@ def generate_x962_curves(count, p, seed, l_max=20):
             "seed_diff": seed_diff
         }
         sim_curves["curves"].append(sim_curve)
-        sim_curves["seeds_successful"] = len(sim_curves["curves"])
+        sim_curves["seeds_successful"] += 1
 
     return sim_curves
