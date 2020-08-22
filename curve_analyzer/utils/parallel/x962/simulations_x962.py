@@ -201,8 +201,9 @@ def generate_x962_curves(count, p, seed, l_max=20):
             continue
         assert h * n == E.order()  # might not be needed
 
+        seed_diff = ZZ('0X' + original_seed) - ZZ('0X' + current_seed)
         sim_curve = {
-            "name": "x962_sim_" + str(bits) + "_rel_seed_" + str(rel_seed),
+            "name": "x962_sim_" + str(bits) + "_seed_diff_" + str(seed_diff),
             "category": sim_curves["name"],
             "desc": "",
             "field": {
@@ -220,7 +221,7 @@ def generate_x962_curves(count, p, seed, l_max=20):
             "cofactor": h,
             "characteristics": None,
             "seed": current_seed,
-            "seed_diff": ZZ('0X' + original_seed) - ZZ('0X' + current_seed)
+            "seed_diff": seed_diff
         }
         sim_curves["curves"].append(sim_curve)
 
