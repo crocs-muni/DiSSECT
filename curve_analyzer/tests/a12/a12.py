@@ -1,5 +1,7 @@
-from sage.all import prime_range, Integers, ZZ, euler_phi
+from sage.all import Integers, ZZ, euler_phi
+
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
+
 
 # Computes the order of l (small prime) modulo curve order and bit length of the index of <l>
 # Returns a dictionary
@@ -7,7 +9,7 @@ def a12_curve_function(curve, l):
     card = curve.cardinality
     try:
         mul_ord = (Integers(card)(l)).multiplicative_order()
-        complement_bit_length = ZZ(euler_phi(card)/mul_ord).nbits()
+        complement_bit_length = ZZ(euler_phi(card) / mul_ord).nbits()
     except ArithmeticError:
         mul_ord = None
         complement_bit_length = None

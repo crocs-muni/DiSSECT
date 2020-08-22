@@ -1,4 +1,5 @@
 import unittest
+
 from curve_analyzer.tests.a24.a24 import a24_curve_function
 from curve_analyzer.utils.custom_curve import CustomCurve
 

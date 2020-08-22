@@ -9,16 +9,15 @@ Number of tasks to be computed in parallel is set on the initialization and rema
 fixed.
 """
 
+import argparse
+import json
+import logging
+import os
 import queue
 import shlex
 import time
-import json
-import os
-import argparse
-import logging
 import uuid
-import itertools
-from typing import List, Dict, Tuple, Union, Optional, Any
+from typing import List, Optional
 
 from job_manager.runner import AsyncRunner
 
@@ -172,7 +171,7 @@ class ParallelRunner:
                             % (i, self.job_queue.qsize(), self.get_num_running()))
 
                 # Re-fill job queue with some data
-                if self.job_queue.qsize() < self.queue_threshold()/2:
+                if self.job_queue.qsize() < self.queue_threshold() / 2:
                     self.pull_jobs()
 
     def process_input(self):

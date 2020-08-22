@@ -1,4 +1,5 @@
 import unittest
+
 from curve_analyzer.tests.a06.a06 import a06_curve_function
 from curve_analyzer.utils.custom_curve import CustomCurve
 
@@ -54,16 +55,16 @@ class Test_a06(unittest.TestCase):
         self.assertEqual(result2['kronecker'], l3['deg2'], "Should be " + str(l3['deg2']))
 
     def test_3(self):
-      result1 = a06_curve_function(E1, 5, 1)
-      result2 = a06_curve_function(E1, 5, 2)
-      self.assertEqual(result1['kronecker'], l5['deg1'], "Should be " + str(l5['deg1']))
-      self.assertEqual(result2['kronecker'], l5['deg2'], "Should be " + str(l5['deg2']))
+        result1 = a06_curve_function(E1, 5, 1)
+        result2 = a06_curve_function(E1, 5, 2)
+        self.assertEqual(result1['kronecker'], l5['deg1'], "Should be " + str(l5['deg1']))
+        self.assertEqual(result2['kronecker'], l5['deg2'], "Should be " + str(l5['deg2']))
 
     def test_7(self):
-      result1 = a06_curve_function(E1, 7, 1)
-      result2 = a06_curve_function(E1, 7, 2)
-      self.assertEqual(result1['kronecker'], l7['deg1'], "Should be " + str(l7['deg1']))
-      self.assertEqual(result2['kronecker'], l7['deg2'], "Should be " + str(l7['deg2']))
+        result1 = a06_curve_function(E1, 7, 1)
+        result2 = a06_curve_function(E1, 7, 2)
+        self.assertEqual(result1['kronecker'], l7['deg1'], "Should be " + str(l7['deg1']))
+        self.assertEqual(result2['kronecker'], l7['deg2'], "Should be " + str(l7['deg2']))
 
 
 if __name__ == '__main__':

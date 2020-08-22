@@ -1,4 +1,5 @@
 from sage.all import ZZ, sqrt, factor, squarefree_part
+
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 
@@ -35,7 +36,6 @@ def select_a02_results(curve_results):
         for x in curve_results:
             selected_results.append(x[key])
     return selected_results
-
 
 
 def pretty_print_a02_results(curve_list, save_to_txt=True):

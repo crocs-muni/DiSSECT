@@ -1,4 +1,5 @@
-from sage.all import kronecker, ZZ, prime_range
+from sage.all import kronecker, ZZ
+
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 

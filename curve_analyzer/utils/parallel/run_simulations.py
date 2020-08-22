@@ -100,7 +100,6 @@ def main():
         """
         logger.info("Going to start task %s" % (j.idx,))
 
-
     def on_finished(r: TaskResult):
         """
         Called when task completes. Can be used to re-enqueue failed task.

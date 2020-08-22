@@ -8,9 +8,11 @@ a JSON config file (not implemented here).
 After experiment is finished, the script writes results to the output file.
 """
 
-import json
 import argparse
+import json
+
 from sage.all import ZZ
+
 from curve_analyzer.utils.json_handler import IntegerEncoder
 from curve_analyzer.utils.parallel.x962.simulations_x962 import generate_x962_curves
 
@@ -32,4 +34,4 @@ if __name__ == '__main__':
 
     # Save results to the output file
     with open(args.outfile, 'w+') as fh:
-        json.dump(r, fh, cls = IntegerEncoder)
+        json.dump(r, fh, cls=IntegerEncoder)

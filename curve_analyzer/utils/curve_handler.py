@@ -1,9 +1,11 @@
-from curve_analyzer.definitions import CURVE_PATH
-from curve_analyzer.utils.custom_curve import CustomCurve
-from sage.all import ZZ
 import json
 import os
 import re
+
+from sage.all import ZZ
+
+from curve_analyzer.definitions import CURVE_PATH
+from curve_analyzer.utils.custom_curve import CustomCurve
 
 
 # Generates a dictionary with keys = sources of curves (secg, gost,...) and values = dictionaries
@@ -63,7 +65,7 @@ def custom_curves(curve_db, curve_type, order_bound, verbose, binary, extension,
 
 
 # Creates a list of instances of class CustomCurve out of imported database (conditioned by curve_type, see above)
-def import_curves(curve_type="sample", order_bound=256, verbose=False, binary = False, extension = False, single_curve = ""):
+def import_curves(curve_type="sample", order_bound=256, verbose=False, binary=False, extension=False, single_curve=""):
     if single_curve != "":
         print("Importing " + single_curve)
     else:
@@ -72,5 +74,6 @@ def import_curves(curve_type="sample", order_bound=256, verbose=False, binary = 
     if curve_type in ["sim", "all"]:
         ignore_sim = False
     curve_db = import_curve_db(CURVE_PATH, ignore_sim)
-    curve_list = sorted(custom_curves(curve_db, curve_type, order_bound, verbose, binary, extension, single_curve), key=lambda item: item.order)
+    curve_list = sorted(custom_curves(curve_db, curve_type, order_bound, verbose, binary, extension, single_curve),
+                        key=lambda item: item.order)
     return curve_list

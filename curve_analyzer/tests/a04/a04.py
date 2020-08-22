@@ -1,4 +1,5 @@
 from sage.all import ecm
+
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results, timeout
 
 # global time for one factorization 
@@ -42,10 +43,10 @@ def largest_factor_bitlen(factorization):
 def a04_curve_function(curve, k):
     card = curve.cardinality
     t = TIME
-    curve_results = {('(+)'+'factorization'): near_order_factorizations(card, '+', k, t)}
-    curve_results[('(+)'+'largest_factor_bitlen')] = largest_factor_bitlen(curve_results[('(+)'+'factorization')])
-    curve_results[('(-)'+'factorization')] = near_order_factorizations(card, '-', k, t)
-    curve_results[('(-)'+'largest_factor_bitlen')] = largest_factor_bitlen(curve_results[('(-)'+'factorization')])
+    curve_results = {('(+)' + 'factorization'): near_order_factorizations(card, '+', k, t)}
+    curve_results[('(+)' + 'largest_factor_bitlen')] = largest_factor_bitlen(curve_results[('(+)' + 'factorization')])
+    curve_results[('(-)' + 'factorization')] = near_order_factorizations(card, '-', k, t)
+    curve_results[('(-)' + 'largest_factor_bitlen')] = largest_factor_bitlen(curve_results[('(-)' + 'factorization')])
     return curve_results
 
 
@@ -54,12 +55,13 @@ def compute_a04_results(curve_list, desc=''):
 
 
 def get_a04_captions(results):
-    captions = ['factorization (+)', 'largest_factor_bitlen (+)', ' factorization (-)','largest_factor_bitlen (-)']
+    captions = ['factorization (+)', 'largest_factor_bitlen (+)', ' factorization (-)', 'largest_factor_bitlen (-)']
     return captions
 
 
 def select_a04_results(curve_results):
-    keys = [('(+)'+'factorization'),('(+)'+'largest_factor_bitlen'),('(-)'+'factorization'),('(-)'+'largest_factor_bitlen')]
+    keys = [('(+)' + 'factorization'), ('(+)' + 'largest_factor_bitlen'), ('(-)' + 'factorization'),
+            ('(-)' + 'largest_factor_bitlen')]
     selected_results = []
     for key in keys:
         selected_key = []

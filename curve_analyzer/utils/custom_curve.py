@@ -15,6 +15,7 @@ def montgomery_to_short_weierstrass(F, A, B, x, y):
         assert (u, v) in EllipticCurve(F, [a, b])
     return a, b, u, v
 
+
 def twisted_edwards_to_montgomery(F, a, d, u, v, scaling=True):
     A = F((2 * a + 2 * d) / (a - d))
     B = F(4 / (a - d))
@@ -42,12 +43,14 @@ def twisted_edwards_to_short_weierstrass(F, aa, d, x, y):
     assert (u, v) in EllipticCurve(F, [a, b])
     return a, b, u, v
 
+
 def get_poly(poly_dict, K):
-        w = K.gens()[0]
-        poly = 0
-        for mono in poly_dict:
-            poly += ZZ(mono["coeff"]) * w ** ZZ(mono["power"])
-        return K(poly)
+    w = K.gens()[0]
+    poly = 0
+    for mono in poly_dict:
+        poly += ZZ(mono["coeff"]) * w ** ZZ(mono["power"])
+    return K(poly)
+
 
 # Class for unified representation of curves from databases
 class CustomCurve:
@@ -99,7 +102,7 @@ class CustomCurve:
                 pass
         return (x, y)
 
-    def set_generator(self, binary=False, extension=False, x = None, y = None):
+    def set_generator(self, binary=False, extension=False, x=None, y=None):
         if x == None or y == None:
             x, y = self.get_xy(extension)
         if x is None or y is None or x == "" or y == "":
@@ -145,7 +148,7 @@ class CustomCurve:
                 self.set_generator(extension=True)
 
         elif self.form == "Montgomery":
-            assert self.field_desc['type'] != "Extension" # TO DO
+            assert self.field_desc['type'] != "Extension"  # TO DO
             A = ZZ(self.params['a']['raw'])
             B = ZZ(self.params['b']['raw'])
             p = ZZ(self.field_desc['p'])
@@ -158,7 +161,7 @@ class CustomCurve:
 
         elif self.form in ["Edwards", "TwistedEdwards"]:
             # we assume c=1
-            assert self.field_desc['type'] != "Extension" # TO DO
+            assert self.field_desc['type'] != "Extension"  # TO DO
             if self.form == "Edwards":
                 aa = 1
             if self.form == "TwistedEdwards":

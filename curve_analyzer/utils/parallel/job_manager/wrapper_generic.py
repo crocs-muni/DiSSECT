@@ -5,7 +5,6 @@ Wrapper could call another scripts or call specific sage methods.
 
 Implementation is not yet finished.
 """
-import json
 import argparse
 
 

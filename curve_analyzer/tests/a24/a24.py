@@ -1,4 +1,5 @@
-from sage.all import PolynomialRing, ZZ, prime_range, GF
+from sage.all import PolynomialRing, ZZ, GF
+
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 

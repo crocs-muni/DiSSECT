@@ -1,4 +1,5 @@
 import unittest
+
 from curve_analyzer.tests.a04.a04 import a04_curve_function
 from curve_analyzer.utils.custom_curve import CustomCurve
 
@@ -33,8 +34,10 @@ E1 = CustomCurve({'name': 'secp112r2',
                                                           {'r': 17, 'least': 288, 'full': 288},
                                                           {'r': 19, 'least': 360, 'full': 360}]}})
 
-k1 = {'(+)factorization': [5, 688979, 2554037775511, 505965776926277], '(+)largest_factor_bitlen': 49, '(-)factorization': [3, 227, 347, 811, 3361, 4663, 1482153143043691933], '(-)largest_factor_bitlen': 61}
-k2 = {'(+)factorization': [3, 3, 622905539198011, 1588143500261423971], '(+)largest_factor_bitlen': 61, '(-)factorization': [13, 53, 43866547717, 294578987413941354779], '(-)largest_factor_bitlen': 68}
+k1 = {'(+)factorization': [5, 688979, 2554037775511, 505965776926277], '(+)largest_factor_bitlen': 49,
+      '(-)factorization': [3, 227, 347, 811, 3361, 4663, 1482153143043691933], '(-)largest_factor_bitlen': 61}
+k2 = {'(+)factorization': [3, 3, 622905539198011, 1588143500261423971], '(+)largest_factor_bitlen': 61,
+      '(-)factorization': [13, 53, 43866547717, 294578987413941354779], '(-)largest_factor_bitlen': 68}
 
 
 class Test_a04(unittest.TestCase):
@@ -42,12 +45,14 @@ class Test_a04(unittest.TestCase):
     def test_1(self):
         result = a04_curve_function(E1, 1)
         self.assertEqual(result['(+)factorization'], k1['(+)factorization'], "Should be " + str(k1['(+)factorization']))
-        self.assertEqual(result['(+)largest_factor_bitlen'], k1['(+)largest_factor_bitlen'], "Should be " + str(k1['(+)largest_factor_bitlen']))
+        self.assertEqual(result['(+)largest_factor_bitlen'], k1['(+)largest_factor_bitlen'],
+                         "Should be " + str(k1['(+)largest_factor_bitlen']))
 
     def test_2(self):
-      result = a04_curve_function(E1, 2)
-      self.assertEqual(result['(+)factorization'], k2['(+)factorization'], "Should be " + str(k2['(+)factorization']))
-      self.assertEqual(result['(+)largest_factor_bitlen'], k2['(+)largest_factor_bitlen'], "Should be " + str(k2['(+)largest_factor_bitlen']))
+        result = a04_curve_function(E1, 2)
+        self.assertEqual(result['(+)factorization'], k2['(+)factorization'], "Should be " + str(k2['(+)factorization']))
+        self.assertEqual(result['(+)largest_factor_bitlen'], k2['(+)largest_factor_bitlen'],
+                         "Should be " + str(k2['(+)largest_factor_bitlen']))
 
 
 if __name__ == '__main__':

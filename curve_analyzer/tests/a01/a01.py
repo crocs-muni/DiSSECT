@@ -1,4 +1,5 @@
 from sage.all import GF
+
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 

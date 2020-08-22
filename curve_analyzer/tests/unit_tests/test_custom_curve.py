@@ -1,5 +1,7 @@
 import unittest
-from sage.all import ZZ, GF
+
+from sage.all import GF
+
 from curve_analyzer.utils.custom_curve import twisted_edwards_to_short_weierstrass, twisted_edwards_to_montgomery, \
     CustomCurve
 
