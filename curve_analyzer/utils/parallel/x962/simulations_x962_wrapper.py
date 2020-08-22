@@ -12,7 +12,7 @@ import json
 import argparse
 from sage.all import ZZ
 from curve_analyzer.utils.json_handler import IntegerEncoder
-from curve_analyzer.utils.simulations_x962 import generate_x962_curves
+from curve_analyzer.utils.parallel.x962.simulations_x962 import generate_x962_curves
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Sage experiment runner')

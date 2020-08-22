@@ -20,12 +20,11 @@ def get_file_name(params, resdir=None):
     return fname if resdir is None else os.path.join(resdir, fname)
 
 
-def parameters(config_path, num_bits=112, total_count=40, count=16, resdir=None):
+def load_x962_parameters(config_path, num_bits, total_count, count, resdir=None):
     with open(config_path, 'r') as f:
         params = json.load(f)
         p, curve_seed = params['%s' % num_bits]
 
-    # This logic was written by Sysox3:
     while total_count > 0:
         if total_count < count:
             file_name = get_file_name([total_count, ZZ(p).nbits(), curve_seed], resdir)
@@ -44,15 +43,15 @@ def main():
                         help='Number of tasks to run in parallel')
     parser.add_argument('-s', '--sage', default='sage',
                         help='Path to the sage')
-    parser.add_argument('--resdir', dest='resdir', default='./results',
+    parser.add_argument('--resdir', dest='resdir', default='./results/x962',
                         help='Where to store experiment results')
-    parser.add_argument('-c', '--count', type=int, default=10,
+    parser.add_argument('-c', '--count', type=int, default=16,
                         help='')
-    parser.add_argument('-t', '--totalcount', dest='total_count', type=int, default=100,
+    parser.add_argument('-t', '--totalcount', dest='total_count', type=int, default=32,
                         help='')
     parser.add_argument('-b', '--bits', type=int, default=128,
                         help='')
-    parser.add_argument('-p', '--configpath', default='parameters.json',
+    parser.add_argument('-p', '--configpath', default='x962/parameters_x962.json',
                         help='')
     args = parser.parse_args()
     print(args)
@@ -60,7 +59,7 @@ def main():
     os.makedirs(args.resdir, exist_ok=True)  # make sure resdir exists
 
     script_path = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
-    wrapper_path = os.path.join(script_path, 'simulations_x962_wrapper.py')
+    wrapper_path = os.path.join(script_path, 'x962/simulations_x962_wrapper.py')
 
     pr = ParallelRunner()
     pr.parallel_tasks = args.tasks
@@ -79,7 +78,7 @@ def main():
         The function also has an access to `pr` so it can adapt to job already being done.
         The function can also store its own state.
         """
-        for p in parameters(args.configpath, args.bits, args.total_count, args.count, args.resdir):
+        for p in load_x962_parameters(args.configpath, args.bits, args.total_count, args.count, args.resdir):
             cli = ' '.join(['--%s=%s' % (k, p[k]) for k in p.keys()])
             t = Task(args.sage, '%s %s' % (wrapper_path, cli))
             yield t
@@ -112,9 +111,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
