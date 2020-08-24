@@ -33,7 +33,6 @@ def generate_r(seed, p):
     #     originally floor
     s = floor((t - 1) / 160)
     h = t - 160 * s
-    #     print("t:",t, "s:", s, "h:", h)
     H = sha1_bin(seed)
     c0 = H[-h:]
     c0_modified = list(c0)
@@ -84,7 +83,7 @@ def embedding_degree(E, r):
 
 
 def has_points_of_low_order(E, l_max=4):
-    # deterministic method utilizing division polynomials, useful for 256 bit E with l_max = 4
+    # deterministic method utilizing division polynomials, useful for 256 bit E with l_max = 4 (see docs/division_early_abort)
     p = E.base_field().order()
     R = PolynomialRing(GF(p), 'x')
     x = R.gen()
@@ -138,7 +137,7 @@ def verify_security(E, embedding_degree_bound=20, verbose=False):
     return True, h, n
 
 
-def generate_x962_curves(count, p, seed, l_max=20):
+def generate_x962_curves(count, p, seed):
     bits = p.nbits()
     sim_curves = {"name": "x962_sim_" + str(bits), "desc": "simulated curves generated according to the X9.62 standard",
                   "initial_seed": seed, "seeds_tried": count, "curves": [], "seeds_successful": 0}
@@ -160,6 +159,13 @@ def generate_x962_curves(count, p, seed, l_max=20):
             continue
         E = EllipticCurve(GF(p), [a, b])
 
+        # a heuristic for speeding up the generation process in exchange for sacrificing some curves with low cofactor
+        if bits < 224:
+            l_max = 3
+            if bits < 192:
+                l_max = 2
+        else:
+            l_max = 4
         if has_points_of_low_order(E, l_max):
             continue
 
