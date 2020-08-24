@@ -119,7 +119,8 @@ def verify_security(E, embedding_degree_bound=20, verbose=False):
         print("Computing order")
     q = E.base_field().order()
     order = E.order()
-    r_min_bits = order.nbits() - 10
+    # a somewhat arbitrary bound (slightly more strict than in the standard), but it will speed up the generation process
+    r_min_bits = order.nbits() - 5
     r_min = max(2 ** r_min_bits, 4 * sqrt(q))
     if verbose:
         print("Checking near-primality of", order)
@@ -155,7 +156,7 @@ def generate_x962_curves(count, p, seed):
         a = -3
 
         # check if r gives rise to an elliptic curve
-        if b == None or 4 * a ** 3 + 27 * b ** 2 == 0:
+        if b is None or 4 * a ** 3 + 27 * b ** 2 == 0:
             continue
         E = EllipticCurve(GF(p), [a, b])
 
@@ -172,7 +173,6 @@ def generate_x962_curves(count, p, seed):
         secure, h, n = verify_security(E)
         if not secure:
             continue
-        assert h * n == E.order()  # might not be needed
 
         seed_diff = ZZ('0X' + original_seed) - ZZ('0X' + current_seed)
         sim_curve = {
