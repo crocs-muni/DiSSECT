@@ -1,8 +1,8 @@
+import json
 from hashlib import sha1
 
-from sage.all import Mod
-
-from curve_analyzer.utils.json_handler import *
+from sage.all import ZZ, floor, ceil, GF, is_prime, PolynomialRing, EllipticCurve, prime_range, is_pseudoprime, \
+    sqrt
 
 
 # hex string to binary string
@@ -83,52 +83,20 @@ def embedding_degree(E, r):
     return embedding_degree_q(q, r)
 
 
-def has_root(pol, p):
-    R = PolynomialRing(GF(p), 'x')
-    S = R.quotient(pol, 'a')
-    f1 = S(x)
-    res = S(1)
-    for bit in p.bits():
-        if bit == 1:
-            res *= f1
-        f1 = S(f1 ** 2)
-    return gcd(pol, res.lift() - x).degree() > 0
-
-
-def has_points_of_low_order(E, l_max=4, poly_method='division'):
-    assert poly_method in ['division', 'modular']
+def has_points_of_low_order(E, l_max=4):
+    # deterministic method utilizing division polynomials, useful for 256 bit E with l_max = 4
     p = E.base_field().order()
     R = PolynomialRing(GF(p), 'x')
     x = R.gen()
-
-    if poly_method == 'modular':  # non-deterministic method
-        mdb = ClassicalModularPolynomialDatabase()
-        for l in prime_range(l_max):
-            j = E.j_invariant()
-            pol = R(mdb[l](j, x))
-            if has_root(pol, p):
+    weier = x ** 3 + x * E.ainvs()[-2] + E.ainvs()[-1]
+    for l in prime_range(l_max):
+        div_pol = E.division_polynomial(l)
+        roots = div_pol.roots(GF(p))
+        for root, mult in roots:
+            if weier(R(root)).is_square():
                 return True
             else:
                 continue
-
-    if poly_method == 'division':  # deterministic method, useful for 256 bits with l_max = 4
-        weier = x ** 3 + x * E.ainvs()[-2] + E.ainvs()[-1]
-        for l in prime_range(l_max):
-            #             print("l:", l)
-            #             t1 = time.time()
-            div_pol = E.division_polynomial(l)
-            roots = div_pol.roots(GF(p))
-            # t2 = time.time()
-            #             print("Div pol + roots computation:", t2-t1)
-            for root, mult in roots:
-                #                 t3 = time.time()
-                issqr = weier(R(root)).is_square()
-                #                 t4 = time.time()
-                #                 print("Issqr:", issqr, t4-t3)
-                if issqr:
-                    return True
-                else:
-                    continue
     return False
 
 
@@ -192,7 +160,7 @@ def generate_x962_curves(count, p, seed, l_max=20):
             continue
         E = EllipticCurve(GF(p), [a, b])
 
-        if has_points_of_low_order(E, l_max, poly_method='division'):
+        if has_points_of_low_order(E, l_max):
             continue
 
         secure, h, n = verify_security(E)
