@@ -1,7 +1,7 @@
 import json
 from hashlib import sha1
 
-from sage.all import ZZ, floor, ceil, GF, is_prime, PolynomialRing, EllipticCurve, prime_range, is_pseudoprime, \
+from sage.all import Mod, ZZ, floor, ceil, GF, is_prime, PolynomialRing, EllipticCurve, prime_range, is_pseudoprime, \
     sqrt
 
 
