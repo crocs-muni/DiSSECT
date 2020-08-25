@@ -25,6 +25,7 @@ for bitsize in bitsizes:
             fname = os.path.join(root, file)
             with open(fname, 'r') as f:
                 results = json.load(f)
+                print('Merging ', fname, '...')
 
                 if merged == None:
                     merged = results
@@ -35,7 +36,11 @@ for bitsize in bitsizes:
                     merged["seeds_tried"] += results["seeds_tried"]
                     merged["seeds_successful"] += results["seeds_successful"]
                 # check seed continuity
-                assert (expected_initial_seed == results["initial_seed"])
+                try:
+                    assert (expected_initial_seed == results["initial_seed"])
+                except AssertionError:
+                    raise ValueError('The expected initial seed is ', expected_initial_seed, ' but the current one is ',
+                                     results["initial_seed"])
 
     # save the merged results into a temp file, then delete all others, then rename it
     merged_name = os.path.join(results_path,
