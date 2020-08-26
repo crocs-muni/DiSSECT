@@ -4,7 +4,8 @@ import os
 from curve_analyzer.utils.json_handler import IntegerEncoder
 from curve_analyzer.utils.parallel.x962.simulations_x962 import increment_seed
 
-# bitsizes = next(os.walk('./results/x962'))[1]
+VERBOSE = False
+
 # get the names of immediate subdirs, which should be the respective bitsizes
 bitsizes = [f.name for f in os.scandir('./results/x962') if f.is_dir()]
 
@@ -25,7 +26,8 @@ for bitsize in bitsizes:
             fname = os.path.join(root, file)
             with open(fname, 'r') as f:
                 results = json.load(f)
-                print('Merging ', fname, '...')
+                if VERBOSE:
+                    print('Merging ', fname, '...')
 
                 if merged == None:
                     merged = results
