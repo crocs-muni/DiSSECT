@@ -21,7 +21,7 @@ for bitsize in bitsizes:
 
     for root, _, files in os.walk(results_path):
         # iterate through result files, starting with largest seeds
-        for file in sorted(files, reverse=True):
+        for file in sorted(files, key=lambda x: int((x.split('.')[-2]).split('_')[-1], 16), reverse=True):
             fname = os.path.join(root, file)
             with open(fname, 'r') as f:
                 results = json.load(f)
