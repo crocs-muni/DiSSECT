@@ -34,14 +34,15 @@ E1 = CustomCurve({'name': 'secp112r1',
                                                           {'r': 17, 'least': 8, 'full': 16},
                                                           {'r': 19, 'least': 360, 'full': 360}]}})
 
-number_of_trace_factors = 5
-trace_factorization = [[5, 1], [13, 1], [367, 1], [653, 1], [282930227, 1]]
+number_of_factors = 5
+trace_factorization = [(5, 1), (13, 1), (367, 1), (653, 1), (282930227, 1)]
+
 
 class Test_a25(unittest.TestCase):
 
     def test_1(self):
         result = a25_curve_function(E1)
-        self.assertEqual(result['trace'], number_of_trace_factors, "Should be " + str(number_of_trace_factors))
+        self.assertEqual(result['number_of_factors'], number_of_factors, "Should be " + str(number_of_factors))
         self.assertEqual(result['trace_factorization'], trace_factorization, "Should be " + str(trace_factorization))
 
 
