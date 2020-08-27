@@ -1,5 +1,4 @@
 import itertools
-import os
 import time
 from datetime import datetime
 
@@ -7,7 +6,7 @@ import pytz
 from prettytable import PrettyTable  # http://zetcode.com/python/prettytable/
 
 from curve_analyzer.definitions import TEST_PATH
-from curve_analyzer.utils.json_handler import *
+from curve_analyzer.utils.json_handler import save_into_json, load_from_json
 
 
 # Returns the current datetime as CEST
