@@ -6,8 +6,8 @@ from curve_analyzer.tests.test_interface import pretty_print_results, compute_re
 # Computation of number of prime degree divisors of trace
 # Returns a dictionary (key: 'trace') 
 def a25_curve_function(curve):
-    f = factor(curve.trace)
-    curve_results = {'trace_factorization': f, 'number_of_factors': len(list(f))}
+    f = list(factor(curve.trace))
+    curve_results = {'trace_factorization': f, 'number_of_factors': len(f)}
     return curve_results
 
 
