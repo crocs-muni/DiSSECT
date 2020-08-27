@@ -1,6 +1,7 @@
 import json
 
-from sage.all_cmdline import *  # import sage library
+from sage.all import *  # import sage library
+from sage.rings.polynomial import polynomial_modn_dense_ntl
 
 
 class IntegerEncoder(json.JSONEncoder):
@@ -8,7 +9,7 @@ class IntegerEncoder(json.JSONEncoder):
         if isinstance(obj, sage.rings.integer.Integer):
             return int(obj)
 
-        if isinstance(obj, sage.rings.polynomial.polynomial_modn_dense_ntl.Polynomial_dense_mod_p):
+        if isinstance(obj, polynomial_modn_dense_ntl.Polynomial_dense_mod_p):
             return str(obj)
 
         # Let the base class default method raise the TypeError
