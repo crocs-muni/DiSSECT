@@ -117,7 +117,7 @@ class CustomCurve:
         if self.form == "Weierstrass":
             if self.field_desc['type'] == "Prime":
                 p = ZZ(self.field_desc['p'])
-                F = GF(p)
+                F = GF(p, proof=False)
                 self.field = F
                 a = ZZ(self.params['a']["raw"])
                 b = ZZ(self.params['b']["raw"])
@@ -128,7 +128,7 @@ class CustomCurve:
                 degree = ZZ(self.field_desc['degree'])
                 F = GF(2)['w']
                 modulus = get_poly(self.field_desc["poly"], F)
-                K = GF(2 ** degree, 'w', modulus)
+                K = GF(2 ** degree, 'w', modulus, proof=False)
                 self.field = K
                 a = ZZ(self.params['a']["raw"])
                 b = ZZ(self.params['b']["raw"])
@@ -138,9 +138,9 @@ class CustomCurve:
             elif self.field_desc['type'] == 'Extension':
                 base = ZZ(self.field_desc['base'])
                 degree = ZZ(self.field_desc['degree'])
-                F = GF(base)['w']
+                F = GF(base, proof=False)['w']
                 modulus = get_poly(self.field_desc["poly"], F)
-                K = GF(base ** degree, 'w', modulus)
+                K = GF(base ** degree, 'w', modulus, proof=False)
                 self.field = K
                 a = get_poly(self.params['a']['poly'], K)
                 b = get_poly(self.params['b']['poly'], K)
@@ -152,7 +152,7 @@ class CustomCurve:
             A = ZZ(self.params['a']['raw'])
             B = ZZ(self.params['b']['raw'])
             p = ZZ(self.field_desc['p'])
-            F = GF(p)
+            F = GF(p, proof=False)
             self.field = F
             x, y = self.get_xy()
             a, b, u, v = montgomery_to_short_weierstrass(F, A, B, x, y)
@@ -168,7 +168,7 @@ class CustomCurve:
                 aa = ZZ(self.params['a']['raw'])
             d = ZZ(self.params['d']['raw'])
             p = ZZ(self.field_desc['p'])
-            F = GF(p)
+            F = GF(p, proof=False)
             x, y = self.get_xy()
             a, b, xx, yy = twisted_edwards_to_short_weierstrass(F, aa, d, x, y)
             self.EC = EllipticCurve(F, [a, b])
@@ -177,7 +177,7 @@ class CustomCurve:
             self.EC = "Not implemented"
 
         self.q = self.EC.base_field().order()
-        self.EC.set_order(self.cardinality)
+        self.EC.set_order(self.cardinality, num_checks=0)
         self.trace = self.q + 1 - self.cardinality
 
     def __repr__(self):
