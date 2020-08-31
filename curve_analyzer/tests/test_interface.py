@@ -6,6 +6,7 @@ from datetime import datetime
 import pytz
 from prettytable import PrettyTable  # http://zetcode.com/python/prettytable/
 from sage.all import sage_eval
+from sage.parallel.decorate import fork
 
 from curve_analyzer.definitions import TEST_PATH
 from curve_analyzer.utils.json_handler import save_into_json, load_from_json
@@ -186,13 +187,6 @@ def timeout(func, args=(), kwargs={}, timeout_duration=10):
         return func(*args, **kwargs)
 
     return my_new_func()
-
-
-def ints_before_strings(x):
-    try:
-        return ZZ(x)
-    except:
-        return oo
 
 
 def remove_values_from_list(l, val):
