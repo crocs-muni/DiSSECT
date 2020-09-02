@@ -11,5 +11,6 @@ test:
   before_script:
     - sage --pip3 install Ptable
   script:
+    - export PATH=$PATH:`sage -c "import sys; print(\":\".join(sys.path))"`
     - sage --python3 setup.py install
     - sage --python3 -m unittest discover curve_analyzer/tests/unit_tests
