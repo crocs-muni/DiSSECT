@@ -1,18 +1,19 @@
-from sage.all import factor
+from sage.all import ecm
 
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results, timeout
 
-# global time for one factorization 
+# global time for one factorization
 TIME = 10
 
 
 # Factors 'n' in time 't'
 def attempt_factor(n, t):
     try:
-        factorization = timeout(factor, [n], timeout_duration=t)
+        factorization = timeout(ecm.factor, [n], timeout_duration=t)
     except:
         factorization = None
     return factorization
+
 
 # Computer factorization of k*n+1 (k*n-1) if 'sign' is "+" ("-") in time 't'
 def near_order_factorizations(n, sign='+', k=10, t=10):
@@ -23,7 +24,7 @@ def near_order_factorizations(n, sign='+', k=10, t=10):
     elif sign == '-':
         m = k * n - 1
     try:
-        return list(attempt_factor(m, t))
+        return attempt_factor(m, t)
     except:
         return None
 
@@ -31,7 +32,7 @@ def near_order_factorizations(n, sign='+', k=10, t=10):
 # Computes bit length of largest factor(last item of list) of 'factorization'
 def largest_factor_bitlen(factorization):
     try:
-        bitlen = factorization[-1][0].nbits()
+        bitlen = factorization[-1].nbits()
     except:
         bitlen = '-'
     return bitlen
@@ -39,8 +40,9 @@ def largest_factor_bitlen(factorization):
 
 # Computes factorization of ord*k+1 and ord*k-1 and bit lengths of their largest factors
 # Returns a dictionary
-def a04_curve_function(curve, k, t=TIME):
+def a04_curve_function(curve, k):
     card = curve.cardinality
+    t = TIME
     curve_results = {('(+)' + 'factorization'): near_order_factorizations(card, '+', k, t)}
     curve_results[('(+)' + 'largest_factor_bitlen')] = largest_factor_bitlen(curve_results[('(+)' + 'factorization')])
     curve_results[('(-)' + 'factorization')] = near_order_factorizations(card, '-', k, t)
