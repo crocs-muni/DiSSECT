@@ -1,21 +1,23 @@
 import json
 import os
 
+from curve_analyzer.definitions import PARALLEL_RESULTS_PATH, X962_PATH
 from curve_analyzer.utils.json_handler import IntegerEncoder
 from curve_analyzer.utils.parallel.x962.simulations_x962 import increment_seed
 
+X962_RESULTS = os.path.join(PARALLEL_RESULTS_PATH, 'x962')
 VERBOSE = False
 
 # get the names of immediate subdirs, which should be the respective bitsizes
-bitsizes = [f.name for f in os.scandir('./results/x962') if f.is_dir()]
+bitsizes = [f.name for f in os.scandir(X962_RESULTS) if f.is_dir()]
 
 for bitsize in bitsizes:
-    results_path = os.path.join('./results/x962', bitsize)
+    results_path = os.path.join(X962_RESULTS, bitsize)
     # skip empty dirs
     if len(os.listdir(results_path)) == 0:
         continue
 
-    with open('x962/parameters_x962.json', 'r') as f:
+    with open(os.path.join(X962_PATH, 'parameters_x962.json'), 'r') as f:
         params = json.load(f)
         original_seed = params[bitsize][1]
     merged = None
