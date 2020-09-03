@@ -78,7 +78,9 @@ def custom_curves(curve_db, curve_type, order_bound, verbose, binary, extension,
 
 # Creates a list of instances of class CustomCurve out of imported database (conditioned by curve_type, see above)
 def import_curves(curve_type="sample", order_bound=256, verbose=False, binary=False, extension=False, single_curve="",
-                  allow_cofactor=True):
+                  allow_cofactor=True, chunk=1, chunks_total=1):
+    assert chunk <= chunks_total
+
     if single_curve != "":
         print("Importing " + single_curve)
     else:
@@ -90,4 +92,10 @@ def import_curves(curve_type="sample", order_bound=256, verbose=False, binary=Fa
     curve_list = sorted(
         custom_curves(curve_db, curve_type, order_bound, verbose, binary, extension, single_curve, allow_cofactor),
         key=lambda item: item.order)
-    return curve_list
+
+    def chunkify(lst, n):
+        """Split lst into n chunks"""
+        return [lst[i::n] for i in range(n)]
+
+    curve_chunks = chunkify(curve_list, chunks_total)
+    return curve_chunks[chunk - 1]
