@@ -10,18 +10,20 @@ from curve_analyzer.utils.curve_handler import import_curves
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Welcome to Curve analyzer! It allows you to run tests on a selected subset of standard or simulated curves.')
-    parser.add_argument('test_name', metavar='test_name', type=str, nargs=1, action='store',
-                        help='the test identifier, e.g., a02')
-    parser.add_argument('curve_type', metavar='curve_type', type=str, nargs=1,
-                        help='the type of curves to be tested; must be one of the following: std (all standard curves), sim (all simulated curves), sample (curves secp112r1, secp192r1, secp256r1), all (all curves in the database)')
+    requiredNamed = parser.add_argument_group('required named arguments')
+    requiredNamed.add_argument('-tn', '--test_name', metavar='test_name', type=str, nargs=1, action='store',
+                               help='the test identifier, e.g., a02', required=True)
+    requiredNamed.add_argument('-ct', '--curve_type', metavar='curve_type', type=str, nargs=1,
+                               help='the type of curves to be tested; must be one of the following: std (all standard curves), sim (all simulated curves), sample (curves secp112r1, secp192r1, secp256r1), all (all curves in the database)',
+                               required=True)
     parser.add_argument('-v', '--verbosity', action='store_true', help='verbosity flag (default: False)')
-    parser.add_argument('-b', action='store', type=int, metavar='order_bound',
+    parser.add_argument('-b', '--order_bound', action='store', type=int, metavar='order_bound',
                         help='upper bound for curve order bitsize (default: 256)')
-    parser.add_argument('-d', action='store', type=str, metavar='description',
+    parser.add_argument('-d', '--description', action='store', type=str, metavar='description',
                         help='custom text description of the current test run for logs (default: "")')
-    parser.add_argument('-ct', action='store', type=int, metavar='chunks_total',
+    parser.add_argument('-cht', '--chunks_total', action='store', type=int, metavar='chunks_total',
                         help='the number of chunks into which the curve list is divided (default: 1)')
-    parser.add_argument('-c', action='store', type=int, metavar='chunk',
+    parser.add_argument('-ch', '--chunk', action='store', type=int, metavar='chunk',
                         help='the chunk of the curve list that will be processed (default: 1)')
 
     args = parser.parse_args()
@@ -49,16 +51,16 @@ if __name__ == '__main__':
     else:
         description = args.d
 
-    if args.ct == None:
-        ct = 1
+    if args.cht == None:
+        cht = 1
     else:
-        ct = args.ct
+        cht = args.cht
 
-    if args.c == None:
-        c = 1
+    if args.ch == None:
+        ch = 1
     else:
-        c = args.c
+        ch = args.ch
 
-    curves_list = import_curves(ctype, order_bound, args.verbosity, chunks_total=ct, chunk=c)
+    curves_list = import_curves(ctype, order_bound, args.verbosity, chunks_total=cht, chunk=ch)
     print("")
     test_function(curves_list, desc=description)
