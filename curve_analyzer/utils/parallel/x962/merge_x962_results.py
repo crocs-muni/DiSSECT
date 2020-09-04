@@ -31,7 +31,7 @@ for bitsize in bitsizes:
                 if VERBOSE:
                     print('Merging ', fname, '...')
 
-                if merged == None:
+                if merged is None:
                     merged = results
                     expected_initial_seed = original_seed
                 else:
