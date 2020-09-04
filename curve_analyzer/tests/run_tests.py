@@ -31,8 +31,8 @@ def load_test_parameters(args):
 
 def main():
     parser = argparse.ArgumentParser(description='Experiment parallelizer')
-    parser.add_argument('-t', '--tasks', type=int, default=62,
-                        help='Number of tasks to run in parallel (default: 62')
+    parser.add_argument('-t', '--tasks', type=int, default=1,
+                        help='Number of tasks to run in parallel (default: 1')
     parser.add_argument('-j', '--jobs', type=int, default=100,
                         help='Number of jobs to run in parallel (default: 100')
     parser.add_argument('-s', '--sage', default='sage',
