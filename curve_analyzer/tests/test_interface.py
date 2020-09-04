@@ -33,8 +33,8 @@ class Logs:
         self.create_logs()
 
     def init_log_paths(self, test_name):
-        self.main_log_file = TEST_PATH + '/' + test_name + '/' + test_name + ".log"
-        self.log_dir = TEST_PATH + '/' + test_name + '/logs/'
+        self.main_log_file = os.path.join(TEST_PATH, test_name, test_name + ".log")
+        self.log_dir = os.path.join(TEST_PATH, test_name, '/logs/')
         timestamp = get_timestamp()
         if not self.desc == '':
             name = timestamp + "_" + self.desc
@@ -64,9 +64,9 @@ class Logs:
 
 # Deduces paths to JSON files from the test name
 def init_json_paths(test_name, desc=''):
-    path_json = TEST_PATH + '/' + test_name + '/' + get_timestamp() + test_name + desc + '.json'
-    path_tmp = TEST_PATH + '/' + test_name + '/' + 'tmp.json'
-    path_params = TEST_PATH + '/' + test_name + '/' + test_name + '.params'
+    path_json = os.path.join(TEST_PATH, test_name, test_name + desc + '_' + get_timestamp() + '.json')
+    path_tmp = os.path.join(TEST_PATH, test_name, 'tmp.json')
+    path_params = os.path.join(TEST_PATH, test_name, test_name + '.params')
     if not os.path.exists(path_json):
         save_into_json({}, path_json, 'w')
     return path_json, path_tmp, path_params
@@ -142,7 +142,7 @@ def compute_results(curve_list, test_name, curve_function, desc=''):
 
 
 def init_txt_paths(test_name, desc=''):
-    name = TEST_PATH + '/' + test_name + '/' + test_name
+    name = os.path.join(TEST_PATH, + test_name, test_name)
     if not desc == '':
         name += "_" + desc
     return name + '.txt'
