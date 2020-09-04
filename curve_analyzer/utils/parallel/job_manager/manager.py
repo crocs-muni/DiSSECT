@@ -19,7 +19,7 @@ import time
 import uuid
 from typing import List, Optional
 
-from job_manager.runner import AsyncRunner
+from curve_analyzer.utils.parallel.job_manager.runner import AsyncRunner
 
 logger = logging.getLogger(__name__)
 
