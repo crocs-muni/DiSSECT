@@ -1,3 +1,5 @@
+#!/usr/bin/env sage
+
 import json
 import os
 
