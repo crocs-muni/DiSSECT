@@ -3,9 +3,9 @@ import json
 import logging
 import os
 
-from job_manager.manager import ParallelRunner, Task, TaskResult
 from sage.all import ZZ
 
+from curve_analyzer.utils.parallel.job_manager.manager import ParallelRunner, Task, TaskResult
 from curve_analyzer.utils.parallel.x962.simulations_x962 import increment_seed
 
 try:
