@@ -83,7 +83,6 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
         log_obj.write_to_logs("\tProcessing params " + str(params_local), frmt='{:.<60}')
         if str(params_local) in results[curve.name]:
             log_obj.write_to_logs("Already computed", newlines=1)
-            continue
         else:
             results[curve.name][str(params_local)] = curve_function(curve, *params_local_values)
             log_obj.write_to_logs("Done", newlines=1)
