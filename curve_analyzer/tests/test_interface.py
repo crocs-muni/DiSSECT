@@ -34,7 +34,7 @@ class Logs:
 
     def init_log_paths(self, test_name):
         self.main_log_file = os.path.join(TEST_PATH, test_name, test_name + ".log")
-        self.log_dir = os.path.join(TEST_PATH, test_name, '/logs/')
+        self.log_dir = os.path.join(TEST_PATH, test_name, 'logs')
         timestamp = get_timestamp()
         if not self.desc == '':
             name = timestamp + "_" + self.desc
