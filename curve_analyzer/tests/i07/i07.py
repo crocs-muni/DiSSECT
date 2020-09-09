@@ -1,4 +1,4 @@
-from sage.all import log, floor
+from sage.all import floor
 
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
@@ -6,13 +6,13 @@ from curve_analyzer.tests.test_interface import pretty_print_results, compute_re
 # Computes the distance of curve order to the nearest power of 2
 def i07_curve_function(curve):
     order = curve.order * curve.cofactor
-    l = floor(log(order, 2))
+    l = order.nbits() - 1
     u = l + 1
     L = 2 ** l
     U = 2 ** u
-    curve_results = {"distance": U - order}
-    if U - order > order - L:
-        curve_results["distance"] = order - L
+    distance = min(order - L, U - order)
+    ratio = floor(order / distance)
+    curve_results = {"distance": distance, "ratio": ratio}
     return curve_results
 
 
@@ -20,12 +20,12 @@ def compute_i07_results(curve_list, desc=''):
     compute_results(curve_list, 'i07', i07_curve_function, desc=desc)
 
 
-def get_i07_captions(results):
-    return ["distance"]
+def get_i07_captions(curve_results):
+    return ["distance", "ratio"]
 
 
 def select_i07_results(curve_results):
-    keys = ["distance"]
+    keys = ["distance", "ratio"]
     selected_results = []
     for key in keys:
         selected_key = []
