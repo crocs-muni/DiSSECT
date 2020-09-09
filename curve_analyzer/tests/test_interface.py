@@ -102,7 +102,11 @@ def compute_results(curve_list, test_name, curve_function, desc=''):
         return
     main_json_file, json_file, tmp_file, params_file = init_json_paths(test_name, desc)
     log_obj = Logs(test_name, desc)
-    old_results = load_from_json(main_json_file)
+    try:
+        old_results = load_from_json(main_json_file)
+    except FileNotFoundError:
+        old_results = {}
+
     new_results = {}
     if not os.path.exists(params_file):
         print("No parameter file found, terminating the test.")
