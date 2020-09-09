@@ -12,11 +12,11 @@ Run `sage --python3 -m unittest discover` in directory `tests/unit_tests/`.
 
 ## Testing the curves
 
-Run `./run_tests.py` in directory `tests`. Use the `-h` flag to get the help menu.
+Run `./run_tests.py` in directory `tests`. Use the `-h` flag to get the help menu. To merge the results of a test (a22 in this case) into single file, run `./merge_test_results.py -n a22`.
 
 ### Example usage
 
-To run test a22 on standard curves of bitsizes up to 192 in verbose mode, run `./run_tests.py a22 std -v -b 192`.
+To run test a22 on all standard curves of bitsizes up to 192 in verbose mode using 3 cores and 100 jobs, run `./run_tests.py -n a22 -c std -v -b 192 -t 2 -j 4`.
 
 ### Supported curve sets
 
@@ -37,3 +37,4 @@ To run test a22 on standard curves of bitsizes up to 192 in verbose mode, run `.
 - a23 volcano
 - a24 isogeny_extensions
 - a25 trace_factorization
+- i07 distance_of_order_from_power_of_two
