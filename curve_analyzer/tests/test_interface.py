@@ -133,7 +133,7 @@ def compute_results(curve_list, test_name, curve_function, desc=''):
         total_time += diff_time
 
         log_obj.write_to_logs("Done, time elapsed: " + str(diff_time), newlines=2)
-        save_into_json(results, tmp_file, 'w', indent=1)
+        save_into_json(results, tmp_file, 'w')
 
     log_obj.write_to_logs(80 * '.' + "\n" + "Finished, total time elapsed: " + str(total_time) + "\n\n" + 80 * '#',
                           newlines=3)
