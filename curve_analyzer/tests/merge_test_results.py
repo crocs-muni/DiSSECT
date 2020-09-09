@@ -39,7 +39,7 @@ else:
 total_results.update(sorted(merged.items()))
 total_results_ordered = OrderedDict(sorted(total_results.items()))
 merged_file_name = os.path.join(TEST_PATH, test_name, test_name + '_' + get_timestamp() + '.tmp')
-save_into_json(total_results_ordered, merged_file_name, 'w+', indent=0)
+save_into_json(total_results_ordered, merged_file_name, 'w+')
 
 # delete the original results and the partial results and rename the temp file
 for file in partial_results_filenames:
