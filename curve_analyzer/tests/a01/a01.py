@@ -7,14 +7,6 @@ TIME = 10
 
 
 
-def gen_orders(E, t):
-
-    try:
-        G.append([timeout(E.gens()[1].order, [], timeout_duration=t)])
-    except:
-        return G
-
-
 def a01_curve_function(curve, deg):
     '''returns the orders of the two generators of the curve over the deg-th relative extension'''
     E = curve.EC
