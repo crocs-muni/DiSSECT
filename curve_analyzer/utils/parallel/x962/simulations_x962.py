@@ -1,7 +1,7 @@
 import json
 from hashlib import sha1
 
-from sage.all import Mod, ZZ, floor, ceil, GF, is_prime, PolynomialRing, EllipticCurve, prime_range, is_pseudoprime, \
+from sage.all import Integers, ZZ, floor, ceil, GF, is_prime, PolynomialRing, EllipticCurve, prime_range, is_pseudoprime, \
     sqrt
 
 
@@ -23,7 +23,7 @@ def increment_seed(seed, i=1):
     """accepts a hex string as input (not starting with 0x)"""
     g = ZZ(seed, 16).nbits()
     f = '0' + str(len(seed)) + 'X'
-    return format(ZZ(Mod(ZZ(seed, 16) + i, 2 ** g)), f)
+    return format(ZZ(Integers(2 ** g)(ZZ(seed, 16) + i)), f)
 
 
 # http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.202.2977&rep=rep1&type=pdf, page 42
@@ -72,7 +72,7 @@ def get_b_from_r(r, p, a=-3):
 
 def embedding_degree_q(q, r):
     """returns embedding degree with respect to q"""
-    return Mod(q, r).multiplicative_order()
+    return Integers(r)(q).multiplicative_order()
 
 
 def embedding_degree(E, r):
