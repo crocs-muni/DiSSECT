@@ -1,22 +1,39 @@
 from sage.all import ZZ, sqrt, factor, squarefree_part
 
-from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
+from curve_analyzer.tests.test_interface import pretty_print_results, compute_results, timeout
 
+
+# global time for one factorization
+TIME = 10
+
+def ext_trace(q,t,deg):
+    a = 2
+    b = t
+    for _ in range(deg-1):
+        tmp = b
+        b = t*b-q*a
+        a = tmp
+    return b
 
 # Computation of d_K (cm_disc), v (max_conductor) and factorization of D where D=t^2-4q = v^2*d_K
 # Returns a dictionary (keys: 'cm_disc', 'factorization', 'max_conductor') 
-def a02_curve_function(curve):
-    E = curve.EC
+def a02_curve_function(curve,deg):
     t = curve.trace
     q = curve.q
     curve_results = {}
+    t = ext_trace(q,t,deg)
+    q = q**deg
     D = t ** 2 - 4 * q
     d = squarefree_part(D)
     disc = d
     if d % 4 != 1:
         disc *= 4
     curve_results['cm_disc'] = disc
-    curve_results['factorization'] = list(factor(D))
+    t = TIME
+    try:
+        curve_results['factorization'] = list(timeout(factor, [D],timeout_duration=t))
+    except:
+        curve_results['factorization'] = []
     curve_results['max_conductor'] = ZZ(sqrt(D / disc))
     return curve_results
 

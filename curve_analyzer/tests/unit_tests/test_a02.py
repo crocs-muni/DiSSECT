@@ -38,17 +38,30 @@ cm_factorization = {'cm_disc': -3147981784734289480448435252561803,
                     'factorization': [(2, 2), (23, 1), (136868773249316933932540663154861, 1)],
                     'max_conductor': 2}
 
+cm_factorization_deg2 = {'cm_disc': -3147981784734289480448435252561803,
+                    'factorization': [(2, 12), (11, 2), (23, 1), (205152464245457, 2), (136868773249316933932540663154861, 1)],
+                    'max_conductor': 144427334828801728}
+
 
 class Test_a02(unittest.TestCase):
 
     def test_1(self):
-        result = a02_curve_function(E1)
+        result = a02_curve_function(E1,1)
         self.assertEqual(result['cm_disc'], cm_factorization['cm_disc'],
                          "Should be " + str(cm_factorization['cm_disc']))
         self.assertEqual(result['factorization'], cm_factorization['factorization'],
                          "Should be " + str(cm_factorization['factorization']))
         self.assertEqual(result['max_conductor'], cm_factorization['max_conductor'],
                          "Should be " + str(cm_factorization['max_conductor']))
+
+    def test_2(self):
+        result = a02_curve_function(E1,2)
+        self.assertEqual(result['cm_disc'], cm_factorization_deg2['cm_disc'],
+                         "Should be " + str(cm_factorization_deg2['cm_disc']))
+        self.assertEqual(result['factorization'], cm_factorization_deg2['factorization'],
+                         "Should be " + str(cm_factorization_deg2['factorization']))
+        self.assertEqual(result['max_conductor'], cm_factorization_deg2['max_conductor'],
+                         "Should be " + str(cm_factorization_deg2['max_conductor']))
 
 
 if __name__ == '__main__':
