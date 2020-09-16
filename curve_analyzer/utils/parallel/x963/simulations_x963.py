@@ -4,8 +4,8 @@ from hashlib import sha1
 from sage.all import Integers, ZZ, floor, ceil, GF, is_prime, PolynomialRing, EllipticCurve, prime_range, is_pseudoprime, \
     sqrt
 
-# The standard x963 is the same as x962
-# Maybe except for the fact that point order n can be <4\sqrt(q) but this is almost never the case since n~q
+# For now, it is the same as x962
+
 
 # hex string to binary string
 def sha1_bin(x):
