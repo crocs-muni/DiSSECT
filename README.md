@@ -16,7 +16,7 @@ Run `./run_tests.py` in directory `tests`. Use the `-h` flag to get the help men
 
 ### Example usage
 
-To run test a22 on all standard curves of bitsizes up to 192 in verbose mode using 3 cores and 100 jobs, run `./run_tests.py -n a22 -c std -v -b 192 -t 2 -j 4`.
+To run test a22 on all standard curves of bitsizes up to 192 in verbose mode using 3 cores and 100 jobs, run `./run_tests.py -n a22 -c std -v -b 192 -t 3 -j 100`.
 
 ### Supported curve sets
 
