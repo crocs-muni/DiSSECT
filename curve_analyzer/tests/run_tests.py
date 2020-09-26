@@ -72,7 +72,7 @@ def main():
         for p in load_test_parameters(args):
             cli = ' '.join(['--%s=%s' % (k, p[k]) for k in p.keys()])
             if args.verbosity:
-                cli = cli.join('-v')
+                cli = ' '.join([cli, '-v'])
             t = Task(args.sage, '%s %s' % (wrapper_path, cli))
             yield t
 
