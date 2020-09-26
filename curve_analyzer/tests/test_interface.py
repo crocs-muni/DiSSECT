@@ -97,10 +97,11 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
 # A universal function for running tests on curve lists; it is called by each test file which has its own curve function.
 # Each test is assumed to have a params file in its folder; the results and logs are created there as well.
 def compute_results(curve_list, test_name, curve_function, desc=''):
+    main_json_file, json_file, tmp_file, params_file = init_json_paths(test_name, desc)
     if curve_list == []:
         print("No input curves found, terminating the test.")
+        save_into_json({}, json_file, 'w')
         return
-    main_json_file, json_file, tmp_file, params_file = init_json_paths(test_name, desc)
     log_obj = Logs(test_name, desc)
     try:
         old_results = load_from_json(main_json_file)
