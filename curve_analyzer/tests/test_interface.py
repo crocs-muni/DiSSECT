@@ -1,6 +1,7 @@
 import itertools
 import os
 import time
+import random
 from datetime import datetime
 
 import pytz
@@ -66,7 +67,8 @@ class Logs:
 def init_json_paths(test_name, desc=''):
     path_main_json = os.path.join(TEST_PATH, test_name, test_name + '.json')
     path_json = os.path.join(TEST_PATH, test_name, test_name + '_' + desc + '_' + get_timestamp() + '.json')
-    path_tmp = os.path.join(TEST_PATH, test_name, 'tmp.json')
+    # tmp name must be unique for parallel test runs
+    path_tmp = "%s_%04x.tmp" % (path_json.split('.')[-2], random.randrange(2**16))
     path_params = os.path.join(TEST_PATH, test_name, test_name + '.params')
     if not os.path.exists(path_json):
         save_into_json({}, path_json, 'w')
@@ -151,7 +153,6 @@ def compute_results(curve_list, test_name, curve_function, desc=''):
                           newlines=3)
     os.remove(json_file)
     os.rename(tmp_file, json_file)
-
 
 def init_txt_paths(test_name, desc=''):
     name = os.path.join(TEST_PATH, + test_name, test_name)
