@@ -13,3 +13,5 @@ curve_analyzer/tests/.*
 curve_analyzer/tests/**/*.json
 curve_analyzer/tests/**/*.params
 curve_analyzer/tests/**/*.txt
+curve_analyzer/utils/parallel/results/*
+curve_analyzer/curves_json_sim/*
