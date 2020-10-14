@@ -1,3 +1,5 @@
 [submodule "curve_analyzer/curves_json"]
 	path = curve_analyzer/curves_json
 	url = https://github.com/J08nY/std-curves.git
+	branch = data
+	update = merge
