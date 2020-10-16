@@ -24,7 +24,7 @@ def load_test_parameters(args):
     while args.jobs > 0:
         chunk = jobs_total - args.jobs + 1
         yield {'test_name': args.test_name, 'curve_type': args.curve_type, 'order_bound': args.order_bound,
-               'description': "_part_" + str(chunk) + "_of_" + str(jobs_total), 'chunks_total': jobs_total,
+               'description': "_part_" + str(chunk).zfill(4) + "_of_" + str(jobs_total).zfill(4), 'chunks_total': jobs_total,
                'chunk': chunk}
         args.jobs -= 1
 
