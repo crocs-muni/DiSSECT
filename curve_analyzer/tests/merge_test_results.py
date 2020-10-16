@@ -9,11 +9,27 @@ from collections import OrderedDict
 from curve_analyzer.definitions import TEST_PATH
 from curve_analyzer.utils.json_handler import load_from_json, save_into_json
 
+def dict_update_rec(a,b):
+    for key in b.keys():
+        if not key in a.keys():
+            a[key] = b[key]
+            continue
+        b_value = b[key]
+        a_value = a[key]
+        if isinstance(a_value,dict):
+            dict_update_rec(a_value,b_value)
+        else:
+            a_value = b_value
+        a[key] = a_value
+
+
 parser = argparse.ArgumentParser(description='Test results merger')
 parser.add_argument('-n', '--test_name', type=str, help='Name of the test')
 args = parser.parse_args()
 test_name = args.test_name
 assert re.search(r'[ais][0-9][0-9]', test_name)
+
+
 
 # initialize original results
 results_file_name = os.path.join(TEST_PATH, test_name, test_name + '.json')
@@ -31,7 +47,7 @@ for root, _, files in os.walk(os.path.join(TEST_PATH, test_name)):
         with open(fname, 'r') as f:
             partial_results = OrderedDict(json.load(f))
         partial_results_sorted = sorted(partial_results.items())
-        total_results.update(partial_results_sorted)
+        dict_update_rec(total_results,partial_results_sorted)#total_results.update(partial_results_sorted)
         tmp_file_name = os.path.join(TEST_PATH, test_name, test_name + '.tmp')
         save_into_json(total_results, tmp_file_name, 'w+')
         os.remove(fname)
