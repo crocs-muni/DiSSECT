@@ -1,7 +1,6 @@
+#!/usr/bin/env sage
+
 import os, json
-
-
-
 from pathlib import Path
 
 with open("params","r") as f:
