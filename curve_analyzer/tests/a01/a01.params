@@ -1,9 +1,0 @@
-{
-  "params_global": {
-    "deg_range": "[1,2]"
-  },
-  "params_local_names": [
-  "deg"
-  ]
-}
-
