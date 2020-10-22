@@ -45,9 +45,8 @@ for root, _, files in os.walk(os.path.join(TEST_PATH, test_name)):
             continue
         fname = os.path.join(root, file)
         with open(fname, 'r') as f:
-            partial_results = OrderedDict(json.load(f))
-        partial_results_sorted = sorted(partial_results.items())
-        dict_update_rec(total_results,partial_results_sorted)#total_results.update(partial_results_sorted)
+            partial_results = json.load(f)
+        dict_update_rec(total_results, partial_results)
         tmp_file_name = os.path.join(TEST_PATH, test_name, test_name + '.tmp')
         save_into_json(total_results, tmp_file_name, 'w+')
         os.remove(fname)
