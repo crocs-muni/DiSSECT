@@ -1,3 +1,4 @@
+#!/usr/bin/env sage
 import os, json, itertools,sys
 from sage.all import sage_eval
 from curve_analyzer.utils.json_handler import *
