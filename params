@@ -1,6 +1,37 @@
-&test a08: {
-  "params_global": {},
-  "params_local_names": []
+&test a01: {
+  "params_global": {
+    "deg_range": "[1,2]"
+  },
+  "params_local_names": [
+  "deg"
+  ]
+}
+
+&test a02: {
+  "params_global": {
+    "deg_range": "[1]"
+  },
+  "params_local_names": [
+  "deg"
+  ]
+}
+
+&test a04: {
+  "params_global": {
+    "k_range": "range(1, 9)"
+  },
+  "params_local_names": [
+    "k"
+  ]
+}
+
+&test a05: {
+  "params_global": {
+    "l_range": "prime_range(19)"
+  },
+  "params_local_names": [
+    "l"
+  ]
 }
 
 &test a06: {
@@ -13,6 +44,19 @@
   ]
 }
 
+&test a08: {
+  "params_global": {},
+  "params_local_names": []
+}
+
+&test a12: {
+  "params_global": {
+    "l_range": "prime_range(15)"
+  },
+  "params_local_names": [
+    "l"
+  ]
+}
 
 &test a22: {
   "params_global": {
@@ -22,10 +66,7 @@
     "l"
   ]
 }
-&test a25: {
-  "params_global": {},
-  "params_local_names": []
-}
+
 &test a23: {
   "params_global": {
     "l_range": "prime_range(20)"
@@ -34,40 +75,7 @@
     "l"
   ]
 }
-&test a05: {
-  "params_global": {
-    "l_range": "prime_range(19)"
-  },
-  "params_local_names": [
-    "l"
-  ]
-}
-&test a12: {
-  "params_global": {
-    "l_range": "prime_range(15)"
-  },
-  "params_local_names": [
-    "l"
-  ]
-}
-&test a01: {
-  "params_global": {
-    "deg_range": "[1,2]"
-  },
-  "params_local_names": [
-  "deg"
-  ]
-}
 
-
-&test a02: {
-  "params_global": {
-    "deg_range": "[1]"
-  },
-  "params_local_names": [
-  "deg"
-  ]
-}
 &test a24: {
   "params_global": {
     "l_range": "prime_range(20)"
@@ -76,16 +84,13 @@
     "l"
   ]
 }
-&test i07: {
+
+&test a25: {
   "params_global": {},
   "params_local_names": []
 }
 
-&test a04: {
-  "params_global": {
-    "k_range": "range(1, 9)"
-  },
-  "params_local_names": [
-    "k"
-  ]
+&test i07: {
+  "params_global": {},
+  "params_local_names": []
 }
