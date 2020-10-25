@@ -37,7 +37,7 @@
 &test a06: {
   "params_global": {
     "l_range": "prime_range(10)",
-    "deg_range": "[1,2,3,4]"
+    "deg_range": "[1,3,4]"
   },
   "params_local_names": [
     "l", "deg"
