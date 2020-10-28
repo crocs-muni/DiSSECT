@@ -34,7 +34,7 @@ E1 = CustomCurve({'name': 'secp112r2',
                                                           {'r': 17, 'least': 288, 'full': 288},
                                                           {'r': 19, 'least': 360, 'full': 360}]}})
 
-dist1 = {'distance': 740611633441112928659565470072532}
+dist1 = {'distance': 740611633441112928659565470072532, "distance 64": 20, "distance 32": 12}
 
 
 class Test_i07(unittest.TestCase):
@@ -43,6 +43,10 @@ class Test_i07(unittest.TestCase):
         result = i07_curve_function(E1)
         self.assertEqual(result['distance'], dist1['distance'],
                          "Should be " + str(dist1['distance']))
+        self.assertEqual(result['distance 64'], dist1['distance 64'],
+                         "Should be " + str(dist1['distance 64']))
+        self.assertEqual(result['distance 32'], dist1['distance 32'],
+                         "Should be " + str(dist1['distance 32']))
 
 
 if __name__ == '__main__':
