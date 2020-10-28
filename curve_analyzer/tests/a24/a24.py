@@ -72,8 +72,8 @@ def i_finder(curve, l):
     i2 = 1
     deg = a.multiplicative_order()
     E = curve.EC
-    card = ext_card(E, curve.order, deg)
-    if card % deg ** 2 != 0 or is_torsion_cyclic(E, curve.order, l, deg):
+    card = ext_card(E, curve.order*curve.cofactor, deg)
+    if card % deg ** 2 != 0 or is_torsion_cyclic(E, curve.order*curve.cofactor, l, deg):
         i2 *= l
     return i2, i1
 
