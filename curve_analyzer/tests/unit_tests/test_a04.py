@@ -1,7 +1,7 @@
 import unittest, ast
 from curve_analyzer.tests.a04.a04 import a04_curve_function
 from curve_analyzer.tests.testing_curves import curves, curve_names
-results={'secp112r2': {"{'k': 1}": {'(+)factorization': [5, 688979, 2554037775511, 505965776926277], '(+)largest_factor_bitlen': 49, '(-)factorization': 'NO DATA (timed out)', '(-)largest_factor_bitlen': '-'}}, 'bn158': {"{'k': 1}": {'(+)factorization': [2, 13, 19, 283, 2953, 12703, 255775566845467, 153820879925462235919], '(+)largest_factor_bitlen': 68, '(-)factorization': [2, 2, 3, 3, 7, 17, 1031, 1289, 9859, 18453708086941, 199195681547286757733], '(-)largest_factor_bitlen': 68}}, 'brainpoolP160r1': {"{'k': 1}": {'(+)factorization': [2, 7, 7, 223, 19949, 85009, 464461626269101, 77398836126035560547], '(+)largest_factor_bitlen': 67, '(-)factorization': [2, 2, 2, 3, 83, 1933, 216841, 2745161, 3244753, 72663031601, 2465333512157], '(-)largest_factor_bitlen': 42}}}
+results={'secp112r2': {"{'k': 1}": {'(+)factorization': [5, 688979, 2554037775511, 505965776926277], '(+)largest_factor_bitlen': 49, '(-)factorization': 'NO DATA (timed out)', '(-)largest_factor_bitlen': 'NO DATA (timed out)'}}, 'bn158': {"{'k': 1}": {'(+)factorization': [2, 13, 19, 283, 2953, 12703, 255775566845467, 153820879925462235919], '(+)largest_factor_bitlen': 68, '(-)factorization': [2, 2, 3, 3, 7, 17, 1031, 1289, 9859, 18453708086941, 199195681547286757733], '(-)largest_factor_bitlen': 68}}, 'brainpoolP160r1': {"{'k': 1}": {'(+)factorization': [2, 7, 7, 223, 19949, 85009, 464461626269101, 77398836126035560547], '(+)largest_factor_bitlen': 67, '(-)factorization': [2, 2, 2, 3, 83, 1933, 216841, 2745161, 3244753, 72663031601, 2465333512157], '(-)largest_factor_bitlen': 42}}}
 
 class Test_a04(unittest.TestCase):
  
