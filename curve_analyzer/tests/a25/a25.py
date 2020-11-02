@@ -7,6 +7,7 @@ from curve_analyzer.tests.test_interface import pretty_print_results, compute_re
 # Returns a dictionary (key: 'trace') 
 def a25_curve_function(curve):
     f = list(factor(curve.trace))
+    f = [list(i) for i in f]
     curve_results = {'trace_factorization': f, 'number_of_factors': len(f)}
     return curve_results
 

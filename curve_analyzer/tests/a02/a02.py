@@ -32,9 +32,10 @@ def a02_curve_function(curve,deg):
     t = TIME
     factorization = timeout(factor, [D],timeout_duration=t)
     if factorization == 'NO DATA (timed out)':
-        curve_results['factorization'] = ["-"]
+        curve_results['factorization'] = []
     else:
-        curve_results['factorization'] = list(factorization)
+        tuples_to_lists = [list(i) for i in list(factorization)]
+        curve_results['factorization'] = tuples_to_lists
     curve_results['max_conductor'] = ZZ(sqrt(D / disc))
     return curve_results
 
