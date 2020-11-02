@@ -1,7 +1,6 @@
 #!/usr/bin/env sage
-import itertools
+import itertools,optparse
 from curve_analyzer.utils.json_handler import *
-from curve_analyzer.utils.custom_curve import CustomCurve
 from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_prefixes
 from curve_analyzer.tests.testing_curves import curves
 
@@ -31,17 +30,27 @@ def compute_results(test_name):
 
 
 def main():
-    directory = TEST_PATH
-    for filename in os.listdir(directory):
-        if filename in tests_to_skip:
-            continue
-        if not filename[0] in TEST_prefixes:
-            continue
-        try:
-            int(filename[1:],10)
-        except:
-            continue
-        compute_results(filename)
+    parser = optparse.OptionParser()
+    parser.add_option('-t', '--test',
+                      action="store", dest="test",
+                      help="list of names for structure generation seperated by comma or \'all\'", default="all")
+    options, args = parser.parse_args()
+    if options.test== "all":
+        directory = TEST_PATH
+        for filename in os.listdir(directory):
+            if filename in tests_to_skip:
+                continue
+            if not filename[0] in TEST_prefixes:
+                continue
+            try:
+                int(filename[1:],10)
+            except:
+                continue
+            compute_results(filename)
+    else:
+        tests = options.test.split(",")
+        for name in tests:
+            compute_results(name)
 
 main()
 
