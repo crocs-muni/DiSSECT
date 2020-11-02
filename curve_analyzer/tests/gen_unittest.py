@@ -1,7 +1,19 @@
-import ast, sys, os
+import ast, sys, os, optparse, json
 from curve_analyzer.utils.json_handler import save_into_json, load_from_json
 from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_prefixes
 from curve_analyzer.tests.testing_curves import curves
+
+def parse(text):
+    try:
+        value = int(text)
+    except:
+        try:
+            value = json.loads(text)
+        except:
+            pass
+    if isinstance(text, list):
+        value = [parse(i) for i in text]
+    return value
 
 
 
@@ -14,7 +26,8 @@ def create_structure_file(name):
         print("Input parameters: ")
     params = []
     for param_name in local_params:
-        params.append(int(input(param_name+": ")))
+        param_value = parse(input(param_name+": "))
+        params.append(param_value)
     module_name = TEST_MODULE_PATH+'.'+name + '.' + name
     __import__(module_name)
     curve_function = getattr(sys.modules[module_name], name+"_curve_function")
@@ -25,8 +38,8 @@ def create_structure_file(name):
         result[curve.name] = {}
         computed_result = curve_function(curve, *params)
         for key in computed_result.keys():
-            key_result = input("Result for "+key+": ")
-            if str(computed_result[key])!=key_result:
+            key_result = parse(input("Result for "+key+": "))
+            if computed_result[key]!=key_result and str(computed_result[key])!=key_result:
                 print("Wrong result, should be: " + str(computed_result[key]))
                 return False
         result[curve.name][params_local] = computed_result
@@ -59,24 +72,68 @@ def create_unittest(name):
 
 tests_to_skip = ['a08']
 
+def all_tests(structure, unittest):
+    directory = TEST_PATH
+    for filename in os.listdir(directory):
+        if filename in tests_to_skip:
+            continue
+        if not filename[0] in TEST_prefixes:
+            continue
+        try:
+            int(filename[1:], 10)
+        except:
+            continue
+        if structure:
+            create_structure_file(filename)
+        if unittest:
+            create_unittest(filename)
+
+
+
+
 def main():
-    name = input("Name of the test (type \'all\' for all tests): ")
-    if name!="all":
-        if create_structure_file(name):
-            create_unittest(name)
+    parser = optparse.OptionParser()
+    parser.add_option('-u', '--unittest',
+                      action="store", dest="unittest",
+                      help="list of names for unittest seperated by comma or \'all\'", default="_")
+
+    parser.add_option('-s', '--structure',
+                      action="store", dest="structure",
+                      help="list of names for structure files seperated by comma or \'all\'", default="_")
+    parser.add_option('-b', '--both',
+                      action="store", dest="both",
+                      help="list of names for unittest and structure files seperated by comma or \'all\'", default="_")
+
+    options, args = parser.parse_args()
+    if options.both!="_":
+        if options.both.strip()=="all":
+            all_tests(True,True)
+        else:
+            tests = options.both.split(",")
+            for name in tests:
+                create_structure_file(name.strip())
+                create_unittest(name.strip())
+
+    elif options.unittest!="_":
+        if options.unittest.strip()=="all":
+            all_tests(False,True)
+        else:
+            tests = options.unittest.split(",")
+            for name in tests:
+                create_unittest(name.strip())
+
+    elif options.structure!="_":
+        if options.structure.strip()=="all":
+            all_tests(True,False)
+        else:
+            tests = options.structure.split(",")
+            for name in tests:
+                create_structure_file(name.strip())
     else:
-        directory = TEST_PATH
-        for filename in os.listdir(directory):
-            if filename in tests_to_skip:
-                continue
-            if not filename[0] in TEST_prefixes:
-                continue
-            try:
-                int(filename[1:], 10)
-            except:
-                continue
-            if create_structure_file(filename):
-                create_unittest(filename)
+        print("Something's wrong")
+
+
+
 
 
 
