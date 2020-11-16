@@ -1,4 +1,4 @@
-from sage.all import PolynomialRing, ZZ, GF, EllipticCurve
+from sage.all import PolynomialRing, ZZ, GF, EllipticCurve,log
 
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
