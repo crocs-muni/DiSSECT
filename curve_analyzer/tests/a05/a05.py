@@ -1,4 +1,4 @@
-from sage.all import ZZ, PolynomialRing, GF, Integers
+from sage.all import ZZ, PolynomialRing, GF, Integers,log, EllipticCurve
 
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
@@ -17,14 +17,33 @@ def ext_card(E, q, card_low, deg):
     card_high = q ** deg + 1 - s_new
     return card_high
 
+def stupid_coerce_K_to_L(element,K,L):
+    name_K = str(K.gen())
+    name_L = str(L.gen())
+    return L(str(element).replace(name_K,name_L))
 
-def extend(E, q, deg):
+def extend(E, q, deg,field):
     '''returns curve over deg-th relative extension; does not seem to work for binary curves'''
-    R = E.base_field()['x'];
-    (x,) = R._first_ngens(1)
-    pol = R.irreducible_element(deg)
-    Fext = GF(q ** deg, name='z', modulus=pol)
-    EE = E.base_extend(Fext)
+    if q%2!=0:
+        R = field['x']
+        pol = R.irreducible_element(deg)
+        Fext = GF(q ** deg, name='z', modulus=pol)
+        return E.base_extend(Fext)
+    K = field
+    charac = K.characteristic()
+    R = GF(charac)['x']
+    ext_deg = q ** deg
+    pol = R.irreducible_element(deg*(log(q, charac)))
+    Kext = GF(ext_deg, name='ex', modulus=pol)
+    gKext = Kext.gen()
+
+    h = gKext ** ((ext_deg - 1) // (q - 1))
+    assert charac ** (h.minpoly().degree()) == q
+    H = GF(q, name='h', modulus=h.minpoly())
+    inclusion = H.hom([h])
+
+    new_coefficients = [inclusion(stupid_coerce_K_to_L(a, K, H)) for a in E.a_invariants()]
+    EE = EllipticCurve(Kext, new_coefficients)
     return EE
 
 
@@ -42,10 +61,10 @@ def find_least_torsion(E, q, order, l):
 
 
 # True if the l-torsion is cyclic and False otherwise (bycyclic)
-def is_torsion_cyclic(E, q, order, l, deg):
+def is_torsion_cyclic(E, q, order, l, deg,field):
     card = ext_card(E, q, order, deg)
     m = ZZ(card / l)
-    EE = extend(E, q, deg)
+    EE = extend(E, q, deg,field)
     for j in range(1, 6):
         P = EE.random_element()
         if not (m * P == EE(0)):
@@ -56,7 +75,7 @@ def is_torsion_cyclic(E, q, order, l, deg):
 # Computes the smallest extension which contains full l-torsion subgroup
 # Least is the result of find_least_torsion
 # Returns the degree
-def find_full_torsion(E, q, order, l, least):
+def find_full_torsion(E, q, order, l, least,field):
     q_least = q ** least
     k = embedding_degree_q(q_least, l)
     # k satisfies l|a^k-1 where a,1 are eigenvalues of Frobenius of extended E
@@ -64,7 +83,7 @@ def find_full_torsion(E, q, order, l, least):
         return k * least
     else:  # i.e. a==1, we have two options for the geometric multiplicity
         card = ext_card(E, q, order, least)
-        if (card % l ** 2) == 0 and not is_torsion_cyclic(E, q, order, l, least):  # geom. multiplicity is 2
+        if (card % l ** 2) == 0 and not is_torsion_cyclic(E, q, order, l, least,field):  # geom. multiplicity is 2
             return least
         else:  # geom. multiplicity is 1
             return l * least
@@ -73,13 +92,13 @@ def find_full_torsion(E, q, order, l, least):
 
 
 # Returns a triple
-def find_torsions(E, q, order, l):
+def find_torsions(E, q, order, l, field):
     least = find_least_torsion(E, q, order, l)
     if least == l ** 2 - 1:
         full = least
 
     else:
-        full = find_full_torsion(E, q, order, l, least)
+        full = find_full_torsion(E, q, order, l, least, field)
 
     return least, full, ZZ(full / least)
 
@@ -92,7 +111,7 @@ def a05_curve_function(curve, l):
     curve_results = {}
 
     try:
-        least, full, relative = find_torsions(E, q, order, l)
+        least, full, relative = find_torsions(E, q, order, l,curve.field )
 
     except (ArithmeticError, TypeError, ValueError) as e:
         least, full, relative = None, None, None
