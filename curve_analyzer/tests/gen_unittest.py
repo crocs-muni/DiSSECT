@@ -111,8 +111,8 @@ def main():
         else:
             tests = options.both.split(",")
             for name in tests:
-                create_structure_file(name.strip())
-                create_unittest(name.strip())
+                if create_structure_file(name.strip()):
+                    create_unittest(name.strip())
 
     elif options.unittest!="_":
         if options.unittest.strip()=="all":

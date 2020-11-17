@@ -94,3 +94,8 @@
   "params_global": {},
   "params_local_names": []
 }
+
+&test i06: {
+  "params_global": {},
+  "params_local_names": []
+}
