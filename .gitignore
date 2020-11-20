@@ -1,4 +1,4 @@
-curve_analyzer/local/
+data/
 local/
 *.log
 *.pyc
