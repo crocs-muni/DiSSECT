@@ -40,7 +40,7 @@ To run test a22 on all standard curves of bitsizes up to 192 in verbose mode usi
    a23    | volcano depth and crater degree in the $`l`$-isogeny graph                        | :white_check_mark: | :white_check_mark: | high         | low
    a24    | field extensions containing nontrivial/full number of $`l`$-isogenies             | :white_check_mark: | :soon:             | medium       | low
    a25    | factorization of trace in field extensions                                        | :white_check_mark: | :white_check_mark: | low          | low
-   i06    | square parts of $`4q-1`$ and $`4n-1`$, where                                      | :white_check_mark: | :x:                | low          | low
+   i06    | square parts of $`4q^d-1`$ and $`4n-1`$                                           | :white_check_mark: | :x:                | low          | low
    i07    | distance of $`n`$ from the nearest power of two and multiple of 32/64             | :white_check_mark: | :soon:             | low          | low
 
 Notation: $`n`$ is the curve order, $`q`$ is the order of the base field  
