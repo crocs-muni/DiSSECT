@@ -7,8 +7,10 @@
 Run `sage --python3 setup.py develop`.
 
 ## Unit tests
-
 Run `sage --python3 -m unittest discover` in directory `tests/unit_tests/`.
+
+## Generating structure files
+Run `tests_structures.py -t all` in directory `tests`.
 
 ## Testing the curves
 
@@ -27,14 +29,20 @@ To run test a22 on all standard curves of bitsizes up to 192 in verbose mode usi
 
 ### Overview of available tests
 
-- a01 group_stucture_in_extensions
-- a02 cm_disc_factorizations
-- a04 near_order_factorizations
-- a05 torsion_extensions
-- a06 prime_decomposition_wrt_cm_discs_in_extensions
-- a12 orders_of_small_primes_modulo_curve_order
-- a22 division_pol_factorizations
-- a23 volcano
-- a24 isogeny_extensions
-- a25 trace_factorization
-- i07 distance_of_order_from_power_of_two
+| name | description	| implemented  	|  computed\* 	|  time req. 	| memory req.  	|
+|---	|---	|---	|---	|---	|---	|
+a01 | group_stucture_in_extensions 					 | yes | no 	| high | low
+a02 | cm_disc_factorizations						 | yes | no 	| high | low
+a04 | near_order_factorizations 					 | yes | no 	| high | low
+a05 | torsion_extensions 							 | yes | yes 	| medium | low
+a06 | prime_decomposition_wrt_cm_discs_in_extensions | yes | yes 	| high | medium
+a12 | orders_of_small_primes_modulo_curve_order		 | yes | yes 	| medium | low
+a22 | division_pol_factorizations					 | yes | partly | high | high
+a23 | volcano										 | yes | yes 	| high | low
+a24 | isogeny_extensions							 | yes | partly | medium | low
+a25 | trace_factorization							 | yes | yes 	| low | low
+i07 | distance_of_order_from_power_of_two			 | yes | partly | low  | low
+
+\*on curves with at most 256 bits
+
+### Overview of all planned tests
