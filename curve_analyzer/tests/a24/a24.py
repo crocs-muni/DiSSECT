@@ -47,7 +47,6 @@ def extend(E, q, deg,field):
 
 def is_torsion_cyclic(E, q,order, l, deg,field):
     card = ext_card(E, order, deg)
-    print(card%(l**2),l**23)
     assert card % l ** 2 == 0
     m = ZZ(card / l)
     EE = extend(E,q,deg,field)
