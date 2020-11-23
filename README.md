@@ -25,17 +25,17 @@ To run test a22 on all standard curves of bitsizes up to 192 in verbose mode usi
 
 | name    | description                                    | implemented        |  computed\*        |time req.\*\* |memory req.\*\*\*
 |:-------:| -----------------------------------------------|:------------------:|:------------------:|:------------:|:---------:   
-   a01    | group_stucture_in_extensions                   | :heavy_check_mark: | :x:                | high         | low
-   a02    | cm_disc_factorizations                         | :heavy_check_mark: | :x:                | high         | medium
-   a04    | near_order_factorizations                      | :heavy_check_mark: | :x:                | high         | high
-   a05    | torsion_extensions                             | :heavy_check_mark: | :heavy_check_mark: | medium       | low
-   a06    | prime_decomposition_wrt_cm_discs_in_extensions | :heavy_check_mark: | :heavy_check_mark: | high         | medium
-   a12    | orders_of_small_primes_modulo_curve_order      | :heavy_check_mark: | :heavy_check_mark: | medium       | medium
-   a22    | division_pol_factorizations                    | :heavy_check_mark: | :white_check_mark: | high         | high
-   a23    | volcano                                        | :heavy_check_mark: | :heavy_check_mark: | high         | low
-   a24    | isogeny_extensions                             | :heavy_check_mark: | :white_check_mark: | medium       | low
-   a25    | trace_factorization                            | :heavy_check_mark: | :heavy_check_mark: | low          | low
-   i07    | distance_of_order_from_power_of_two            | :heavy_check_mark: | :white_check_mark: | low          | low
+   a01    | group_stucture_in_extensions                   | :white_check_mark: | :x:                | high         | low
+   a02    | cm_disc_factorizations                         | :white_check_mark: | :x:                | high         | medium
+   a04    | near_order_factorizations                      | :white_check_mark: | :x:                | high         | high
+   a05    | torsion_extensions                             | :white_check_mark: | :white_check_mark: | medium       | low
+   a06    | prime_decomposition_wrt_cm_discs_in_extensions | :white_check_mark: | :white_check_mark: | high         | medium
+   a12    | orders_of_small_primes_modulo_curve_order      | :white_check_mark: | :white_check_mark: | medium       | medium
+   a22    | division_pol_factorizations                    | :white_check_mark: | :soon:             | high         | high
+   a23    | volcano                                        | :white_check_mark: | :white_check_mark: | high         | low
+   a24    | isogeny_extensions                             | :white_check_mark: | :soon:             | medium       | low
+   a25    | trace_factorization                            | :white_check_mark: | :white_check_mark: | low          | low
+   i07    | distance_of_order_from_power_of_two            | :white_check_mark: | :soon:             | low          | low
 
 \* on sim and std curves with at most 256 bits  
 \*\* this is very rough and subjective  
