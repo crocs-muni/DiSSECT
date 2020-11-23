@@ -3,6 +3,7 @@ import os
 import time
 import random
 from datetime import datetime
+import json
 
 import pytz
 from prettytable import PrettyTable  # http://zetcode.com/python/prettytable/
@@ -68,17 +69,59 @@ def init_json_paths(test_name, desc=''):
     path_main_json = os.path.join(TEST_PATH, test_name, test_name + '.json')
     path_json = os.path.join(TEST_PATH, test_name, test_name + '_' + desc + '_' + get_timestamp() + '.json')
     # tmp name must be unique for parallel test runs
-    path_tmp = "%s_%04x.tmp" % (path_json.split('.')[-2], random.randrange(2**16))
+    path_tmp = "%s_%04x.tmp" % (path_json.split('.')[-2], random.randrange(2 ** 16))
     path_params = os.path.join(TEST_PATH, test_name, test_name + '.params')
     if not os.path.exists(path_json):
         save_into_json({}, path_json, 'w')
     return path_main_json, path_json, path_tmp, path_params
 
 
+def special_case(text):
+    if not isinstance(text, str):
+        return False
+    return text.strip() == "NO DATA (timed out)"
+
+
+def compare_structures(struct1, struct2):
+    if type(struct1) != type(struct2):
+        if special_case(struct1) or special_case(struct2):
+            return True
+        return False
+    if isinstance(struct1, list):
+        value = True
+        for i in range(min(len(struct1), len(struct2))):
+            value &= compare_structures(struct1[i], struct2[i])
+        return value
+    if isinstance(struct1, dict):
+        if set(struct1.keys()) != set(struct2.keys()):
+            return False
+        value = True
+        for key in struct1.keys():
+            value &= compare_structures(struct1[key], struct2[key])
+        return value
+    return True
+
+
+def get_model_structure(curve_function):
+    name = curve_function.__name__.split("_", 1)[0]
+    with open(TEST_PATH + "/" + name + "/" + name + "_structure.json", 'r') as f:
+        results = json.load(f)
+    return list(list(results.values())[0].values())[0]
+
+def is_structure_new(old, curve_function, curve):
+    if not curve.name in old:
+        return True
+    model_structure = get_model_structure(curve_function)
+    computed = list(old[curve.name].values())[0]
+    return not compare_structures(model_structure,computed)
+
+
+
 # Tries to run tests for each individual curve; called by compute_results
 def update_curve_results(curve, curve_function, params_global, params_local_names, old_results, log_obj):
     log_obj.write_to_logs("Processing curve " + curve.name + ":", newlines=1)
     new_results = {}
+    new_struct = is_structure_new(old_results, curve_function,curve)
     if curve.name not in old_results:
         new_results[curve.name] = {}
     else:
@@ -87,8 +130,7 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
     for params_local_values in itertools.product(*params_global.values()):
         params_local = dict(zip(params_local_names, params_local_values))
         log_obj.write_to_logs("\tProcessing params " + str(params_local), frmt='{:.<60}')
-        # print(params_local, results[curve.name])
-        if curve.name in old_results and str(params_local) in old_results[curve.name]:
+        if curve.name in old_results and str(params_local) in old_results[curve.name] and not new_struct:
             log_obj.write_to_logs("Already computed", newlines=1)
         else:
             new_results[curve.name][str(params_local)] = curve_function(curve, *params_local_values)
@@ -153,6 +195,7 @@ def compute_results(curve_list, test_name, curve_function, desc=''):
                           newlines=3)
     os.remove(json_file)
     os.rename(tmp_file, json_file)
+
 
 def init_txt_paths(test_name, desc=''):
     name = os.path.join(TEST_PATH, + test_name, test_name)

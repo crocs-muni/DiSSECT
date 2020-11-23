@@ -34,7 +34,7 @@ def largest_factor_bitlen(factorization):
     try:
         bitlen = factorization[-1].nbits()
     except:
-        bitlen = '-'
+        bitlen = factorization
     return bitlen
 
 

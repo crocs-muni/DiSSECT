@@ -1,4 +1,4 @@
-from sage.all import PolynomialRing, ZZ, GF
+from sage.all import PolynomialRing, ZZ, GF, EllipticCurve,log
 
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
@@ -15,22 +15,42 @@ def ext_card(E, order, deg):
     return card_high
 
 
-def extend(E, deg):
+def stupid_coerce_K_to_L(element,K,L):
+    name_K = str(K.gen())
+    name_L = str(L.gen())
+    return L(str(element).replace(name_K,name_L))
+
+def extend(E, q, deg,field):
     '''returns curve over deg-th relative extension; does not seem to work for binary curves'''
-    q = E.base_field().order()
-    R = E.base_field()['x'];
-    (x,) = R._first_ngens(1)
-    pol = R.irreducible_element(deg)
-    Fext = GF(q ** deg, name='z', modulus=pol)
-    EE = E.base_extend(Fext)
+    if q%2!=0:
+        R = field['x']
+        pol = R.irreducible_element(deg)
+        Fext = GF(q ** deg, name='z', modulus=pol)
+        return E.base_extend(Fext)
+    K = field
+    charac = K.characteristic()
+    R = GF(charac)['x']
+    ext_deg = q ** deg
+    pol = R.irreducible_element(deg*(log(q, charac)))
+    Kext = GF(ext_deg, name='ex', modulus=pol)
+    gKext = Kext.gen()
+
+    h = gKext ** ((ext_deg - 1) // (q - 1))
+    assert charac ** (h.minpoly().degree()) == q
+    H = GF(q, name='h', modulus=h.minpoly())
+    inclusion = H.hom([h])
+
+    new_coefficients = [inclusion(stupid_coerce_K_to_L(a, K, H)) for a in E.a_invariants()]
+    EE = EllipticCurve(Kext, new_coefficients)
     return EE
 
 
-def is_torsion_cyclic(E, order, l, deg):
+def is_torsion_cyclic(E, q,order, l, deg,field):
     card = ext_card(E, order, deg)
+    print(card%(l**2),l**23)
     assert card % l ** 2 == 0
     m = ZZ(card / l)
-    EE = extend(E, deg)
+    EE = extend(E,q,deg,field)
     for j in range(1, 6):
         P = EE.random_element()
         if not (m * P == EE(0)):
@@ -73,7 +93,7 @@ def i_finder(curve, l):
     deg = a.multiplicative_order()
     E = curve.EC
     card = ext_card(E, curve.order*curve.cofactor, deg)
-    if card % deg ** 2 != 0 or is_torsion_cyclic(E, curve.order*curve.cofactor, l, deg):
+    if card % l ** 2 != 0 or is_torsion_cyclic(E,curve.q, curve.order*curve.cofactor, l, deg,curve.field):
         i2 *= l
     return i2, i1
 

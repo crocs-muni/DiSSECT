@@ -7,10 +7,11 @@ from curve_analyzer.tests.test_interface import pretty_print_results, compute_re
 # Returns a dictionary (keys: 'factorization', 'degs_list', 'len' )
 def a22_curve_function(curve, l):
     pol = curve.EC.division_polynomial(l)
-    fact = list(factor(pol))
+    fact = [list(i) for i in list(factor(pol))]
     # count multiplicities?
     degs = [x.degree() for x, _ in fact]
-    curve_results = {'factorization': fact, 'degs_list': degs, 'len': len(degs)}
+    fact_str = [[str(i[0]),i[1]] for i in fact]
+    curve_results = {'factorization': fact_str, 'degs_list': degs, 'len': len(degs)}
     return curve_results
 
 
