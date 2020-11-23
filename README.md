@@ -4,13 +4,7 @@
 
 # Setup
 
-Run `sage --python3 setup.py develop`.
-
-## Unit tests
-Run `sage --python3 -m unittest discover` in directory `tests/unit_tests/`.
-
-## Generating structure files
-Run `tests_structures.py -t all` in directory `tests`.
+Run `sage --python3 setup.py develop` to initialize the project, then `sage --python3 params.py` to generate parameter files and `sage --python3 tests/tests_structures.py -t all` to generate structure files.
 
 ## Testing the curves
 
@@ -27,7 +21,7 @@ To run test a22 on all standard curves of bitsizes up to 192 in verbose mode usi
 - sample: curves secp112r1, secp192r1, secp256r1
 - all: all curves in the database
 
-### Overview of available tests
+## Overview of available tests
 
 | name    | description                                    | implemented        |  computed\*        |time req.|memory req.
 |:-------:| -----------------------------------------------|:------------------:|:------------------:|:-------:|:---------:   
@@ -45,4 +39,7 @@ To run test a22 on all standard curves of bitsizes up to 192 in verbose mode usi
 
 \*on curves with at most 256 bits
 
-### Overview of all planned tests
+## Overview of all planned tests
+
+## Unit tests
+Run `sage --python3 -m unittest discover` in directory `tests/unit_tests/`.
