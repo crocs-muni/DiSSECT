@@ -2,6 +2,7 @@
 
 [![pipeline status](https://gitlab.fi.muni.cz/x408178/curve_analyzer/badges/master/pipeline.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/commits/master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/blob/master/LICENSE)
+[![language](https://badgen.net/badge/language/python,sage/purple?list=/)](https://www.sagemath.org/)
 [![tests](https://badgen.net/badge/tests/13/blue)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/tree/master/curve_analyzer/tests)
 [![curves](https://badgen.net/badge/curves/158%20std,%20217188%20sim?list=|)](https://github.com/J08nY/std-curves)
 
