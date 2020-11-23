@@ -26,20 +26,23 @@ To run test a22 on all standard curves of bitsizes up to 192 in verbose mode usi
 
 ## Overview of available tests
 
-| name    | description                                    | implemented        |  computed\*        |time req.\*\* |memory req.\*\*\*
-|:-------:| -----------------------------------------------|:------------------:|:------------------:|:------------:|:---------:   
-   a01    | group_stucture_in_extensions                   | :white_check_mark: | :x:                | high         | low
-   a02    | cm_disc_factorizations                         | :white_check_mark: | :x:                | high         | medium
-   a04    | near_order_factorizations                      | :white_check_mark: | :x:                | high         | high
-   a05    | torsion_extensions                             | :white_check_mark: | :white_check_mark: | medium       | low
-   a06    | prime_decomposition_wrt_cm_discs_in_extensions | :white_check_mark: | :white_check_mark: | high         | medium
-   a12    | orders_of_small_primes_modulo_curve_order      | :white_check_mark: | :white_check_mark: | medium       | medium
-   a22    | division_pol_factorizations                    | :white_check_mark: | :soon:             | high         | high
-   a23    | volcano                                        | :white_check_mark: | :white_check_mark: | high         | low
-   a24    | isogeny_extensions                             | :white_check_mark: | :soon:             | medium       | low
-   a25    | trace_factorization                            | :white_check_mark: | :white_check_mark: | low          | low
-   i07    | distance_of_order_from_power_of_two            | :white_check_mark: | :soon:             | low          | low
+| name    | description                                                                       | implemented        |  computed\*        |time req.\*\* |memory req.\*\*\*
+|:-------:| ----------------------------------------------------------------------------------|:------------------:|:------------------:|:------------:|:---------:   
+   a01    | group stucture of the curve in field extensions                                   | :white_check_mark: | :x:                | high         | low
+   a02    | factorizations of the CM discriminant in field extensions                         | :white_check_mark: | :x:                | high         | medium
+   a04    | factorizations of $`kn\pm 1`$                                                     | :white_check_mark: | :x:                | high         | high
+   a05    | field extensions containing nontrivial/full $`l`$-torsion                         | :white_check_mark: | :white_check_mark: | medium       | low
+   a06    | Kronecker symbols of CM discriminants in field extensions w.r.t. small primes     | :white_check_mark: | :white_check_mark: | high         | medium
+   a08    | class number of the maximal order of the endomorphism ring                        | :white_check_mark: | :x:                | extreme      | low
+   a12    | multiplicative orders of small primes modulo curve order                          | :white_check_mark: | :white_check_mark: | medium       | medium
+   a22    | factorizations of small division polynomials                                      | :white_check_mark: | :soon:             | high         | high
+   a23    | volcano depth and crater degree in the $`l`$-isogeny graph                        | :white_check_mark: | :white_check_mark: | high         | low
+   a24    | field extensions containing nontrivial/full number of $`l`$-isogenies             | :white_check_mark: | :soon:             | medium       | low
+   a25    | factorization of trace in field extensions                                        | :white_check_mark: | :white_check_mark: | low          | low
+   i06    | square parts of $`4q-1`$ and $`4n-1`$, where                                      | :white_check_mark: | :x:                | low          | low
+   i07    | distance of $`n`$ from the nearest power of two and multiple of 32/64             | :white_check_mark: | :soon:             | low          | low
 
+Notation: $`n`$ is the curve order, $`q`$ is the order of the base field  
 \* on sim and std curves with at most 256 bits  
 \*\* this is very rough and subjective  
 \*\*\* on the above dataset: low is  <100 MB, medium is 100-500 MB, high is >500 MB (measuring JSONs)
