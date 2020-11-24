@@ -12,11 +12,11 @@ Run `sage --python3 setup.py develop` to initialize the project, then `sage --py
 
 ## Testing the curves
 
-Run `./run_tests.py` in directory `tests`. Use the `-h` flag to get the help menu. To merge the results of a test (a22 in this case) into single file, run `./merge_test_results.py -n a22`.
+Run `./run_tests.py` in directory `tests`. Use the `-h` flag to get the help menu. To merge the results of a test (a05 in this case) into single file, run `./merge_test_results.py -n a05`.
 
 ### Example usage
 
-To run test a22 on all standard curves of bitsizes up to 192 in verbose mode using 3 cores and 100 jobs, run `./run_tests.py -n a22 -c std -v -b 192 -t 3 -j 100`.
+To run test a05 on all standard curves of bitsizes up to 192 with cofactor 1 or 2 in verbose mode using 3 cores and 100 jobs, run `./run_tests.py -n a05 -c std -v -b 192 -a 1 2 -t 3 -j 100`.
 
 ### Supported curve sets
 
