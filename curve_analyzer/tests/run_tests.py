@@ -79,8 +79,6 @@ def main():
             cli = ' '.join(['--%s=%s' % (k, p[k]) for k in p.keys()])
 
             cli = ' '.join([cli, '-a', allowed_cofactors_string])
-            if args.verbosity:
-                cli = ' '.join([cli, '-v'])
             t = Task(args.sage, '%s %s' % (wrapper_path, cli))
             yield t
 
