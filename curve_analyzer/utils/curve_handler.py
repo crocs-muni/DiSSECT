@@ -84,7 +84,8 @@ def import_curves(curve_type="sample", order_bound=256, verbose=False, binary=Fa
     if single_curve != "":
         print("Importing " + single_curve)
     else:
-        print("Importing " + curve_type + " curves of sizes up to " + str(order_bound) + " bits from the database, allowed cofactors: " + str(allowed_cofactors))
+        print("Importing " + curve_type + " curves of sizes up to " + str(
+            order_bound) + " bits from the database, allowed cofactors: " + str(allowed_cofactors))
     ignore_sim = True
     if curve_type in ["sim", "all"]:
         ignore_sim = False
@@ -100,7 +101,11 @@ def import_curves(curve_type="sample", order_bound=256, verbose=False, binary=Fa
     curve_chunks = chunkify(curve_list, chunks_total)
     return curve_chunks[chunk - 1]
 
-def filter_curve_names(allowed_categories=["nist","x962","x962_sim_128", "x962_sim_160", "x962_sim_192", "x962_sim_224", "x962_sim_256"], allowed_bitsizes=range(257), allowed_cofactors=[1], allow_binary=False, allow_extension=False):
+
+def filter_curve_names(
+        allowed_categories=["nist", "x962", "x962_sim_128", "x962_sim_160", "x962_sim_192", "x962_sim_224",
+                            "x962_sim_256"], allowed_bitsizes=range(257), allowed_cofactors=[1], allow_binary=False,
+        allow_extension=False):
     ignore_sim = not any('sim' in cat for cat in allowed_categories)
     curve_db = import_curve_db(ignore_sim=ignore_sim)
 
@@ -109,14 +114,23 @@ def filter_curve_names(allowed_categories=["nist","x962","x962_sim_128", "x962_s
     for source in sources:
         curves = curve_db[source]["curves"]
         for curve in curves:
-            if curve["category"] in allowed_categories and ZZ(curve["cofactor"]) in [ZZ(c) for c in allowed_cofactors] and curve["field"]["bits"] in allowed_bitsizes:
-                if (allow_binary == False and curve["field"]["type"] == "Binary") or (allow_extension == False and curve["field"]["type"] == "Extension"):
+            if curve["category"] in allowed_categories and ZZ(curve["cofactor"]) in [ZZ(c) for c in
+                                                                                     allowed_cofactors] and \
+                    curve["field"]["bits"] in allowed_bitsizes:
+                if (allow_binary == False and curve["field"]["type"] == "Binary") or (
+                        allow_extension == False and curve["field"]["type"] == "Extension"):
                     continue
                 curve_names.append(curve["name"])
     return curve_names
 
-def filter_results(json_file, allowed_categories=["nist","x962","x962_sim_128", "x962_sim_160", "x962_sim_192", "x962_sim_224", "x962_sim_256"], allowed_bitsizes=range(257), allowed_cofactors=[1], allow_binary=False, allow_extension=False):
-    curve_names = filter_curve_names(allowed_categories=allowed_categories, allowed_bitsizes=allowed_bitsizes, allowed_cofactors=allowed_cofactors, allow_binary=allow_binary,allow_extension=allow_extension)
+
+def filter_results(json_file,
+                   allowed_categories=["nist", "x962", "x962_sim_128", "x962_sim_160", "x962_sim_192", "x962_sim_224",
+                                       "x962_sim_256"], allowed_bitsizes=range(257), allowed_cofactors=[1],
+                   allow_binary=False, allow_extension=False):
+    curve_names = filter_curve_names(allowed_categories=allowed_categories, allowed_bitsizes=allowed_bitsizes,
+                                     allowed_cofactors=allowed_cofactors, allow_binary=allow_binary,
+                                     allow_extension=allow_extension)
     with open(json_file, 'r') as rf:
         results = json.load(rf)
         for key in list(results):

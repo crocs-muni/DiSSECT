@@ -21,6 +21,8 @@ if __name__ == '__main__':
                         help='upper bound for curve order bitsize (default: 256)')
     parser.add_argument('-d', '--description', action='store', type=str, metavar='description', default="",
                         help='custom text description of the current test run for logs (default: "")')
+    parser.add_argument('-a', '--allowed_cofactors', nargs='+', metavar='allowed_cofactors', default=[1],
+                        help='the list of cofactors the curve can have (default: [1])')
     parser.add_argument('--chunks_total', action='store', type=int, metavar='chunks_total', default=1,
                         help='the number of chunks into which the curve list is divided (default: 1)')
     parser.add_argument('--chunk', action='store', type=int, metavar='chunk', default=1,
@@ -42,6 +44,6 @@ if __name__ == '__main__':
         exit()
 
     curves_list = import_curves(curve_type=args.curve_type, order_bound=args.order_bound, verbose=args.verbosity,
+                                allowed_cofactors=args.allowed_cofactors,
                                 chunks_total=args.chunks_total, chunk=args.chunk)
-    print("")
     test_function(curves_list, desc=args.description)

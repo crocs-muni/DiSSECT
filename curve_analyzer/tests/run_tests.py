@@ -24,7 +24,9 @@ def load_test_parameters(args):
     while args.jobs > 0:
         chunk = jobs_total - args.jobs + 1
         yield {'test_name': args.test_name, 'curve_type': args.curve_type, 'order_bound': args.order_bound,
-               'description': "part_" + str(chunk).zfill(4) + "_of_" + str(jobs_total).zfill(4), 'chunks_total': jobs_total,
+               'allowed_cofactors': args.allowed_cofactors,
+               'description': "part_" + str(chunk).zfill(4) + "_of_" + str(jobs_total).zfill(4),
+               'chunks_total': jobs_total,
                'chunk': chunk}
         args.jobs -= 1
 
@@ -46,6 +48,8 @@ def main():
     parser.add_argument('-v', '--verbosity', action='store_true', help='verbosity flag (default: False)')
     parser.add_argument('-b', '--order_bound', action='store', type=int, metavar='order_bound', default=256,
                         help='upper bound for curve order bitsize (default: 256)')
+    parser.add_argument('-a', '--allowed_cofactors', nargs='+', metavar='allowed_cofactors', default=[1],
+                        help='the list of cofactors the curve can have (default: [1])')
 
     args = parser.parse_args()
     print(args)
@@ -70,7 +74,11 @@ def main():
         The function can also store its own state.
         """
         for p in load_test_parameters(args):
+            allowed_cofactors_string = ' '.join(map(str, p['allowed_cofactors']))
+            del p['allowed_cofactors']
             cli = ' '.join(['--%s=%s' % (k, p[k]) for k in p.keys()])
+
+            cli = ' '.join([cli, '-a', allowed_cofactors_string])
             if args.verbosity:
                 cli = ' '.join([cli, '-v'])
             t = Task(args.sage, '%s %s' % (wrapper_path, cli))
