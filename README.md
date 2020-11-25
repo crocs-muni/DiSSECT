@@ -39,7 +39,7 @@ To run test a05 on all standard curves of bitsizes up to 192 with cofactor 1 or 
    a22    | factorizations of small division polynomials                                      | :white_check_mark: | :soon:             | high         | high
    a23    | volcano depth and crater degree in the $`l`$-isogeny graph                        | :white_check_mark: | :white_check_mark: | high         | low
    a24    | field extensions containing nontrivial/full number of $`l`$-isogenies             | :white_check_mark: | :soon:             | medium       | low
-   a25    | factorization of trace in field extensions                                        | :white_check_mark: | :white_check_mark: | low          | low
+   a25    | trace in field extensions and its factorization                                   | :white_check_mark: | :white_check_mark: | low          | low
    i06    | square parts of $`4q-1`$ and $`4n-1`$                                             | :white_check_mark: | :x:                | low          | low
    i07    | distance of $`n`$ from the nearest power of two and multiple of 32/64             | :white_check_mark: | :soon:             | low          | low
 
