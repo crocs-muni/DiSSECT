@@ -44,7 +44,7 @@ To run test a05 on all standard curves of bitsizes up to 192 with cofactor 1 or 
    i07    | distance of $`n`$ from the nearest power of two and multiple of 32/64             | :white_check_mark: | :soon:             | low          | low
 
 Notation: $`n`$ is the curve order, $`q`$ is the order of the base field  
-\* on sim and std curves with at most 256 bits  
+\* on sim and std curves with at most 256 bits
 \*\* this is very rough and subjective  
 \*\*\* on the above dataset: low is  <100 MB, medium is 100-500 MB, high is >500 MB (measuring JSONs)
 
@@ -84,4 +84,4 @@ Notation: $`n`$ is the curve order, $`q`$ is the order of the base field
 
 
 ## Unit tests
-Run `sage --python3 -m unittest discover` in directory `tests/unit_tests/`.
+Run `sage --python3 -m unittest discover` in directory `tests/unit_tests/`. Only unit tests starting with `test` will be run; those starting with `local` have to be run manually (as they require resources not available on the server).
