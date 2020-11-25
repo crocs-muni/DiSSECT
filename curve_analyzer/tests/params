@@ -87,11 +87,16 @@
 
 &test a25: {
   "params_global": {
-     "deg_range": "[1]"
+     "deg_range": "[1,2]"
   },
   "params_local_names": [
      "deg"
   ]
+}
+
+&test i06: {
+  "params_global": {},
+  "params_local_names": []
 }
 
 &test i07: {
@@ -99,7 +104,3 @@
   "params_local_names": []
 }
 
-&test i06: {
-  "params_global": {},
-  "params_local_names": []
-}
