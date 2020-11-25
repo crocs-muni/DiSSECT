@@ -1,6 +1,6 @@
 import unittest, ast
 from curve_analyzer.tests.i06.i06 import i06_curve_function
-from curve_analyzer.tests.testing_curves import curves, curve_names
+from curve_analyzer.tests.example_curves import curves, curve_names
 results={'secp112r2': {'{}': {'p': 1, 'order': 1}}, 'bn158': {'{}': {'p': 5, 'order': 277}}, 'brainpoolP160r1': {'{}': {'p': 627, 'order': 3}}}
 
 class Test_i06(unittest.TestCase):

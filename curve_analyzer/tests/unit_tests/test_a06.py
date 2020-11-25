@@ -1,6 +1,6 @@
 import unittest, ast
 from curve_analyzer.tests.a06.a06 import a06_curve_function
-from curve_analyzer.tests.testing_curves import curves, curve_names
+from curve_analyzer.tests.example_curves import curves, curve_names
 key = "{'l': 2, 'deg': 1}"
 results={'secp112r2': {key: {'kronecker': -1}}, 'bn158': {key: {'kronecker': -1}}, 'brainpoolP160r1': {key: {'kronecker': -1}}}
 

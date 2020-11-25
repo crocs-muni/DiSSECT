@@ -1,6 +1,6 @@
 import unittest, ast
 from curve_analyzer.tests.a22.a22 import a22_curve_function
-from curve_analyzer.tests.testing_curves import curves, curve_names
+from curve_analyzer.tests.example_curves import curves, curve_names
 results={'secp112r2': {"{'l': 2}": {'factorization': [['x + 841610090548475696082223908882494', 1], ['x^2 + 3610075134545239076002374364665933*x + 2797590916291665130774294894805068', 1]], 'degs_list': [1, 2], 'len': 2}}, 'bn158': {"{'l': 2}": {'factorization': [['x^3 + 17', 1]], 'degs_list': [3], 'len': 1}}, 'brainpoolP160r1': {"{'l': 2}": {'factorization': [['x^3 + 297190522446607939568481567949428902921613329152*x + 173245649450172891208247283053495198538671808088', 1]], 'degs_list': [3], 'len': 1}}}
 
 class Test_a22(unittest.TestCase):

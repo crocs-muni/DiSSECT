@@ -1,6 +1,6 @@
 import unittest, ast
 from curve_analyzer.tests.a23.a23 import a23_curve_function
-from curve_analyzer.tests.testing_curves import curves, curve_names
+from curve_analyzer.tests.example_curves import curves, curve_names
 results={'secp112r2': {"{'l': 2}": {'crater_degree': 0, 'depth': 1}}, 'bn158': {"{'l': 2}": {'crater_degree': 0, 'depth': 0}}, 'brainpoolP160r1': {"{'l': 2}": {'crater_degree': 0, 'depth': 0}}}
 
 class Test_a23(unittest.TestCase):

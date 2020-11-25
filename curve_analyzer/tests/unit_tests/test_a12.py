@@ -1,6 +1,6 @@
 import unittest, ast
 from curve_analyzer.tests.a12.a12 import a12_curve_function
-from curve_analyzer.tests.testing_curves import curves, curve_names
+from curve_analyzer.tests.example_curves import curves, curve_names
 results={'secp112r2': {"{'l': 2}": {'order': None, 'complement_bit_length': None}}, 'bn158': {"{'l': 2}": {'order': 68775890453579100830338448837026871186869452804, 'complement_bit_length': 2}}, 'brainpoolP160r1': {"{'l': 2}": {'order': 333074399610011218706771259707545341053235642114, 'complement_bit_length': 3}}}
 
 class Test_a12(unittest.TestCase):

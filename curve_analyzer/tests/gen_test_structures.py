@@ -2,7 +2,7 @@
 import itertools,optparse
 from curve_analyzer.utils.json_handler import *
 from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_prefixes
-from curve_analyzer.tests.testing_curves import curves
+from curve_analyzer.tests.example_curves import curves
 
 tests_to_skip = ['a08']
 

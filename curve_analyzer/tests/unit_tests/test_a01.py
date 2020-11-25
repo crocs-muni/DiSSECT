@@ -1,6 +1,6 @@
 import unittest, ast
 from curve_analyzer.tests.a01.a01 import a01_curve_function
-from curve_analyzer.tests.testing_curves import curves, curve_names
+from curve_analyzer.tests.example_curves import curves, curve_names
 results={'secp112r2': {"{'deg': 1}": {'ord1': 4451685225093714699870930859147564, 'ord2': 1}}, 'bn158': {"{'deg': 1}": {'ord1': 206327671360737302491015346511080613560608358413, 'ord2': 1}}, 'brainpoolP160r1': {"{'deg': 1}": {'ord1': 1332297598440044874827085038830181364212942568457, 'ord2': 1}}}
 
 class Test_a01(unittest.TestCase):

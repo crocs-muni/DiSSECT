@@ -1,6 +1,6 @@
 import unittest, ast
 from curve_analyzer.tests.a25.a25 import a25_curve_function
-from curve_analyzer.tests.testing_curves import curves, curve_names
+from curve_analyzer.tests.example_curves import curves, curve_names
 key = "{'deg': 1}"
 results={'secp112r2': {key: {'trace': 72213667414400864, 'trace_factorization': [[2, 5], [11, 1], [205152464245457, 1]], 'number_of_factors': 3}}, 'bn158': {key: {'trace': 454233058419889982668807, 'trace_factorization': [[2953, 1], [153820879925462235919, 1]], 'number_of_factors': 2}}, 'brainpoolP160r1': {key: {'trace': 519972310379544251229703, 'trace_factorization': [[3023, 1], [49277, 1], [3490581720239293, 1]], 'number_of_factors': 3}}}
 

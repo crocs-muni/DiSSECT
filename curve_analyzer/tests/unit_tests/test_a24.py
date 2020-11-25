@@ -1,6 +1,6 @@
 import unittest, ast
 from curve_analyzer.tests.a24.a24 import a24_curve_function
-from curve_analyzer.tests.testing_curves import curves, curve_names
+from curve_analyzer.tests.example_curves import curves, curve_names
 results={'secp112r2': {"{'l': 2}": {'least': 1, 'full': 2, 'relative': 2}}, 'bn158': {"{'l': 2}": {'least': 3, 'full': 3, 'relative': 1}}, 'brainpoolP160r1': {"{'l': 2}": {'least': 3, 'full': 3, 'relative': 1}}}
 
 class Test_a24(unittest.TestCase):
