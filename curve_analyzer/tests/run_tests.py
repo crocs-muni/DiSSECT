@@ -58,7 +58,7 @@ def main():
         exit()
     print(args)
 
-    wrapper_path = os.path.join(TEST_PATH, 'run_tests_wrapper.py')
+    wrapper_path = os.path.join(TEST_PATH, 'run_tests_single.py')
 
     pr = ParallelRunner()
     pr.parallel_tasks = args.tasks

@@ -3,7 +3,7 @@
 import os, json
 from pathlib import Path
 
-with open("params","r") as f:
+with open("params", "r") as f:
 	params = f.read()
 params = params.split("&test ")[1:]
 written = ""

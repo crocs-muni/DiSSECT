@@ -1,7 +1,7 @@
 
 1. Write x.py in the directory curve_analyzer/tests/x/ (don't forget __init__.py)
-2. Add test x parameters into global params file (it's in the root directory)
-3. Create curve_analyzer/tests/x/x.params (or run params.py in the root, warning: all of the params file will be set to default)
+2. Add test x parameters into global params file (it's in the tests directory)
+3. Create curve_analyzer/tests/x/x.params (or run gen_params.py in the tests directory, warning: all of the params file will be set to default)
 4. Compute the result of x_curve_function on your chosen parameters for curves from curve_analyzer/tests/testing_curves.py (do it in other way than using x_curve_function)
 5. Run curve_analyzer/tests/gen_unittest.py -b x (You will be asked for the computed values)
 6. The files x_structure.json, unit_tests/test_x.py were created, you can now modify the unit test for your needs
