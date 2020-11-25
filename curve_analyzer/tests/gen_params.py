@@ -8,12 +8,11 @@ with open("params", "r") as f:
 params = params.split("&test ")[1:]
 written = ""
 for test in params:
-	
 	name,to_write = test.split(":",1)
 	Path("curve_analyzer/tests/" + name).mkdir(parents=True, exist_ok=True)	
 	to_write = to_write.strip()
-	full_name = "./curve_analyzer/tests/"+ name + "/" + name + ".params"
+	full_name = os.path.join(".", name, name + ".params")
 	with open(full_name, 'w') as f:
 		f.write(to_write)
 	written += name + ", "
-print("Params files created/updated for "+ written[:-2])
+print("Params files created/updated for "+ written)
