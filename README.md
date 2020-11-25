@@ -30,7 +30,7 @@ To run test a05 on all standard curves of bitsizes up to 192 with cofactor 1 or 
 | name    | description                                                                       | implemented        |  computed\*        |time req.\*\* |memory req.\*\*\*
 |:-------:| ----------------------------------------------------------------------------------|:------------------:|:------------------:|:------------:|:---------:   
    a01    | group stucture of the curve in field extensions                                   | :white_check_mark: | :x:                | high         | low
-   a02    | factorizations of the CM discriminant in field extensions                         | :white_check_mark: | :x:                | high         | medium
+   a02    | CM discriminant, its factorizations and max conductors in field extensions        | :white_check_mark: | :x:                | high         | medium
    a04    | factorizations of $`kn\pm 1`$                                                     | :white_check_mark: | :x:                | high         | high
    a05    | field extensions containing nontrivial/full $`l`$-torsion                         | :white_check_mark: | :white_check_mark: | medium       | low
    a06    | Kronecker symbols of CM discriminants in field extensions w.r.t. small primes     | :white_check_mark: | :white_check_mark: | high         | medium
