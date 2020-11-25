@@ -11,3 +11,5 @@ setup(name='DiSSECT',
       packages=find_packages())
 
 os.system("curve_analyzer/utils/parallel/setup.py")
+os.system("curve_analyzer/tests/gen_params.py")
+os.system("curve_analyzer/tests/gen_test_structures.py")
