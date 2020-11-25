@@ -53,8 +53,9 @@ class Logs:
         self.main_log = open(self.main_log_file, 'a')
         self.current_log = open(self.current_log_file, 'w')
 
-    def write_to_logs(self, text, frmt='{:s}', newlines=0):
-        print(frmt.format(text), end=newlines * "\n")
+    def write_to_logs(self, text, frmt='{:s}', newlines=0, verbose_print=False):
+        if verbose_print:
+            print(frmt.format(text), end=newlines * "\n")
         for f in [self.main_log, self.current_log]:
             f.write(frmt.format(text))
             f.write(newlines * "\n")
@@ -118,8 +119,8 @@ def is_structure_new(old, curve_function, curve):
 
 
 # Tries to run tests for each individual curve; called by compute_results
-def update_curve_results(curve, curve_function, params_global, params_local_names, old_results, log_obj):
-    log_obj.write_to_logs("Processing curve " + curve.name + ":", newlines=1)
+def update_curve_results(curve, curve_function, params_global, params_local_names, old_results, log_obj, verbose=False):
+    log_obj.write_to_logs("Processing curve " + curve.name + ":", newlines=1, verbose_print=verbose)
     new_results = {}
     new_struct = is_structure_new(old_results, curve_function,curve)
     if curve.name not in old_results:
@@ -129,18 +130,18 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
 
     for params_local_values in itertools.product(*params_global.values()):
         params_local = dict(zip(params_local_names, params_local_values))
-        log_obj.write_to_logs("\tProcessing params " + str(params_local), frmt='{:.<60}')
+        log_obj.write_to_logs("\tProcessing params " + str(params_local), frmt='{:.<60}', verbose_print=verbose)
         if curve.name in old_results and str(params_local) in old_results[curve.name] and not new_struct:
-            log_obj.write_to_logs("Already computed", newlines=1)
+            log_obj.write_to_logs("Already computed", newlines=1, verbose_print=verbose)
         else:
             new_results[curve.name][str(params_local)] = curve_function(curve, *params_local_values)
-            log_obj.write_to_logs("Done", newlines=1)
+            log_obj.write_to_logs("Done", newlines=1, verbose_print=verbose)
     return new_results[curve.name]
 
 
 # A universal function for running tests on curve lists; it is called by each test file which has its own curve function.
 # Each test is assumed to have a params file in its folder; the results and logs are created there as well.
-def compute_results(curve_list, test_name, curve_function, desc=''):
+def compute_results(curve_list, test_name, curve_function, desc='', verbose=False):
     main_json_file, json_file, tmp_file, params_file = init_json_paths(test_name, desc)
     if curve_list == []:
         print("No input curves found, terminating the test.")
@@ -165,7 +166,7 @@ def compute_results(curve_list, test_name, curve_function, desc=''):
     total_time = 0
     timestamp = get_timestamp()
 
-    log_obj.write_to_logs("Current datetime: " + timestamp, newlines=1)
+    log_obj.write_to_logs("Current datetime: " + timestamp, newlines=1, verbose_print=verbose)
     std_count = 0
     sim_count = 0
     for curve in curve_list:
@@ -175,24 +176,23 @@ def compute_results(curve_list, test_name, curve_function, desc=''):
             std_count += 1
     log_obj.write_to_logs(
         "Hold on to your hat! Running test " + str(test_name) + " on " + str(std_count) + " std curves and " + str(
-            sim_count) + " sim curves with global parameters:\n" + str(params_global), newlines=2)
+            sim_count) + " sim curves with global parameters:\n" + str(params_global), newlines=2, verbose_print=verbose)
 
     for curve in curve_list:
         start_time = time.time()
 
         new_results[curve.name] = update_curve_results(curve, curve_function, params_global, params_local_names,
-                                                       old_results,
-                                                       log_obj)
+                                                       old_results, log_obj, verbose=verbose)
 
         end_time = time.time()
         diff_time = end_time - start_time
         total_time += diff_time
 
-        log_obj.write_to_logs("Done, time elapsed: " + str(diff_time), newlines=2)
+        log_obj.write_to_logs("Done, time elapsed: " + str(diff_time), newlines=2, verbose_print=verbose)
         save_into_json(new_results, tmp_file, 'w')
 
     log_obj.write_to_logs(80 * '.' + "\n" + "Finished, total time elapsed: " + str(total_time) + "\n\n" + 80 * '#',
-                          newlines=3)
+                          newlines=3, verbose_print=verbose)
     os.remove(json_file)
     os.rename(tmp_file, json_file)
 

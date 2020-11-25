@@ -42,8 +42,7 @@ if __name__ == '__main__':
     if not ctype in ["std", "sim", "sample", "all"]:
         print("curve_type must be one of std, sim, sample, all")
         exit()
-
     curves_list = import_curves(curve_type=args.curve_type, order_bound=args.order_bound, verbose=args.verbosity,
                                 allowed_cofactors=args.allowed_cofactors,
                                 chunks_total=args.chunks_total, chunk=args.chunk)
-    test_function(curves_list, desc=args.description)
+    test_function(curves_list, desc=args.description, verbose=args.verbosity)

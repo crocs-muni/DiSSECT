@@ -40,8 +40,8 @@ def a02_curve_function(curve,deg):
     return curve_results
 
 
-def compute_a02_results(curve_list, desc=''):
-    compute_results(curve_list, 'a02', a02_curve_function, desc=desc)
+def compute_a02_results(curve_list, desc='', verbose = False):
+    compute_results(curve_list, 'a02', a02_curve_function, desc=desc, verbose=verbose)
 
 
 def get_a02_captions(results):

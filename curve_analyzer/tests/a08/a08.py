@@ -18,8 +18,8 @@ def a08_curve_function(curve):
     return curve_results
 
 
-def compute_a08_results(curve_list, desc=''):
-    compute_results(curve_list, 'a08', a08_curve_function, desc=desc)
+def compute_a08_results(curve_list, desc='', verbose = False):
+    compute_results(curve_list, 'a08', a08_curve_function, desc=desc, verbose=verbose)
 
 
 def get_a08_captions(results):

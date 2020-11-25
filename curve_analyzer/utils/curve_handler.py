@@ -93,6 +93,8 @@ def import_curves(curve_type="sample", order_bound=256, verbose=False, binary=Fa
     curve_list = sorted(
         custom_curves(curve_db, curve_type, order_bound, verbose, binary, extension, single_curve, allowed_cofactors),
         key=lambda item: item.order)
+    if verbose:
+        print("")
 
     def chunkify(lst, n):
         """Split lst into n chunks"""

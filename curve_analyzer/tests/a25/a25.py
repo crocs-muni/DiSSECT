@@ -13,8 +13,8 @@ def a25_curve_function(curve, deg):
     return curve_results
 
 
-def compute_a25_results(curve_list, desc=''):
-    compute_results(curve_list, 'a25', a25_curve_function, desc=desc)
+def compute_a25_results(curve_list, desc='', verbose = False):
+    compute_results(curve_list, 'a25', a25_curve_function, desc=desc, verbose=verbose)
 
 
 def get_a25_captions(results):

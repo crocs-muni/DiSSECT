@@ -18,8 +18,8 @@ def i07_curve_function(curve):
     return curve_results
 
 
-def compute_i07_results(curve_list, desc=''):
-    compute_results(curve_list, 'i07', i07_curve_function, desc=desc)
+def compute_i07_results(curve_list, desc='', verbose = False):
+    compute_results(curve_list, 'i07', i07_curve_function, desc=desc, verbose=verbose)
 
 
 def get_i07_captions(curve_results):
