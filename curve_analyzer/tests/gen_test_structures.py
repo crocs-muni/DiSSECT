@@ -1,7 +1,7 @@
 #!/usr/bin/env sage
 import itertools
 import optparse
-import sys
+import sys,json
 from pathlib import Path
 
 from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_NAMES
