@@ -23,7 +23,7 @@ setup(name='DiSSECT',
       author_email='vlada.sedlacek@mail.muni.cz',
       license='MIT',
       packages=find_packages(),
-      install_requires = install_requires
+      install_requires = install_requires,
       entry_points={
         'console_scripts': ['run_tests_single=curve_analyzer.run_tests_single:main', 'merge_test_results=curve_analyzer.merge_test_results:main']
         }
