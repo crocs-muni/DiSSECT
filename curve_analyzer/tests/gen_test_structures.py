@@ -1,17 +1,18 @@
 #!/usr/bin/env sage
 import itertools,optparse
-from curve_analyzer.utils.json_handler import *
+from curve_analyzer.utils.json_handler import save_into_json
 from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_prefixes
 from curve_analyzer.tests.example_curves import curves
+from pathlib import Path
 
 tests_to_skip = ['a08']
 
 def compute_results(test_name):
-    module_name = TEST_MODULE_PATH+'.'+test_name + '.' + test_name
+    module_name = TEST_MODULE_PATH + '.' + test_name + '.' + test_name
     __import__(module_name)
     curve_function = getattr(sys.modules[module_name], test_name+"_curve_function")
-    main_json_file = os.path.join(TEST_PATH, test_name, test_name +'_structure'+ '.json')
-    params_file = os.path.join(TEST_PATH, test_name, test_name + '.params')
+    main_json_file = Path(TEST_PATH, test_name, test_name +'_structure'+ '.json')
+    params_file = Path(TEST_PATH, test_name, test_name + '.params')
     results= {}
     for curve in curves:
         results[curve.name] = {}
