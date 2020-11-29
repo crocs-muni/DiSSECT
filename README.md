@@ -8,7 +8,7 @@
 
 # Setup
 
-Run `sage --python3 setup.py develop` to initialize the project, then `sage --python3 params.py` to generate parameter files and `sage --python3 tests/tests_structures.py -t all` to generate structure files.
+Run `sage --python3 setup.py develop --user` to initialize the project, then `sage --python3 params.py` to generate parameter files and `sage --python3 tests/tests_structures.py -t all` to generate structure files.
 
 ## Testing the curves
 
