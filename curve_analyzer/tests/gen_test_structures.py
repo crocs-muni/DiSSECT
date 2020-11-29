@@ -52,9 +52,4 @@ def main():
         for name in tests:
             compute_results(name)
 
-# main()
-
-
-
-
-
+main()
