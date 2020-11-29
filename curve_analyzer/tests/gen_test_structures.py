@@ -1,9 +1,12 @@
 #!/usr/bin/env sage
-import itertools,optparse
-from curve_analyzer.utils.json_handler import save_into_json
+import itertools
+import optparse
+import sys
+from pathlib import Path
+
 from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_NAMES
 from curve_analyzer.tests.example_curves import curves
-from pathlib import Path
+from curve_analyzer.utils.json_handler import save_into_json
 
 tests_to_skip = ['a08']
 
