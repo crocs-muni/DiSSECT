@@ -1,5 +1,11 @@
-from setuptools import setup, find_packages
+#!/usr/bin/env sage
+
 import os
+from pathlib import Path
+
+from setuptools import setup, find_packages
+
+from curve_analyzer.definitions import TEST_PATH
 
 setup(name='DiSSECT',
       version='0.2',
@@ -10,6 +16,6 @@ setup(name='DiSSECT',
       license='MIT',
       packages=find_packages())
 
-os.system("curve_analyzer/utils/parallel/setup.py")
-os.system("curve_analyzer/tests/gen_params.py")
-os.system("curve_analyzer/tests/gen_test_structures.py")
+# os.system(Path(TEST_PATH"curve_analyzer/utils/parallel/setup.py")
+os.system(Path(TEST_PATH,"gen_params.py"))
+os.system(Path(TEST_PATH,"gen_test_structures.py"))
