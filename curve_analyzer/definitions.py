@@ -7,4 +7,5 @@ TEST_PATH = Path(ROOT_DIR, 'tests')
 PARALLEL_RESULTS_PATH = Path(ROOT_DIR, 'utils/parallel/results')
 X962_PATH = Path(ROOT_DIR, 'utils/parallel/x962')
 TEST_MODULE_PATH = 'curve_analyzer.tests'
-TEST_prefixes = ['a','i','s']
+TEST_PREFIXES = ['a', 'i', 's']
+TEST_NAMES = [f.name for f in TEST_PATH.iterdir() if f.is_dir() and f.name[0] in TEST_PREFIXES and int(f.name[1:], 10)]

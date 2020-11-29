@@ -1,7 +1,7 @@
 #!/usr/bin/env sage
 import itertools,optparse
 from curve_analyzer.utils.json_handler import save_into_json
-from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_prefixes
+from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_NAMES
 from curve_analyzer.tests.example_curves import curves
 from pathlib import Path
 
@@ -37,15 +37,8 @@ def main():
                       help="list of names for structure generation seperated by comma or \'all\'", default="all")
     options, args = parser.parse_args()
     if options.test== "all":
-        directory = TEST_PATH
-        for filename in os.listdir(directory):
+        for filename in TEST_NAMES:
             if filename in tests_to_skip:
-                continue
-            if not filename[0] in TEST_prefixes:
-                continue
-            try:
-                int(filename[1:],10)
-            except:
                 continue
             compute_results(filename)
     else:

@@ -1,6 +1,6 @@
 import ast, sys, os, optparse, json
 from curve_analyzer.utils.json_handler import save_into_json, load_from_json
-from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_prefixes
+from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_NAMES
 from curve_analyzer.tests.example_curves import curves
 
 def parse(text):
@@ -74,14 +74,8 @@ tests_to_skip = ['a08']
 
 def all_tests(structure, unittest):
     directory = TEST_PATH
-    for filename in os.listdir(directory):
+    for filename in TEST_NAMES:
         if filename in tests_to_skip:
-            continue
-        if not filename[0] in TEST_prefixes:
-            continue
-        try:
-            int(filename[1:], 10)
-        except:
             continue
         if structure:
             create_structure_file(filename)
