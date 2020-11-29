@@ -15,3 +15,4 @@ curve_analyzer/tests/**/*.params
 curve_analyzer/tests/**/*.txt
 curve_analyzer/utils/parallel/results/*
 curve_analyzer/curves_json_sim/*
+/curve_analyzer.egg-info/
