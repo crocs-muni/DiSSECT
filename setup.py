@@ -7,6 +7,15 @@ from setuptools import setup, find_packages
 
 from curve_analyzer.definitions import TEST_PATH
 
+install_requires = [
+    'sage',
+    'sarge',
+    'psutil',
+    'pid>=2.0.1',
+    'coloredlogs',
+    'shellescape',
+]
+
 setup(name='DiSSECT',
       version='0.2',
       description='Distinguisher of Standard & Simulated Elliptic Curves through Testing.',
@@ -14,8 +23,9 @@ setup(name='DiSSECT',
       author='SeSuSy',
       # author_email='email',
       license='MIT',
-      packages=find_packages())
+      packages=find_packages(),
+      install_requires = install_requires
+      )
 
-# os.system(Path(TEST_PATH"curve_analyzer/utils/parallel/setup.py")
 os.system(Path(TEST_PATH,"gen_params.py"))
 os.system(Path(TEST_PATH,"gen_test_structures.py"))
