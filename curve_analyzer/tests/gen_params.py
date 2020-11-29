@@ -1,18 +1,18 @@
 #!/usr/bin/env sage
 
-import os, json
 from pathlib import Path
+from curve_analyzer.definitions import TEST_PATH
 
-with open("params", "r") as f:
+with open(Path(TEST_PATH, 'params'), "r") as f:
 	params = f.read()
 params = params.split("&test ")[1:]
 
 for test in params:
 	name,to_write = test.split(":",1)
-	Path("curve_analyzer/tests/" + name).mkdir(parents=True, exist_ok=True)	
+	Path(TEST_PATH, name).mkdir(parents=True, exist_ok=True)
 	to_write = to_write.strip()
-	full_name = os.path.join(".", name, name + ".params")
-	if os.path.isfile(full_name):
+	full_name = Path(TEST_PATH, name, name + ".params")
+	if full_name.is_file():
 		with open(full_name, 'r') as f:
 			current = f.read()
 		if not current == to_write:
