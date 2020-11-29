@@ -1,8 +1,11 @@
 #!/usr/bin/env sage
 import itertools
+import json
 import optparse
-import sys,json
+import sys
 from pathlib import Path
+
+from sage.misc.sage_eval import sage_eval
 
 from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_NAMES
 from curve_analyzer.tests.example_curves import curves
@@ -49,7 +52,7 @@ def main():
         for name in tests:
             compute_results(name)
 
-main()
+# main()
 
 
 
