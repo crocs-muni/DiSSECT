@@ -61,9 +61,9 @@ def curve_gen(curve_db, curve_type, order_bound, verbose, binary, extension, sin
             name = curve['name']
             if curve_type == "std" and "sim" in name:
                 continue
-            if curve_type == "sim" and not "sim" in name:
+            if curve_type == "sim" and "sim" not in name:
                 continue
-            if curve_type == "sample" and not name in ["secp112r1", "secp192r1", "secp256r1"]:
+            if curve_type == "sample" and name not in ["secp112r1", "secp192r1", "secp256r1"]:
                 continue
             if verbose:
                 print(curve['name'])
