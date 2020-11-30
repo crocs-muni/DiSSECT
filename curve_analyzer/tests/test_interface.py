@@ -49,7 +49,7 @@ class Logs:
             os.mkdir(self.log_dir)
         if not os.path.exists(self.main_log_file):
             with open(self.main_log_file, 'w'):
-                pass
+                pass  # this is just to create the file
         self.main_log = open(self.main_log_file, 'a')
         self.current_log = open(self.current_log_file, 'w')
 
@@ -111,7 +111,7 @@ def get_model_structure(curve_function):
 
 
 def is_structure_new(old, curve_function, curve):
-    if not curve.name in old:
+    if curve.name not in old:
         return True
     model_structure = get_model_structure(curve_function)
     computed = list(old[curve.name].values())[0]
@@ -237,7 +237,10 @@ def pretty_print_results(curve_list, test_name, get_captions, select_results, cu
 
 # https://ask.sagemath.org/question/10112/kill-the-thread-in-a-long-computation/
 # stops the function func after 'timeout_duration' seconds
-def timeout(func, args=(), kwargs={}, timeout_duration=10):
+def timeout(func, args=(), kwargs=None, timeout_duration=10):
+    if kwargs is None:
+        kwargs = {}
+
     @fork(timeout=timeout_duration, verbose=False)
     def my_new_func():
         return func(*args, **kwargs)
