@@ -2,8 +2,8 @@
 import ast
 import json
 import optparse
-import os
 import sys
+from pathlib import Path
 
 from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_NAMES
 from curve_analyzer.tests.example_curves import curves
@@ -24,7 +24,7 @@ def parse(text):
 
 
 def create_structure_file(name):
-    f = open(TEST_PATH + "/" + name + "/" + name + ".params", "r")
+    f = open(Path(TEST_PATH, name, name + ".params"), "r")
     params = ast.literal_eval(f.read())
     f.close()
     local_params = params["params_local_names"]
@@ -55,12 +55,12 @@ def create_structure_file(name):
 
 
 def create_unittest(name):
-    results = load_from_json(TEST_PATH + "/" + name + "/" + name + "_structure.json")
-    if os.path.exists(TEST_PATH + "/unit_tests/test_" + name + ".py"):
+    results = load_from_json(Path(TEST_PATH, name, name + "_structure.json"))
+    if Path(TEST_PATH, "unit_tests", "test_" + name + ".py").is_file():
         answer = input("Unittest for " + name + " already exists, overwrite? [Y/n]")
         if answer in "[n,N]":
             return
-    f = open(TEST_PATH + "/unit_tests/test_" + name + ".py", "w")
+    f = open(Path(TEST_PATH, "unit_tests", "test_" + name + ".py"), "w")
     f.write("import unittest, ast\n")
     f.write("from curve_analyzer.tests." + name + "." + name + " import " + name + "_curve_function\n")
     f.write("from curve_analyzer.tests.testing_curves import curves, curve_names\n")
