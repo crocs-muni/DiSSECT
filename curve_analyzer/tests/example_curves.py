@@ -1,5 +1,6 @@
 from curve_analyzer.utils.custom_curve import CustomCurve
 
+# noinspection SpellCheckingInspection
 curve_brain = CustomCurve({
     "name": "brainpoolP160r1",
     "category": "brainpool",
@@ -133,7 +134,8 @@ curve_bn = CustomCurve({
 curve_sec = CustomCurve({
     "name": "secp112r2",
     "category": "secg",
-    "desc": "A randomly generated curve. [SEC2v1](https://www.secg.org/SEC2-Ver-1.0.pdf) states 'E was chosen verifiably at random as specified in ANSI X9.62 [1] from the seed'.",
+    "desc": "A randomly generated curve. [SEC2v1](https://www.secg.org/SEC2-Ver-1.0.pdf) states 'E was chosen "
+            "verifiably at random as specified in ANSI X9.62 [1] from the seed'.",
     "oid": "1.3.132.0.7",
     "field": {
         "type": "Prime",

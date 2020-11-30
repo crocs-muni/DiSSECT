@@ -1,3 +1,4 @@
+#!/usr/bin/env sage
 import ast
 import json
 import optparse
@@ -81,7 +82,6 @@ tests_to_skip = ['a08']
 
 
 def all_tests(structure, unittest):
-    directory = TEST_PATH
     for filename in TEST_NAMES:
         if filename in tests_to_skip:
             continue
@@ -95,14 +95,14 @@ def main():
     parser = optparse.OptionParser()
     parser.add_option('-u', '--unittest',
                       action="store", dest="unittest",
-                      help="list of names for unittest seperated by comma or \'all\'", default="_")
+                      help="list of names for unittest separated by comma or \'all\'", default="_")
 
     parser.add_option('-s', '--structure',
                       action="store", dest="structure",
-                      help="list of names for structure files seperated by comma or \'all\'", default="_")
+                      help="list of names for structure files separated by comma or \'all\'", default="_")
     parser.add_option('-b', '--both',
                       action="store", dest="both",
-                      help="list of names for unittest and structure files seperated by comma or \'all\'", default="_")
+                      help="list of names for unittest and structure files separated by comma or \'all\'", default="_")
 
     options, args = parser.parse_args()
     if options.both != "_":

@@ -11,7 +11,7 @@ from curve_analyzer.utils.json_handler import load_from_json, save_into_json
 
 def dict_update_rec(a, b):
     for key in b.keys():
-        if not key in a.keys():
+        if key not in a.keys():
             a[key] = b[key]
             continue
         b_value = b[key]
