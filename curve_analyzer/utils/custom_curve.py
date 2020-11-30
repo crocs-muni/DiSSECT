@@ -7,7 +7,7 @@ from sage.all import EllipticCurve, ZZ, GF  # import sage library
 def montgomery_to_short_weierstrass(F, A, B, x, y):
     a = F((3 - A ** 2) / (3 * B ** 2))
     b = F((2 * A ** 3 - 9 * A) / (27 * B ** 3))
-    if x == '' or y == '' or x == None or y == None:
+    if x == '' or y == '' or x is None or y is None:
         return a, b, None, None
     else:
         u = F((3 * x + A) / (3 * B))
@@ -23,7 +23,7 @@ def twisted_edwards_to_montgomery(F, a, d, u, v, scaling=True):
         scaling = False
     s = F(1 / B).sqrt()
 
-    if u == '' or v == '' or u == None or v == None:
+    if u == '' or v == '' or u is None or v is None:
         if scaling:
             return A, 1, None, None
         else:
@@ -87,8 +87,8 @@ class CustomCurve:
         self.set()
 
     def get_xy(self, extension=False):
-        if self.generator_desc == None:
-            return (None, None)
+        if self.generator_desc is None:
+            return None, None
         if extension:
             x = get_poly(self.generator_desc['x']['poly'], self.field)
             y = get_poly(self.generator_desc['y']['poly'], self.field)
@@ -100,10 +100,10 @@ class CustomCurve:
                 y = ZZ(y)
             except TypeError:
                 pass
-        return (x, y)
+        return x, y
 
     def set_generator(self, binary=False, extension=False, x=None, y=None):
-        if x == None or y == None:
+        if x is None or y is None:
             x, y = self.get_xy(extension)
         if x is None or y is None or x == "" or y == "":
             self.generator = None
