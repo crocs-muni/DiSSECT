@@ -2,6 +2,9 @@ from sage.all import floor
 
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
+DISTANCE_32 = "distance 32"
+DISTANCE_64 = "distance 64"
+
 
 # Computes the distance of curve order to the nearest power of 2 and to the nearest multiple of 32 and 64
 def i07_curve_function(curve):
@@ -14,7 +17,7 @@ def i07_curve_function(curve):
     dist32 = min(abs(order % 32), 32 - abs(order % 32))
     dist64 = min(abs(order % 64), 64 - abs(order % 64))
     ratio = floor(order / distance)
-    curve_results = {"distance": distance, "ratio": ratio, "distance 32": dist32, "distance 64": dist64}
+    curve_results = {"distance": distance, "ratio": ratio, DISTANCE_32: dist32, DISTANCE_64: dist64}
     return curve_results
 
 
@@ -23,11 +26,11 @@ def compute_i07_results(curve_list, desc='', verbose=False):
 
 
 def get_i07_captions(curve_results):
-    return ["distance", "ratio", "distance 32", "distance 64"]
+    return ["distance", "ratio", DISTANCE_32, DISTANCE_64]
 
 
 def select_i07_results(curve_results):
-    keys = ["distance", "ratio", "distance 32", "distance 64"]
+    keys = ["distance", "ratio", DISTANCE_32, DISTANCE_64]
     selected_results = []
     for key in keys:
         selected_key = []
