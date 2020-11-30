@@ -9,6 +9,8 @@ from curve_analyzer.definitions import TEST_PATH
 
 install_requires = [
     'sage>=9.0',
+    'prettytable',
+    'pytz',
     'sarge',
     'psutil',
     'pid>=2.0.1',
