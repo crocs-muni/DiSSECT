@@ -1,6 +1,6 @@
 image:
   name: sagemath/sagemath:latest
-  entrypoint: [""]
+  entrypoint: [ "" ]
 
 stages:
   - test
