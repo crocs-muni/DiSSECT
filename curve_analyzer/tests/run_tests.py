@@ -7,7 +7,7 @@ import logging
 import os
 import re
 
-from curve_analyzer.definitions import TEST_PATH
+from curve_analyzer.definitions import TEST_PATH, TEST_NAMES
 from curve_analyzer.utils.parallel.job_manager.manager import ParallelRunner, Task, TaskResult
 
 try:
@@ -42,7 +42,7 @@ def main():
                         help='Path to the sage')
     requiredNamed = parser.add_argument_group('required named arguments')
     requiredNamed.add_argument('-n', '--test_name', metavar='test_name', type=str, action='store',
-                               help='the test identifier, e.g., a02', required=True)
+                               help='the test identifier; available tests: ' + ", ".join(TEST_NAMES), required=True)
     requiredNamed.add_argument('-c', '--curve_type', metavar='curve_type', type=str,
                                help='the type of curves to be tested; must be one of the following: std (all standard '
                                     'curves), sim (all simulated curves), sample (curves secp112r1, secp192r1, '
