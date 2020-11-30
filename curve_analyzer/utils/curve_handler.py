@@ -78,7 +78,9 @@ def custom_curves(curve_db, curve_type, order_bound, verbose, binary, extension,
 
 # Creates a list of instances of class CustomCurve out of imported database (conditioned by curve_type, see above)
 def import_curves(curve_type="sample", order_bound=256, verbose=False, binary=False, extension=False, single_curve="",
-                  allowed_cofactors=[1], chunk=1, chunks_total=1):
+                  allowed_cofactors=None, chunk=1, chunks_total=1):
+    if allowed_cofactors is None:
+        allowed_cofactors = [1]
     assert chunk <= chunks_total
 
     if single_curve != "":
@@ -105,9 +107,13 @@ def import_curves(curve_type="sample", order_bound=256, verbose=False, binary=Fa
 
 
 def filter_curve_names(
-        allowed_categories=["nist", "x962", "x962_sim_128", "x962_sim_160", "x962_sim_192", "x962_sim_224",
-                            "x962_sim_256"], allowed_bitsizes=range(257), allowed_cofactors=[1], allow_binary=False,
+        allowed_categories=None, allowed_bitsizes=range(257), allowed_cofactors=None, allow_binary=False,
         allow_extension=False):
+    if allowed_cofactors is None:
+        allowed_cofactors = [1]
+    if allowed_categories is None:
+        allowed_categories = ["nist", "x962", "x962_sim_128", "x962_sim_160", "x962_sim_192", "x962_sim_224",
+                              "x962_sim_256"]
     ignore_sim = not any('sim' in cat for cat in allowed_categories)
     curve_db = import_curve_db(ignore_sim=ignore_sim)
 
@@ -127,9 +133,13 @@ def filter_curve_names(
 
 
 def filter_results(json_file,
-                   allowed_categories=["nist", "x962", "x962_sim_128", "x962_sim_160", "x962_sim_192", "x962_sim_224",
-                                       "x962_sim_256"], allowed_bitsizes=range(257), allowed_cofactors=[1],
+                   allowed_categories=None, allowed_bitsizes=range(257), allowed_cofactors=None,
                    allow_binary=False, allow_extension=False):
+    if allowed_cofactors is None:
+        allowed_cofactors = [1]
+    if allowed_categories is None:
+        allowed_categories = ["nist", "x962", "x962_sim_128", "x962_sim_160", "x962_sim_192", "x962_sim_224",
+                              "x962_sim_256"]
     curve_names = filter_curve_names(allowed_categories=allowed_categories, allowed_bitsizes=allowed_bitsizes,
                                      allowed_cofactors=allowed_cofactors, allow_binary=allow_binary,
                                      allow_extension=allow_extension)
