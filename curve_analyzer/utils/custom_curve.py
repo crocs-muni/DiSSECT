@@ -189,7 +189,7 @@ class CustomCurve:
         return self.__repr__()
 
     def __lt__(self, other):
-        return (self.order, self.name) < (other.order, other.name)
+        return (self.order.nbits(), self.name) < (other.order.nbits(), other.name)
 
 
 # Not using for now
