@@ -4,15 +4,15 @@ from curve_analyzer.tests.test_interface import pretty_print_results, compute_re
 
 
 def embedding_degree_q(q, l):
-    '''returns embedding degree with respect to q'''
+    """returns embedding degree with respect to q"""
     return (Integers(l)(q)).multiplicative_order()
 
 
-def ext_card(E, q, card_low, deg):
-    '''returns curve cardinality over deg-th relative extension'''
+def ext_card(q, card_low, deg):
+    """returns curve cardinality over deg-th relative extension"""
     tr = q + 1 - card_low
     s_old, s_new = 2, tr
-    for i in range(2, deg + 1):
+    for _ in range(2, deg + 1):
         s_old, s_new = s_new, tr * s_new - q * s_old
     card_high = q ** deg + 1 - s_new
     return card_high
@@ -25,7 +25,7 @@ def stupid_coerce_K_to_L(element, K, L):
 
 
 def extend(E, q, deg, field):
-    '''returns curve over deg-th relative extension; does not seem to work for binary curves'''
+    """returns curve over the deg-th relative extension"""
     if q % 2 != 0:
         R = field['x']
         pol = R.irreducible_element(deg)
@@ -51,7 +51,7 @@ def extend(E, q, deg, field):
 
 # Computes the smallest extension which contains a nontrivial l-torsion point
 # Returns the degree
-def find_least_torsion(E, q, order, l):
+def find_least_torsion(q, order, l):
     x = PolynomialRing(GF(l ** 2), 'x').gen()
     t = q + 1 - order
 
@@ -64,10 +64,10 @@ def find_least_torsion(E, q, order, l):
 
 # True if the l-torsion is cyclic and False otherwise (bycyclic)
 def is_torsion_cyclic(E, q, order, l, deg, field):
-    card = ext_card(E, q, order, deg)
+    card = ext_card(q, order, deg)
     m = ZZ(card / l)
     EE = extend(E, q, deg, field)
-    for j in range(1, 6):
+    for _ in range(1, 6):
         P = EE.random_element()
         if not (m * P == EE(0)):
             return True
@@ -84,7 +84,7 @@ def find_full_torsion(E, q, order, l, least, field):
     if k > 1:  # i.e. a!=1
         return k * least
     else:  # i.e. a==1, we have two options for the geometric multiplicity
-        card = ext_card(E, q, order, least)
+        card = ext_card(q, order, least)
         if (card % l ** 2) == 0 and not is_torsion_cyclic(E, q, order, l, least, field):  # geom. multiplicity is 2
             return least
         else:  # geom. multiplicity is 1
@@ -95,7 +95,7 @@ def find_full_torsion(E, q, order, l, least, field):
 
 # Returns a triple
 def find_torsions(E, q, order, l, field):
-    least = find_least_torsion(E, q, order, l)
+    least = find_least_torsion(q, order, l)
     if least == l ** 2 - 1:
         full = least
 
@@ -115,7 +115,7 @@ def a05_curve_function(curve, l):
     try:
         least, full, relative = find_torsions(E, q, order, l, curve.field)
 
-    except (ArithmeticError, TypeError, ValueError) as e:
+    except (ArithmeticError, TypeError, ValueError) as _:
         least, full, relative = None, None, None
 
     curve_results['least'] = least

@@ -1,61 +1,7 @@
-from sage.all import PolynomialRing, ZZ, GF, EllipticCurve, log
+from sage.all import PolynomialRing, GF
 
+from curve_analyzer.tests.a05.a05 import ext_card, is_torsion_cyclic
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
-
-
-def ext_card(E, order, deg):
-    '''returns curve cardinality over deg-th relative extension'''
-    card_low = order
-    q = (E.base_field()).order()
-    tr = q + 1 - card_low
-    s_old, s_new = 2, tr
-    for i in range(2, deg + 1):
-        s_old, s_new = s_new, tr * s_new - q * s_old
-    card_high = q ** deg + 1 - s_new
-    return card_high
-
-
-def stupid_coerce_K_to_L(element, K, L):
-    name_K = str(K.gen())
-    name_L = str(L.gen())
-    return L(str(element).replace(name_K, name_L))
-
-
-def extend(E, q, deg, field):
-    '''returns curve over deg-th relative extension; does not seem to work for binary curves'''
-    if q % 2 != 0:
-        R = field['x']
-        pol = R.irreducible_element(deg)
-        Fext = GF(q ** deg, name='z', modulus=pol)
-        return E.base_extend(Fext)
-    K = field
-    charac = K.characteristic()
-    R = GF(charac)['x']
-    ext_deg = q ** deg
-    pol = R.irreducible_element(deg * (log(q, charac)))
-    Kext = GF(ext_deg, name='ex', modulus=pol)
-    gKext = Kext.gen()
-
-    h = gKext ** ((ext_deg - 1) // (q - 1))
-    assert charac ** (h.minpoly().degree()) == q
-    H = GF(q, name='h', modulus=h.minpoly())
-    inclusion = H.hom([h])
-
-    new_coefficients = [inclusion(stupid_coerce_K_to_L(a, K, H)) for a in E.a_invariants()]
-    EE = EllipticCurve(Kext, new_coefficients)
-    return EE
-
-
-def is_torsion_cyclic(E, q, order, l, deg, field):
-    card = ext_card(E, order, deg)
-    assert card % l ** 2 == 0
-    m = ZZ(card / l)
-    EE = extend(E, q, deg, field)
-    for j in range(1, 6):
-        P = EE.random_element()
-        if not (m * P == EE(0)):
-            return True
-    return False
 
 
 # Computes the eigenvalues of Frobenius endomorphism in F_l, or in F_l if s=2
@@ -92,7 +38,8 @@ def i_finder(curve, l):
     i2 = 1
     deg = a.multiplicative_order()
     E = curve.EC
-    card = ext_card(E, curve.order * curve.cofactor, deg)
+    q = curve.q
+    card = ext_card(q, curve.order * curve.cofactor, deg)
     if card % l ** 2 != 0 or is_torsion_cyclic(E, curve.q, curve.order * curve.cofactor, l, deg, curve.field):
         i2 *= l
     return i2, i1
@@ -105,7 +52,7 @@ def a24_curve_function(curve, l):
     try:
         i2, i1 = i_finder(curve, l)
         least, full, relative = i1, i2, i2 // i1
-    except (ArithmeticError, TypeError, ValueError) as e:
+    except (ArithmeticError, TypeError, ValueError) as _:
         least, full, relative = None, None, None
 
     curve_results['least'] = least
