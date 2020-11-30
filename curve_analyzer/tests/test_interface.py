@@ -1,9 +1,9 @@
 import itertools
-import os
-import time
-import random
-from datetime import datetime
 import json
+import os
+import random
+import time
+from datetime import datetime
 
 import pytz
 from prettytable import PrettyTable  # http://zetcode.com/python/prettytable/
@@ -109,20 +109,20 @@ def get_model_structure(curve_function):
         results = json.load(f)
     return list(list(results.values())[0].values())[0]
 
+
 def is_structure_new(old, curve_function, curve):
     if not curve.name in old:
         return True
     model_structure = get_model_structure(curve_function)
     computed = list(old[curve.name].values())[0]
-    return not compare_structures(model_structure,computed)
-
+    return not compare_structures(model_structure, computed)
 
 
 # Tries to run tests for each individual curve; called by compute_results
 def update_curve_results(curve, curve_function, params_global, params_local_names, old_results, log_obj, verbose=False):
     log_obj.write_to_logs("Processing curve " + curve.name + ":", newlines=1, verbose_print=verbose)
     new_results = {}
-    new_struct = is_structure_new(old_results, curve_function,curve)
+    new_struct = is_structure_new(old_results, curve_function, curve)
     if curve.name not in old_results:
         new_results[curve.name] = {}
     else:
@@ -176,7 +176,8 @@ def compute_results(curve_list, test_name, curve_function, desc='', verbose=Fals
             std_count += 1
     log_obj.write_to_logs(
         "Hold on to your hat! Running test " + str(test_name) + " on " + str(std_count) + " std curves and " + str(
-            sim_count) + " sim curves with global parameters:\n" + str(params_global), newlines=2, verbose_print=verbose)
+            sim_count) + " sim curves with global parameters:\n" + str(params_global), newlines=2,
+        verbose_print=verbose)
 
     for curve in curve_list:
         start_time = time.time()

@@ -13,13 +13,14 @@ from curve_analyzer.utils.json_handler import save_into_json
 
 tests_to_skip = ['a08']
 
+
 def compute_results(test_name):
     module_name = TEST_MODULE_PATH + '.' + test_name + '.' + test_name
     __import__(module_name)
-    curve_function = getattr(sys.modules[module_name], test_name+"_curve_function")
-    main_json_file = Path(TEST_PATH, test_name, test_name +'_structure'+ '.json')
+    curve_function = getattr(sys.modules[module_name], test_name + "_curve_function")
+    main_json_file = Path(TEST_PATH, test_name, test_name + '_structure' + '.json')
     params_file = Path(TEST_PATH, test_name, test_name + '.params')
-    results= {}
+    results = {}
     for curve in curves:
         results[curve.name] = {}
     with open(params_file, 'r') as f:
@@ -32,8 +33,7 @@ def compute_results(test_name):
     params_local = dict(zip(params_local_names, params_local_values))
     for curve in curves:
         results[curve.name][str(params_local)] = curve_function(curve, *params_local_values)
-    save_into_json(results,main_json_file,mode = 'w')
-
+    save_into_json(results, main_json_file, mode='w')
 
 
 def main():
@@ -42,7 +42,7 @@ def main():
                       action="store", dest="test",
                       help="list of names for structure generation seperated by comma or \'all\'", default="all")
     options, args = parser.parse_args()
-    if options.test== "all":
+    if options.test == "all":
         for filename in TEST_NAMES:
             if filename in tests_to_skip:
                 continue
@@ -51,5 +51,6 @@ def main():
         tests = options.test.split(",")
         for name in tests:
             compute_results(name)
+
 
 main()

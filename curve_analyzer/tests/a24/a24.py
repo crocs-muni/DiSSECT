@@ -1,4 +1,4 @@
-from sage.all import PolynomialRing, ZZ, GF, EllipticCurve,log
+from sage.all import PolynomialRing, ZZ, GF, EllipticCurve, log
 
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
@@ -15,14 +15,15 @@ def ext_card(E, order, deg):
     return card_high
 
 
-def stupid_coerce_K_to_L(element,K,L):
+def stupid_coerce_K_to_L(element, K, L):
     name_K = str(K.gen())
     name_L = str(L.gen())
-    return L(str(element).replace(name_K,name_L))
+    return L(str(element).replace(name_K, name_L))
 
-def extend(E, q, deg,field):
+
+def extend(E, q, deg, field):
     '''returns curve over deg-th relative extension; does not seem to work for binary curves'''
-    if q%2!=0:
+    if q % 2 != 0:
         R = field['x']
         pol = R.irreducible_element(deg)
         Fext = GF(q ** deg, name='z', modulus=pol)
@@ -31,7 +32,7 @@ def extend(E, q, deg,field):
     charac = K.characteristic()
     R = GF(charac)['x']
     ext_deg = q ** deg
-    pol = R.irreducible_element(deg*(log(q, charac)))
+    pol = R.irreducible_element(deg * (log(q, charac)))
     Kext = GF(ext_deg, name='ex', modulus=pol)
     gKext = Kext.gen()
 
@@ -45,11 +46,11 @@ def extend(E, q, deg,field):
     return EE
 
 
-def is_torsion_cyclic(E, q,order, l, deg,field):
+def is_torsion_cyclic(E, q, order, l, deg, field):
     card = ext_card(E, order, deg)
     assert card % l ** 2 == 0
     m = ZZ(card / l)
-    EE = extend(E,q,deg,field)
+    EE = extend(E, q, deg, field)
     for j in range(1, 6):
         P = EE.random_element()
         if not (m * P == EE(0)):
@@ -91,8 +92,8 @@ def i_finder(curve, l):
     i2 = 1
     deg = a.multiplicative_order()
     E = curve.EC
-    card = ext_card(E, curve.order*curve.cofactor, deg)
-    if card % l ** 2 != 0 or is_torsion_cyclic(E,curve.q, curve.order*curve.cofactor, l, deg,curve.field):
+    card = ext_card(E, curve.order * curve.cofactor, deg)
+    if card % l ** 2 != 0 or is_torsion_cyclic(E, curve.q, curve.order * curve.cofactor, l, deg, curve.field):
         i2 *= l
     return i2, i1
 
@@ -113,7 +114,7 @@ def a24_curve_function(curve, l):
     return curve_results
 
 
-def compute_a24_results(curve_list, desc='', verbose = False):
+def compute_a24_results(curve_list, desc='', verbose=False):
     compute_results(curve_list, 'a24', a24_curve_function, desc=desc, verbose=verbose)
 
 

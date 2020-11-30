@@ -18,7 +18,7 @@ def a08_curve_function(curve):
     return curve_results
 
 
-def compute_a08_results(curve_list, desc='', verbose = False):
+def compute_a08_results(curve_list, desc='', verbose=False):
     compute_results(curve_list, 'a08', a08_curve_function, desc=desc, verbose=verbose)
 
 

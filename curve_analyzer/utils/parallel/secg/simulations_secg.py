@@ -1,17 +1,17 @@
 import json
 from hashlib import sha1
 
-from sage.all import Integers, ZZ, floor, next_prime, log, ceil, GF, is_prime, PolynomialRing, EllipticCurve, prime_range, is_pseudoprime, \
+from sage.all import Integers, ZZ, floor, log, ceil, GF, is_prime, PolynomialRing, EllipticCurve, prime_range, \
+    is_pseudoprime, \
     sqrt
 
 
-
-#Differs from x9.62 by:
+# Differs from x9.62 by:
 # 1) embedding degree has to be at least 100
 # 2) cofactor h satisfies h<= 2^(t/8) where t is the security level in bits (usually log(p)/2)
 # 3) n+1 and n-1 (where n is the prime subgroup) have to have large prime factor (log_n(factor)>19/20)
 
-#!! secp224r1 doesn't seem to satisfy 3)
+# !! secp224r1 doesn't seem to satisfy 3)
 
 # hex string to binary string
 def sha1_bin(x):
@@ -121,17 +121,19 @@ def verify_near_primality(u, r_min, l_max=255):
         return True, h, n
     return False, None, None
 
+
 def security_level(q):
     L = ceil(log(q, 2))
-    if L==521:
+    if L == 521:
         return 256
-    if L==192:
+    if L == 192:
         return 80
-    return L//2
+    return L // 2
 
-def verify_n_minusplus_1(m,N,bound = 19/20):
+
+def verify_n_minusplus_1(m, N, bound=19 / 20):
     for d in m.factor():
-        if log(d[0],N)>bound:
+        if log(d[0], N) > bound:
             return True
     return False
 
@@ -160,10 +162,10 @@ def verify_security(E, embedding_degree_bound=100, verbose=False):
     if verbose:
         print("Checking cofactor")
     t = security_level(q)
-    if log(h,2)> t//8 or h!=(floor((sqrt(q)+1)**2))//n:
+    if log(h, 2) > t // 8 or h != (floor((sqrt(q) + 1) ** 2)) // n:
         print("tu2")
         return False, None, None
-    if not verify_n_minusplus_1(n-1,n) or not verify_n_minusplus_1(n+1,n):
+    if not verify_n_minusplus_1(n - 1, n) or not verify_n_minusplus_1(n + 1, n):
         print("tu")
         return False, None, None
     return True, h, n

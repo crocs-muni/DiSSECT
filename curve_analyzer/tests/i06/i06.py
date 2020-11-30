@@ -1,19 +1,19 @@
-from sage.all import squarefree_part,sqrt
+from sage.all import squarefree_part, sqrt
 
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 
 # Computes the square part of 4*p-1. 4*order-1 (result is square root of the square part)
 def i06_curve_function(curve):
-    order = curve.order# * curve.cofactor
+    order = curve.order  # * curve.cofactor
     q = curve.q
-    a = 4*q-1
-    b = 4*order-1
-    curve_results = {"p": sqrt(a//squarefree_part(a)), "order": sqrt(b//squarefree_part(b))}
+    a = 4 * q - 1
+    b = 4 * order - 1
+    curve_results = {"p": sqrt(a // squarefree_part(a)), "order": sqrt(b // squarefree_part(b))}
     return curve_results
 
 
-def compute_i06_results(curve_list, desc='', verbose = False):
+def compute_i06_results(curve_list, desc='', verbose=False):
     compute_results(curve_list, 'i06', i06_curve_function, desc=desc, verbose=verbose)
 
 

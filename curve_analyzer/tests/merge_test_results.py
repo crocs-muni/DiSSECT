@@ -4,20 +4,20 @@ import argparse
 import json
 import os
 import re
-from collections import OrderedDict
 
 from curve_analyzer.definitions import TEST_PATH
 from curve_analyzer.utils.json_handler import load_from_json, save_into_json
 
-def dict_update_rec(a,b):
+
+def dict_update_rec(a, b):
     for key in b.keys():
         if not key in a.keys():
             a[key] = b[key]
             continue
         b_value = b[key]
         a_value = a[key]
-        if isinstance(a_value,dict):
-            dict_update_rec(a_value,b_value)
+        if isinstance(a_value, dict):
+            dict_update_rec(a_value, b_value)
         else:
             a_value = b_value
         a[key] = a_value
@@ -28,8 +28,6 @@ parser.add_argument('-n', '--test_name', type=str, help='Name of the test')
 args = parser.parse_args()
 test_name = args.test_name
 assert re.search(r'[ais][0-9][0-9]', test_name)
-
-
 
 # initialize original results
 results_file_name = os.path.join(TEST_PATH, test_name, test_name + '.json')

@@ -50,7 +50,7 @@ def a04_curve_function(curve, k):
     return curve_results
 
 
-def compute_a04_results(curve_list, desc='', verbose = False):
+def compute_a04_results(curve_list, desc='', verbose=False):
     compute_results(curve_list, 'a04', a04_curve_function, desc=desc, verbose=verbose)
 
 

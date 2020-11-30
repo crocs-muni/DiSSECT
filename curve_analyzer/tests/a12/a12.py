@@ -17,7 +17,7 @@ def a12_curve_function(curve, l):
     return curve_results
 
 
-def compute_a12_results(curve_list, desc='', verbose = False):
+def compute_a12_results(curve_list, desc='', verbose=False):
     compute_results(curve_list, 'a12', a12_curve_function, desc=desc, verbose=verbose)
 
 

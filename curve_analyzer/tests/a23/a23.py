@@ -30,7 +30,7 @@ def a23_curve_function(curve, l):
     return curve_results
 
 
-def compute_a23_results(curve_list, desc='', verbose = False):
+def compute_a23_results(curve_list, desc='', verbose=False):
     compute_results(curve_list, 'a23', a23_curve_function, desc=desc, verbose=verbose)
 
 

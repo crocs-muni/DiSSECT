@@ -1,6 +1,6 @@
 from pathlib import Path
 
-ROOT_DIR = Path(__file__).parent   # This is your Project Root
+ROOT_DIR = Path(__file__).parent  # This is your Project Root
 CURVE_PATH = Path(ROOT_DIR, 'curves_json')
 CURVE_PATH_SIM = Path(ROOT_DIR, 'curves_json_sim')
 TEST_PATH = Path(ROOT_DIR, 'tests')

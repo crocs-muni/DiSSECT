@@ -1,19 +1,19 @@
 from sage.all import factor
 
-from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 from curve_analyzer.tests.a02.a02 import ext_trace
+from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 
 # Computation of the trace in an extension together with its factorization
 def a25_curve_function(curve, deg):
-    trace = ext_trace( curve.q, curve.trace, deg)
+    trace = ext_trace(curve.q, curve.trace, deg)
     f = list(factor(curve.trace))
     f = [list(i) for i in f]
     curve_results = {'trace': curve.trace, 'trace_factorization': f, 'number_of_factors': len(f)}
     return curve_results
 
 
-def compute_a25_results(curve_list, desc='', verbose = False):
+def compute_a25_results(curve_list, desc='', verbose=False):
     compute_results(curve_list, 'a25', a25_curve_function, desc=desc, verbose=verbose)
 
 

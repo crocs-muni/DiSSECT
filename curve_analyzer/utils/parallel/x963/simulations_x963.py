@@ -1,8 +1,10 @@
 import json
 from hashlib import sha1
 
-from sage.all import Integers, ZZ, floor, ceil, GF, is_prime, PolynomialRing, EllipticCurve, prime_range, is_pseudoprime, \
+from sage.all import Integers, ZZ, floor, ceil, GF, is_prime, PolynomialRing, EllipticCurve, prime_range, \
+    is_pseudoprime, \
     sqrt
+
 
 # For now, it is the same as x962
 

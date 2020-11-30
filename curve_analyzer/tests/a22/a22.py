@@ -10,12 +10,12 @@ def a22_curve_function(curve, l):
     fact = [list(i) for i in list(factor(pol))]
     # count multiplicities?
     degs = [x.degree() for x, _ in fact]
-    fact_str = [[str(i[0]),i[1]] for i in fact]
+    fact_str = [[str(i[0]), i[1]] for i in fact]
     curve_results = {'factorization': fact_str, 'degs_list': degs, 'len': len(degs)}
     return curve_results
 
 
-def compute_a22_results(curve_list, desc='', verbose = False):
+def compute_a22_results(curve_list, desc='', verbose=False):
     compute_results(curve_list, 'a22', a22_curve_function, desc=desc, verbose=verbose)
 
 
