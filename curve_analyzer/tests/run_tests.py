@@ -14,7 +14,7 @@ try:
     import coloredlogs
 
     coloredlogs.install(level=logging.INFO)
-except Exception as e:
+except ModuleNotFoundError:
     print('E: Package coloredlogs is not installed. No logs will be displayed')
 
 logger = logging.getLogger(__name__)
@@ -44,7 +44,9 @@ def main():
     requiredNamed.add_argument('-n', '--test_name', metavar='test_name', type=str, action='store',
                                help='the test identifier, e.g., a02', required=True)
     requiredNamed.add_argument('-c', '--curve_type', metavar='curve_type', type=str,
-                               help='the type of curves to be tested; must be one of the following: std (all standard curves), sim (all simulated curves), sample (curves secp112r1, secp192r1, secp256r1), all (all curves in the database)',
+                               help='the type of curves to be tested; must be one of the following: std (all standard '
+                                    'curves), sim (all simulated curves), sample (curves secp112r1, secp192r1, '
+                                    'secp256r1), all (all curves in the database)',
                                required=True)
     parser.add_argument('-v', '--verbosity', action='store_true', help='verbosity flag (default: False)')
     parser.add_argument('-b', '--order_bound', action='store', type=int, metavar='order_bound', default=256,
