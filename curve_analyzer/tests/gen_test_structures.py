@@ -40,7 +40,7 @@ def main():
     parser = optparse.OptionParser()
     parser.add_option('-t', '--test',
                       action="store", dest="test",
-                      help="list of names for structure generation seperated by comma or \'all\'", default="all")
+                      help="list of names for structure generation separated by comma or \'all\'", default="all")
     options, args = parser.parse_args()
     if options.test == "all":
         for filename in TEST_NAMES:
