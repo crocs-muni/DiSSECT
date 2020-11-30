@@ -164,7 +164,8 @@ class CustomCurve:
             assert self.field_desc['type'] != "Extension"  # TO DO
             if self.form == "Edwards":
                 aa = 1
-            if self.form == "TwistedEdwards":
+            else:
+                # TwistedEdwards case
                 aa = ZZ(self.params['a']['raw'])
             d = ZZ(self.params['d']['raw'])
             p = ZZ(self.field_desc['p'])
@@ -185,8 +186,7 @@ class CustomCurve:
             'type'] + " field"
 
     def __str__(self):
-        return self.name + ": " + str(self.nbits) + "-bit curve in " + self.form + " form over " + self.field_desc[
-            'type'] + " field"
+        return self.__repr__()
 
     def __lt__(self, other):
         return (self.order, self.name) < (other.order, other.name)
