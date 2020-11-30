@@ -190,24 +190,3 @@ class CustomCurve:
 
     def __lt__(self, other):
         return (self.order.nbits(), self.name) < (other.order.nbits(), other.name)
-
-
-# Not using for now
-class SimulatedWeierstrassCurve:
-    def __init__(self, F, a, b, seed):
-        self.F = F
-        self.nbits = self.F.order().nbits()
-        self.a = F(a)
-        self.b = F(b)
-        self.seed = seed
-        self.EC = EllipticCurve(F, [a, b])
-        self.order = self.EC.order()
-
-    def __repr__(self):
-        return str(self.nbits) + "-bit Weierstrass curve"
-
-    def __str__(self):
-        return str(self.nbits) + "-bit Weierstrass curve"
-
-    def __lt__(self, other):
-        return self.order < other.order
