@@ -1,6 +1,6 @@
 import json
 
-from sage.rings import integer
+from sage.all import Integer
 
 
 # from sage.all import polynomial_modn_dense_ntl
@@ -8,7 +8,7 @@ from sage.rings import integer
 
 class IntegerEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, integer.Integer):
+        if isinstance(obj, Integer):
             return int(obj)
 
         # if isinstance(obj, polynomial_modn_dense_ntl.Polynomial_dense_mod_p):
