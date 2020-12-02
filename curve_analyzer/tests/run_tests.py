@@ -55,7 +55,7 @@ def main():
                         help='the list of cofactors the curve can have (default: [1])')
 
     args = parser.parse_args()
-    if not re.search(r'[ais][0-9][0-9]', args.test_name):
+    if not args.test_name in TEST_NAMES:
         print("please enter a valid test identifier, e.g., a02")
         exit()
     print(args)

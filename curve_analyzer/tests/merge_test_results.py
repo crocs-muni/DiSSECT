@@ -6,7 +6,7 @@ import os
 import re
 
 from pathlib import Path
-from curve_analyzer.definitions import TEST_PATH
+from curve_analyzer.definitions import TEST_PATH, TEST_NAMES
 from curve_analyzer.utils.json_handler import load_from_json, save_into_json
 
 
@@ -28,7 +28,7 @@ parser = argparse.ArgumentParser(description='Test results merger')
 parser.add_argument('-n', '--test_name', type=str, help='Name of the test')
 args = parser.parse_args()
 test_name = args.test_name
-assert re.search(r'[ais][0-9][0-9]', test_name)
+assert test_name in TEST_NAMES
 
 # initialize original results
 results_file_name = Path(TEST_PATH, test_name, test_name + '.json')
