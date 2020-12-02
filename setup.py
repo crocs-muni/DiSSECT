@@ -34,5 +34,13 @@ setup(name='DiSSECT',
       }
       )
 
-os.system(Path(TEST_PATH, "gen_params.py"))
-os.system(Path(TEST_PATH, "gen_test_structures.py"))
+import importlib.util
+spec = importlib.util.spec_from_file_location("gen_params", Path(TEST_PATH, "gen_params.py"))
+gen_params = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(gen_params)
+gen_params.main()
+spec = importlib.util.spec_from_file_location("gen_test", Path(TEST_PATH, "gen_test_structures.py"))
+gen_test = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(gen_test)
+gen_test.main()
+
