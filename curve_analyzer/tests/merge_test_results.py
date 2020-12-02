@@ -42,8 +42,8 @@ files = [item for item in Path(TEST_PATH, test_name).iterdir() if item.is_file()
 for file in files:
     if file.suffix != '.json' or "part" not in file.name:
         continue
-    with open(file, 'r') as f:
-        partial_results = json.load(f)
+    partial_results = load_from_json(file)
+
     dict_update_rec(total_results, partial_results)
     tmp_file_name = Path(TEST_PATH, test_name, test_name + '.tmp')
     save_into_json(total_results, tmp_file_name, 'w+')
