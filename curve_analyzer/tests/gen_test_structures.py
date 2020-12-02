@@ -53,4 +53,6 @@ def main():
             compute_results(name)
 
 
-main()
+if __name__ == '__main__':
+   main()
+
