@@ -60,7 +60,7 @@
 
 &test a22: {
   "params_global": {
-    "l_range": "prime_range(20)"
+    "l_range": "prime_range(7)"
   },
   "params_local_names": [
     "l"
