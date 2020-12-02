@@ -50,5 +50,9 @@ for file in files:
     file.unlink()
 
     # delete the old result file and rename the temp one
-    results_file_name.unlink()
+    try:
+        results_file_name.unlink()
+    except FileNotFoundError:
+        pass
+
     tmp_file_name.rename(results_file_name)
