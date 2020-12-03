@@ -19,32 +19,29 @@ def dict_update_rec(a, b):
         a[key] = a_value
 
 def merge_results(test_name):
-
-    # initialize original results
-    results_file_name = Path(TEST_PATH, test_name, test_name + '.json')
-    if results_file_name.is_file():
-        total_results = load_from_json(results_file_name)
-    else:
-        total_results = {}
-
-    # iterate through partial results in the same folder and merge them together with the original ones, then delete them
+    # iterate through partial results in the same folder and interatively merge them together
+    new_results = {}
     files = [item for item in Path(TEST_PATH, test_name).iterdir() if
              item.is_file() and item.suffix == '.json' and "part" in item.name]
     for file in files:
         partial_results = load_from_json(file)
+        dict_update_rec(new_results, partial_results)
 
-        dict_update_rec(total_results, partial_results)
+    # merge the new results with the old ones, if they exist
+    total_results_name = Path(TEST_PATH, test_name, test_name + '.json')
+    if total_results_name.is_file():
+        total_results = load_from_json(total_results_name)
+        dict_update_rec(new_results, total_results)
         tmp_file_name = Path(TEST_PATH, test_name, test_name + '.tmp')
-        save_into_json(total_results, tmp_file_name, 'w+')
+        save_into_json(new_results, tmp_file_name, 'w+')
+        total_results_name.unlink()
+        tmp_file_name.rename(total_results_name)
+    else:
+        save_into_json(new_results, total_results_name, 'w+')
+
+    # delete the partial results
+    for file in files:
         file.unlink()
-
-        # delete the old result file and rename the temp one
-        try:
-            results_file_name.unlink()
-        except FileNotFoundError:
-            pass
-
-        tmp_file_name.rename(results_file_name)
 
 if __name__ == '__main__':
     import argparse
