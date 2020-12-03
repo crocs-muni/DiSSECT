@@ -6,6 +6,7 @@ from curve_analyzer.utils.json_handler import load_from_json, save_into_json
 
 
 def dict_update_rec(a, b):
+    """Recursively update the first dictionary using keys and values in the second."""
     for key in b.keys():
         if key not in a.keys():
             a[key] = b[key]
@@ -18,7 +19,10 @@ def dict_update_rec(a, b):
             a_value = b_value
         a[key] = a_value
 
+
 def merge_results(test_name, verbose=False):
+    """Merge all JSONS with partial results of the given test together with current results. Assumes that the partial results will fit into memory."""
+
     # iterate through partial results in the same folder and interatively merge them together
     new_results = {}
     files = [item for item in Path(TEST_PATH, test_name).iterdir() if
