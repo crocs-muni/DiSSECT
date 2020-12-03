@@ -1,6 +1,7 @@
 #!/usr/bin/env sage
 
 from pathlib import Path
+
 from curve_analyzer.definitions import TEST_PATH, TEST_NAMES
 from curve_analyzer.utils.json_handler import load_from_json, save_into_json
 
@@ -21,7 +22,8 @@ def dict_update_rec(a, b):
 
 
 def merge_results(test_name, verbose=False):
-    """Merge all JSONS with partial results of the given test together with current results. Assumes that the partial results will fit into memory."""
+    """Merge all JSONS with partial results of the given test together with current results. Assumes that the partial
+    results will fit into memory. """
 
     # iterate through partial results in the same folder and interatively merge them together
     new_results = {}
@@ -52,8 +54,11 @@ def merge_results(test_name, verbose=False):
         save_into_json(new_results, total_results_name, 'w+')
 
     # delete the partial results
+    if verbose:
+        print("Deleting old files...")
     for file in files:
         file.unlink()
+
 
 if __name__ == '__main__':
     import argparse
@@ -62,9 +67,8 @@ if __name__ == '__main__':
     parser.add_argument('-n', '--test_name', type=str, help='Name of the test')
     parser.add_argument('-v', '--verbosity', action='store_true', help='verbosity flag (default: False)')
     args = parser.parse_args()
-    test_name = args.test_name
-    if test_name not in TEST_NAMES:
+    if args.test_name not in TEST_NAMES:
         print("please enter a valid test identifier, e.g., a02")
         exit()
 
-    merge_results(test_name, verbose=args.verbosity)
+    merge_results(args.test_name, verbose=args.verbosity)

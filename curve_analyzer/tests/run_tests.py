@@ -5,7 +5,6 @@
 import argparse
 import logging
 import os
-import re
 
 from curve_analyzer.definitions import TEST_PATH, TEST_NAMES
 from curve_analyzer.utils.parallel.job_manager.manager import ParallelRunner, Task, TaskResult
@@ -55,7 +54,7 @@ def main():
                         help='the list of cofactors the curve can have (default: [1])')
 
     args = parser.parse_args()
-    if not args.test_name in TEST_NAMES:
+    if args.test_name not in TEST_NAMES:
         print("please enter a valid test identifier, e.g., a02")
         exit()
     print(args)
