@@ -1,9 +1,5 @@
 #!/usr/bin/env sage
 
-import json
-import os
-import re
-
 from pathlib import Path
 from curve_analyzer.definitions import TEST_PATH, TEST_NAMES
 from curve_analyzer.utils.json_handler import load_from_json, save_into_json
@@ -63,3 +59,7 @@ if __name__ == '__main__':
         exit()
 
     merge_results(test_name)
+
+    from jsonmerge import merge
+
+    total_results = merge(total_results, partial_results)
