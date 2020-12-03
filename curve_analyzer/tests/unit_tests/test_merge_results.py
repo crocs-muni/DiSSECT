@@ -2,8 +2,8 @@ import unittest
 from pathlib import Path
 
 from curve_analyzer.definitions import TEST_PATH
-from curve_analyzer.utils.json_handler import save_into_json, load_from_json
 from curve_analyzer.tests.merge_test_results import merge_results
+from curve_analyzer.utils.json_handler import save_into_json, load_from_json
 
 merge_inputs = [
     {
@@ -175,13 +175,18 @@ class Test_merge_test_results(unittest.TestCase):
     def test_merging_and_file_manipulation(self):
         tmp_test = Path(TEST_PATH, "a00")
         tmp_test.mkdir()
-        for (i, merge_input) in enumerate(merge_inputs):
-            save_into_json(merge_input,
-                           Path(tmp_test, "a00_part" + str(i+1).zfill(4) + "_of_" + str(len(merge_inputs)).zfill(4) + ".json"),
-                           'w+')
-        merge_results("a00")
-        results = load_from_json(Path(tmp_test, "a00.json"))
-        self.assertEqual(results, merge_output)
+
+        for _ in range(2):
+            # check functionality without and with already existing result file
+            for (i, merge_input) in enumerate(merge_inputs):
+                save_into_json(merge_input,
+                               Path(tmp_test, "a00_part" + str(i + 1).zfill(4) + "_of_" + str(len(merge_inputs)).zfill(
+                                   4) + ".json"),
+                               'w+')
+            merge_results("a00")
+            results = load_from_json(Path(tmp_test, "a00.json"))
+            self.assertEqual(results, merge_output)
+
         Path(tmp_test, "a00.json").unlink()
         tmp_test.rmdir()
 
