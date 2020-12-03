@@ -18,7 +18,7 @@ def dict_update_rec(a, b):
             a_value = b_value
         a[key] = a_value
 
-def merge_results(test_name):
+def merge_results(test_name, verbose=False):
     # iterate through partial results in the same folder and interatively merge them together
     new_results = {}
     files = [item for item in Path(TEST_PATH, test_name).iterdir() if
@@ -26,6 +26,8 @@ def merge_results(test_name):
     for file in files:
         partial_results = load_from_json(file)
         dict_update_rec(new_results, partial_results)
+        if verbose:
+            print("Results from " + file.name + " merged")
 
     # merge the new results with the old ones, if they exist
     total_results_name = Path(TEST_PATH, test_name, test_name + '.json')
@@ -48,10 +50,11 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Test results merger')
     parser.add_argument('-n', '--test_name', type=str, help='Name of the test')
+    parser.add_argument('-v', '--verbosity', action='store_true', help='verbosity flag (default: False)')
     args = parser.parse_args()
     test_name = args.test_name
     if test_name not in TEST_NAMES:
         print("please enter a valid test identifier, e.g., a02")
         exit()
 
-    merge_results(test_name)
+    merge_results(test_name, verbose=args.verbosity)
