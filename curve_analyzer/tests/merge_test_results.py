@@ -28,10 +28,9 @@ def merge_results(test_name):
         total_results = {}
 
     # iterate through partial results in the same folder and merge them together with the original ones, then delete them
-    files = [item for item in Path(TEST_PATH, test_name).iterdir() if item.is_file()]
+    files = [item for item in Path(TEST_PATH, test_name).iterdir() if
+             item.is_file() and item.suffix == '.json' and "part" in item.name]
     for file in files:
-        if file.suffix != '.json' or "part" not in file.name:
-            continue
         partial_results = load_from_json(file)
 
         dict_update_rec(total_results, partial_results)
