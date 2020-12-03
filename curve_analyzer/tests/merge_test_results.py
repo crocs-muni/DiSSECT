@@ -36,13 +36,19 @@ def merge_results(test_name, verbose=False):
     # merge the new results with the old ones, if they exist
     total_results_name = Path(TEST_PATH, test_name, test_name + '.json')
     if total_results_name.is_file():
+        if verbose:
+            print("Merging with the old results...")
         total_results = load_from_json(total_results_name)
         dict_update_rec(new_results, total_results)
         tmp_file_name = Path(TEST_PATH, test_name, test_name + '.tmp')
+        if verbose:
+            print("Saving into JSON...")
         save_into_json(new_results, tmp_file_name, 'w+')
         total_results_name.unlink()
         tmp_file_name.rename(total_results_name)
     else:
+        if verbose:
+            print("Saving into JSON...")
         save_into_json(new_results, total_results_name, 'w+')
 
     # delete the partial results
