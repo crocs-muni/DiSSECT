@@ -25,8 +25,8 @@ def merge_results(test_name, verbose=False):
 
     # iterate through partial results in the same folder and interatively merge them together
     new_results = {}
-    files = [item for item in Path(TEST_PATH, test_name).iterdir() if
-             item.is_file() and item.suffix == '.json' and "part" in item.name]
+    files = sorted([item for item in Path(TEST_PATH, test_name).iterdir() if
+                    item.is_file() and item.suffix == '.json' and "part" in item.name])
     for file in files:
         partial_results = load_from_json(file)
         dict_update_rec(new_results, partial_results)
