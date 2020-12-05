@@ -1,7 +1,7 @@
 #!/usr/bin/env sage
 import ast
 import json
-import optparse
+import argparse
 import sys
 from pathlib import Path
 
@@ -9,46 +9,45 @@ from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_NAMES
 from curve_analyzer.tests.example_curves import curves
 from curve_analyzer.utils.json_handler import save_into_json, load_from_json
 
-
-def parse(text):
-    try:
-        value = int(text)
-    except:
-        try:
-            value = json.loads(text)
-        except:
-            pass
-    if isinstance(text, list):
-        value = [parse(i) for i in text]
-    return value
-
-
-def create_structure_file(name):
-    f = open(Path(TEST_PATH, name, name + ".params"), "r")
-    params = ast.literal_eval(f.read())
-    f.close()
-    local_params = params["params_local_names"]
+def load_params_local(local_params):
     if local_params:
         print("Input parameters: ")
     params = []
     for param_name in local_params:
-        param_value = parse(input(param_name + ": "))
+        try:
+            param_value = json.loads(input(param_name + ": "))
+        except json.decoder.JSONDecodeError:
+            print("Invalid format")
+            return False
         params.append(param_value)
+    return params
+
+
+def create_structure_file(name):
+    with open(Path(TEST_PATH, name, name + ".params"), "r") as f:
+        params = json.loads(f.read())
+    params_names = params["params_local_names"]
+    params = load_params_local(params_names)
+
     module_name = TEST_MODULE_PATH + '.' + name + '.' + name
     __import__(module_name)
     curve_function = getattr(sys.modules[module_name], name + "_curve_function")
-    params_local = str(dict(zip(local_params, params)))
+
     result = {}
     for curve in curves:
         print("Curve " + curve.name + ": ")
         result[curve.name] = {}
         computed_result = curve_function(curve, *params)
         for key in computed_result.keys():
-            key_result = parse(input("Result for " + key + ": "))
+            try:
+                key_result = json.loads(input("Result for " + key + ": "))
+            except json.decoder.JSONDecodeError:
+                print("Invalid format")
+                return False
             if computed_result[key] != key_result and str(computed_result[key]) != key_result:
                 print("Wrong result, should be: " + str(computed_result[key]))
                 return False
-        result[curve.name][params_local] = computed_result
+        result[curve.name][str(dict(zip(params_names, params)))] = computed_result
     json_file = TEST_PATH + "/" + name + "/" + name + '_structure.json'
     save_into_json(result, json_file, mode='w')
     return True
@@ -61,9 +60,10 @@ def create_unittest(name):
         if answer in "[n,N]":
             return
     f = open(Path(TEST_PATH, "unit_tests", "test_" + name + ".py"), "w")
+
     f.write("import unittest, ast\n")
     f.write("from curve_analyzer.tests." + name + "." + name + " import " + name + "_curve_function\n")
-    f.write("from curve_analyzer.tests.testing_curves import curves, curve_names\n")
+    f.write("from curve_analyzer.tests.example_curves import curves, curve_names\n")
     f.write("results=" + str(results) + "\n")
     f.write("\nclass Test" +name[0].upper()+ name[1:] + "(unittest.TestCase):\n \n")
     for curve in results.keys():
@@ -75,62 +75,37 @@ def create_unittest(name):
     f.write("\nif __name__ == '__main__':\n")
     f.write("   unittest.main()\n")
     f.write("   print(\"Everything passed\")\n")
+
     f.close()
 
 
 tests_to_skip = ['a08']
 
 
-def all_tests(structure, unittest):
-    for filename in TEST_NAMES:
-        if filename in tests_to_skip:
-            continue
-        if structure:
-            create_structure_file(filename)
-        if unittest:
-            create_unittest(filename)
-
-
 def main():
-    parser = optparse.OptionParser()
-    parser.add_option('-u', '--unittest',
-                      action="store", dest="unittest",
-                      help="list of names for unittest separated by comma or \'all\'", default="_")
+    parser = argparse.ArgumentParser(
+        description='Create unit tests or structure files or both(default).')
+    parser.add_argument("-u", action='store_true', help='only unittest flag (default: False)')
+    parser.add_argument('-s', action='store_true', help='only structure file flag (default: False)')
+    requiredNamed = parser.add_argument_group('required named arguments')
+    requiredNamed.add_argument('-n', '--test_name', metavar='test_name', type=str, action='store',
+                               help='List names of the tests seperated by comma or all; available tests: ' + ", ".join(TEST_NAMES), required=True)
 
-    parser.add_option('-s', '--structure',
-                      action="store", dest="structure",
-                      help="list of names for structure files separated by comma or \'all\'", default="_")
-    parser.add_option('-b', '--both',
-                      action="store", dest="both",
-                      help="list of names for unittest and structure files separated by comma or \'all\'", default="_")
-
-    options, args = parser.parse_args()
-    if options.both != "_":
-        if options.both.strip() == "all":
-            all_tests(True, True)
-        else:
-            tests = options.both.split(",")
-            for name in tests:
-                if create_structure_file(name.strip()):
-                    create_unittest(name.strip())
-
-    elif options.unittest != "_":
-        if options.unittest.strip() == "all":
-            all_tests(False, True)
-        else:
-            tests = options.unittest.split(",")
-            for name in tests:
-                create_unittest(name.strip())
-
-    elif options.structure != "_":
-        if options.structure.strip() == "all":
-            all_tests(True, False)
-        else:
-            tests = options.structure.split(",")
-            for name in tests:
-                create_structure_file(name.strip())
+    args = parser.parse_args()
+    if args.test_name=="all":
+        test_name = TEST_NAMES
     else:
-        print("Something's wrong")
+        test_name = [n.strip() for n in args.test_name.split(",")]
+    test_name = list(set(test_name)-set(tests_to_skip))
+    for name in test_name:
+            if args.u:
+                create_unittest(name)
+                continue
+            if args.s:
+                create_structure_file(name)
+                continue
+            if create_structure_file(name):
+                create_unittest(name)
 
 
 if __name__ == '__main__':
