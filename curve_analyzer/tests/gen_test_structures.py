@@ -9,7 +9,7 @@ from sage.misc.sage_eval import sage_eval
 
 from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_NAMES
 from curve_analyzer.tests.example_curves import curves
-from curve_analyzer.utils.json_handler import save_into_json
+from curve_analyzer.utils.json_handler import save_into_json, load_from_json
 
 tests_to_skip = ['a08']
 
@@ -18,7 +18,6 @@ def compute_results(test_name):
     module_name = TEST_MODULE_PATH + '.' + test_name + '.' + test_name
     __import__(module_name)
     curve_function = getattr(sys.modules[module_name], test_name + "_curve_function")
-    main_json_file = Path(TEST_PATH, test_name, test_name + '_structure' + '.json')
     params_file = Path(TEST_PATH, test_name, test_name + '.params')
     results = {}
     for curve in curves:
@@ -33,7 +32,17 @@ def compute_results(test_name):
     params_local = dict(zip(params_local_names, params_local_values))
     for curve in curves:
         results[curve.name][str(params_local)] = curve_function(curve, *params_local_values)
-    save_into_json(results, main_json_file, mode='w')
+
+    # Generate/update structure file
+    structure_file = Path(TEST_PATH, test_name, test_name + '_structure' + '.json')
+    if structure_file.is_file():
+        old_results = load_from_json(structure_file)
+        if old_results != results:
+            save_into_json(results, structure_file, mode='w')
+            print("Params file updated for", test_name)
+    else:
+        save_into_json(results, structure_file, mode='w')
+        print("Params file created for", test_name)
 
 
 def main(imported=False):
