@@ -14,16 +14,17 @@ from curve_analyzer.definitions import TEST_PATH
 from curve_analyzer.utils.json_handler import save_into_json, load_from_json
 
 
-# Returns the current datetime as CEST
 def get_timestamp():
+    """Returns the current datetime as CEST."""
     cest = pytz.timezone('Europe/Prague')
     now = datetime.now()
     now = cest.localize(now)
     return datetime.isoformat(now, sep='_', timespec='seconds')[:-6]
 
 
-# Class for managing logs for each curve test
 class Logs:
+    """Class for managing logs for each curve test."""
+
     def __init__(self, test_name, desc=''):
         self.desc = desc
         self.main_log_file = None
@@ -65,8 +66,8 @@ class Logs:
             f.close()
 
 
-# Deduces paths to JSON files from the test name
 def init_json_paths(test_name, desc=''):
+    """Deduces paths to JSON files from the test name."""
     path_main_json = os.path.join(TEST_PATH, test_name, test_name + '.json')
     path_json = os.path.join(TEST_PATH, test_name, test_name + '_' + desc + '_' + get_timestamp() + '.json')
     # tmp name must be unique for parallel test runs
@@ -118,8 +119,8 @@ def is_structure_new(old, curve_function, curve):
     return not compare_structures(model_structure, computed)
 
 
-# Tries to run tests for each individual curve; called by compute_results
 def update_curve_results(curve, curve_function, params_global, params_local_names, old_results, log_obj, verbose=False):
+    """Tries to run tests for each individual curve; called by compute_results."""
     log_obj.write_to_logs("Processing curve " + curve.name + ":", newlines=1, verbose_print=verbose)
     new_results = {}
     new_struct = is_structure_new(old_results, curve_function, curve)
@@ -139,9 +140,10 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
     return new_results[curve.name]
 
 
-# A universal function for running tests on curve lists; it is called by each test file which has its own curve function.
-# Each test is assumed to have a params file in its folder; the results and logs are created there as well.
 def compute_results(curve_list, test_name, curve_function, desc='', verbose=False):
+    """A universal function for running tests on curve lists; it is called by each test file which has its own curve
+    function. Each test is assumed to have a params file in its folder; the results and logs are created there as
+    well. """
     main_json_file, json_file, tmp_file, params_file = init_json_paths(test_name, desc)
     if curve_list == []:
         print("No input curves found, terminating the test.")
@@ -205,8 +207,9 @@ def init_txt_paths(test_name, desc=''):
     return name + '.txt'
 
 
-# Visualizes test results from the relevant JSON; the functions get_captions are select_results are provided by each test separately
 def pretty_print_results(curve_list, test_name, get_captions, select_results, curve_sort_key="bits", save_to_txt=True):
+    """Visualizes test results from the relevant JSON; the functions get_captions are select_results are provided by
+    each test separately. """
     path_main_json, _, _, _ = init_json_paths(test_name)
     results = load_from_json(path_main_json)
 
@@ -235,9 +238,9 @@ def pretty_print_results(curve_list, test_name, get_captions, select_results, cu
             f.write(str(t))
 
 
-# https://ask.sagemath.org/question/10112/kill-the-thread-in-a-long-computation/
-# stops the function func after 'timeout_duration' seconds
 def timeout(func, args=(), kwargs=None, timeout_duration=10):
+    """Stops the function func after 'timeout_duration' seconds, taken from
+    https://ask.sagemath.org/question/10112/kill-the-thread-in-a-long-computation/. """
     if kwargs is None:
         kwargs = {}
 
@@ -246,7 +249,3 @@ def timeout(func, args=(), kwargs=None, timeout_duration=10):
         return func(*args, **kwargs)
 
     return my_new_func()
-
-
-def remove_values_from_list(l, val):
-    return [value for value in l if value != val]

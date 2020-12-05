@@ -133,4 +133,5 @@ def main():
         print("Something's wrong")
 
 
-main()
+if __name__ == '__main__':
+    main()

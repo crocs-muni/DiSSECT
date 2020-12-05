@@ -4,10 +4,12 @@
 
 import argparse
 import sys
+
 from curve_analyzer.definitions import TEST_NAMES
 from curve_analyzer.utils.curve_handler import import_curves
 
-if __name__ == '__main__':
+
+def main():
     parser = argparse.ArgumentParser(
         description='Welcome to Curve analyzer! It allows you to run tests on a selected subset of standard or '
                     'simulated curves.')
@@ -49,3 +51,7 @@ if __name__ == '__main__':
                                 allowed_cofactors=args.allowed_cofactors,
                                 chunks_total=args.chunks_total, chunk=args.chunk)
     test_function(curves_list, desc=args.description, verbose=args.verbosity)
+
+
+if __name__ == '__main__':
+    main()

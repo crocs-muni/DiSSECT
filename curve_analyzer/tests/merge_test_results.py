@@ -1,15 +1,13 @@
 #!/usr/bin/env sage
 
-import argparse
-import json
-import os
-import re
+from pathlib import Path
 
-from curve_analyzer.definitions import TEST_PATH
+from curve_analyzer.definitions import TEST_PATH, TEST_NAMES
 from curve_analyzer.utils.json_handler import load_from_json, save_into_json
 
 
 def dict_update_rec(a, b):
+    """Recursively update the first dictionary using keys and values in the second."""
     for key in b.keys():
         if key not in a.keys():
             a[key] = b[key]
@@ -23,35 +21,54 @@ def dict_update_rec(a, b):
         a[key] = a_value
 
 
-parser = argparse.ArgumentParser(description='Test results merger')
-parser.add_argument('-n', '--test_name', type=str, help='Name of the test')
-args = parser.parse_args()
-test_name = args.test_name
-assert re.search(r'[ais][0-9][0-9]', test_name)
+def merge_results(test_name, verbose=False):
+    """Merge all JSONS with partial results of the given test together with current results. Assumes that the partial
+    results will fit into memory. """
 
-# initialize original results
-results_file_name = os.path.join(TEST_PATH, test_name, test_name + '.json')
-if os.path.isfile(results_file_name):
-    total_results = load_from_json(results_file_name)
-else:
-    total_results = {}
-
-# iterate through partial results and merge them together with the original ones, then delete them
-for root, _, files in os.walk(os.path.join(TEST_PATH, test_name)):
+    # iterate through partial results in the same folder and interatively merge them together
+    new_results = {}
+    files = sorted([item for item in Path(TEST_PATH, test_name).iterdir() if
+                    item.is_file() and item.suffix == '.json' and "part" in item.name])
     for file in files:
-        if file.split('.')[-1] != 'json' or "part" not in file:
-            continue
-        fname = os.path.join(root, file)
-        with open(fname, 'r') as f:
-            partial_results = json.load(f)
-        dict_update_rec(total_results, partial_results)
-        tmp_file_name = os.path.join(TEST_PATH, test_name, test_name + '.tmp')
-        save_into_json(total_results, tmp_file_name, 'w+')
-        os.remove(fname)
+        partial_results = load_from_json(file)
+        dict_update_rec(new_results, partial_results)
+        if verbose:
+            print("Results from " + file.name + " merged")
 
-        # delete the old result file and rename the temp one
-        try:
-            os.remove(results_file_name)
-        except OSError:
-            pass
-        os.rename(tmp_file_name, results_file_name)
+    # merge the new results with the old ones, if they exist
+    total_results_name = Path(TEST_PATH, test_name, test_name + '.json')
+    if total_results_name.is_file():
+        if verbose:
+            print("Merging with the old results...")
+        total_results = load_from_json(total_results_name)
+        dict_update_rec(new_results, total_results)
+        tmp_file_name = Path(TEST_PATH, test_name, test_name + '.tmp')
+        if verbose:
+            print("Saving into JSON...")
+        save_into_json(new_results, tmp_file_name, 'w+')
+        total_results_name.unlink()
+        tmp_file_name.rename(total_results_name)
+    else:
+        if verbose:
+            print("Saving into JSON...")
+        save_into_json(new_results, total_results_name, 'w+')
+
+    # delete the partial results
+    if verbose:
+        print("Deleting old files...")
+    for file in files:
+        file.unlink()
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Test results merger')
+    parser.add_argument('-n', '--test_name', type=str, help='Name of the test')
+    parser.add_argument('-v', '--verbosity', action='store_true', help='verbosity flag (default: False)')
+    args = parser.parse_args()
+    if args.test_name not in TEST_NAMES:
+        print("please enter a valid test identifier, e.g., a02")
+        exit()
+
+    merge_results(args.test_name, verbose=args.verbosity)
