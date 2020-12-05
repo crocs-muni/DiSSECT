@@ -29,8 +29,8 @@ setup(name='DiSSECT',
       packages=find_packages(),
       install_requires=install_requires,
       entry_points={
-          'console_scripts': ['run_tests_single=curve_analyzer.run_tests_single:main',
-                              'merge_test_results=curve_analyzer.merge_test_results:main']
+          'console_scripts': ['run_tests_single=curve_analyzer.tests.run_tests_single:main',
+                              'merge_test_results=curve_analyzer.tests.merge_test_results:main']
       }
       )
 
@@ -39,8 +39,7 @@ spec = importlib.util.spec_from_file_location("gen_params", Path(TEST_PATH, "gen
 gen_params = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(gen_params)
 gen_params.main()
-spec = importlib.util.spec_from_file_location("gen_test", Path(TEST_PATH, "gen_test_structures.py"))
-gen_test = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(gen_test)
-gen_test.main()
-
+spec2 = importlib.util.spec_from_file_location("gen_test", Path(TEST_PATH, "gen_test_structures.py"))
+gen_test = importlib.util.module_from_spec(spec2)
+spec2.loader.exec_module(gen_test)
+gen_test.main(True)
