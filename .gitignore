@@ -16,6 +16,7 @@ curve_analyzer/tests/**/*.txt
 curve_analyzer/utils/parallel/results/*
 curve_analyzer/curves_json_sim/*
 /curve_analyzer.egg-info/
+DiSSECT.egg-info
 curve_analyzer/__pycache__/
 curve_analyzer/tests/__pycache__/
 curve_analyzer/tests/a01/__pycache__/
