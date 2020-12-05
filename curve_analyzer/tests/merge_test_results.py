@@ -4,7 +4,7 @@ from pathlib import Path
 
 from curve_analyzer.definitions import TEST_PATH, TEST_NAMES
 from curve_analyzer.utils.json_handler import load_from_json, save_into_json
-
+import argparse
 
 def dict_update_rec(a, b):
     """Recursively update the first dictionary using keys and values in the second."""
@@ -60,9 +60,7 @@ def merge_results(test_name, verbose=False):
         file.unlink()
 
 
-if __name__ == '__main__':
-    import argparse
-
+def main():
     parser = argparse.ArgumentParser(description='Test results merger')
     parser.add_argument('-n', '--test_name', type=str, help='Name of the test')
     parser.add_argument('-v', '--verbosity', action='store_true', help='verbosity flag (default: False)')
@@ -72,3 +70,6 @@ if __name__ == '__main__':
         exit()
 
     merge_results(args.test_name, verbose=args.verbosity)
+
+if __name__ == '__main__':
+    main()

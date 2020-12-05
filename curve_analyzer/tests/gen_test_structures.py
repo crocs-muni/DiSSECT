@@ -45,7 +45,13 @@ def compute_results(test_name):
         print("Params file created for", test_name)
 
 
-def main():
+def main(imported=False):
+    if imported:
+        for filename in TEST_NAMES:
+            if filename in tests_to_skip:
+                continue
+            compute_results(filename)
+        return
     parser = optparse.OptionParser()
     parser.add_option('-t', '--test',
                       action="store", dest="test",
@@ -64,4 +70,3 @@ def main():
 
 if __name__ == '__main__':
    main()
-
