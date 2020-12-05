@@ -87,7 +87,7 @@ B1_results = {"cofactor": 2, "a": 1, "b": 1, "order": 0x040000000000000000000201
               "gen_y": 0x0289070fb05d38ff58321f2e800536d538ccdaa3d9}
 
 
-class Test_custom_curve(unittest.TestCase):
+class TestCustomCurve(unittest.TestCase):
 
     def test_Ed_to_Wei(self):
         result = twisted_edwards_to_short_weierstrass(F, a, d, x, y)

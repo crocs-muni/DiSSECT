@@ -3,7 +3,7 @@ import unittest
 from curve_analyzer.utils.curve_handler import import_curves
 
 
-class Test_import_curves(unittest.TestCase):
+class TestImportCurves(unittest.TestCase):
     def test_import_sim(self):
         curves = import_curves(curve_type="sim", order_bound=128, allowed_cofactors=[1])
         self.assertEqual(len(curves), 15916)

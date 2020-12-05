@@ -170,7 +170,7 @@ merge_output = {
 }
 
 
-class Test_merge_test_results(unittest.TestCase):
+class TestMergeTestResults(unittest.TestCase):
 
     def test_merging_and_file_manipulation(self):
         tmp_test = Path(TEST_PATH, "a00")
