@@ -4,7 +4,7 @@ import os
 import random
 import time
 from datetime import datetime
-
+from pathlib import Path
 import pytz
 from prettytable import PrettyTable  # http://zetcode.com/python/prettytable/
 from sage.all import sage_eval
@@ -106,7 +106,7 @@ def compare_structures(struct1, struct2):
 
 def get_model_structure(curve_function):
     name = curve_function.__name__.split("_", 1)[0]
-    with open(TEST_PATH + "/" + name + "/" + name + "_structure.json", 'r') as f:
+    with open(Path(TEST_PATH,name,name+"_structure.json"), 'r') as f:
         results = json.load(f)
     return list(list(results.values())[0].values())[0]
 

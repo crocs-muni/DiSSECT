@@ -5,7 +5,7 @@
 import argparse
 import sys
 
-from curve_analyzer.definitions import TEST_NAMES
+from curve_analyzer.definitions import TEST_NAMES, TEST_MODULE_PATH
 from curve_analyzer.utils.curve_handler import import_curves
 
 
@@ -35,14 +35,13 @@ def main():
 
     args = parser.parse_args()
     tn = args.test_name
-    module_name = tn + '.' + tn
+    module_name = TEST_MODULE_PATH+"."+ tn + '.' + tn
     try:
         __import__(module_name)
     except ModuleNotFoundError:
         print("please enter a valid test identifier, e.g., a02")
         exit()
     test_function = getattr(sys.modules[module_name], "compute_" + tn + "_results")
-
     ctype = args.curve_type
     if ctype not in ["std", "sim", "sample", "all"]:
         print("curve_type must be one of std, sim, sample, all")
