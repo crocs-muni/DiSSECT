@@ -3,9 +3,11 @@ from sage.all import PolynomialRing, NumberField, ZZ
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 
-# Computes the class number of the maximal order of the endomorphism algebra
-# Time consuming
 def a08_curve_function(curve):
+    '''
+    Computes the class number of the maximal order of the endomorphism algebra
+    Time consuming
+    '''
     q = curve.q
     trace = curve.trace
     Q = PolynomialRing(ZZ, 'x')

@@ -6,8 +6,8 @@ DISTANCE_32 = "distance 32"
 DISTANCE_64 = "distance 64"
 
 
-# Computes the distance of curve order to the nearest power of 2 and to the nearest multiple of 32 and 64
 def i07_curve_function(curve):
+    '''Computes the distance of curve order to the nearest power of 2 and to the nearest multiple of 32 and 64'''
     order = curve.order * curve.cofactor
     l = order.nbits() - 1
     u = l + 1

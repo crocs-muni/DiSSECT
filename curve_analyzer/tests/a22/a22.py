@@ -3,9 +3,11 @@ from sage.all import factor
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 
-# Computation factorization of l-th division polynomial
-# Returns a dictionary (keys: 'factorization', 'degs_list', 'len' )
 def a22_curve_function(curve, l):
+    '''
+    Computation factorization of l-th division polynomial
+    Returns a dictionary (keys: 'factorization', 'degs_list', 'len' )
+    '''
     pol = curve.EC.division_polynomial(l)
     fact = [list(i) for i in list(factor(pol))]
     # count multiplicities?

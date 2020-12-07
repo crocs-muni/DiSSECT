@@ -3,8 +3,8 @@ from sage.all import squarefree_part, sqrt
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 
-# Computes the square part of 4*p-1. 4*order-1 (result is square root of the square part)
 def i06_curve_function(curve):
+    '''Computes the square part of 4*p-1. 4*order-1 (result is square root of the square part)'''
     order = curve.order  # * curve.cofactor
     q = curve.q
     a = 4 * q - 1

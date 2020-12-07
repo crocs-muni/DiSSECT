@@ -4,8 +4,8 @@ from curve_analyzer.tests.a05.a05 import ext_card, is_torsion_cyclic
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 
-# Computes the eigenvalues of Frobenius endomorphism in F_l, or in F_l if s=2
 def eigenvalues(curve, l, s=1):
+    '''Computes the eigenvalues of Frobenius endomorphism in F_l, or in F_l if s=2'''
     x = PolynomialRing(GF(l ** s), 'x').gen()
     q = curve.q
     t = curve.trace
@@ -13,10 +13,12 @@ def eigenvalues(curve, l, s=1):
     return f.roots()
 
 
-# Finds the minimal degrees i_2,i_1 of extension of curve E/F_q where
-# E/F_q**(i_2) - all l+1 isogenies are rational, E/F_q**(i_1) - at least 1 isogeny is rational
-# Returns i2, i1
 def i_finder(curve, l):
+    '''
+    Finds the minimal degrees i_2,i_1 of extension of curve E/F_q where
+    E/F_q**(i_2) - all l+1 isogenies are rational, E/F_q**(i_1) - at least 1 isogeny is rational
+    Returns i2, i1
+    '''
     eig = eigenvalues(curve, l)
     # Case with no eigenvalues
     if not eig:
@@ -45,9 +47,11 @@ def i_finder(curve, l):
     return i2, i1
 
 
-# Computes i2,i1 (see i_finder) for all primes l<l_max
-# Returns a dictionary (keys: 'least' (i1), 'full' (i2), 'relative' (i2/i1))
 def a24_curve_function(curve, l):
+    '''
+    Computes i2,i1 (see i_finder) for all primes l<l_max
+    Returns a dictionary (keys: 'least' (i1), 'full' (i2), 'relative' (i2/i1))
+    '''
     curve_results = {}
     try:
         i2, i1 = i_finder(curve, l)

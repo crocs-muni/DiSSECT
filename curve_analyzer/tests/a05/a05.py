@@ -49,9 +49,11 @@ def extend(E, q, deg, field):
     return EE
 
 
-# Computes the smallest extension which contains a nontrivial l-torsion point
-# Returns the degree
 def find_least_torsion(q, order, l):
+    '''
+    Computes the smallest extension which contains a nontrivial l-torsion point
+    Returns the degree
+    '''
     x = PolynomialRing(GF(l ** 2), 'x').gen()
     t = q + 1 - order
 
@@ -62,8 +64,10 @@ def find_least_torsion(q, order, l):
     return min(roots[0].multiplicative_order(), roots[1].multiplicative_order())
 
 
-# True if the l-torsion is cyclic and False otherwise (bycyclic)
 def is_torsion_cyclic(E, q, order, l, deg, field):
+    '''
+    True if the l-torsion is cyclic and False otherwise (bycyclic)
+    '''
     card = ext_card(q, order, deg)
     m = ZZ(card / l)
     EE = extend(E, q, deg, field)
@@ -74,10 +78,12 @@ def is_torsion_cyclic(E, q, order, l, deg, field):
     return False
 
 
-# Computes the smallest extension which contains full l-torsion subgroup
-# Least is the result of find_least_torsion
-# Returns the degree
 def find_full_torsion(E, q, order, l, least, field):
+    '''
+    Computes the smallest extension which contains full l-torsion subgroup
+    Least is the result of find_least_torsion
+    Returns the degree
+    '''
     q_least = q ** least
     k = embedding_degree_q(q_least, l)
     # k satisfies l|a^k-1 where a,1 are eigenvalues of Frobenius of extended E
@@ -93,8 +99,8 @@ def find_full_torsion(E, q, order, l, least, field):
         # Computes k1,k2, k2/k1 where k2(k1) is the smallest extension containing all(some) l-torsion points
 
 
-# Returns a triple
 def find_torsions(E, q, order, l, field):
+    '''Returns a triple of extensions containin torsion'''
     least = find_least_torsion(q, order, l)
     if least == l ** 2 - 1:
         full = least
@@ -105,8 +111,8 @@ def find_torsions(E, q, order, l, field):
     return least, full, ZZ(full / least)
 
 
-# Computes find_torsions for given l and returns a dictionary
 def a05_curve_function(curve, l):
+    '''Computes find_torsions for given l and returns a dictionary'''
     E = curve.EC
     q = curve.q
     order = curve.order * curve.cofactor

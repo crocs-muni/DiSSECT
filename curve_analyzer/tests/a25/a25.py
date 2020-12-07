@@ -4,8 +4,8 @@ from curve_analyzer.tests.a02.a02 import ext_trace
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 
-# Computation of the trace in an extension together with its factorization
 def a25_curve_function(curve, deg):
+    '''Computation of the trace in an extension together with its factorization'''
     trace = ext_trace(curve.q, curve.trace, deg)
     f = list(factor(trace))
     f = [list(i) for i in f]

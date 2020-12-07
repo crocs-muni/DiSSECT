@@ -52,8 +52,8 @@ def get_poly(poly_dict, K):
     return K(poly)
 
 
-# Class for unified representation of curves from databases
 class CustomCurve:
+    '''Class for unified representation of curves from databases'''
 
     def __init__(self, db_curve):
         """the "fixed" part of attributes"""

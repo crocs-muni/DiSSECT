@@ -3,9 +3,11 @@ from sage.all import Integers, ZZ, euler_phi
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results
 
 
-# Computes the order of l (small prime) modulo curve order and bit length of the index of <l>
-# Returns a dictionary
 def a12_curve_function(curve, l):
+    '''
+    Computes the order of l (small prime) modulo curve order and bit length of the index of <l>
+    Returns a dictionary
+    '''
     card = curve.cardinality
     try:
         mul_ord = (Integers(card)(l)).multiplicative_order()
