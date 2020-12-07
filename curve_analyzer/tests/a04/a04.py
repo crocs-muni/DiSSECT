@@ -6,15 +6,6 @@ from curve_analyzer.tests.test_interface import pretty_print_results, compute_re
 TIME = 10
 
 
-def attempt_factor(n, t):
-    '''Factors 'n' in time 't' '''
-    try:
-        factorization = timeout(ecm.factor, [n], timeout_duration=t)
-    except:
-        factorization = None
-    return factorization
-
-
 def near_order_factorizations(n, sign='+', k=10, t=10):
     '''Computer factorization of k*n+1 (k*n-1) if 'sign' is "+" ("-") in time 't' '''
     assert sign in ['+', '-']
@@ -23,17 +14,14 @@ def near_order_factorizations(n, sign='+', k=10, t=10):
         m = k * n + 1
     else:
         m = k * n - 1
-    try:
-        return attempt_factor(m, t)
-    except:
-        return None
+    return timeout(ecm.factor, [m], timeout_duration=t)
 
 
 def largest_factor_bitlen(factorization):
     '''Computes bit length of largest factor(last item of list) of 'factorization' '''
     try:
         bitlen = factorization[-1].nbits()
-    except:
+    except AttributeError:
         bitlen = factorization
     return bitlen
 

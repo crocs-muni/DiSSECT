@@ -1,4 +1,4 @@
-from sage.all import GF
+from sage.all import GF, Integer
 
 from curve_analyzer.tests.test_interface import pretty_print_results, compute_results, timeout
 
@@ -14,19 +14,14 @@ def a01_curve_function(curve, deg):
 
     E_ext = E.base_extend(GF(q ** deg))
     t = TIME
-    try:
-        gens = [timeout(E_ext.abelian_group().gens()[0].order, [], timeout_duration=t)]
-    except:
-        return None
-    try:
-        gens.append(timeout(E_ext.abelian_group().gens()[1].order, [], timeout_duration=t))
-    except:
-        pass
-    curve_results['ord1'] = gens[0]
-    if len(gens) < 2:
+    curve_results['ord1'] = timeout(E_ext.abelian_group().gens()[0].order, [], timeout_duration=t)
+    if not isinstance(curve_results['ord1'],Integer):
         curve_results['ord2'] = 1
-    else:
-        curve_results['ord2'] = gens[1]
+        return curve_results
+    try:
+        curve_results['ord2'] = timeout(E_ext.abelian_group().gens()[1].order, [], timeout_duration=t)
+    except IndexError:
+        curve_results['ord2'] = 1
     return curve_results
 
 
