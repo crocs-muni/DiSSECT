@@ -12,15 +12,15 @@ From the root directory, run `sage --python3 setup.py develop --user` to initial
 
 **Virtual environment with sage**: 
 
-- `sage --python3 -m venv --system-site-packages environment`
+- Create virtual environment for python in sage: `sage --python3 -m venv --system-site-packages environment`
 
-- set environment variable: `os.environ['SAGE_LOCAL'] = 'your_sage_directory/local'`
+- Set environment variable: `os.environ['SAGE_LOCAL'] = 'your_sage_directory/local'`
 
-  You can set it permanently (for each python startup) by creating a file in `environment/lib/python3.7/sitepackages` with `import os; os.environ['SAGE_LOCAL'] = 'your_sage_directory/local'`
+  You can set it **permanently** (for each python startup) by creating a file in `environment/lib/python3.7/sitepackages` with `import os; os.environ['SAGE_LOCAL'] = 'your_sage_directory/local'` in the directory `environment/lib/python3.7/site-packages/`
 
-- `source environment/bin/activate`
+- Activate the environment `source environment/bin/activate`
 
-- `pip3 install .` or `pip3 install --editable .` 
+- Run ``pip3 install --editable .` in curve_analyzer folder
 
 ## Testing the curves
 
