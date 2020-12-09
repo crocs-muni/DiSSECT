@@ -20,7 +20,7 @@ From the root directory, run `sage --python3 setup.py develop --user` to initial
 
 - Activate the environment `source environment/bin/activate`
 
-- Run ``pip3 install --editable .` in curve_analyzer folder
+- Run `pip3 install --editable .` in curve_analyzer folder
 
 ## Testing the curves
 
