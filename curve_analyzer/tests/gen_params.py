@@ -5,9 +5,18 @@ import json
 
 from curve_analyzer.definitions import TEST_PATH
 
+def read_default(path):
+    with open(Path(path),"r") as f:
+        return json.load(f)
+
+def write_file(name, path,to_write, message):
+    with open(path, 'w') as f:
+        json.dump(to_write, f)
+    print(message, name)
+
+
 def main():
-    with open(Path(TEST_PATH, 'default.params'), "r") as f:
-        params = json.load(f)
+    params = read_default(Path(TEST_PATH, 'default.params'))
     for test in params:
         name, to_write = test, params[test]
         Path(TEST_PATH, name).mkdir(parents=True, exist_ok=True)
@@ -16,13 +25,9 @@ def main():
             with open(full_name, 'r') as f:
                 current = f.read()
             if not current == to_write:
-                with open(full_name, 'w') as f:
-                    json.dump(to_write,f)
-                print("Params file updated for", name)
+                write_file(name,full_name,to_write,"Params file updated for")
         else:
-            with open(full_name, 'w') as f:
-                json.dump(to_write,f)
-            print("Params file created for", name)
+            write_file(name,full_name,to_write,"Params file created for")
 
 if __name__ == '__main__':
    main()
