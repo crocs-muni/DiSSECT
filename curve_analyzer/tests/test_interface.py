@@ -1,10 +1,10 @@
 import itertools
 import json
-import os
 import random
 import time
 from datetime import datetime
 from pathlib import Path
+
 import pytz
 from prettytable import PrettyTable  # http://zetcode.com/python/prettytable/
 from sage.all import sage_eval
@@ -36,8 +36,8 @@ class Logs:
         self.create_logs()
 
     def init_log_paths(self, test_name):
-        self.main_log_file = os.path.join(TEST_PATH, test_name, test_name + ".log")
-        self.log_dir = os.path.join(TEST_PATH, test_name, 'logs/')
+        self.main_log_file = Path(TEST_PATH, test_name, test_name + ".log")
+        self.log_dir = Path(TEST_PATH, test_name, 'logs')
         timestamp = get_timestamp()
         if not self.desc == '':
             name = timestamp + "_" + self.desc
@@ -46,12 +46,8 @@ class Logs:
         self.current_log_file = self.log_dir + name + '.log'
 
     def create_logs(self):
-        if not os.path.isdir(self.log_dir):
-            os.mkdir(self.log_dir)
-        if not os.path.exists(self.main_log_file):
-            with open(self.main_log_file, 'w'):
-                pass  # this is just to create the file
-        self.main_log = open(self.main_log_file, 'a')
+        self.log_dir.mkdir(exist_ok=True)
+        self.main_log = open(self.main_log_file, 'a+')
         self.current_log = open(self.current_log_file, 'w')
 
     def write_to_logs(self, text, frmt='{:s}', newlines=0, verbose_print=False):
@@ -68,12 +64,12 @@ class Logs:
 
 def init_json_paths(test_name, desc=''):
     """Deduces paths to JSON files from the test name."""
-    path_main_json = os.path.join(TEST_PATH, test_name, test_name + '.json')
-    path_json = os.path.join(TEST_PATH, test_name, test_name + '_' + desc + '_' + get_timestamp() + '.json')
+    path_main_json = Path(TEST_PATH, test_name, test_name + '.json')
+    path_json = Path(TEST_PATH, test_name, test_name + '_' + desc + '_' + get_timestamp() + '.json')
     # tmp name must be unique for parallel test runs
-    path_tmp = "%s_%04x.tmp" % (path_json.split('.json')[0], random.randrange(2 ** 16))
-    path_params = os.path.join(TEST_PATH, test_name, test_name + '.params')
-    if not os.path.exists(path_json):
+    path_tmp = Path("%s_%04x.tmp" % (path_json.with_suffix(''), random.randrange(2 ** 16)))
+    path_params = Path(TEST_PATH, test_name, test_name + '.params')
+    if not path_json.is_file():
         save_into_json({}, path_json, 'w')
     return path_main_json, path_json, path_tmp, path_params
 
@@ -106,7 +102,7 @@ def compare_structures(struct1, struct2):
 
 def get_model_structure(curve_function):
     name = curve_function.__name__.split("_", 1)[0]
-    with open(Path(TEST_PATH,name,name+"_structure.json"), 'r') as f:
+    with open(Path(TEST_PATH, name, name + "_structure.json"), 'r') as f:
         results = json.load(f)
     return list(list(results.values())[0].values())[0]
 
@@ -156,7 +152,7 @@ def compute_results(curve_list, test_name, curve_function, desc='', verbose=Fals
         old_results = {}
 
     new_results = {}
-    if not os.path.exists(params_file):
+    if not params_file.is_file():
         print("No parameter file found, terminating the test.")
         return
     params = load_from_json(params_file)
@@ -196,12 +192,12 @@ def compute_results(curve_list, test_name, curve_function, desc='', verbose=Fals
 
     log_obj.write_to_logs(80 * '.' + "\n" + "Finished, total time elapsed: " + str(total_time) + "\n\n" + 80 * '#',
                           newlines=3, verbose_print=verbose)
-    os.remove(json_file)
-    os.rename(tmp_file, json_file)
+    json_file.unlink()
+    tmp_file.rename(json_file)
 
 
 def init_txt_paths(test_name, desc=''):
-    name = os.path.join(TEST_PATH, + test_name, test_name)
+    name = Path(TEST_PATH, + test_name, test_name)
     if not desc == '':
         name += "_" + desc
     return name + '.txt'
