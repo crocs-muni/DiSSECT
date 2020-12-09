@@ -192,6 +192,8 @@ def compute_results(curve_list, test_name, curve_function, desc='', verbose=Fals
 
     log_obj.write_to_logs(80 * '.' + "\n" + "Finished, total time elapsed: " + str(total_time) + "\n\n" + 80 * '#',
                           newlines=3, verbose_print=verbose)
+    log_obj.close_logs()
+
     json_file.unlink()
     tmp_file.rename(json_file)
 
