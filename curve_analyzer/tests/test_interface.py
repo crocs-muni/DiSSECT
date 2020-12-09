@@ -67,7 +67,7 @@ def init_json_paths(test_name, desc=''):
     path_main_json = Path(TEST_PATH, test_name, test_name + '.json')
     path_json = Path(TEST_PATH, test_name, test_name + '_' + desc + '_' + get_timestamp() + '.json')
     # tmp name must be unique for parallel test runs
-    path_tmp = Path("%s_%04x.tmp" % (path_json.with_suffix(''), random.randrange(2 ** 16)))
+    path_tmp = Path("%s_%04x.tmp" % (path_json.with_suffix(''), random.randrange(2 ** 32)))
     path_params = Path(TEST_PATH, test_name, test_name + '.params')
     if not path_json.is_file():
         save_into_json({}, path_json, 'w')
