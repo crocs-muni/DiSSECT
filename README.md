@@ -56,7 +56,7 @@ i06    | square parts of $`4q-1`$ and $`4n-1`$                                  
 i07    | distance of $`n`$ from the nearest power of two and multiple of 32/64             | :white_check_mark: | :white_check_mark:             | low          | low
 
 Notation: $`n`$ is the curve order, $`q`$ is the order of the base field  
-\* on sim and std curves with at most 256 bits
+\* on sim and std curves with at most 256 bits and cofactor 1    
 \*\* this is very rough and subjective  
 \*\*\* on the above dataset: low is  <100 MB, medium is 100-500 MB, high is >500 MB (measuring JSONs)
 
