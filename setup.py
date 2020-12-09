@@ -30,7 +30,7 @@ setup(name='DiSSECT',
       install_requires=install_requires,
       entry_points={
           'console_scripts': ['run_tests_single=curve_analyzer.tests.run_tests_single:main',
-                              'merge_test_results=curve_analyzer.tests.merge_test_results:main']
+                              'merge_test_results=curve_analyzer.tests.merge_test_results:main','run_tests=curve_analyzer.tests.run_tests:main' ]
       }
       )
 
