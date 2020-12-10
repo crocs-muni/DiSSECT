@@ -72,7 +72,8 @@ def main():
     print("Intermediate values:")
     print(register)
     print("ZVP conditions:")
-    print(sorted(zvp_set, key=lambda x: len(str(x))))
+    zvp_lifted = [x.lift() for x in zvp_set]
+    print(sorted(zvp_lifted, key=lambda x: len(str(x))))
 
 
 if __name__ == '__main__':
