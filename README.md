@@ -52,7 +52,7 @@ a22    | factorizations of small division polynomials                           
 a23    | volcano depth and crater degree in the $`l`$-isogeny graph                        | :white_check_mark: | :white_check_mark: | high         | low
 a24    | field extensions containing nontrivial/full number of $`l`$-isogenies             | :white_check_mark: | :white_check_mark:             | medium       | low
 a25    | trace in field extensions and its factorization                                   | :white_check_mark: | :white_check_mark: | low          | low
-i06    | square parts of $`4q-1`$ and $`4n-1`$                                             | :white_check_mark: | :x:                | low          | low
+i06    | square parts of $`4q-1`$ and $`4n-1`$                                             | :white_check_mark: | :white_check_mark:                | low          | low
 i07    | distance of $`n`$ from the nearest power of two and multiple of 32/64             | :white_check_mark: | :white_check_mark:             | low          | low
 
 Notation: $`n`$ is the curve order, $`q`$ is the order of the base field  
