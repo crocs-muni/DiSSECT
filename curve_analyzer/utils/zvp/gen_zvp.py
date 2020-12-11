@@ -63,10 +63,10 @@ def fill_register(register, formula_file, quotient_ring=ZZ):
 
 
 def main():
-    R = PolynomialRing(ZZ, ('x1', 'y1', 'x2', 'y2', 'a', 'b'))
-    x1, y1, x2, y2, a, b = R.gens()
+    R = PolynomialRing(ZZ, ('a', 'b', 'x1', 'y1', 'x2', 'y2'), order='invlex')
+    a, b, x1, y1, x2, y2, = R.gens()
     Q = QuotientRing(R, R.ideal(y1 ** 2 - x1 ** 3 - a * x1 - b, y2 ** 2 - x2 ** 3 - a * x2 - b),
-                     ('x_1', 'y_1', 'x_2', 'y_2', 'a', 'b'))
+                     ('a', 'b', 'x_1', 'y_1', 'x_2', 'y_2'))
     register = {"X1": x1, "Y1": y1, "X2": x2, "Y2": y2, "Z1": 1, "Z2": 1}
     zvp_set = fill_register(register, formula_file='addition_formula_1.txt', quotient_ring=Q)
     print("Intermediate values:")
