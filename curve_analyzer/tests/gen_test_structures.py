@@ -39,10 +39,10 @@ def compute_results(test_name):
         old_results = load_from_json(structure_file)
         if old_results != results:
             save_into_json(results, structure_file, mode='w')
-            print("Structure file updated for ", test_name)
+            print("Structure file updated for", test_name)
     else:
         save_into_json(results, structure_file, mode='w')
-        print("Structure file created for ", test_name)
+        print("Structure file created for", test_name)
 
 
 def main(imported=False):
@@ -69,4 +69,4 @@ def main(imported=False):
 
 
 if __name__ == '__main__':
-   main()
+    main()
