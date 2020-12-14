@@ -5,7 +5,9 @@ venv/
 *.log
 *.pyc
 *.ipynb
-**/.ipynb_checkpoints/
+!curve_analyzer/visual/test_results_multi_comparison.ipynb
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
 curve_analyzer/**/__pycache__
 curve_analyzer/tests/test_launcher.py
 curve_analyzer/tests/.*
