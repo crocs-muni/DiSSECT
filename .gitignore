@@ -1,5 +1,6 @@
 data/
 local/
+venv
 *.log
 *.pyc
 .ipynb_checkpoints/
