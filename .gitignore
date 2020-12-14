@@ -1,16 +1,15 @@
 data/
 local/
 venv/
+.idea/
 *.log
 *.pyc
-.ipynb_checkpoints/
-curve_analyzer/.ipynb_checkpoints/ 
-curve_analyzer/tests/.ipynb_checkpoints
 *.ipynb
+**/.ipynb_checkpoints/
+curve_analyzer/**/__pycache__
 curve_analyzer/tests/test_launcher.py
-curve_analyzer/tests/sample_curves.py
 curve_analyzer/tests/.*
-.idea/
+curve_analyzer/tests/sample_curves.py
 curve_analyzer/tests/**/*.json
 curve_analyzer/tests/**/*.params
 curve_analyzer/tests/**/*.txt
@@ -18,4 +17,3 @@ curve_analyzer/utils/parallel/results/*
 curve_analyzer/curves_json_sim/*
 /curve_analyzer.egg-info/
 DiSSECT.egg-info
-curve_analyzer/**/__pycache__
