@@ -32,7 +32,7 @@ setup(name='DiSSECT',
           'console_scripts': ['run_tests_single=curve_analyzer.tests.run_tests_single:main',
                               'merge_test_results=curve_analyzer.tests.merge_test_results:main','run_tests=curve_analyzer.tests.run_tests:main' ]
       },
-      scripts=['curve_analyzer.tests.gen_test_structures','curve_analyzer.tests.gen_params','curve_analyzer.tests.merge_test_results','curve_analyzer.tests.gen_unittest','curve_analyzer.tests.run_tests','curve_analyzer.tests.run_tests_single']
+      scripts=['curve_analyzer/tests/gen_test_structures.py','curve_analyzer/tests/gen_params.py','curve_analyzer/tests/merge_test_results.py','curve_analyzer/tests/gen_unittest.py','curve_analyzer/tests/run_tests.py','curve_analyzer/tests/run_tests_single.py']
       )
 
 import importlib.util
