@@ -7,21 +7,16 @@
 [![curves](https://badgen.net/badge/curves/158%20std,%20217188%20sim?list=|)](https://github.com/J08nY/std-curves)
 
 # Setup
-
-From the root directory, run `sage --python3 setup.py develop --user` to initialize the project.
-
-**Virtual environment with sage**: 
+**Using virtual environment**:
 
 - Create virtual environment for python in sage: `sage --python3 -m venv --system-site-packages environment`
 
-- Set environment variable: `os.environ['SAGE_LOCAL'] = 'your_sage_directory/local'`
-
-  You can set it **permanently** (for each python startup) by creating a file in `environment/lib/python3.7/sitepackages` with `import os; os.environ['SAGE_LOCAL'] = 'your_sage_directory/local'` in the directory `environment/lib/python3.7/site-packages/`
-
-- Activate the environment `source environment/bin/activate`
+- Activate the environment: `source environment/bin/activate`
 
 - Run `pip3 install --editable .` in curve_analyzer folder
 
+**Alternatively without virtual environment (not recommended)**:  
+From the root directory, run `sage --python3 setup.py develop --user` to initialize the project.
 ## Testing the curves
 
 Run `./run_tests.py` in directory `tests`. Use the `-h` flag to get the help menu. To merge the results of a test (a05 in this case) into single file, run `./merge_test_results.py -n a05`.
