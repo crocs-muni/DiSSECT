@@ -43,7 +43,7 @@ class Logs:
             name = timestamp + "_" + self.desc
         else:
             name = timestamp
-        self.current_log_file = self.log_dir + name + '.log'
+        self.current_log_file = Path(self.log_dir, name + '.log')
 
     def create_logs(self):
         self.log_dir.mkdir(exist_ok=True)
