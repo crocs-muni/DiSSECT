@@ -1,6 +1,6 @@
 import operator
 
-from sage.all import ZZ, Integer, PolynomialRing, QuotientRing, EllipticCurve
+from sage.all import ZZ, Integer, PolynomialRing, QuotientRing, EllipticCurve, GF, next_prime
 
 ops = {
     "+": operator.add,
@@ -107,10 +107,27 @@ class ZVPFinder:
     def __str__(self):
         return '{self.zvp_reduced_sorted}'.format(self=self)
 
+    def find_zvp_roots(self, a, b, q, verbose=False):
+        zvp_roots = set()
+        for p in self.zvp_reduced_sorted:
+            roots_with_multiplicity = p(a=a, b=b).univariate_polynomial().roots(GF(q))
+            if verbose:
+                print(roots_with_multiplicity)
+            for root, m in roots_with_multiplicity:
+                zvp_roots.add(root)
+        return list(zvp_roots)
+
 
 def main():
     ZVP = ZVPFinder('addition_formula_1.txt', multiple=3)
     ZVP.print_zero_conditions()
+    q = next_prime(2 ** 256)
+    a = 1
+    b = 2
+    print("\nFinding ZVP roots over finite field with", q, "elements for a =", a, "and b =", b, ":")
+    roots = ZVP.find_zvp_roots(a, b, q, verbose=True)
+    print("\nAll roots found:")
+    print(roots)
 
 
 if __name__ == '__main__':
