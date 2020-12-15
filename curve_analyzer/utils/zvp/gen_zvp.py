@@ -25,6 +25,7 @@ class ZVPFinder:
 
     def __init__(self, formula_file, multiple):
         self.formula_file = formula_file
+        self.multiple = multiple
         self.register = {"X1": self.x1, "Y1": self.y1, "X2": self.x2, "Y2": self.y2, "Z1": 1, "Z2": 1}
         self.zvp_set = set()
         self.zvp_set = self.fill_register()
@@ -95,7 +96,7 @@ class ZVPFinder:
         for n in self.zvp_sorted:
             print(n)
 
-        print("\nBy setting (x2,y2) = c*(x1,y1), we get:")
+        print("\nBy setting (x2,y2) =", self.multiple, "* (x1,y1), we get:")
         print("x2 =", self.x2_subst)
         print("y2 =", self.y2_subst, "\n")
 
@@ -108,7 +109,7 @@ class ZVPFinder:
 
 
 def main():
-    ZVP = ZVPFinder('addition_formula_1.txt', 3)
+    ZVP = ZVPFinder('addition_formula_1.txt', multiple=3)
     ZVP.print_zero_conditions()
 
 
