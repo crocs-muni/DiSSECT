@@ -102,5 +102,15 @@
 "i07": {
   "params_global": {},
   "params_local_names": []
+},
+
+"i10": {
+  "params_global": {
+    "multiple_range": "range(2, 6)",
+    "formula_file_range": "[\"addition_formula_1.txt\"]"
+  },
+  "params_local_names": [
+    "multiple", "formula_file"
+  ]
 }}
 
