@@ -108,13 +108,15 @@ class ZVPFinder:
         return '{self.zvp_reduced_sorted}'.format(self=self)
 
     def find_zvp_roots(self, a, b, q, verbose=False):
+        E = EllipticCurve(GF(q), [a, b])
         zvp_roots = set()
         for p in self.zvp_reduced_sorted:
             roots_with_multiplicity = p(a=a, b=b).univariate_polynomial().roots(GF(q))
             if verbose:
                 print(roots_with_multiplicity)
             for root, m in roots_with_multiplicity:
-                zvp_roots.add(root)
+                if E.is_x_coord(root):
+                    zvp_roots.add(root)
         return list(zvp_roots)
 
 
@@ -126,7 +128,7 @@ def main():
     b = 2
     print("\nFinding ZVP roots over finite field with", q, "elements for a =", a, "and b =", b, ":")
     roots = ZVP.find_zvp_roots(a, b, q, verbose=True)
-    print("\nAll roots found:")
+    print("\nAll roots corresponding to valid x-coords:")
     print(roots)
 
 
