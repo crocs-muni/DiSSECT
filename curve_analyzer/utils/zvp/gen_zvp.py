@@ -11,11 +11,16 @@ ops = {
 }
 
 
+def eval_binary_function(f, x, y):
+    return [fi(x, y) for fi in f]
+
+
 class ZVPFinder:
-    R = PolynomialRing(ZZ, ('a', 'b', 'x1', 'y1', 'x2', 'y2'), order='invlex(4), lex(2)')
-    a, b, x1, y1, x2, y2 = R.gens()
+    R = PolynomialRing(ZZ, ('a', 'b', 'x1', 'x2', 'y1', 'y2'), order='invlex')
+    a, b, x1, x2, y1, y2 = R.gens()
     Q = QuotientRing(R, R.ideal(y1 ** 2 - x1 ** 3 - a * x1 - b, y2 ** 2 - x2 ** 3 - a * x2 - b),
-                     ('a', 'b', 'x_1', 'y_1', 'x_2', 'y_2'))
+                     ('aa', 'bb', 'x_1', 'x_2', 'y_1', 'y_2'))
+    aa, bb, x_1, x_2, y_1, y_2 = Q.gens()
     E = EllipticCurve(R, [a, b])
 
     def __init__(self, formula_file, multiple):
@@ -23,8 +28,18 @@ class ZVPFinder:
         self.register = {"X1": self.x1, "Y1": self.y1, "X2": self.x2, "Y2": self.y2, "Z1": 1, "Z2": 1}
         self.zvp_set = set()
         self.zvp_set = self.fill_register()
+        self.zvp_lifted = [x.lift() for x in self.zvp_set]
+        self.zvp_sorted = sorted(self.zvp_lifted, key=lambda x: len(str(x)))
         self.mult = self.E.multiplication_by_m(multiple)
-        self.eval_mult = lambda f, x, y: [fi(x, y) for fi in f]
+        self.x2_subst, self.y2_subst = eval_binary_function(self.mult, self.x1, self.y1)
+        self.zvp_substited = [x(x2=self.x2_subst, y2=self.y2_subst) for x in self.zvp_sorted]
+        self.zvp_numerators = [self.Q(x.numerator()).lift() for x in self.zvp_substited]
+        self.zvp_reduced = set()
+        for numerator in self.zvp_numerators:
+            for f, m in numerator.factor():
+                self.add_atomic(f, self.zvp_reduced)
+        self.zvp_reduced_lifted = [x.lift() for x in self.zvp_reduced]
+        self.zvp_reduced_sorted = sorted(self.zvp_reduced_lifted, key=lambda x: len(str(x)))
 
     def interpret_symbol(self, symbol):
         if symbol.isdigit():
@@ -43,25 +58,28 @@ class ZVPFinder:
                 self.add_to_zvp(op, value1, value2)
                 return ops[op](value1, value2)
 
-    def add_atomic(self, value):
+    def add_atomic(self, value, zvp_set):
         try:
             rad = value.lift().radical()
         except (TypeError, AttributeError):
             rad = value.radical()
         if not isinstance(rad, Integer):
             for f, m in rad.factor():
-                if not self.Q(-f) in self.zvp_set:
-                    self.zvp_set.add(self.Q(f))
+                if not self.Q(-f) in zvp_set:
+                    if self.Q(f) == self.y_1:
+                        zvp_set.add(self.Q(self.y1 ** 2))
+                    else:
+                        zvp_set.add(self.Q(f))
 
     def add_to_zvp(self, op, value1, value2):
         if op == '*':
             for value in [value1, value2]:
                 if not isinstance(value, int):
-                    self.add_atomic(value)
+                    self.add_atomic(value, self.zvp_set)
         elif op in ['**', '^']:
-            self.add_atomic(value1)
+            self.add_atomic(value1, self.zvp_set)
         else:
-            self.add_atomic(ops[op](value1, value2))
+            self.add_atomic(ops[op](value1, value2), self.zvp_set)
 
     def fill_register(self):
         with open(self.formula_file) as f:
@@ -72,39 +90,26 @@ class ZVPFinder:
                 self.register[lhs] = self.eval_reg_binary(rhs)
         return self.zvp_set
 
-    def print_ZVP_conditions(self):
-        zvp_lifted = [x.lift() for x in self.zvp_set]
-        zvp_sorted = sorted(zvp_lifted, key=lambda x: len(str(x)))
+    def print_zero_conditions(self):
         print("ZVP conditions for general affine points on E: y^2 = x^3 + ax + b:")
-        print(zvp_sorted, "\n")
-
-        x2_subst, y2_subst = self.eval_mult(self.mult, self.x1, self.y1)
-        print("By setting (x2,y2) = c*(x1,y1), we get:")
-        print("x2 =", x2_subst)
-        print("y2 =", y2_subst, "\n")
-
-        print("Thus the ZVP conditions become:")
-        zvp_substited = [x(x2=x2_subst, y2=y2_subst) for x in zvp_sorted]
-        zvp_numerators = [self.Q(x.numerator()).lift().factor() for x in zvp_substited]
-        zvp_reduced = set()
-        for factorization in zvp_numerators:
-            for f, m in factorization:
-                zvp_reduced.add(f)
-        for n in zvp_numerators:
+        for n in self.zvp_sorted:
             print(n)
 
-        print("")
-        for n in zvp_reduced:
+        print("\nBy setting (x2,y2) = c*(x1,y1), we get:")
+        print("x2 =", self.x2_subst)
+        print("y2 =", self.y2_subst, "\n")
+
+        print("Thus the ZVP conditions become:")
+        for n in self.zvp_reduced_sorted:
             print(n)
 
     def __str__(self):
-        # return 'Intermediate register values:\n{self.register}'.format(self=self)
-        return 'ZVP conditions for general points:\n{self.zvp_set}'.format(self=self)
+        return '{self.zvp_reduced_sorted}'.format(self=self)
 
 
 def main():
     ZVP = ZVPFinder('addition_formula_1.txt', 3)
-    ZVP.print_ZVP_conditions()
+    ZVP.print_zero_conditions()
 
 
 if __name__ == '__main__':
