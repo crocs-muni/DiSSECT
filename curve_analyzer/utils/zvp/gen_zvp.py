@@ -107,7 +107,7 @@ class ZVPFinder:
     def __str__(self):
         return '{self.zvp_reduced_sorted}'.format(self=self)
 
-    def find_zvp_roots(self, a, b, q, verbose=False):
+    def find_points(self, a, b, q, verbose=False):
         E = EllipticCurve(GF(q), [a, b])
         zvp_roots = set()
         for p in self.zvp_reduced_sorted:
@@ -116,7 +116,7 @@ class ZVPFinder:
                 print(roots_with_multiplicity)
             for root, m in roots_with_multiplicity:
                 if E.is_x_coord(root):
-                    zvp_roots.add(root)
+                    zvp_roots.add(E.lift_x(root))
         return list(zvp_roots)
 
 
@@ -127,8 +127,8 @@ def main():
     a = 1
     b = 2
     print("\nFinding ZVP roots over finite field with", q, "elements for a =", a, "and b =", b, ":")
-    roots = ZVP.find_zvp_roots(a, b, q, verbose=True)
-    print("\nAll roots corresponding to valid x-coords:")
+    roots = ZVP.find_points(a, b, q, verbose=True)
+    print("\nCorresponding valid curve points:")
     print(roots)
 
 

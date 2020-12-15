@@ -11,8 +11,8 @@ def i10_curve_function(curve, multiple, formula_file):
     _, _, _, a, b = curve.EC.ainvs()
     formula_path = Path(ZVP_PATH, formula_file)
     ZVP = ZVPFinder(formula_path, multiple)
-    roots = ZVP.find_zvp_roots(a, b, q)
-    curve_results = {"roots": roots, "len": len(roots)}
+    points = ZVP.find_points(a, b, q)
+    curve_results = {"points": points, "len": len(points)}
     return curve_results
 
 
