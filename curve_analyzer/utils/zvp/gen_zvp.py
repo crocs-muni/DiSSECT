@@ -66,7 +66,10 @@ class ZVPFinder:
         try:
             rad = value.lift().radical()
         except (TypeError, AttributeError):
-            rad = value.radical()
+            try:
+                rad = value.radical()
+            except AttributeError:
+                rad = Integer(value).radical()
         if not isinstance(rad, Integer):
             for f, m in rad.factor():
                 if not self.Q(-f) in zvp_set:
