@@ -121,7 +121,10 @@ class ZVPFinder:
 
 
 def main():
-    ZVP = ZVPFinder('addition_formula_1.txt', multiple=3)
+    from curve_analyzer.definitions import EFD_PATH
+    from pathlib import Path
+    formula_file = Path(EFD_PATH, 'shortw', 'projective', 'addition', 'add-2007-bl.op3')
+    ZVP = ZVPFinder(formula_file, multiple=3)
     ZVP.print_zero_conditions()
     q = next_prime(2 ** 256)
     a = 1

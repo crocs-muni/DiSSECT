@@ -7,6 +7,7 @@ CURVE_PATH_SIM = Path(ROOT_DIR, 'curves_json_sim')
 TEST_PATH = Path(ROOT_DIR, 'tests')
 PARALLEL_RESULTS_PATH = Path(ROOT_DIR, 'utils', 'parallel', 'results')
 ZVP_PATH = Path(ROOT_DIR, 'utils', 'zvp')
+EFD_PATH = Path(ROOT_DIR, 'utils', 'efd')
 X962_PATH = Path(ROOT_DIR, 'utils', 'parallel', 'x962')
 TEST_MODULE_PATH = 'curve_analyzer.tests'
 TEST_NAME_CONDITION = r'[ais][0-9][0-9]'
