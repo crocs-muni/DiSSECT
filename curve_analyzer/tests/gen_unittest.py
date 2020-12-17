@@ -1,13 +1,13 @@
 #!/usr/bin/env sage
-import ast
-import json
 import argparse
+import json
 import sys
 from pathlib import Path
 
 from curve_analyzer.definitions import TEST_PATH, TEST_MODULE_PATH, TEST_NAMES
 from curve_analyzer.tests.example_curves import curves
 from curve_analyzer.utils.json_handler import save_into_json, load_from_json
+
 
 def load_params_local(local_params):
     if local_params:
@@ -48,7 +48,7 @@ def create_structure_file(name):
                 print("Wrong result, should be: " + str(computed_result[key]))
                 return False
         result[curve.name][str(dict(zip(params_names, params)))] = computed_result
-    json_file = TEST_PATH + "/" + name + "/" + name + '_structure.json'
+    json_file = Path(TEST_PATH, name, name + '_structure.json')
     save_into_json(result, json_file, mode='w')
     return True
 
