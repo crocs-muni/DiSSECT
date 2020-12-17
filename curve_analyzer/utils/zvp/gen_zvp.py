@@ -26,7 +26,8 @@ class ZVPFinder:
     def __init__(self, formula_file, multiple):
         self.formula_file = formula_file
         self.multiple = multiple
-        self.register = {"X1": self.x1, "Y1": self.y1, "X2": self.x2, "Y2": self.y2, "Z1": 1, "Z2": 1}
+        self.register = {"X1": self.x1, "Y1": self.y1, "X2": self.x2, "Y2": self.y2, "Z1": 1, "Z2": 1, "a": self.a,
+                         "b": self.b, }
         self.zvp_set = set()
         self.zvp_set = self.fill_register()
         self.zvp_lifted = [x.lift() for x in self.zvp_set]
@@ -57,6 +58,8 @@ class ZVPFinder:
                 value1 = self.interpret_symbol(symbol1)
                 value2 = self.interpret_symbol(symbol2)
                 self.add_to_zvp(op, value1, value2)
+                if op in ['**', '^'] and not isinstance(value2, int):
+                    value2 = int(value2.lift())
                 return ops[op](value1, value2)
 
     def add_atomic(self, value, zvp_set):
@@ -78,7 +81,8 @@ class ZVPFinder:
                 if not isinstance(value, int):
                     self.add_atomic(value, self.zvp_set)
         elif op in ['**', '^']:
-            self.add_atomic(value1, self.zvp_set)
+            if not isinstance(value1, int):
+                self.add_atomic(value1, self.zvp_set)
         else:
             self.add_atomic(ops[op](value1, value2), self.zvp_set)
 
