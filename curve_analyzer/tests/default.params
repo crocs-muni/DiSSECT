@@ -107,10 +107,8 @@
 "i10": {
   "params_global": {
     "multiple_range": "range(2, 6)",
-    "formula_file_range": "[\"addition_formula_1.txt\"]"
-  },
+    "formula_file_range": "[\"shortw/projective/addition/add-1998-cmo-2.op3\", \"shortw/projective/addition/add-1998-cmo.op3\", \"shortw/projective/addition/add-2002-bj.op3\", \"shortw/projective/addition/add-2007-bl.op3\", \"shortw/projective/addition/add-2016-rcb.op3\", \"shortw/projective/addition/madd-1998-cmo.op3\", \"shortw/projective/addition/mmadd-1998-cmo.op3\", \"shortw/projective-3/addition/add-1998-cmo-2.op3\", \"shortw/projective-3/addition/add-1998-cmo.op3\", \"shortw/projective-3/addition/add-2002-bj.op3\", \"shortw/projective-3/addition/add-2007-bl.op3\", \"shortw/projective-3/addition/add-2016-rcb.op3\", \"shortw/projective-3/addition/madd-1998-cmo.op3\", \"shortw/projective-3/addition/mmadd-1998-cmo.op3\"]"},
   "params_local_names": [
     "multiple", "formula_file"
   ]
 }}
-
