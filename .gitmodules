@@ -3,3 +3,8 @@
 	url = https://github.com/J08nY/std-curves.git
 	branch = data
 	update = merge
+[submodule "curve_analyzer/utils/efd"]
+	path = curve_analyzer/utils/efd
+	url = https://github.com/J08nY/efd.git
+	branch = master
+	update = merge
