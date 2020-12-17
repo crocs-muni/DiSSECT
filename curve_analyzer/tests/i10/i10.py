@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from curve_analyzer.definitions import ZVP_PATH
+from curve_analyzer.definitions import EFD_PATH
 from curve_analyzer.tests.test_interface import compute_results
 from curve_analyzer.utils.zvp.gen_zvp import ZVPFinder
 
@@ -9,9 +9,11 @@ def i10_curve_function(curve, multiple, formula_file):
     """Computes the roots given by ZVP conditions"""
     q = curve.q
     _, _, _, a, b = curve.EC.ainvs()
-    formula_path = Path(ZVP_PATH, formula_file)
+    formula_path = Path(EFD_PATH, formula_file)
     ZVP = ZVPFinder(formula_path, multiple)
-    points = ZVP.find_points(a, b, q)
+    points = []
+    for point in ZVP.find_points(a, b, q):
+        points.append([point[0], point[1]])
     curve_results = {"points": points, "len": len(points)}
     return curve_results
 

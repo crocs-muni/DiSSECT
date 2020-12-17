@@ -118,7 +118,7 @@ class ZVPFinder:
         """Solves ZVP conditions and finds corresponding curve points. Only works for univariate conditions (i.e.,
         y1 should not be present if x1 is). """
         E = EllipticCurve(GF(q), [a, b])
-        zvp_roots = set()
+        zvp_roots = []
         for p in self.zvp_reduced_sorted:
             try:
                 roots_with_multiplicity = p(a=a, b=b).univariate_polynomial().roots(GF(q))
@@ -127,9 +127,9 @@ class ZVPFinder:
             if verbose:
                 print(roots_with_multiplicity)
             for root, m in roots_with_multiplicity:
-                if E.is_x_coord(root):
-                    zvp_roots.add(E.lift_x(root))
-        return list(zvp_roots)
+                if E.is_x_coord(root) and E.lift_x(root) not in zvp_roots:
+                    zvp_roots.append(E.lift_x(root))
+        return zvp_roots
 
 
 def main():
