@@ -122,7 +122,7 @@ class ZVPFinder:
         for p in self.zvp_reduced_sorted:
             try:
                 roots_with_multiplicity = p(a=a, b=b).univariate_polynomial().roots(GF(q))
-            except TypeError:
+            except (TypeError, AttributeError):
                 continue
             if verbose:
                 print(roots_with_multiplicity)
