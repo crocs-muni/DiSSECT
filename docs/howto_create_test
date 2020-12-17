@@ -8,5 +8,5 @@
 
 When updating a test, remember to regenerate the structure file and params file if needed.
 
-Note that x_curve_function has to return a dict, and its values cannot be tuples (only single elements or lists).
+Note that x_curve_function has to return a dict, and its values cannot be tuples (only single elements or lists (whose elements follow the same restrictions)).
 
