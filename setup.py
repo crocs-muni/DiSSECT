@@ -1,11 +1,10 @@
 #!/usr/bin/env sage
 
-import os
 from pathlib import Path
 
 from setuptools import setup, find_packages
 
-from curve_analyzer.definitions import TEST_PATH
+from curve_analyzer.definitions import TRAIT_PATH
 
 install_requires = [
     'sage>=9.0',
@@ -21,7 +20,7 @@ install_requires = [
 
 setup(name='DiSSECT',
       version='0.2',
-      description='Distinguisher of Standard & Simulated Elliptic Curves through Testing.',
+      description='Distinguisher of Standard & Simulated Elliptic Curves through Traits.',
       url='https://gitlab.fi.muni.cz/x408178/curve_analyzer',
       author='Vladimír Sedláček and Vojtěch Suchánek',
       author_email='vlada.sedlacek@mail.muni.cz',
@@ -29,18 +28,22 @@ setup(name='DiSSECT',
       packages=find_packages(),
       install_requires=install_requires,
       entry_points={
-          'console_scripts': ['run_tests_single=curve_analyzer.tests.run_tests_single:main',
-                              'merge_test_results=curve_analyzer.tests.merge_test_results:main','run_tests=curve_analyzer.tests.run_tests:main' ]
+          'console_scripts': ['run_traits_single=curve_analyzer.traits.run_traits_single:main',
+                              'merge_trait_results=curve_analyzer.traits.merge_trait_results:main',
+                              'run_traits=curve_analyzer.traits.run_traits:main']
       },
-      scripts=['curve_analyzer/tests/gen_test_structures.py','curve_analyzer/tests/gen_params.py','curve_analyzer/tests/merge_test_results.py','curve_analyzer/tests/gen_unittest.py','curve_analyzer/tests/run_tests.py','curve_analyzer/tests/run_tests_single.py']
+      scripts=['curve_analyzer/traits/gen_trait_structures.py', 'curve_analyzer/traits/gen_params.py',
+               'curve_analyzer/traits/merge_trait_results.py', 'curve_analyzer/traits/gen_unittest.py',
+               'curve_analyzer/traits/run_traits.py', 'curve_analyzer/traits/run_traits_single.py']
       )
 
 import importlib.util
-spec = importlib.util.spec_from_file_location("gen_params", Path(TEST_PATH, "gen_params.py"))
+
+spec = importlib.util.spec_from_file_location("gen_params", Path(TRAIT_PATH, "gen_params.py"))
 gen_params = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(gen_params)
 gen_params.main()
-spec2 = importlib.util.spec_from_file_location("gen_test", Path(TEST_PATH, "gen_test_structures.py"))
-gen_test = importlib.util.module_from_spec(spec2)
-spec2.loader.exec_module(gen_test)
-gen_test.main(True)
+spec2 = importlib.util.spec_from_file_location("gen_test", Path(TRAIT_PATH, "gen_trait_structures.py"))
+gen_trait = importlib.util.module_from_spec(spec2)
+spec2.loader.exec_module(gen_trait)
+gen_trait.main(True)

@@ -1,9 +1,9 @@
-# DiSSECT: Distinguisher of Standard & Simulated Elliptic Curves through Testing
+# DiSSECT: Distinguisher of Standard & Simulated Elliptic Curves through Traits
 
 [![pipeline status](https://gitlab.fi.muni.cz/x408178/curve_analyzer/badges/master/pipeline.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/commits/master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/blob/master/LICENSE)
 [![language](https://badgen.net/badge/language/python,sage/purple?list=/)](https://www.sagemath.org/)
-[![tests](https://badgen.net/badge/tests/13/blue)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/tree/master/curve_analyzer/tests)
+[![traits](https://badgen.net/badge/traits/13/blue)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/tree/master/curve_analyzer/traits)
 [![curves](https://badgen.net/badge/curves/158%20std,%20217188%20sim?list=|)](https://github.com/J08nY/std-curves)
 
 # Setup
@@ -17,13 +17,16 @@
 
 **Alternatively without virtual environment (not recommended)**:  
 From the root directory, run `sage --python3 setup.py develop --user` to initialize the project.
-## Testing the curves
 
-Run `./run_tests.py` in directory `tests`. Use the `-h` flag to get the help menu. To merge the results of a test (a05 in this case) into single file, run `./merge_test_results.py -n a05`.
+## Running the curve traits
+
+Run `./run_traits.py` in directory `traits`. Use the `-h` flag to get the help menu. To merge the results of a trait (
+a05 in this case) into single file, run `./merge_trait_results.py -n a05`.
 
 ### Example usage
 
-To run test a05 on all standard curves of bitsizes up to 192 with cofactor 1 or 2 in verbose mode using 3 cores and 100 jobs, run `./run_tests.py -n a05 -c std -v -b 192 -a 1 2 -t 3 -j 100`.
+To run trait a05 on all standard curves of bitsizes up to 192 with cofactor 1 or 2 in verbose mode using 3 cores and 100
+jobs, run `./run_traits.py -n a05 -c std -v -b 192 -a 1 2 -t 3 -j 100`.
 
 ### Supported curve sets
 
@@ -32,7 +35,7 @@ To run test a05 on all standard curves of bitsizes up to 192 with cofactor 1 or 
 - sample: curves secp112r1, secp192r1, secp256r1
 - all: all curves in the database
 
-## Overview of available tests
+## Overview of available traits
 
 | name    | description                                                                       | implemented        |  computed\*        |time req.\*\* |memory req.\*\*\*
 |:-------:| ----------------------------------------------------------------------------------|:------------------:|:------------------:|:------------:|:---------:   
@@ -56,7 +59,7 @@ Notation: $`n`$ is the curve order, $`q`$ is the order of the base field
 \*\* this is very rough and subjective  
 \*\*\* on the above dataset: low is  <100 MB, medium is 100-500 MB, high is >500 MB (measuring JSONs)
 
-## Overview of planned tests
+## Overview of planned traits
 
 | name    | description                                                                       | fully specified        
 |:-------:| ----------------------------------------------------------------------------------|:------------------:
@@ -84,17 +87,19 @@ i08    | properties of quadratic twists                                         
 i09    | quadratic residuosity of $`b`$                                                    | :x:
 s01    | statistical properties of scalar multiplication                                   | :x:
 s02    | distribution of point coordinates in various intervals                            | :x:
-   s03    | properties of other curve models                                                  | :x:
-   s04    | modular polynomials in given $`j`$-invariant                                      | :x:
-   s05    | images of points under isogenies                                                  | :x:
-   s06    | summation polynomials                                                             | :x:
-   s07    | distributions of curves with similar properties                                   | :x:
-   s08    | properties of the function shifting a point by the generator                      | :x:
-
+s03    | properties of other curve models                                                  | :x:
+s04    | modular polynomials in given $`j`$-invariant                                      | :x:
+s05    | images of points under isogenies                                                  | :x:
+s06    | summation polynomials                                                             | :x:
+s07    | distributions of curves with similar properties                                   | :x:
+s08    | properties of the function shifting a point by the generator                      | :x:
 
 ## Unit tests
-Run `sage --python3 -m unittest discover` in directory `tests/unit_tests/`. Only unit tests starting with `test` will be run; those starting with `local` have to be run manually (as they require resources not available on the server).
 
+Run `sage --python3 -m unittest discover` in directory `traits/unit_tests/`. Only unit tests starting with `test` will
+be run; those starting with `local` have to be run manually (as they require resources not available on the server).
 
 ## Parameters and structure
-From directory `tests`, parameter files can be (re)generated by `sage --python3 params.py` and structure files can be (re)generated by `sage --python3 tests/tests_structures.py -t all` (both of these are already done during the setup).
+
+From directory `traits`, parameter files can be (re)generated by `sage --python3 params.py` and structure files can be (
+re)generated by `sage --python3 traits/traits_structures.py -t all` (both of these are already done during the setup).
