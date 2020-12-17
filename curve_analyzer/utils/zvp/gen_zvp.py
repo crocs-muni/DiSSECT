@@ -112,10 +112,15 @@ class ZVPFinder:
         return '{self.zvp_reduced_sorted}'.format(self=self)
 
     def find_points(self, a, b, q, verbose=False):
+        """Solves ZVP conditions and finds corresponding curve points. Only works for univariate conditions (i.e.,
+        y1 should not be present if x1 is). """
         E = EllipticCurve(GF(q), [a, b])
         zvp_roots = set()
         for p in self.zvp_reduced_sorted:
-            roots_with_multiplicity = p(a=a, b=b).univariate_polynomial().roots(GF(q))
+            try:
+                roots_with_multiplicity = p(a=a, b=b).univariate_polynomial().roots(GF(q))
+            except TypeError:
+                continue
             if verbose:
                 print(roots_with_multiplicity)
             for root, m in roots_with_multiplicity:
@@ -127,7 +132,7 @@ class ZVPFinder:
 def main():
     from curve_analyzer.definitions import EFD_PATH
     from pathlib import Path
-    formula_file = Path(EFD_PATH, 'shortw', 'projective', 'addition', 'add-2007-bl.op3')
+    formula_file = Path(EFD_PATH, 'shortw', 'projective', 'addition', 'add-2016-rcb.op3')
     ZVP = ZVPFinder(formula_file, multiple=3)
     ZVP.print_zero_conditions()
     q = next_prime(2 ** 256)
