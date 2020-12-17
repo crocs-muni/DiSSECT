@@ -8,6 +8,12 @@ TEST_PATH = Path(ROOT_DIR, 'tests')
 PARALLEL_RESULTS_PATH = Path(ROOT_DIR, 'utils', 'parallel', 'results')
 ZVP_PATH = Path(ROOT_DIR, 'utils', 'zvp')
 EFD_PATH = Path(ROOT_DIR, 'utils', 'efd')
+EFD_SHORTW_PROJECTIVE_ADDITION_PATH = Path(EFD_PATH, 'shortw', 'projective', 'addition')
+EFD_SHORTW_PROJECTIVE_ADDITION_FORMULAS = [f for f in EFD_SHORTW_PROJECTIVE_ADDITION_PATH.iterdir() if
+                                           f.suffix == '.op3']
+EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_PATH = Path(EFD_PATH, 'shortw', 'projective-3', 'addition')
+EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_FORMULAS = [f for f in EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_PATH.iterdir() if
+                                                  f.suffix == '.op3']
 X962_PATH = Path(ROOT_DIR, 'utils', 'parallel', 'x962')
 TEST_MODULE_PATH = 'curve_analyzer.tests'
 TEST_NAME_CONDITION = r'[ais][0-9][0-9]'
