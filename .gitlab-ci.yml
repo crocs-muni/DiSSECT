@@ -2,6 +2,9 @@ image:
   name: sagemath/sagemath:latest
   entrypoint: [ "" ]
 
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
 stages:
   - test
 
