@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from sage.all import ZZ
+
 from curve_analyzer.definitions import EFD_PATH
 from curve_analyzer.traits.trait_interface import compute_results
 from curve_analyzer.utils.zvp.gen_zvp import ZVPFinder
@@ -12,7 +14,7 @@ def i10_curve_function(curve, multiple, formula_file):
     formula_path = Path(EFD_PATH, formula_file)
     ZVP = ZVPFinder(formula_path, multiple)
     points = []
-    for point in ZVP.find_points(a, b, q):
+    for point in ZVP.find_points(ZZ(a), ZZ(b), q):
         points.append([point[0], point[1]])
     curve_results = {"points": points, "len": len(points)}
     return curve_results
