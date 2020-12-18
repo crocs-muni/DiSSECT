@@ -127,7 +127,7 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
 
     for params_local_values in itertools.product(*params_global.values()):
         params_local = dict(zip(params_local_names, params_local_values))
-        log_obj.write_to_logs("\tProcessing params " + str(params_local), frmt='{:.<60}', verbose_print=verbose)
+        log_obj.write_to_logs("    Processing params " + str(params_local), frmt='{:.<107}', verbose_print=verbose)
         if curve.name in old_results and str(params_local) in old_results[curve.name] and not new_struct:
             log_obj.write_to_logs("Already computed", newlines=1, verbose_print=verbose)
         else:
