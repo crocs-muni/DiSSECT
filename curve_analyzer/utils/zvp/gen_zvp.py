@@ -141,11 +141,12 @@ class ZVPFinder:
         (as polynomials over GF(q)). """
         zvp_evaluated_nonconst = []
         for p in self.zvp_univariate:
-            p_eval = p(a=a, b=b).univariate_polynomial().change_ring(PolynomialRing(GF(q), 'x'))
-            # print(p_eval, p_eval.parent())
-            if not p_eval.is_constant() or p_eval == 0:
+            p_eval = p(a=a, b=b).univariate_polynomial()
+            if not p_eval.is_constant():
                 zvp_evaluated_nonconst.append(p_eval)
-        return zvp_evaluated_nonconst
+            elif GF(q)(p_eval) == 0 :
+                zvp_evaluated_nonconst.append(GF(q)(p_eval))
+        return sorted(zvp_evaluated_nonconst)
 
     def find_points(self, a, b, q, verbose=False):
         """Solves ZVP conditions and finds corresponding curve points. Only works properly for nonzero univariate
