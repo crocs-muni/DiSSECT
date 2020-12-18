@@ -103,16 +103,16 @@ class ZVPFinder:
 
     def print_zvp_conditions(self):
         print("ZVP conditions for general affine points on E: y^2 = x^3 + ax + b:")
-        for n in self.zvp_sorted:
-            print(n)
+        for p in self.zvp_sorted:
+            print(p.polynomial(self.x1))
 
         print("\nBy setting (x2,y2) =", self.multiple, "* (x1,y1), we get:")
         print("x2 =", self.x2_subst)
         print("y2 =", self.y2_subst, "\n")
 
         print("Thus the ZVP conditions become (after eliminating linear occurences of y1):")
-        for n in self.zvp_univariate:
-            print(n)
+        for p in self.zvp_univariate:
+            print(p.polynomial(self.x1))
 
     def __str__(self):
         return '{self.zvp_reduced_sorted}'.format(self=self)
@@ -130,7 +130,7 @@ class ZVPFinder:
                 r, _ = roots_wrt_y[0]
                 # use the curve equation as a rational function and substitute for y1
                 curve_function = (self.y1 ** 2 - self.x1 ** 3 - self.a * self.x1 - self.b) / 1
-                p_univariate = curve_function(y1=r).numerator()
+                p_univariate = self.R(curve_function(y1=r).numerator())
             else:
                 p_univariate = p
             zvp_univariate.append(p_univariate)
