@@ -72,7 +72,7 @@ class ZVPFinder:
                 rad = Integer(value).radical()
         if not isinstance(rad, Integer):
             for f, m in rad.factor():
-                if not self.Q(-f) in zvp_set:
+                if not isinstance(f, Integer) and not isinstance(f, int) and not self.Q(-f) in zvp_set:
                     if self.Q(f) == self.y_1:
                         zvp_set.add(self.Q(self.y1 ** 2))
                     else:
