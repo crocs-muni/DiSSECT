@@ -69,7 +69,11 @@ def curve_gen(curve_db, curve_type, order_bound, verbose, binary, extension, sin
                 continue
             if verbose:
                 print(curve['name'])
-            yield CustomCurve(curve)
+            try:
+                yield CustomCurve(curve)
+            except TypeError:
+                print("Skipping curve", curve['name'], "(an error occurred)")
+                continue
 
 
 def custom_curves(curve_db, curve_type, order_bound, verbose, binary, extension, single_curve, allowed_cofactors):
