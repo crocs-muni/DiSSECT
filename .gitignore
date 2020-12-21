@@ -3,6 +3,7 @@ local/
 venv/
 .idea/
 *.log
+*.tmp
 *.pyc
 *.ipynb
 !curve_analyzer/visual/trait_results_multi_comparison.ipynb
