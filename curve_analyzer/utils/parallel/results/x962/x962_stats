@@ -1,0 +1,6 @@
+X9.62 stats
+128b	5000000 seeds tried: 93796 curves found, 15916 of them with cofactor 1
+160b	5000000 seeds tried: 67584 curves found, 12509 of them with cofactor 1
+192b	5000000 seeds tried: 24663 curves found,  8303 of them with cofactor 1
+224b	5000000 seeds tried: 16058 curves found,  9360 of them with cofactor 1
+256b	5000000 seeds tried: 15087 curves found,  8101 of them with cofactor 1
