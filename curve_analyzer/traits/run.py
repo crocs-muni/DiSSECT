@@ -56,22 +56,22 @@ def producer(database, trait, args, queue, lock):
         queue.put((None, None))
 
 
-def consumer(database, trait, queue, lock):
+def consumer(identifier, database, trait, queue, lock):
     db = connect(database)
     trait_function = get_trait_function(trait)
     if not trait_function:
         with lock:
-            print("Consumer ", os.getpid(), "could not be initialized.")
+            print(f"Consumer {identifier:2d} could not be initialized")
         return
 
     with lock:
-        print("Consumer ", os.getpid(), "started.")
+        print(f"Consumer {identifier:2d} started")
 
     while True:
         curve, params = queue.get()
         if curve is params is None:
             with lock:
-                print("Consumer ", os.getpid(), "stopped.")
+                print(f"Consumer {identifier:2d} stopped")
             return
         if is_solved(db, curve, trait, params):
             continue
@@ -106,7 +106,7 @@ def main():
     queue = Queue(1000)
     lock = Lock()
 
-    consumers = [Process(target=consumer, args=(args.database, args.trait_name, queue, lock)) for _ in range(args.jobs)]
+    consumers = [Process(target=consumer, args=(i, args.database, args.trait_name, queue, lock)) for i in range(1, args.jobs + 1)]
     for proc in consumers:
         proc.daemon = True
         proc.start()
