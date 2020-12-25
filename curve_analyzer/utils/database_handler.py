@@ -77,11 +77,19 @@ def get_curves(db, filters):
 
 # TODO this should be IMO handled by the traits - after finishing computation transform Sage values into Python values
 def _cast_sage_types(result):
+    if isinstance(result, int):
+        return result if abs(result) < 2 ** 63 else hex(result)
+
     if isinstance(result, Integer):
-        return cast if (cast := int(result)) < 2 ** 63 else hex(cast)
-    elif isinstance(result, dict):
+        return _cast_sage_types(int(result))
+
+    if isinstance(result, dict):
         for key, value in result.items():
             result[key] = _cast_sage_types(value)
+    elif isinstance(result, list):
+        for idx, value in enumerate(result):
+            result[idx] = _cast_sage_types(value)
+
     return result
 
 
