@@ -20,15 +20,19 @@ def connect(database=None):
 
 
 def upload_curves(db, path):
-    with open(path, "r") as f:
-        curves = json.load(f)
+    try:
+        with open(path, "r") as f:
+            curves = json.load(f)
 
-    if not isinstance(curves, list):  # inconsistency between simulated and standard format
-        curves = curves["curves"]
+        if not isinstance(curves, list):  # inconsistency between simulated and standard format
+            curves = curves["curves"]
+    except:  # invalid format
+        return 0, 0
+
     for curve in curves:
         curve["simulated"] = True if "sim" in curve["category"] else False
         if isinstance(curve["order"], int):
-            curve["order"] = hex(curve["order"])[2:]
+            curve["order"] = hex(curve["order"])
 
     success = 0
     for curve in curves:
@@ -63,13 +67,18 @@ def get_curves(db, filters):
     if filters.allowed_cofactors:
         curve_filter["cofactor"] = { "$in": list(map(int, filters.allowed_cofactors)) }
 
-    return map(CustomCurve, db.curves.find(curve_filter))
+    # Cursor tends to timeout -> collect the results first (memory heavy)
+    curves = list(db.curves.find(curve_filter))
+    # Alternative solution, but it needs to be freed (curves.close() or with construct)
+    # curves = db.curves.find(curve_filter, no_cursor_timeout=True)
+
+    return map(CustomCurve, curves)
 
 
 # TODO this should be IMO handled by the traits - after finishing computation transform Sage values into Python values
 def _cast_sage_types(result):
     if isinstance(result, Integer):
-        return int(result)
+        return cast if (cast := int(result)) < 2 ** 63 else hex(cast)
     elif isinstance(result, dict):
         for key, value in result.items():
             result[key] = _cast_sage_types(value)
