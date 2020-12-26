@@ -76,7 +76,6 @@ def consumer(identifier, database, trait, queue, lock):
         if is_solved(db, curve, trait, params):
             continue
         trait_result = trait_function(curve, **params)
-        # TODO can crash due to DB constrait violation when storing duplicate (curve, params) pair - should not happen unless two producers are being executed in parallel, but the exception can be handled anyway
         store_trait_result(db, curve, trait, params, trait_result)
 
 
