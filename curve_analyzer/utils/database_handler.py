@@ -1,32 +1,34 @@
 import json
 
 from pymongo import MongoClient
+from pymongo.database import Database
 from pymongo.errors import DuplicateKeyError
 from curve_analyzer.utils.custom_curve import CustomCurve
 from sage.all import Integer
+from typing import Optional, Tuple, Iterable, Dict, Any
 
 
-def create_curves_index(db):
-    db["curves"].create_index([("name", 1)], unique=True)
-
-
-def create_trait_index(db, trait):
-    db[f"trait_{trait}"].create_index([("curve", 1), ("params", 1)], unique=True)
-
-
-def connect(database=None):
+def connect(database: Optional[str] = None) -> Database:
     client = MongoClient(database)
     return client["dissect"]
 
 
-def upload_curves(db, path):
+def create_curves_index(db: Database) -> None:
+    db["curves"].create_index([("name", 1)], unique=True)
+
+
+def create_trait_index(db: Database, trait: str) -> None:
+    db[f"trait_{trait}"].create_index([("curve", 1), ("params", 1)], unique=True)
+
+
+def upload_curves(db: Database, path: str) -> Tuple[int, int]:
     try:
         with open(path, "r") as f:
             curves = json.load(f)
 
         if not isinstance(curves, list):  # inconsistency between simulated and standard format
             curves = curves["curves"]
-    except:  # invalid format
+    except Exception:  # invalid format
         return 0, 0
 
     for curve in curves:
@@ -45,8 +47,8 @@ def upload_curves(db, path):
     return success, len(curves)
 
 
-def get_curves(db, filters):
-    curve_filter = {}
+def get_curves(db: Database, filters: Any) -> Iterable[CustomCurve]:
+    curve_filter: Dict[str, Any] = {}
 
     # Curve type filter
     if filters.curve_type == "sim":
@@ -76,7 +78,7 @@ def get_curves(db, filters):
 
 
 # TODO this should be IMO handled by the traits - after finishing computation transform Sage values into Python values
-def _cast_sage_types(result):
+def _cast_sage_types(result: Any) -> Any:
     if isinstance(result, int):
         return result if abs(result) < 2 ** 63 else hex(result)
 
@@ -93,7 +95,7 @@ def _cast_sage_types(result):
     return result
 
 
-def store_trait_result(db, curve, trait, params, result):
+def store_trait_result(db: Database, curve: CustomCurve, trait: str, params: Dict[str, Any], result: Dict[str, Any]) -> bool:
     trait_result = { "curve": curve.name }
     trait_result["params"] = _cast_sage_types(params)
     trait_result["result"] = _cast_sage_types(result)
@@ -103,7 +105,7 @@ def store_trait_result(db, curve, trait, params, result):
         return False
 
 
-def is_solved(db, curve, trait, params):
+def is_solved(db: Database, curve: CustomCurve, trait: str, params: Dict[str, Any]) -> bool:
     trait_result = { "curve": curve.name }
     trait_result["params"] = _cast_sage_types(params)
     return db[f"trait_{trait}"].find_one(trait_result) is not None
