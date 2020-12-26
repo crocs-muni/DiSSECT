@@ -97,7 +97,10 @@ def store_trait_result(db, curve, trait, params, result):
     trait_result = { "curve": curve.name }
     trait_result["params"] = _cast_sage_types(params)
     trait_result["result"] = _cast_sage_types(result)
-    db[f"trait_{trait}"].insert_one(trait_result)
+    try:
+        return db[f"trait_{trait}"].insert_one(trait_result).acknowledged
+    except DuplicateKeyError:
+        return False
 
 
 def is_solved(db, curve, trait, params):
