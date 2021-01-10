@@ -47,6 +47,32 @@ def upload_curves(db: Database, path: str) -> Tuple[int, int]:
     return success, len(curves)
 
 
+def upload_results(db: Database, trait_name: str, path: str) -> Tuple[int, int]:
+    try:
+        with open(path, "r") as f:
+            results = json.load(f)
+    except Exception:  # invalid format
+        return 0, 0
+
+    success = 0
+    total = 0
+    for curve, result in results.items():
+        for params, values in result.items():
+            params = params.replace("'", '"')
+            total += 1
+            record = {
+                "curve": curve,
+                "params": json.loads(params),
+                "result": _cast_sage_types(values)
+            }
+            try:
+                if db[f"trait_{trait_name}"].insert_one(record):
+                    success += 1
+            except:
+                pass
+    return success, total
+
+
 def get_curves(db: Database, filters: Any) -> Iterable[CustomCurve]:
     curve_filter: Dict[str, Any] = {}
 
@@ -113,12 +139,13 @@ def is_solved(db: Database, curve: CustomCurve, trait: str, params: Dict[str, An
 
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) < 2:
-        print(f"USAGE: python {sys.argv[0]} [database_uri] <curve_files...>", file=sys.stderr)
+    if len(sys.argv) < 3 or not sys.argv[1] in ("curves", "results"):
+        print(f"USAGE: python {sys.argv[0]} curves [database_uri] <curve_files...>", file=sys.stderr)
+        print(f"   OR: python {sys.argv[0]} results [database_uri] <trait_name> <results_file>", file=sys.stderr)
         sys.exit(1)
 
     database_uri = "mongodb://localhost:27017/"
-    args = sys.argv[1:]
+    args = sys.argv[2:]
     for idx, arg in enumerate(args):
         if "mongodb://" in arg:
             database_uri = arg
@@ -127,8 +154,17 @@ if __name__ == "__main__":
 
     print(f"Connecting to database {database_uri}")
     db = connect(database_uri)
-    create_curves_index(db)
-    for curves_file in args:
-        print(f"Loading curves from file {curves_file}")
-        uploaded, total = upload_curves(db, curves_file)
+
+    if sys.argv[1] == "curves":
+        for curves_file in args:
+            print(f"Loading curves from file {curves_file}")
+            create_curves_index(db)
+            uploaded, total = upload_curves(db, curves_file)
+            print(f"Successfully uploaded {uploaded} out of {total}")
+    else:
+        trait_name = args[0]
+        results_file = args[1]
+        print(f"Loading trait {trait_name} results from file {results_file}")
+        create_trait_index(db, trait_name)
+        uploaded, total = upload_results(db, trait_name, results_file)
         print(f"Successfully uploaded {uploaded} out of {total}")
