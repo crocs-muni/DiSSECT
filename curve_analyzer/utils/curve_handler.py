@@ -1,5 +1,6 @@
 import json
 import os
+from pathlib import Path
 
 from sage.all import ZZ
 
@@ -20,9 +21,9 @@ def import_curve_db(ignore_sim=True):
 
         # import std curves
         for file in files:
-            if os.path.splitext(file)[-1] != ".json":
+            if Path(file).suffix != ".json":
                 continue
-            with open(os.path.join(path, file)) as f:
+            with open(Path(path, file)) as f:
                 curve_db[source] = json.load(f)
 
     if not ignore_sim:
@@ -34,9 +35,9 @@ def import_curve_db(ignore_sim=True):
 
             # import std curves
             for file in files:
-                if os.path.splitext(file)[-1] != ".json":
+                if Path(file).suffix != ".json":
                     continue
-                with open(os.path.join(path, file)) as f:
+                with open(Path(path, file)) as f:
                     curve_db[source] = json.load(f)
     return curve_db
 
