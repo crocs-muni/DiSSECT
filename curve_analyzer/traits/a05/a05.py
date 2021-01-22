@@ -64,14 +64,14 @@ def find_least_torsion(q, order, l):
     return min(roots[0].multiplicative_order(), roots[1].multiplicative_order())
 
 
-def is_torsion_cyclic(E, q, order, l, deg, field):
+def is_torsion_cyclic(E, q, order, l, deg, field, iterations=10):
     '''
-    True if the l-torsion is cyclic and False otherwise (bycyclic)
+    True if the l-torsion is cyclic and False otherwise (bycyclic). Note that this is probabilistic only.
     '''
     card = ext_card(q, order, deg)
     m = ZZ(card / l)
     EE = extend(E, q, deg, field)
-    for _ in range(1, 6):
+    for _ in range(iterations):
         P = EE.random_element()
         if not (m * P == EE(0)):
             return True
