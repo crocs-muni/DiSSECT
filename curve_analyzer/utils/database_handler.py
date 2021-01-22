@@ -1,11 +1,14 @@
 import json
+from pathlib import Path
+from typing import Optional, Tuple, Iterable, Dict, Any
 
 from pymongo import MongoClient
 from pymongo.database import Database
 from pymongo.errors import DuplicateKeyError
-from curve_analyzer.utils.custom_curve import CustomCurve
 from sage.all import Integer
-from typing import Optional, Tuple, Iterable, Dict, Any
+
+from curve_analyzer.definitions import CURVE_PATH, CURVE_PATH_SIM, TRAIT_NAMES, TRAIT_PATH
+from curve_analyzer.utils.custom_curve import CustomCurve
 
 
 def connect(database: Optional[str] = None) -> Database:
@@ -141,7 +144,9 @@ if __name__ == "__main__":
     import sys
     if len(sys.argv) < 3 or not sys.argv[1] in ("curves", "results"):
         print(f"USAGE: python {sys.argv[0]} curves [database_uri] <curve_files...>", file=sys.stderr)
+        print(f"USAGE: python {sys.argv[0]} curves [database_uri] all", file=sys.stderr)
         print(f"   OR: python {sys.argv[0]} results [database_uri] <trait_name> <results_file>", file=sys.stderr)
+        print(f"   OR: python {sys.argv[0]} results [database_uri] all", file=sys.stderr)
         sys.exit(1)
 
     database_uri = "mongodb://localhost:27017/"
@@ -155,16 +160,36 @@ if __name__ == "__main__":
     print(f"Connecting to database {database_uri}")
     db = connect(database_uri)
 
-    if sys.argv[1] == "curves":
-        for curves_file in args:
+
+    def upload_curves_from_files(curve_files_list):
+        for curves_file in curve_files_list:
             print(f"Loading curves from file {curves_file}")
             create_curves_index(db)
             uploaded, total = upload_curves(db, curves_file)
             print(f"Successfully uploaded {uploaded} out of {total}")
-    else:
-        trait_name = args[0]
-        results_file = args[1]
+
+
+    def upload_results_from_file(trait_name, results_file):
         print(f"Loading trait {trait_name} results from file {results_file}")
         create_trait_index(db, trait_name)
         uploaded, total = upload_results(db, trait_name, results_file)
         print(f"Successfully uploaded {uploaded} out of {total}")
+
+
+    if sys.argv[1] == "curves":
+        if args == ['all']:
+            import glob
+
+            upload_curves_from_files(glob.glob(str(CURVE_PATH) + "/*/*.json"))
+            upload_curves_from_files(glob.glob(str(CURVE_PATH_SIM) + "/*/*/*.json"))
+        else:
+            upload_curves_from_files(args)
+    else:
+        if args == ['all']:
+            for trait_name in TRAIT_NAMES:
+                results_file = Path(TRAIT_PATH, trait_name, str(trait_name) + ".json")
+                upload_results_from_file(trait_name, results_file)
+        else:
+            trait_name = args[0]
+            results_file = args[1]
+            upload_results_from_file(trait_name, results_file)
