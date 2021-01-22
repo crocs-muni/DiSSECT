@@ -96,11 +96,9 @@ def find_full_torsion(E, q, order, l, least, field):
         else:  # geom. multiplicity is 1
             return l * least
 
-        # Computes k1,k2, k2/k1 where k2(k1) is the smallest extension containing all(some) l-torsion points
-
 
 def find_torsions(E, q, order, l, field):
-    '''Returns a triple of extensions containin torsion'''
+    '''Returns a triple of extensions containing torsion'''
     least = find_least_torsion(q, order, l)
     if least == l ** 2 - 1:
         full = least
