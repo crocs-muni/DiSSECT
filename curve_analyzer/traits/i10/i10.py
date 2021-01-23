@@ -15,7 +15,7 @@ def i10_curve_function(curve, multiple, formula_file):
     ZVP = ZVPFinder(formula_path, multiple)
     points = []
     for point in ZVP.find_points(ZZ(a), ZZ(b), q):
-        points.append([point[0], point[1]])
+        points.append([ZZ(point[0]), ZZ(point[1])])
     curve_results = {"points": points, "len": len(points)}
     return curve_results
 
