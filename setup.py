@@ -16,6 +16,7 @@ install_requires = [
     'pid>=2.0.1',
     'coloredlogs',
     'shellescape',
+    'pymongo',
 ]
 
 setup(name='DiSSECT',
