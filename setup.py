@@ -20,10 +20,10 @@ install_requires = [
 ]
 
 setup(name='DiSSECT',
-      version='0.2',
+      version='0.3',
       description='Distinguisher of Standard & Simulated Elliptic Curves through Traits.',
       url='https://gitlab.fi.muni.cz/x408178/curve_analyzer',
-      author='Vladimír Sedláček and Vojtěch Suchánek',
+      author='Vladimír Sedláček, Vojtěch Suchánek and Antonín Dufka',
       author_email='vlada.sedlacek@mail.muni.cz',
       license='MIT',
       packages=find_packages(),
