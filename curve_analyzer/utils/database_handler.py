@@ -144,8 +144,9 @@ if __name__ == "__main__":
     import sys
     if len(sys.argv) < 3 or not sys.argv[1] in ("curves", "results"):
         print(f"USAGE: python {sys.argv[0]} curves [database_uri] <curve_files...>", file=sys.stderr)
-        print(f"USAGE: python {sys.argv[0]} curves [database_uri] all", file=sys.stderr)
+        print(f"   OR: python {sys.argv[0]} curves [database_uri] all", file=sys.stderr)
         print(f"   OR: python {sys.argv[0]} results [database_uri] <trait_name> <results_file>", file=sys.stderr)
+        print(f"   OR: python {sys.argv[0]} results [database_uri] <trait_name> auto", file=sys.stderr)
         print(f"   OR: python {sys.argv[0]} results [database_uri] all", file=sys.stderr)
         sys.exit(1)
 
@@ -184,12 +185,15 @@ if __name__ == "__main__":
             upload_curves_from_files(glob.glob(str(CURVE_PATH_SIM) + "/*/*/*.json"))
         else:
             upload_curves_from_files(args)
-    else:
+    elif sys.argv[1] == "results":
         if args == ['all']:
             for trait_name in TRAIT_NAMES:
                 results_file = Path(TRAIT_PATH, trait_name, str(trait_name) + ".json")
                 upload_results_from_file(trait_name, results_file)
         else:
             trait_name = args[0]
-            results_file = args[1]
+            if args[1] == 'auto':
+                results_file = Path(TRAIT_PATH, trait_name, str(trait_name) + ".json")
+            else:
+                results_file = args[1]
             upload_results_from_file(trait_name, results_file)
