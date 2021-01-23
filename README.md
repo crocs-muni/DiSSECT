@@ -19,7 +19,8 @@
 From the root directory, run `sage --python3 setup.py develop --user` to initialize the project.
 
 ## Running the curve traits
-To feed the trait results directly to a local MongoDB database, run ./run.py -n <trait_name> -c <curve_type>.
+To feed the trait results directly to a local MongoDB database, run './run.py -n <trait_name> -c <curve_type> [-b <max_bit_length>] [-v] [-a <allowed cofactors>]'.
+
 Alternatively, to get results as JSON files, run `./run_traits.py` in directory `traits`. Use the `-h` flag to get the help menu. To merge the results of a trait (
 a05 in this case) into single file, run `./merge_trait_results.py -n a05`.
 
