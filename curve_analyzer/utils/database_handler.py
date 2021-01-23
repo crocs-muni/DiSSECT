@@ -143,11 +143,11 @@ def is_solved(db: Database, curve: CustomCurve, trait: str, params: Dict[str, An
 if __name__ == "__main__":
     import sys
     if len(sys.argv) < 3 or not sys.argv[1] in ("curves", "results"):
-        print(f"USAGE: python {sys.argv[0]} curves [database_uri] <curve_files...>", file=sys.stderr)
-        print(f"   OR: python {sys.argv[0]} curves [database_uri] all", file=sys.stderr)
-        print(f"   OR: python {sys.argv[0]} results [database_uri] <trait_name> <results_file>", file=sys.stderr)
-        print(f"   OR: python {sys.argv[0]} results [database_uri] <trait_name> auto", file=sys.stderr)
-        print(f"   OR: python {sys.argv[0]} results [database_uri] all", file=sys.stderr)
+        print(f"USAGE: python3 {sys.argv[0]} curves [database_uri] <curve_files...>", file=sys.stderr)
+        print(f"   OR: python3 {sys.argv[0]} curves [database_uri] all", file=sys.stderr)
+        print(f"   OR: python3 {sys.argv[0]} results [database_uri] <trait_name> <results_file>", file=sys.stderr)
+        print(f"   OR: python3 {sys.argv[0]} results [database_uri] <trait_name> auto", file=sys.stderr)
+        print(f"   OR: python3 {sys.argv[0]} results [database_uri] all", file=sys.stderr)
         sys.exit(1)
 
     database_uri = "mongodb://localhost:27017/"
