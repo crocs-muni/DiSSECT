@@ -6,7 +6,12 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
 stages:
+  - clear_notebook_output
   - test
+
+clear_notebook_output:
+  script:
+    python3 -m nbconvert --ClearOutputPreprocessor.enabled=True --inplace visual/*.ipynb
 
 test:
   tags:
