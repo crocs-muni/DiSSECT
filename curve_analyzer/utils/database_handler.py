@@ -101,7 +101,6 @@ def get_curves(db: Database, filters: Any = {}, raw: bool = False) -> Iterable[C
         curve_filter["cofactor"] = { "$in": list(map(int, filters.allowed_cofactors)) }
 
     cursor = db.curves.aggregate([
-        { "$unset": "_id" },
         { "$match": curve_filter }
     ])
 
@@ -153,7 +152,6 @@ def get_trait_results(db: Database, trait: str, params: Dict[str, Any] = None, c
         result_filter["curve"] = { "$regex": curve }
 
     aggregate_pipeline = []
-    aggregate_pipeline.append({ "$unset": "_id" })
     aggregate_pipeline.append({ "$match": result_filter })
     if limit:
         aggregate_pipeline.append({ "$limit": limit })
