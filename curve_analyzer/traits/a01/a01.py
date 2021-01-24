@@ -3,7 +3,7 @@ from sage.all import GF, ZZ
 from curve_analyzer.traits.trait_interface import pretty_print_results, compute_results, timeout
 
 # global time for one group computation
-TIME = 10
+TIME = 100
 
 
 def compute_second_generator_order(E_ext):
