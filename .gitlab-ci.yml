@@ -11,7 +11,7 @@ stages:
 
 clear_notebook_output:
   script:
-    python3 -m nbconvert --ClearOutputPreprocessor.enabled=True --inplace visual/*.ipynb
+    python3 -m nbconvert --ClearOutputPreprocessor.enabled=True --inplace curve_analyzer/visual/*.ipynb
 
 test:
   tags:
