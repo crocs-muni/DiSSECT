@@ -1,5 +1,6 @@
-import pandas as pd
 from typing import Dict, Any
+
+import pandas as pd
 
 import curve_analyzer.utils.database_handler as database
 
@@ -28,4 +29,10 @@ def load_curves(filters: Any = {}) -> pd.DataFrame:
         return projection
 
     df = pd.DataFrame(map(project, database.get_curves(db, filters, raw=True)))
+    return df
+
+
+def filter_df(df, bitlength, cofactor):
+    df = df[df["bitlength"] == bitlength]
+    df = df[df["cofactor"] == cofactor]
     return df
