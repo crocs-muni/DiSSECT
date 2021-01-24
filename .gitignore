@@ -20,3 +20,4 @@ curve_analyzer/utils/parallel/results/*
 curve_analyzer/curves_json_sim/*
 /curve_analyzer.egg-info/
 DiSSECT.egg-info
+/curve_analyzer/results/
