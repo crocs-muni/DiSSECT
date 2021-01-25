@@ -17,6 +17,7 @@ install_requires = [
     'coloredlogs',
     'shellescape',
     'pymongo',
+    'pandas'
 ]
 
 setup(name='DiSSECT',
