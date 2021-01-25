@@ -34,8 +34,16 @@ def load_curves(filters: Any = {}) -> pd.DataFrame:
 
 
 def filter_df(df, bitlengths, sources, max_cofactor=1):
+    allowed_curves = []
     for source in sources:
-        df = df[df.curve.isin(STD_CURVE_DICT[source])]
+        allowed_curves += STD_CURVE_DICT[source]
+    if "sim" in sources:
+        if not "std" in sources:
+            df = df[df.curve.isin(allowed_curves) | df.simulated]
+    elif "std" in sources:
+        df = df[~df.simulated]
+    else:
+        df = df[df.curve.isin(allowed_curves) & ~df.simulated]
     df = df[df["bitlength"].isin(bitlengths)]
     df = df[df["cofactor"] <= max_cofactor]
     return df
