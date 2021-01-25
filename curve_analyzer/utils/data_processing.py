@@ -44,11 +44,11 @@ def filter_df(df, bitlengths, sources, max_cofactor=1):
             pass
     if "sim" in sources:
         if not "std" in sources:
-            df = df[df.curve.isin(allowed_curves) | df.simulated]
+            df = df[df.curve.isin(allowed_curves) | (df.simulated == True)]
     elif "std" in sources:
-        df = df[~df.simulated]
+        df = df[df.simulated == False]
     else:
-        df = df[df.curve.isin(allowed_curves) & ~df.simulated]
+        df = df[df.curve.isin(allowed_curves) & (df.simulated == False)]
     df = df[df["bitlength"].isin(bitlengths)]
     df = df[df["cofactor"] <= max_cofactor]
     return df
