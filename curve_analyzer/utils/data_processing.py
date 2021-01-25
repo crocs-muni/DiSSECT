@@ -33,9 +33,9 @@ def load_curves(filters: Any = {}) -> pd.DataFrame:
     return df
 
 
-def filter_df(df, bitlength, sources, max_cofactor=1):
+def filter_df(df, bitlengths, sources, max_cofactor=1):
     for source in sources:
         df = df[df.curve.isin(STD_CURVE_DICT[source])]
-    df = df[df["bitlength"] == bitlength]
+    df = df[df["bitlength"].isin(bitlengths)]
     df = df[df["cofactor"] <= max_cofactor]
     return df
