@@ -32,7 +32,7 @@ def load_curves(filters: Any = {}) -> pd.DataFrame:
     return df
 
 
-def filter_df(df, bitlength, cofactor):
+def filter_df(df, bitlength, max_cofactor):
     df = df[df["bitlength"] == bitlength]
-    df = df[df["cofactor"] == cofactor]
+    df = df[df["cofactor"] <= max_cofactor]
     return df
