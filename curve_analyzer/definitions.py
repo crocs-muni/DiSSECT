@@ -1,6 +1,8 @@
 import re
 from pathlib import Path
 
+from curve_analyzer.utils.json_handler import load_from_json
+
 ROOT_DIR = Path(__file__).parent  # This is your Project Root
 CURVE_PATH = Path(ROOT_DIR, 'curves_json')
 CURVE_PATH_SIM = Path(ROOT_DIR, 'curves_json_sim')
@@ -19,3 +21,12 @@ TRAIT_MODULE_PATH = 'curve_analyzer.traits'
 TRAIT_NAME_CONDITION = r'[ais][0-9][0-9]'
 TRAIT_NAMES = [f.name for f in TRAIT_PATH.iterdir() if f.is_dir() and re.search(TRAIT_NAME_CONDITION, f.name)]
 STD_SOURCES = [f.name for f in CURVE_PATH.iterdir() if f.is_dir() and not "." in f.name]
+STD_CURVE_NAMES = []
+STD_CURVE_DICT = {}
+for source in STD_SOURCES:
+    STD_CURVE_DICT[source] = []
+    curves = load_from_json(Path(CURVE_PATH, source, "curves.json"))["curves"]
+    for curve in curves:
+        STD_CURVE_DICT[source].append(curve["name"])
+        STD_CURVE_NAMES.append(curve["name"])
+STD_CURVE_COUNT = len(STD_CURVE_NAMES)
