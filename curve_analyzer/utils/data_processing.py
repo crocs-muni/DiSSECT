@@ -36,7 +36,10 @@ def load_curves(filters: Any = {}) -> pd.DataFrame:
 def filter_df(df, bitlengths, sources, max_cofactor=1):
     allowed_curves = []
     for source in sources:
-        allowed_curves += STD_CURVE_DICT[source]
+        try:
+            allowed_curves += STD_CURVE_DICT[source]
+        except KeyError:
+            pass
     if "sim" in sources:
         if not "std" in sources:
             df = df[df.curve.isin(allowed_curves) | df.simulated]
