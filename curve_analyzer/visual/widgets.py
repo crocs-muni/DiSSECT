@@ -26,6 +26,8 @@ def multi_checkbox_widget(description, preselected, others):
 
     description_widget = widgets.Label(value=description, layout=widgets.Layout(position="top"))
     search_widget = widgets.Text(layout=widgets.Layout(width="auto"))
+    select_all_widget = widgets.Checkbox(description="(un)select all", value=False, style=style)
+    select_preselected_widget = widgets.Checkbox(value=True)
     options_dict = {**{option: widgets.Checkbox(description=option, value=True,
                                                 layout=layout, style=style) for option in preselected},
                     **{option: widgets.Checkbox(description=option, value=False,
@@ -33,7 +35,12 @@ def multi_checkbox_widget(description, preselected, others):
     all_options = preselected + others
     options = [options_dict[option] for option in all_options]
     options_widget = widgets.VBox(options)
-    multi_select = widgets.VBox([description_widget, search_widget, options_widget],
+    # link all options to the select_all_widget, but also make sure this doesn't unselect preselected ones:
+    for option in options:
+        widgets.jsdlink((select_all_widget, 'value'), (option, 'value'))
+        if option.value:
+            widgets.jsdlink((select_preselected_widget, 'value'), (option, 'value'))
+    multi_select = widgets.VBox([description_widget, search_widget, select_all_widget, options_widget],
                                 layout=widgets.Layout(width=widget_outer_width))
 
     # Wire the search field to the checkboxes
