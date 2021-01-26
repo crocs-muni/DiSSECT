@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 import difflib
+from pathlib import Path
 
 import ipywidgets as widgets
 from IPython.core.display import display
 
 from curve_analyzer.definitions import STD_SOURCES, STD_BITLENGTHS, ALL_COFACTORS
-from curve_analyzer.utils.data_processing import get_trait_params_dict, filter_df
+from curve_analyzer.utils.json_handler import load_from_json
+from curve_analyzer.utils.data_processing import filter_df
+from curve_analyzer.definitions import TRAIT_PATH
+from sage.all import sage_eval
 
 
-def multi_checkbox_widget(description, preselected, others):
+def multi_checkbox_widget(name, preselected, others):
     """ Inspired by from https://gist.github.com/pbugnion/5bb7878ff212a0116f0f1fbc9f431a5c """
     """ Widget with a search field and lots of checkboxes """
 
@@ -24,7 +28,7 @@ def multi_checkbox_widget(description, preselected, others):
     layout = widgets.Layout(width="100px")
     widget_outer_width = "120px"
 
-    description_widget = widgets.Label(value=description, layout=widgets.Layout(position="top"))
+    description_widget = widgets.Label(value=f"{name}:", layout=widgets.Layout(position="top"))
     search_widget = widgets.Text(layout=widgets.Layout(width="auto"))
     select_all_widget = widgets.Checkbox(description="(un)select all", value=False, style=style)
     select_preselected_widget = widgets.Checkbox(value=True)
@@ -42,6 +46,7 @@ def multi_checkbox_widget(description, preselected, others):
             widgets.jsdlink((select_preselected_widget, 'value'), (option, 'value'))
     multi_select = widgets.VBox([description_widget, search_widget, select_all_widget, options_widget],
                                 layout=widgets.Layout(width=widget_outer_width))
+    multi_select.name = name
 
     # Wire the search field to the checkboxes
     def on_text_change(change):
@@ -60,9 +65,9 @@ def multi_checkbox_widget(description, preselected, others):
 
 
 def common_filtering_widgets():
-    source_choice = multi_checkbox_widget("source:", preselected=["std", "sim"], others=STD_SOURCES)
-    bitlength_choice = multi_checkbox_widget("bitlength:", preselected=[128, 160, 192, 224, 256], others=STD_BITLENGTHS)
-    cofactor_choice = multi_checkbox_widget("cofactor:", preselected=[1], others=ALL_COFACTORS)
+    source_choice = multi_checkbox_widget("source", preselected=["std", "sim"], others=STD_SOURCES)
+    bitlength_choice = multi_checkbox_widget("bitlength", preselected=[128, 160, 192, 224, 256], others=STD_BITLENGTHS)
+    cofactor_choice = multi_checkbox_widget("cofactor", preselected=[1], others=ALL_COFACTORS)
     return [source_choice, bitlength_choice, cofactor_choice]
 
 
@@ -71,7 +76,7 @@ def trait_filtering_widgets(trait_name):
     param_choice = []
     for param_name in params_dict.keys():
         param_values = params_dict[param_name]
-        param_choice.append(multi_checkbox_widget(param_name + ":", preselected=[param_values[0]], others=param_values))
+        param_choice.append(multi_checkbox_widget(param_name, preselected=[param_values[0]], others=param_values))
     return param_choice
 
 
@@ -83,13 +88,19 @@ def get_filtering_widgets(trait_name):
     return filtering_widgets
 
 
+def get_trait_params_dict(trait_name):
+    params_file = load_from_json(Path(TRAIT_PATH, trait_name, trait_name + ".params"))
+    params_names = params_file["params_local_names"]
+    params_dict = {}
+    for param_name in params_names:
+        param_values = sage_eval(params_file["params_global"][param_name + "_range"])
+        params_dict[param_name] = param_values
+    params_dict_sorted = {key: params_dict[key] for key in sorted(params_dict)}
+    return params_dict_sorted
+
+
 def get_choices(filtering_widgets):
+    result = {}
     for subwidget in filtering_widgets:
-        yield [w.description for w in subwidget.children[-1].children if w.value]
-
-
-def filter_df_via_widgets(df, trait_name, filtering_widgets):
-    choices = list(get_choices(filtering_widgets))
-    sources, bitlengths, cofactors = choices[:3]
-    allowed_trait_params_list = choices[3:]
-    return filter_df(df, sources, bitlengths, cofactors, trait_name, allowed_trait_params_list)
+        result[subwidget.name] = [w.description for w in subwidget.children[-1].children if w.value]
+    return result
