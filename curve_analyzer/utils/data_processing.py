@@ -1,6 +1,7 @@
 from typing import Dict, Any
 
 import pandas as pd
+from sage.all import ZZ
 
 import curve_analyzer.utils.database_handler as database
 from curve_analyzer.definitions import STD_CURVE_DICT
@@ -33,7 +34,9 @@ def load_curves(filters: Any = {}) -> pd.DataFrame:
     return df
 
 
-def filter_df(df, bitlengths, sources, max_cofactor=1):
+def filter_df(df, bitlengths, sources, cofactors):
+    bitlengths = map(ZZ, bitlengths)
+    cofactors = map(ZZ, cofactors)
     allowed_curves = []
     for source in sources:
         try:
@@ -47,6 +50,6 @@ def filter_df(df, bitlengths, sources, max_cofactor=1):
         df = df[df.simulated == False]
     else:
         df = df[df.curve.isin(allowed_curves) & (df.simulated == False)]
-    df = df[df["bitlength"].isin(bitlengths)]
-    df = df[df["cofactor"] <= max_cofactor]
+    df = df[df.bitlength.isin(bitlengths)]
+    df = df[df.cofactor.isin(cofactors)]
     return df
