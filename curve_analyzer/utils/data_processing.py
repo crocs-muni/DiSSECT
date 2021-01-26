@@ -34,8 +34,6 @@ def load_curves(filters: Any = {}) -> pd.DataFrame:
 
 
 def filter_df(df, bitlengths, sources, max_cofactor=1):
-    # Remove entries with NaN values
-    df = df.dropna()
     allowed_curves = []
     for source in sources:
         try:
