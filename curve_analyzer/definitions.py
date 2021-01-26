@@ -48,7 +48,7 @@ STD_BITLENGTHS = sorted(STD_BITLENGTHS)
 #             for curve in curves:
 #                 SIM_COFACTORS.add(ZZ(curve["cofactor"]))
 # SIM_COFACTORS = sorted(SIM_COFACTORS)
-# ALL_COFACTORS = sorted(set(STD_COFACTORS + SIM_COFACTORS))
+SIM_BITLENGTHS = [128, 160, 192, 224, 256]
 SIM_COFACTORS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
                  29, 30, 31]
-SIM_BITLENGTHS = [128, 160, 192, 224, 256]
+ALL_COFACTORS = sorted(set(STD_COFACTORS + SIM_COFACTORS))
