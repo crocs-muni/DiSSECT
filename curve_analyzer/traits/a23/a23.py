@@ -4,10 +4,10 @@ from curve_analyzer.traits.trait_interface import compute_results
 
 
 def a23_curve_function(curve, l):
-    '''
+    """
     Computes the depth of volcano and the degree of the crater subgraph containing E
     Returns a dictionary (keys: 'crater_degree', 'depth')
-    '''
+    """
     t = curve.trace
     q = curve.q
     curve_results = {}

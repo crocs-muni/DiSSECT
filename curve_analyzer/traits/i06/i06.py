@@ -4,7 +4,7 @@ from curve_analyzer.traits.trait_interface import compute_results
 
 
 def i06_curve_function(curve):
-    '''Computes the square part of 4*p-1. 4*order-1 (result is square root of the square part)'''
+    """"Computes the square part of 4*p-1. 4*order-1 (result is square root of the square part)"""
     order = curve.order  # * curve.cofactor
     q = curve.q
     a = 4 * q - 1

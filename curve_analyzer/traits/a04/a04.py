@@ -7,7 +7,7 @@ TIME = 10
 
 
 def near_order_factorizations(n, sign='+', k=10, t=10):
-    '''Computer factorization of k*n+1 (k*n-1) if 'sign' is "+" ("-") in time 't' '''
+    """Computer factorization of k*n+1 (k*n-1) if 'sign' is "+" ("-") in time 't' """
     assert sign in ['+', '-']
 
     if sign == '+':
@@ -18,7 +18,7 @@ def near_order_factorizations(n, sign='+', k=10, t=10):
 
 
 def largest_factor_bitlen(factorization):
-    '''Computes bit length of largest factor(last item of list) of 'factorization' '''
+    """Computes bit length of largest factor(last item of list) of 'factorization' """
     try:
         bitlen = factorization[-1].nbits()
     except AttributeError:
@@ -27,11 +27,10 @@ def largest_factor_bitlen(factorization):
 
 
 def a04_curve_function(curve, k):
-    '''
+    """
     Computes factorization of ord*k+1 and ord*k-1 and bit lengths of their largest factors
     Returns a dictionary
-    noinspection PyDictCreation
-    '''
+    """
     card = curve.cardinality
     t = TIME
     curve_results = {}

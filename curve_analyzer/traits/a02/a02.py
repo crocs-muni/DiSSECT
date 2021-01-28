@@ -17,10 +17,10 @@ def ext_trace(q, t, deg):
 
 
 def a02_curve_function(curve, deg):
-    '''
+    """
     Computation of d_K (cm_disc), v (max_conductor) and factorization of D where D=t^2-4q = v^2*d_K
     Returns a dictionary (keys: 'cm_disc', 'factorization', 'max_conductor')
-    '''
+    """
     t = curve.trace
     q = curve.q
     curve_results = {}

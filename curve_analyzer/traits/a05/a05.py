@@ -50,10 +50,10 @@ def extend(E, q, deg, field):
 
 
 def find_least_torsion(q, order, l):
-    '''
+    """
     Computes the smallest extension which contains a nontrivial l-torsion point
     Returns the degree
-    '''
+    """
     x = PolynomialRing(GF(l ** 2), 'x').gen()
     t = q + 1 - order
 
@@ -65,9 +65,9 @@ def find_least_torsion(q, order, l):
 
 
 def is_torsion_cyclic(E, q, order, l, deg, field, iterations=10):
-    '''
+    """
     True if the l-torsion is cyclic and False otherwise (bycyclic). Note that this is probabilistic only.
-    '''
+    """
     card = ext_card(q, order, deg)
     m = ZZ(card / l)
     EE = extend(E, q, deg, field)
@@ -79,11 +79,11 @@ def is_torsion_cyclic(E, q, order, l, deg, field, iterations=10):
 
 
 def find_full_torsion(E, q, order, l, least, field):
-    '''
+    """
     Computes the smallest extension which contains full l-torsion subgroup
     Least is the result of find_least_torsion
     Returns the degree
-    '''
+    """
     q_least = q ** least
     k = embedding_degree_q(q_least, l)
     # k satisfies l|a^k-1 where a,1 are eigenvalues of Frobenius of extended E
@@ -98,7 +98,7 @@ def find_full_torsion(E, q, order, l, least, field):
 
 
 def find_torsions(E, q, order, l, field):
-    '''Returns a triple of extensions containing torsion'''
+    """Returns a triple of extensions containing torsion"""
     least = find_least_torsion(q, order, l)
     if least == l ** 2 - 1:
         full = least
@@ -110,7 +110,7 @@ def find_torsions(E, q, order, l, field):
 
 
 def a05_curve_function(curve, l):
-    '''Computes find_torsions for given l and returns a dictionary'''
+    """Computes find_torsions for given l and returns a dictionary"""
     E = curve.EC
     q = curve.q
     order = curve.order * curve.cofactor

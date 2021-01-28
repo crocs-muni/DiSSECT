@@ -5,7 +5,7 @@ from curve_analyzer.traits.trait_interface import compute_results
 
 
 def a25_curve_function(curve, deg):
-    '''Computation of the trace in an extension together with its factorization'''
+    """Computation of the trace in an extension together with its factorization"""
     trace = ext_trace(curve.q, curve.trace, deg)
     f = list(factor(trace))
     f = [list(i) for i in f]

@@ -4,10 +4,10 @@ from curve_analyzer.traits.trait_interface import compute_results
 
 
 def a12_curve_function(curve, l):
-    '''
+    """
     Computes the order of l (small prime) modulo curve order and bit length of the index of <l>
     Returns a dictionary
-    '''
+    """
     card = curve.cardinality
     try:
         mul_ord = (Integers(card)(l)).multiplicative_order()
