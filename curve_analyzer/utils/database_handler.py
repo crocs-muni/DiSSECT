@@ -38,6 +38,15 @@ def upload_curves(db: Database, path: str) -> Tuple[int, int]:
         curve["simulated"] = True if "sim" in curve["category"] else False
         if isinstance(curve["order"], int):
             curve["order"] = hex(curve["order"])
+        # unify hex representation
+        elif isinstance(curve["order"], str):
+            curve["order"] = hex(int(curve["order"], base=16))
+
+        if isinstance(curve["cofactor"], int):
+            curve["cofactor"] = hex(curve["cofactor"])
+        # unify hex representation
+        elif isinstance(curve["cofactor"], str):
+            curve["cofactor"] = hex(int(curve["cofactor"], base=16))
 
     success = 0
     for curve in curves:
@@ -97,14 +106,14 @@ def get_curves(db: Database, filters: Any = {}, raw: bool = False) -> Iterable[C
 
     # Cofactor filter
     if hasattr(filters, "allowed_cofactors") and filters.allowed_cofactors:
-        curve_filter["cofactor"] = { "$in": list(map(int, filters.allowed_cofactors)) }
+        curve_filter["cofactor"] = { "$in": list(map(hex, filters.allowed_cofactors)) }
 
     cursor = db.curves.aggregate([
         { "$match": curve_filter }
     ])
 
     if raw:
-        return cursor
+        return map(_decode_ints, cursor)
     # Cursor tends to timeout -> collect the results first (memory heavy), alternatively disable cursor timeout
     return map(CustomCurve, list(cursor))
 
