@@ -71,39 +71,43 @@ def upload_results(db: Database, trait_name: str, path: str) -> Tuple[int, int]:
             try:
                 if db[f"trait_{trait_name}"].insert_one(record):
                     success += 1
-            except:
+            except Exception:
                 pass
     return success, total
 
 
-def get_curves(db: Database, filters: Any) -> Iterable[CustomCurve]:
+def get_curves(db: Database, filters: Any = {}, raw: bool = False) -> Iterable[CustomCurve]:
     curve_filter: Dict[str, Any] = {}
 
     # Curve type filter
-    if filters.curve_type == "sim":
-        curve_filter["simulated"] = True
-    elif filters.curve_type == "std":
-        curve_filter["simulated"] = False
-    elif filters.curve_type == "sample":
-        curve_filter["simulated"] = False
-        curve_filter["name"] = { "$in": ["secp112r1", "secp192r1", "secp256r1"] }
-    elif filters.curve_type != "all":
-        curve_filter["name"] = filters.curve_type
+    if hasattr(filters, "curve_type"):
+        if filters.curve_type == "sim":
+            curve_filter["simulated"] = True
+        elif filters.curve_type == "std":
+            curve_filter["simulated"] = False
+        elif filters.curve_type == "sample":
+            curve_filter["simulated"] = False
+            curve_filter["name"] = { "$in": ["secp112r1", "secp192r1", "secp256r1"] }
+        elif filters.curve_type != "all":
+            curve_filter["name"] = filters.curve_type
 
     # Bit-length filter
-    curve_filter["field.bits"] = { "$lte": filters.order_bound }
+    if hasattr(filters, "order_bound"):
+        curve_filter["field.bits"] = { "$lte": filters.order_bound }
 
     # Cofactor filter
     # TODO discuss if (allowed_cofactor == None => match_any) is ok
-    if filters.allowed_cofactors:
+    if hasattr(filters, "allowed_cofactors") and filters.allowed_cofactors:
         curve_filter["cofactor"] = { "$in": list(map(int, filters.allowed_cofactors)) }
 
-    # Cursor tends to timeout -> collect the results first (memory heavy)
-    curves = list(db.curves.find(curve_filter))
-    # Alternative solution, but it needs to be freed (curves.close() or with construct)
-    # curves = db.curves.find(curve_filter, no_cursor_timeout=True)
+    cursor = db.curves.aggregate([
+        { "$match": curve_filter }
+    ])
 
-    return map(CustomCurve, curves)
+    if raw:
+        return cursor
+    # Cursor tends to timeout -> collect the results first (memory heavy), alternatively disable cursor timeout
+    return map(CustomCurve, list(cursor))
 
 
 # TODO this should be IMO handled by the traits - after finishing computation transform Sage values into Python values
@@ -140,6 +144,39 @@ def is_solved(db: Database, curve: CustomCurve, trait: str, params: Dict[str, An
     return db[f"trait_{trait}"].find_one(trait_result) is not None
 
 
+def get_trait_results(db: Database, trait: str, params: Dict[str, Any] = None, curve: str = None, limit: int = None):
+    result_filter = {}
+    if params:
+        result_filter["params"] = params
+    if curve:
+        result_filter["curve"] = { "$regex": curve }
+
+    aggregate_pipeline = []
+    aggregate_pipeline.append({ "$match": result_filter })
+    if limit:
+        aggregate_pipeline.append({ "$limit": limit })
+
+    return map(_flatten_trait_result, db[f"trait_{trait}"].aggregate(aggregate_pipeline))
+
+
+def _flatten_trait_result(record: Dict[str, Any]):
+    output = dict()
+
+    output["curve"] = record["curve"]
+    _flatten_trait_result_rec(record["params"], "", output)
+    _flatten_trait_result_rec(record["result"], "", output)
+
+    return output
+
+
+def _flatten_trait_result_rec(record: Dict[str, Any], prefix: str, output: Dict[str, Any]):
+    for key in record:
+        if isinstance(record[key], dict):
+            _flatten_trait_result(record[key], key + "_", output)
+        else:
+            output[prefix + key] = record[key]
+
+
 if __name__ == "__main__":
     import sys
     if len(sys.argv) < 3 or not sys.argv[1] in ("curves", "results"):
@@ -161,7 +198,6 @@ if __name__ == "__main__":
     print(f"Connecting to database {database_uri}")
     db = connect(database_uri)
 
-
     def upload_curves_from_files(curve_files_list):
         for curves_file in curve_files_list:
             print(f"Loading curves from file {curves_file}")
@@ -169,13 +205,11 @@ if __name__ == "__main__":
             uploaded, total = upload_curves(db, curves_file)
             print(f"Successfully uploaded {uploaded} out of {total}")
 
-
     def upload_results_from_file(trait_name, results_file):
         print(f"Loading trait {trait_name} results from file {results_file}")
         create_trait_index(db, trait_name)
         uploaded, total = upload_results(db, trait_name, results_file)
         print(f"Successfully uploaded {uploaded} out of {total}")
-
 
     if sys.argv[1] == "curves":
         if args == ['all']:
