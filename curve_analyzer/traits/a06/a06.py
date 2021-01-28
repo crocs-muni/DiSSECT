@@ -1,7 +1,7 @@
 from sage.all import kronecker
 
 from curve_analyzer.traits.a05.a05 import ext_card
-from curve_analyzer.traits.trait_interface import pretty_print_results, compute_results
+from curve_analyzer.traits.trait_interface import compute_results
 
 
 def ext_cm_disc(q, card_low, deg):
@@ -29,22 +29,3 @@ def a06_curve_function(curve, l, deg):
 
 def compute_a06_results(curve_list, desc='', verbose=False):
     compute_results(curve_list, 'a06', a06_curve_function, desc=desc, verbose=verbose)
-
-
-def get_a06_captions(results):
-    return ["kronecker"]
-
-
-def select_a06_results(curve_results):
-    keys = ["kronecker"]
-    selected_results = []
-    for key in keys:
-        selected_key = []
-        for x in curve_results:
-            selected_key.append(x[key])
-        selected_results.append(selected_key)
-    return selected_results
-
-
-def pretty_print_a06_results(curve_list, save_to_txt=True):
-    pretty_print_results(curve_list, 'a06', get_a06_captions, select_a06_results, save_to_txt=save_to_txt)

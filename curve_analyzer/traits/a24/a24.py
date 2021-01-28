@@ -1,7 +1,7 @@
 from sage.all import PolynomialRing, GF
 
 from curve_analyzer.traits.a05.a05 import ext_card, is_torsion_cyclic
-from curve_analyzer.traits.trait_interface import pretty_print_results, compute_results
+from curve_analyzer.traits.trait_interface import compute_results
 
 
 def eigenvalues(curve, l, s=1):
@@ -67,23 +67,3 @@ def a24_curve_function(curve, l):
 
 def compute_a24_results(curve_list, desc='', verbose=False):
     compute_results(curve_list, 'a24', a24_curve_function, desc=desc, verbose=verbose)
-
-
-def get_a24_captions(results):
-    captions = ['least', 'full', 'relative']
-    return captions
-
-
-def select_a24_results(curve_results):
-    keys = ['least', 'full', 'relative']
-    selected_results = []
-    for key in keys:
-        selected_key = []
-        for x in curve_results:
-            selected_key.append(x[key])
-        selected_results.append(selected_key)
-    return selected_results
-
-
-def pretty_print_a24_results(curve_list, save_to_txt=True):
-    pretty_print_results(curve_list, 'a24', get_a24_captions, select_a24_results, save_to_txt=save_to_txt)

@@ -1,6 +1,6 @@
 from sage.all import ZZ, sqrt, factor, squarefree_part
 
-from curve_analyzer.traits.trait_interface import pretty_print_results, compute_results, timeout
+from curve_analyzer.traits.trait_interface import compute_results, timeout
 
 # global time for one factorization
 TIME = 10
@@ -45,20 +45,3 @@ def a02_curve_function(curve, deg):
 
 def compute_a02_results(curve_list, desc='', verbose=False):
     compute_results(curve_list, 'a02', a02_curve_function, desc=desc, verbose=verbose)
-
-
-def get_a02_captions(results):
-    return ['max_conductor', 'factorization', 'cm_disc']
-
-
-def select_a02_results(curve_results):
-    keys = ['max_conductor', 'factorization', 'cm_disc']
-    selected_results = []
-    for key in keys:
-        for x in curve_results:
-            selected_results.append(x[key])
-    return selected_results
-
-
-def pretty_print_a02_results(curve_list, save_to_txt=True):
-    pretty_print_results(curve_list, 'a02', get_a02_captions, select_a02_results, save_to_txt=save_to_txt)

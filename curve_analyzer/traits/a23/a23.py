@@ -1,6 +1,6 @@
 from sage.all import kronecker, ZZ
 
-from curve_analyzer.traits.trait_interface import pretty_print_results, compute_results
+from curve_analyzer.traits.trait_interface import compute_results
 
 
 def a23_curve_function(curve, l):
@@ -33,19 +33,3 @@ def a23_curve_function(curve, l):
 
 def compute_a23_results(curve_list, desc='', verbose=False):
     compute_results(curve_list, 'a23', a23_curve_function, desc=desc, verbose=verbose)
-
-
-def get_a23_captions(results):
-    captions = ['crater_degree', 'depth']
-    return captions
-
-
-def select_a23_results(curve_results):
-    degs_lists = [x['crater_degree'] for x in curve_results]
-    depths = [x['depth'] for x in curve_results]
-    selected_results = [degs_lists, depths]
-    return selected_results
-
-
-def pretty_print_a23_results(curve_list, save_to_txt=True):
-    pretty_print_results(curve_list, 'a23', get_a23_captions, select_a23_results, save_to_txt=save_to_txt)

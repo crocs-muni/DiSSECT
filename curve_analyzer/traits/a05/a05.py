@@ -1,6 +1,6 @@
 from sage.all import ZZ, PolynomialRing, GF, Integers, log, EllipticCurve
 
-from curve_analyzer.traits.trait_interface import pretty_print_results, compute_results
+from curve_analyzer.traits.trait_interface import compute_results
 
 
 def embedding_degree_q(q, l):
@@ -131,23 +131,3 @@ def a05_curve_function(curve, l):
 
 def compute_a05_results(curve_list, desc='', verbose=False):
     compute_results(curve_list, 'a05', a05_curve_function, desc=desc, verbose=verbose)
-
-
-def get_a05_captions(results):
-    captions = ['least', 'full', 'relative']
-    return captions
-
-
-def select_a05_results(curve_results):
-    keys = ['least', 'full', 'relative']
-    selected_results = []
-    for key in keys:
-        selected_key = []
-        for x in curve_results:
-            selected_key.append(x[key])
-        selected_results.append(selected_key)
-    return selected_results
-
-
-def pretty_print_a05_results(curve_list, save_to_txt=True):
-    pretty_print_results(curve_list, 'a05', get_a05_captions, select_a05_results, save_to_txt=save_to_txt)

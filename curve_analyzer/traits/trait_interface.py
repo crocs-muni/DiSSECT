@@ -6,7 +6,6 @@ from datetime import datetime
 from pathlib import Path
 
 import pytz
-from prettytable import PrettyTable  # http://zetcode.com/python/prettytable/
 from sage.all import sage_eval
 from sage.parallel.decorate import fork
 
@@ -196,44 +195,6 @@ def compute_results(curve_list, trait_name, curve_function, desc='', verbose=Fal
 
     json_file.unlink()
     tmp_file.rename(json_file)
-
-
-def init_txt_paths(trait_name, desc=''):
-    name = Path(TRAIT_PATH, + trait_name, trait_name)
-    if not desc == '':
-        name += "_" + desc
-    return name + '.txt'
-
-
-def pretty_print_results(curve_list, trait_name, get_captions, select_results, curve_sort_key="bits", save_to_txt=True):
-    """Visualizes trait results from the relevant JSON; the functions get_captions are select_results are provided by
-    each trait separately. """
-    path_main_json, _, _, _ = init_json_paths(trait_name)
-    results = load_from_json(path_main_json)
-
-    captions = get_captions(results)
-    headlines = ['name', 'bits']
-    for caption in captions:
-        headlines.append(caption)
-    t = PrettyTable(headlines)
-
-    for curve in curve_list:
-        name = curve.name
-        if name not in results.keys():
-            continue
-        order_bits = curve.nbits
-        row = [name, order_bits]
-        for result in select_results(results[name].values()):
-            row.append(result)
-        t.add_row(row)
-
-    t.sortby = curve_sort_key
-    print(t)
-
-    if save_to_txt:
-        path_txt = init_txt_paths(trait_name)
-        with open(path_txt, "w") as f:
-            f.write(str(t))
 
 
 def timeout(func, args=(), kwargs=None, timeout_duration=10):
