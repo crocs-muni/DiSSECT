@@ -6,7 +6,7 @@ venv/
 *.tmp
 *.pyc
 *.ipynb
-!curve_analyzer/visual/trait_results_multi_comparison.ipynb
+!curve_analyzer/visual/*.ipynb
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 curve_analyzer/**/__pycache__
