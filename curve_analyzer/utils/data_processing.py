@@ -30,7 +30,8 @@ def load_curves(filters: Any = {}) -> pd.DataFrame:
         projection["simulated"] = record["simulated"]
         return projection
 
-    df = pd.DataFrame(map(project, database.get_curves(db, filters, raw=True)))
+    df = pd.DataFrame(map(project, database.get_curves(db, filters, raw=True))).convert_dtypes()
+
     return df
 
 
