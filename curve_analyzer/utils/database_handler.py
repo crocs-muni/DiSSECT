@@ -66,7 +66,7 @@ def upload_results(db: Database, trait_name: str, path: str) -> Tuple[int, int]:
             record = {
                 "curve": curve,
                 "params": json.loads(params),
-                "result": _cast_sage_types(values)
+                "result": _encode_ints(values)
             }
             try:
                 if db[f"trait_{trait_name}"].insert_one(record):
@@ -96,7 +96,6 @@ def get_curves(db: Database, filters: Any = {}, raw: bool = False) -> Iterable[C
         curve_filter["field.bits"] = { "$lte": filters.order_bound }
 
     # Cofactor filter
-    # TODO discuss if (allowed_cofactor == None => match_any) is ok
     if hasattr(filters, "allowed_cofactors") and filters.allowed_cofactors:
         curve_filter["cofactor"] = { "$in": list(map(int, filters.allowed_cofactors)) }
 
@@ -110,13 +109,9 @@ def get_curves(db: Database, filters: Any = {}, raw: bool = False) -> Iterable[C
     return map(CustomCurve, list(cursor))
 
 
-# TODO this should be IMO handled by the traits - after finishing computation transform Sage values into Python values
 def _cast_sage_types(result: Any) -> Any:
-    if isinstance(result, int):
-        return result if abs(result) < 2 ** 63 else hex(result)
-
     if isinstance(result, Integer):
-        return _cast_sage_types(int(result))
+        return int(result)
 
     if isinstance(result, dict):
         for key, value in result.items():
@@ -128,10 +123,23 @@ def _cast_sage_types(result: Any) -> Any:
     return result
 
 
+def _encode_ints(result: Any) -> Any:
+    if isinstance(result, Integer) or isinstance(result, int):
+        return hex(result)
+    if isinstance(result, dict):
+        for key, value in result.items():
+            result[key] = _encode_ints(value)
+    elif isinstance(result, list):
+        for idx, value in enumerate(result):
+            result[idx] = _encode_ints(value)
+
+    return result
+
+
 def store_trait_result(db: Database, curve: CustomCurve, trait: str, params: Dict[str, Any], result: Dict[str, Any]) -> bool:
     trait_result = { "curve": curve.name }
     trait_result["params"] = _cast_sage_types(params)
-    trait_result["result"] = _cast_sage_types(result)
+    trait_result["result"] = _encode_ints(result)
     try:
         return db[f"trait_{trait}"].insert_one(trait_result).acknowledged
     except DuplicateKeyError:
@@ -156,7 +164,7 @@ def get_trait_results(db: Database, trait: str, params: Dict[str, Any] = None, c
     if limit:
         aggregate_pipeline.append({ "$limit": limit })
 
-    return map(_flatten_trait_result, db[f"trait_{trait}"].aggregate(aggregate_pipeline))
+    return map(_decode_ints, map(_flatten_trait_result, db[f"trait_{trait}"].aggregate(aggregate_pipeline)))
 
 
 def _flatten_trait_result(record: Dict[str, Any]):
@@ -172,9 +180,21 @@ def _flatten_trait_result(record: Dict[str, Any]):
 def _flatten_trait_result_rec(record: Dict[str, Any], prefix: str, output: Dict[str, Any]):
     for key in record:
         if isinstance(record[key], dict):
-            _flatten_trait_result(record[key], key + "_", output)
+            _flatten_trait_result_rec(record[key], key + "_", output)
         else:
             output[prefix + key] = record[key]
+
+
+def _decode_ints(source: Any) -> Any:
+    if isinstance(source, str) and source[:2] == "0x":
+        return int(source, base=16)
+    if isinstance(source, dict):
+        for key, value in source.items():
+            source[key] = _decode_ints(value)
+    elif isinstance(source, list):
+        for idx, value in enumerate(source):
+            source[idx] = _decode_ints(value)
+    return source
 
 
 if __name__ == "__main__":
