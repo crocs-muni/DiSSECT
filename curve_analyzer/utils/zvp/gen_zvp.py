@@ -23,14 +23,15 @@ class ZVPFinder:
     aa, bb, x_1, x_2, y_1, y_2 = Q.gens()
     E = EllipticCurve(R, [a, b])
 
-    def __init__(self, formula_file, multiple, verbose=False):
+    def __init__(self, formula_file, multiple, verbose=False, one_point_dependent=False):
         self.formula_file = formula_file
         self.multiple = multiple
         self.register = {"X1": self.x1, "Y1": self.y1, "X2": self.x2, "Y2": self.y2, "Z1": 1, "Z2": 1, "a": self.a,
                          "b": self.b, }
         self.zvp_set = set()
         self.zvp_set = self.fill_register()
-        self.zvp_lifted = [x.lift() for x in self.zvp_set]
+        self.zvp_lifted = [x.lift() for x in self.zvp_set if not one_point_dependent
+                           or (one_point_dependent and self.depends_on_one_point(x))]
         self.zvp_sorted = sorted(self.zvp_lifted, key=lambda x: len(str(x)))
         self.mult = self.E.multiplication_by_m(multiple)
         self.x2_subst, self.y2_subst = eval_binary_function(self.mult, self.x1, self.y1)
@@ -117,6 +118,11 @@ class ZVPFinder:
     def __str__(self):
         return '{self.zvp_reduced_sorted}'.format(self=self)
 
+    def depends_on_one_point(self, p):
+        vs = p.variables()
+        return (self.x1 not in vs and self.y1 not in vs or self.x2 not in vs and self.y2 not in vs) \
+               and (self.x1 in vs or self.x2 in vs or self.y1 in vs or self.y2 in vs)
+
     def make_conditions_univariate(self):
         """Eliminate y1 from the conditions and return univariate conditions instead (though they are still not
         recognized as univariate until a,b values are substitued in). """
@@ -144,7 +150,7 @@ class ZVPFinder:
             p_eval = p(a=a, b=b).univariate_polynomial()
             if not p_eval.is_constant():
                 zvp_evaluated_nonconst.append(p_eval)
-            elif GF(q)(p_eval) == 0 :
+            elif GF(q)(p_eval) == 0:
                 zvp_evaluated_nonconst.append(GF(q)(p_eval))
         return sorted(zvp_evaluated_nonconst)
 
