@@ -20,9 +20,13 @@ def i12_curve_function(curve, formula_file):
     I = R.ideal(y1 ** 2 - x1 ** 3 - a * x1 - b, y2 ** 2 - x2 ** 3 - a * x2 - b, X3, Y3, Z3)
     try:
         variety = I.variety()
-    except ValueError:
+    except (ValueError, NotImplementedError):
         variety = None
-    curve_results = {"ideal": I, "dimension": I.dimension(), "variety": variety}
+    try:
+        dimension = I.dimension()
+    except NotImplementedError:
+        dimension = None
+    curve_results = {"ideal": I, "dimension": dimension, "variety": variety}
     return curve_results
 
 
