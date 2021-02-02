@@ -39,6 +39,8 @@ class ZVPFinder:
         self.zvp_numerators = [self.Q(x.numerator()).lift() for x in self.zvp_substited]
         self.zvp_reduced = set()
         for numerator in self.zvp_numerators:
+            if numerator == 0:
+                continue
             for f, m in numerator.factor():
                 self.add_atomic(f, self.zvp_reduced)
         self.zvp_reduced_lifted = [x.lift() for x in self.zvp_reduced]
