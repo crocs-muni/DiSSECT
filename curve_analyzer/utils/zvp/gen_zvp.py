@@ -46,6 +46,7 @@ class ZVPFinder:
         self.zvp_reduced_lifted = [x.lift() for x in self.zvp_reduced]
         self.zvp_reduced_sorted = sorted(self.zvp_reduced_lifted, key=lambda x: len(str(x)))
         self.zvp_univariate = self.make_conditions_univariate()
+        self.output_polys = [x.lift() for x in [self.register["X3"], self.register["Y3"], self.register["Z3"]]]
         if verbose:
             self.print_zvp_conditions()
 
