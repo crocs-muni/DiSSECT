@@ -26,8 +26,8 @@ class ZVPFinder:
     def __init__(self, formula_file, multiple, verbose=False, one_point_dependent=False):
         self.formula_file = formula_file
         self.multiple = multiple
-        self.register = {"X1": self.x1, "Y1": self.y1, "X2": self.x2, "Y2": self.y2, "Z1": 1, "Z2": 1, "a": self.a,
-                         "b": self.b, }
+        self.register = {"X1": self.Q(self.x1), "Y1": self.Q(self.y1), "X2": self.Q(self.x2), "Y2": self.Q(self.y2), "Z1": self.Q(1), "Z2": self.Q(1), "a": self.Q(self.a),
+                         "b": self.Q(self.b)}
         self.zvp_set = set()
         self.zvp_set = self.fill_register()
         self.zvp_lifted = [x.lift() for x in self.zvp_set if not one_point_dependent
