@@ -54,7 +54,7 @@ class ZVPFinder:
             return self.register[symbol]
 
     def eval_reg_binary(self, expression):
-        """Assumes a binary operation."""
+        """Expects a binary operation (or avalue defined earlier)."""
         for op in ops.keys():
             symbols = expression.split(op)
             if len(symbols) == 2:
@@ -65,6 +65,8 @@ class ZVPFinder:
                 if op in ['**', '^'] and not isinstance(value2, int):
                     value2 = int(value2.lift())
                 return ops[op](value1, value2)
+        # if there was no binary operation
+        return self.register[expression]
 
     def add_atomic(self, value, zvp_set):
         try:
