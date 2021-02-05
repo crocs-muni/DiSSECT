@@ -21,3 +21,16 @@ curve_analyzer/curves_json_sim/*
 /curve_analyzer.egg-info/
 DiSSECT.egg-info
 /curve_analyzer/results/
+!dissect/visual/*.ipynb
+dissect/**/__pycache__
+dissect/traits/test_launcher.py
+dissect/traits/.*
+dissect/traits/sample_curves.py
+dissect/traits/**/*.json
+!dissect/traits/**/*_structure.json
+dissect/traits/**/*.params
+dissect/traits/**/*.txt
+dissect/utils/parallel/results/*
+dissect/curves_json_sim/*
+DiSSECT.egg-info
+/dissect/results/
