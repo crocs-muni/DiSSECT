@@ -1,0 +1,23 @@
+{
+  "secp112r2": {
+    "{'l': 2}": {
+      "least": 1,
+      "full": 2,
+      "relative": 2
+    }
+  },
+  "bn158": {
+    "{'l': 2}": {
+      "least": 3,
+      "full": 3,
+      "relative": 1
+    }
+  },
+  "brainpoolP160r1": {
+    "{'l': 2}": {
+      "least": 3,
+      "full": 3,
+      "relative": 1
+    }
+  }
+}

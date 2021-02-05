@@ -1,0 +1,17 @@
+{
+  "secp112r2": {
+    "{'l': 2, 'deg': 1}": {
+      "kronecker": -1
+    }
+  },
+  "bn158": {
+    "{'l': 2, 'deg': 1}": {
+      "kronecker": -1
+    }
+  },
+  "brainpoolP160r1": {
+    "{'l': 2, 'deg': 1}": {
+      "kronecker": -1
+    }
+  }
+}

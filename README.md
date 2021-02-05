@@ -1,4 +1,4 @@
-# DiSSECT: Distinguisher of Standard & Simulated Elliptic Curves through Traits
+# DiSSECT: Distinguisher of Standard & Simulated Elliptic Curves via Traits
 
 [![pipeline status](https://gitlab.fi.muni.cz/x408178/curve_analyzer/badges/master/pipeline.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/commits/master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/blob/master/LICENSE)
@@ -9,11 +9,10 @@
 # Setup
 **Using virtual environment**:
 
+- Clone with  ```git clone --recurse-submodules https://gitlab.fi.muni.cz/x408178/DiSSECT.git```
 - Create virtual environment for python in sage: `sage --python3 -m venv --system-site-packages environment`
-
 - Activate the environment: `source environment/bin/activate`
-
-- Run `pip3 install --editable .` in curve_analyzer folder
+- Run `pip3 install --editable .` in DiSSECT folder
 
 **Alternatively without virtual environment (not recommended)**:  
 From the root directory, run `sage --python3 setup.py develop --user` to initialize the project.

@@ -1,0 +1,20 @@
+{
+  "secp112r2": {
+    "{'l': 2}": {
+      "crater_degree": 0,
+      "depth": 1
+    }
+  },
+  "bn158": {
+    "{'l': 2}": {
+      "crater_degree": 0,
+      "depth": 0
+    }
+  },
+  "brainpoolP160r1": {
+    "{'l': 2}": {
+      "crater_degree": 0,
+      "depth": 0
+    }
+  }
+}
