@@ -1,0 +1,131 @@
+{"a01": {
+  "params_global": {
+    "deg_range": "[1,2]"
+  },
+  "params_local_names": [
+  "deg"
+  ]
+},
+
+"a02": {
+  "params_global": {
+    "deg_range": "[1]"
+  },
+  "params_local_names": [
+  "deg"
+  ]
+},
+
+"a04": {
+  "params_global": {
+    "k_range": "range(1, 9)"
+  },
+  "params_local_names": [
+    "k"
+  ]
+},
+
+"a05": {
+  "params_global": {
+    "l_range": "prime_range(19)"
+  },
+  "params_local_names": [
+    "l"
+  ]
+},
+
+"a06": {
+  "params_global": {
+    "l_range": "prime_range(10)",
+    "deg_range": "[1,3,4]"
+  },
+  "params_local_names": [
+    "l", "deg"
+  ]
+},
+
+"a08": {
+  "params_global": {},
+  "params_local_names": []
+},
+
+"a12": {
+  "params_global": {
+    "l_range": "prime_range(15)"
+  },
+  "params_local_names": [
+    "l"
+  ]
+},
+
+"a22": {
+  "params_global": {
+    "l_range": "prime_range(7)"
+  },
+  "params_local_names": [
+    "l"
+  ]
+},
+
+"a23": {
+  "params_global": {
+    "l_range": "prime_range(20)"
+  },
+  "params_local_names": [
+    "l"
+  ]
+},
+
+"a24": {
+  "params_global": {
+    "l_range": "prime_range(20)"
+  },
+  "params_local_names": [
+    "l"
+  ]
+},
+
+"a25": {
+  "params_global": {
+     "deg_range": "[1,2]"
+  },
+  "params_local_names": [
+     "deg"
+  ]
+},
+
+"i06": {
+  "params_global": {},
+  "params_local_names": []
+},
+
+"i07": {
+  "params_global": {},
+  "params_local_names": []
+},
+
+"i10": {
+  "params_global": {
+    "multiple_range": "range(2, 6)",
+    "formula_file_range": "[\"shortw/projective/addition/add-1998-cmo-2.op3\", \"shortw/projective/addition/add-1998-cmo.op3\", \"shortw/projective/addition/add-2002-bj.op3\", \"shortw/projective/addition/add-2007-bl.op3\", \"shortw/projective/addition/add-2016-rcb.op3\", \"shortw/projective/addition/madd-1998-cmo.op3\", \"shortw/projective/addition/mmadd-1998-cmo.op3\", \"shortw/projective-3/addition/add-1998-cmo-2.op3\", \"shortw/projective-3/addition/add-1998-cmo.op3\", \"shortw/projective-3/addition/add-2002-bj.op3\", \"shortw/projective-3/addition/add-2007-bl.op3\", \"shortw/projective-3/addition/add-2016-rcb.op3\", \"shortw/projective-3/addition/madd-1998-cmo.op3\", \"shortw/projective-3/addition/mmadd-1998-cmo.op3\"]"},
+  "params_local_names": [
+    "multiple", "formula_file"
+  ]
+},
+
+"i11": {
+  "params_global": {
+    "formula_file_range": "[\"shortw/projective/addition/add-1998-cmo-2.op3\", \"shortw/projective/addition/add-1998-cmo.op3\", \"shortw/projective/addition/add-2002-bj.op3\", \"shortw/projective/addition/add-2007-bl.op3\", \"shortw/projective/addition/add-2016-rcb.op3\", \"shortw/projective/addition/madd-1998-cmo.op3\", \"shortw/projective/addition/mmadd-1998-cmo.op3\", \"shortw/projective-3/addition/add-1998-cmo-2.op3\", \"shortw/projective-3/addition/add-1998-cmo.op3\", \"shortw/projective-3/addition/add-2002-bj.op3\", \"shortw/projective-3/addition/add-2007-bl.op3\", \"shortw/projective-3/addition/add-2016-rcb.op3\", \"shortw/projective-3/addition/madd-1998-cmo.op3\", \"shortw/projective-3/addition/mmadd-1998-cmo.op3\"]"},
+  "params_local_names": [
+   "formula_file"
+  ]
+},
+
+"i12": {
+  "params_global": {
+    "formula_file_range": "[\"shortw/projective/addition/add-1998-cmo-2.op3\", \"shortw/projective/addition/add-1998-cmo.op3\", \"shortw/projective/addition/add-2002-bj.op3\", \"shortw/projective/addition/add-2007-bl.op3\", \"shortw/projective/addition/add-2016-rcb.op3\", \"shortw/projective/addition/madd-1998-cmo.op3\", \"shortw/projective/addition/mmadd-1998-cmo.op3\", \"shortw/projective-3/addition/add-1998-cmo-2.op3\", \"shortw/projective-3/addition/add-1998-cmo.op3\", \"shortw/projective-3/addition/add-2002-bj.op3\", \"shortw/projective-3/addition/add-2007-bl.op3\", \"shortw/projective-3/addition/add-2016-rcb.op3\", \"shortw/projective-3/addition/madd-1998-cmo.op3\", \"shortw/projective-3/addition/mmadd-1998-cmo.op3\"]"},
+  "params_local_names": [
+   "formula_file"
+  ]
+}
+}
