@@ -1,4 +1,4 @@
-###Distributions
+### Distributions
 Most distributions are considered over all the set of all (isogeny/isomorphism classes of) elliptic curves over $\mathbb{F}_{p}$ for fixed $p$. In some cases, we only consider (isogeny/isomorpism classes of) ordinary curves.
 
 ### a01
@@ -77,7 +77,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 ### a23
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}$, prime $l$
 
-**Output:** the depth of the $l$-volcano and the degree of the crater subgraph(i.e., 2 is the degree of a circle crater, 1 for segment and 0 for point; more precisely: the degree is $1+\genfrac(){}{0}{d_K}{l}$) 
+**Output:** the depth of the $l$-volcano and the degree of the crater subgraph(i.e., 2 is the degree of a circle crater, 1 for a segment and 0 for a point; more precisely: the degree is $1+\genfrac(){}{0}{d_K}{l}$) 
 
 **Motivation:** the volcano structure might be relevant for cryptanalysis
 
