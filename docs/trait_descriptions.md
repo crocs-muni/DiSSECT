@@ -24,7 +24,7 @@ The distribution is not known. It probably can be reduced to the distribution of
 
 Given an elliptic curve $E/\mathbb{F}_p$ and a prime $l$, the function $a05$ returns $k_1,k_2,k_2/k_1$ where $k_1,k_2$ are the smallest integers satisfying $E[l]\cap E(\mathbb{F}_{p^{k_1}})\neq \empty$ and $E[l]\subseteq E(\mathbb{F}_{p^{k_2}})$. 
 
-The distribution is not known (but see page 50 in <https://is.muni.cz/th/pxawb/diplomova_prace.pdf>).
+The distribution is not known (but see page 50 in <https://github.com/vojtechsu/isogenies/blob/master/master_thesis.pdf>).
 
 ### a06
 
@@ -62,7 +62,7 @@ The distribution of the crater should be given by Chebotarev's theorem. The dist
 
 Given an elliptic curve $E/\mathbb{F}_p$ and a prime $l$, the function $a24$ returns $i_1,i_2,i_2/i_1$ where $i_1,i_2$ are the smallest integers such that from  $E/\mathbb{F}_{p^{i_1}}$ there exists a ($\mathbb{F}_{p^{i_1}}$ rational) $l$-isogeny and from $E/\mathbb{F}_{p^{i_2}}$ there exist all $l+1$ ($\mathbb{F}_{p^{i_2}}$ rational) $l$-isogenies.
 
-The distribution of $i_1$ is not known (but see page 50 in <https://is.muni.cz/th/pxawb/diplomova_prace.pdf>).
+The distribution of $i_1$ is not known (but see page 50 in <https://github.com/vojtechsu/isogenies/blob/master/master_thesis.pdf>).
 
 ### a25
 
