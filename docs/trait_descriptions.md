@@ -1,4 +1,4 @@
-All distributions are considered over all the set of all (isomorphism classes of) elliptic curves over $\mathbb{F}_{p}$ for fixed $p$.
+Most distributions are considered over all the set of all (isogeny/isomorphism classes of) elliptic curves over $\mathbb{F}_{p}$ for fixed $p$. In some cases, we only consider (isogeny/isomorpism classes of) ordinary curves.
 
 ### a01
 
