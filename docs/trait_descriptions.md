@@ -85,6 +85,6 @@ The distribution should be easy to compute using Sato-Tate.
 
 ### i13
 
-Given an elliptic curve $E/\mathbb{F}_p$ and a scalar $k$, the function $i07$ returns the number of points on E with Hamming weight of the $x$-coordinate equal to $k$.
+Given an elliptic curve $E/\mathbb{F}_p$ and a scalar $k$, the function $i13$ returns the number of points on E with Hamming weight of the $x$-coordinate equal to $k$.
 
 The distribution is not known.
