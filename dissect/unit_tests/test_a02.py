@@ -4,12 +4,12 @@ import unittest
 from dissect.traits.a02.a02 import a02_curve_function
 from dissect.traits.example_curves import curve_names
 
-results = {'secp112r2': {"{'deg': 1}": {'cm_disc': -3147981784734289480448435252561803,
+results = {'secp112r2': {"{}": {'cm_disc': -3147981784734289480448435252561803,
                                         'factorization': [[2, 2], [23, 1], [136868773249316933932540663154861, 1]],
                                         'max_conductor': 2}}, 'bn158': {
-    "{'deg': 1}": {'cm_disc': -3, 'factorization': [[3, 1], [51329, 2], [8849442974123583107, 2]],
+    "{}": {'cm_disc': -3, 'factorization': [[3, 1], [51329, 2], [8849442974123583107, 2]],
                    'max_conductor': 454233058418789397299203}}, 'brainpoolP160r1': {
-    "{'deg': 1}": {'cm_disc': -4645380339943745084523443872838008326722778443,
+    "{}": {'cm_disc': -4645380339943745084523443872838008326722778443,
                    'factorization': [[3, 2], [11, 2], [17, 1], [29, 1], [89, 1], [22067, 1], [577011261754261, 1],
                                      [8314894957527277176257, 1]], 'max_conductor': 33}}}
 

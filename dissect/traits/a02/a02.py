@@ -16,7 +16,7 @@ def ext_trace(q, t, deg):
     return b
 
 
-def a02_curve_function(curve, deg):
+def a02_curve_function(curve):
     """
     Computation of d_K (cm_disc), v (max_conductor) and factorization of D where D=t^2-4q = v^2*d_K
     Returns a dictionary (keys: 'cm_disc', 'factorization', 'max_conductor')
@@ -24,8 +24,6 @@ def a02_curve_function(curve, deg):
     t = curve.trace
     q = curve.q
     curve_results = {}
-    t = ext_trace(q, t, deg)
-    q = q ** deg
     D = t ** 2 - 4 * q
     d = squarefree_part(D)
     disc = d
