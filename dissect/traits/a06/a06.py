@@ -1,11 +1,11 @@
 from sage.all import ZZ, sqrt
 
+import dissect.traits.trait_utils as tu
 from dissect.traits.trait_interface import compute_results
 from dissect.traits.trait_utils import ext_cm_disc
-import dissect.traits.trait_utils as tu
 from dissect.utils.custom_curve import CustomCurve
 
-TIME = 30
+TRAIT_TIMEOUT = 40
 
 
 def a06_curve_function(curve: CustomCurve, deg):
@@ -16,7 +16,7 @@ def a06_curve_function(curve: CustomCurve, deg):
     cm_disc_ext = ext_cm_disc(curve, deg=deg)
     ratio_sqrt = ZZ(sqrt(cm_disc_ext / cm_disc_base))
     curve_results["ratio_sqrt"] = ratio_sqrt
-    curve_results["factorization"] = tu.factorization(ratio_sqrt, timeout_duration=TIME)
+    curve_results["factorization"] = tu.factorization(ratio_sqrt, timeout_duration=TRAIT_TIMEOUT)
     return curve_results
 
 

@@ -1,5 +1,6 @@
 import re
 from pathlib import Path
+from typing import List
 
 from sage.all import ZZ
 
@@ -21,7 +22,8 @@ EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_FORMULAS = [f for f in EFD_SHORTW_PROJECTI
 X962_PATH = Path(ROOT_DIR, 'utils', 'parallel', 'x962')
 TRAIT_MODULE_PATH = 'dissect.traits'
 TRAIT_NAME_CONDITION = r'[ais][0-9][0-9]'
-TRAIT_NAMES = [f.name for f in TRAIT_PATH.iterdir() if f.is_dir() and re.search(TRAIT_NAME_CONDITION, f.name)]
+TRAIT_NAMES: List[str] = [f.name for f in TRAIT_PATH.iterdir() if f.is_dir()
+                          and re.search(TRAIT_NAME_CONDITION, f.name)]
 STD_SOURCES = [f.name for f in CURVE_PATH.iterdir() if f.is_dir() and "." not in f.name]
 STD_BITLENGTHS = set()
 STD_COFACTORS = set()

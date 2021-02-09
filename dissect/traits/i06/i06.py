@@ -1,7 +1,8 @@
 from sage.all import sqrt
+
+import dissect.traits.trait_utils as tu
 from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
-import dissect.traits.trait_utils as tu
 
 
 def i06_curve_function(curve: CustomCurve):
@@ -10,14 +11,16 @@ def i06_curve_function(curve: CustomCurve):
     q = curve.q
     a = 4 * q - 1
     b = 4 * order - 1
-    if tu.squarefree_part(a) == 'NO DATA (timed out)':
-        a_square_part = 'NO DATA (timed out)'
+    a_squarefree_part = tu.squarefree_part(a)
+    b_squarefree_part = tu.squarefree_part(b)
+    if a_squarefree_part == 'NO DATA (timed out)':
+        a_square_part = a_squarefree_part
     else:
-        a_square_part = sqrt(a // tu.squarefree_part(a))
-    if tu.squarefree_part(b) == 'NO DATA (timed out)':
-        b_square_part = 'NO DATA (timed out)'
+        a_square_part = sqrt(a // a_squarefree_part)
+    if b_squarefree_part == 'NO DATA (timed out)':
+        b_square_part = b_squarefree_part
     else:
-        b_square_part = sqrt(b // tu.squarefree_part(b))
+        b_square_part = sqrt(b // b_squarefree_part)
     curve_results = {"p": a_square_part, "order": b_square_part}
     return curve_results
 

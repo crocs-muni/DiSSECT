@@ -1,8 +1,8 @@
+import dissect.traits.trait_utils as tu
 from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
-import dissect.traits.trait_utils as tu
 
-TIME = 20
+TRAIT_TIMEOUT = 30
 
 
 def near_order_factorizations(n, sign='+', k=10, t=10):
@@ -13,7 +13,7 @@ def near_order_factorizations(n, sign='+', k=10, t=10):
         m = k * n + 1
     else:
         m = k * n - 1
-    return tu.factorization(m, t)
+    return tu.factorization(m, timeout_duration=t)
 
 
 def largest_factor_bitlen(factorization):
@@ -31,7 +31,7 @@ def a04_curve_function(curve: CustomCurve, k):
     Returns a dictionary
     """
     card = curve.cardinality
-    t = TIME
+    t = TRAIT_TIMEOUT
     curve_results = {}
     curve_results['(+)factorization'] = near_order_factorizations(card, '+', k, t)
     curve_results['(+)largest_factor_bitlen'] = largest_factor_bitlen(curve_results['(+)factorization'])
