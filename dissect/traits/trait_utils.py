@@ -6,8 +6,7 @@ from sage.rings.finite_rings.all import GF
 from dissect.utils.custom_curve import CustomCurve
 
 
-
-def ext_card(curve: CustomCurve, deg,sage=False):
+def ext_card(curve: CustomCurve, deg, sage=False):
     """returns curve cardinality over deg-th relative extension"""
     if sage:
         return curve.EC.cardinality(extension_degree=deg)
@@ -22,7 +21,7 @@ def ext_card(curve: CustomCurve, deg,sage=False):
 
 def ext_trace(curve: CustomCurve, deg):
     """returns the trace of Frobenius over deg-th relative extension"""
-    return curve.q**deg+1-ext_card(curve,deg)
+    return curve.q ** deg + 1 - ext_card(curve, deg)
 
 
 def ext_cm_disc(curve: CustomCurve, deg=1):
@@ -44,7 +43,7 @@ def extend(curve: CustomCurve, deg):
     """returns curve over the deg-th relative extension"""
     E = curve.EC
     q = curve.q
-    field = curve.field_desc
+    field = curve.field
     if q % 2 != 0:
         R = field['x']
         pol = R.irreducible_element(deg)

@@ -27,6 +27,7 @@ def find_full_torsion(curve:CustomCurve, l, least):
     Least is the result of find_least_torsion
     Returns the degree
     """
+    q = curve.q
     k = embedding_degree_q(q ** least, l)
     # k satisfies l|a^k-1 where a,1 are eigenvalues of Frobenius of extended E
     if k > 1:  # i.e. a!=1
