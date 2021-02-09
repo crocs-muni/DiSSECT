@@ -1,52 +1,12 @@
-from sage.all import ZZ, PolynomialRing, GF, Integers, log, EllipticCurve
+from sage.all import ZZ, PolynomialRing, GF, Integers
 
 from dissect.traits.trait_interface import compute_results
+from dissect.traits.trait_utils import ext_card, is_torsion_cyclic
 
 
 def embedding_degree_q(q, l):
     """returns embedding degree with respect to q"""
     return (Integers(l)(q)).multiplicative_order()
-
-
-def ext_card(q, card_low, deg):
-    """returns curve cardinality over deg-th relative extension"""
-    tr = q + 1 - card_low
-    s_old, s_new = 2, tr
-    for _ in range(2, deg + 1):
-        s_old, s_new = s_new, tr * s_new - q * s_old
-    card_high = q ** deg + 1 - s_new
-    return card_high
-
-
-def stupid_coerce_K_to_L(element, K, L):
-    name_K = str(K.gen())
-    name_L = str(L.gen())
-    return L(str(element).replace(name_K, name_L))
-
-
-def extend(E, q, deg, field):
-    """returns curve over the deg-th relative extension"""
-    if q % 2 != 0:
-        R = field['x']
-        pol = R.irreducible_element(deg)
-        Fext = GF(q ** deg, name='z', modulus=pol)
-        return E.base_extend(Fext)
-    K = field
-    charac = K.characteristic()
-    R = GF(charac)['x']
-    ext_deg = q ** deg
-    pol = R.irreducible_element(deg * (log(q, charac)))
-    Kext = GF(ext_deg, name='ex', modulus=pol)
-    gKext = Kext.gen()
-
-    h = gKext ** ((ext_deg - 1) // (q - 1))
-    assert charac ** (h.minpoly().degree()) == q
-    H = GF(q, name='h', modulus=h.minpoly())
-    inclusion = H.hom([h])
-
-    new_coefficients = [inclusion(stupid_coerce_K_to_L(a, K, H)) for a in E.a_invariants()]
-    EE = EllipticCurve(Kext, new_coefficients)
-    return EE
 
 
 def find_least_torsion(q, order, l):
@@ -62,20 +22,6 @@ def find_least_torsion(q, order, l):
     roots = [r[0] for r in f.roots() for _ in range(r[1])]
 
     return min(roots[0].multiplicative_order(), roots[1].multiplicative_order())
-
-
-def is_torsion_cyclic(E, q, order, l, deg, field, iterations=10):
-    """
-    True if the l-torsion is cyclic and False otherwise (bycyclic). Note that this is probabilistic only.
-    """
-    card = ext_card(q, order, deg)
-    m = ZZ(card / l)
-    EE = extend(E, q, deg, field)
-    for _ in range(iterations):
-        P = EE.random_element()
-        if not (m * P == EE(0)):
-            return True
-    return False
 
 
 def find_full_torsion(E, q, order, l, least, field):

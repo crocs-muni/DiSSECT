@@ -3,17 +3,7 @@ from sage.all import ZZ, sqrt, factor, squarefree_part
 from dissect.traits.trait_interface import compute_results, timeout
 
 # global time for one factorization
-TIME = 10
-
-
-def ext_trace(q, t, deg):
-    a = 2
-    b = t
-    for _ in range(deg - 1):
-        tmp = b
-        b = t * b - q * a
-        a = tmp
-    return b
+TIME = 20
 
 
 def a02_curve_function(curve):
@@ -21,10 +11,7 @@ def a02_curve_function(curve):
     Computation of d_K (cm_disc), v (max_conductor) and factorization of D where D=t^2-4q = v^2*d_K
     Returns a dictionary (keys: 'cm_disc', 'factorization', 'max_conductor')
     """
-    t = curve.trace
-    q = curve.q
-    curve_results = {}
-    D = t ** 2 - 4 * q
+    D = ext_cm_disc(curve, deg=1)
     d = squarefree_part(D)
     disc = d
     if d % 4 != 1:
