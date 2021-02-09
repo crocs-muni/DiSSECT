@@ -87,7 +87,7 @@ def is_torsion_cyclic(curve: CustomCurve, l, deg, iterations=10):
     """
     card = ext_card(q, curve.cardinality, deg)
     m = ZZ(card / l)
-    EE = extend(E = curve.EC, curve.q, deg, curve.field)
+    EE = extend(curve.EC, curve.q, deg, curve.field)
     for _ in range(iterations):
         P = EE.random_element()
         if not (m * P == EE(0)):
