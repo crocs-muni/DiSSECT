@@ -18,12 +18,7 @@ def a02_curve_function(curve: CustomCurve):
         disc *= 4
     curve_results = {}
     curve_results['cm_disc'] = disc
-    factorization = tu.factorization(D)
-    if factorization == 'NO DATA (timed out)':
-        curve_results['factorization'] = []
-    else:
-        tuples_to_lists = [list(i) for i in list(factorization)]
-        curve_results['factorization'] = tuples_to_lists
+    curve_results['factorization'] = tu.factorization(D)
     curve_results['max_conductor'] = ZZ(sqrt(D / disc))
     return curve_results
 
