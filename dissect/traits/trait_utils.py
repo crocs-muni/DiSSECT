@@ -6,17 +6,13 @@ from sage.rings.finite_rings.all import GF
 from dissect.utils.custom_curve import CustomCurve
 
 
-def ext_card_curve(curve: CustomCurve, deg, sage=False):
+
+def ext_card(curve: CustomCurve, deg,sage=False):
     """returns curve cardinality over deg-th relative extension"""
-    if not sage:
-        return ext_card(curve.q, curve.cardinality, deg)
-    else:
+    if sage:
         return curve.EC.cardinality(extension_degree=deg)
-
-
-def ext_card(q, card_low, deg):
-    """returns curve cardinality over deg-th relative extension"""
-    tr = q + 1 - card_low
+    tr = curve.trace
+    q = curve.q
     s_old, s_new = 2, tr
     for _ in range(2, deg + 1):
         s_old, s_new = s_new, tr * s_new - q * s_old
@@ -26,33 +22,29 @@ def ext_card(q, card_low, deg):
 
 def ext_trace(curve: CustomCurve, deg):
     """returns the trace of Frobenius over deg-th relative extension"""
-    q = curve.q
-    tr = curve.trace
-    a = 2
-    b = tr
-    for _ in range(deg - 1):
-        tmp = b
-        b = tr * b - q * a
-        a = tmp
-    return b
+    return curve.q**deg+1-ext_card(curve,deg)
 
 
 def ext_cm_disc(curve: CustomCurve, deg=1):
     """returns the CM discriminant (up to a square) over deg-th relative extension"""
     q = curve.q
-    card_ext = ext_card_curve(curve, deg)
+    card_ext = ext_card(curve, deg)
     ext_tr = q ** deg + 1 - card_ext
     return ext_tr ** 2 - 4 * q ** deg
 
 
 def stupid_coerce_K_to_L(element, K, L):
+    """returns the element of K as an element of L"""
     name_K = str(K.gen())
     name_L = str(L.gen())
     return L(str(element).replace(name_K, name_L))
 
 
-def extend(E, q, deg, field):
+def extend(curve: CustomCurve, deg):
     """returns curve over the deg-th relative extension"""
+    E = curve.EC
+    q = curve.q
+    field = curve.field_desc
     if q % 2 != 0:
         R = field['x']
         pol = R.irreducible_element(deg)
@@ -76,13 +68,13 @@ def extend(E, q, deg, field):
     return EE
 
 
-def is_torsion_cyclic(E, q, order, l, deg, field, iterations=10):
+def is_torsion_cyclic(curve: CustomCurve, l, deg, iterations=10):
     """
     True if the l-torsion is cyclic and False otherwise (bicyclic). Note that this is probabilistic only.
     """
-    card = ext_card(q, order, deg)
+    card = ext_card(curve, deg)
     m = ZZ(card / l)
-    EE = extend(E, q, deg, field)
+    EE = extend(curve, deg)
     for _ in range(iterations):
         P = EE.random_element()
         if not (m * P == EE(0)):
