@@ -1,9 +1,10 @@
-from sage.all import ZZ, sqrt, factor, squarefree_part
+from sage.all import ZZ, sqrt, squarefree_part
 
-from dissect.traits.trait_interface import compute_results, timeout
+from dissect.traits.trait_interface import compute_results
 import dissect.traits.trait_utils as tu
 from dissect.traits.trait_utils import ext_cm_disc
 from dissect.utils.custom_curve import CustomCurve
+
 
 def a02_curve_function(curve: CustomCurve):
     """

@@ -1,5 +1,3 @@
-from sage.all import factor
-
 from dissect.traits.trait_utils import ext_trace
 from dissect.traits.trait_interface import compute_results
 import dissect.traits.trait_utils as tu

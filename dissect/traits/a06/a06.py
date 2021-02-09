@@ -1,13 +1,11 @@
-from sage.all import ZZ, ecm, sqrt
+from sage.all import ZZ, sqrt
 
-from dissect.traits.trait_interface import compute_results, timeout
+from dissect.traits.trait_interface import compute_results
 from dissect.traits.trait_utils import ext_cm_disc
+import dissect.traits.trait_utils as tu
 from dissect.utils.custom_curve import CustomCurve
 
-# global time for one factorization
-
-TIME = 20
-
+TIME=30
 
 def a06_curve_function(curve: CustomCurve, deg):
     """returns the factorization of the D_deg/D_1, where D_deg is the CM discriminant over the deg-th relative
@@ -17,7 +15,7 @@ def a06_curve_function(curve: CustomCurve, deg):
     cm_disc_ext = ext_cm_disc(curve, deg=deg)
     ratio_sqrt = ZZ(sqrt(cm_disc_ext / cm_disc_base))
     curve_results["ratio_sqrt"] = ratio_sqrt
-    curve_results["factorization"] = timeout(ecm.factor, [ratio_sqrt], timeout_duration=TIME)
+    curve_results["factorization"] = tu.factorization(ratio_sqrt, timeout_duration=TIME)
     return curve_results
 
 

@@ -1,8 +1,8 @@
-from sage.all import squarefree_part, sqrt
-
+from sage.all import sqrt
 from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 import dissect.traits.trait_utils as tu
+
 
 def i06_curve_function(curve: CustomCurve):
     """"Computes the square part of 4*p-1. 4*order-1 (result is square root of the square part)"""

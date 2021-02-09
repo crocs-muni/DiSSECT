@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from sage.all import ZZ, EllipticCurve, ecm, factor
+from sage.all import ZZ, EllipticCurve, ecm, factor, product
 from dissect.traits.trait_interface import timeout
 from sage.functions.log import log
 from sage.rings.finite_rings.all import GF
@@ -82,23 +82,15 @@ def is_torsion_cyclic(curve: CustomCurve, l, deg, iterations=20):
     return False
 
 
-# global time for one factorization
-TIME = 10
-
-
-def factorization(m, t=None,ecm = True):
-    if t == None:
-        t = TIME
-    if ecm:
-        return timeout(ecm.factor, [m], timeout_duration=t)
+def factorization(x, timeout_duration=20, use_ecm=True):
+    """return the factorization of abs(x) as a list or 'NO DATA (timed out)'"""
+    if use_ecm:
+        return timeout(ecm.factor, [abs(x)], timeout_duration=timeout_duration)
     else:
-        return [i[0] for i in list(factor(m)) for _ in range(i[1])]
+        return [i[0] for i in list(factor(abs(x))) for _ in range(i[1])]
 
 
-def squarefree_part(x,t = None, ecm = True):
-    F = factorization(x,t,ecm)
-    n = x.parent()(1)
-    for p, e in F:
-        if e % 2:
-            n *= p
-    return n * F.unit()
+def squarefree_part(x, timeout_duration=20, use_ecm=True):
+    """return the square free part of abs(x) or 'NO DATA (timed out)'"""
+    F = factorization(x, timeout_duration=timeout_duration, use_ecm=use_ecm)
+    return product(set(F))
