@@ -1,12 +1,12 @@
 import re
 from pathlib import Path
-from typing import List
+from typing import List, Set, Any, Union
 
 from sage.all import ZZ
 
 from dissect.utils.json_handler import load_from_json
 
-ROOT_DIR = Path(__file__).parent  # This is the project root
+ROOT_DIR: Union[Path, Any] = Path(__file__).parent  # This is the project root
 CURVE_PATH = Path(ROOT_DIR, 'curves_json')
 CURVE_PATH_SIM = Path(ROOT_DIR, 'curves_json_sim')
 TRAIT_PATH = Path(ROOT_DIR, 'traits')
@@ -20,13 +20,13 @@ EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_PATH = Path(EFD_PATH, 'shortw', 'projectiv
 EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_FORMULAS = [f for f in EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_PATH.iterdir() if
                                                   f.suffix == '.op3']
 X962_PATH = Path(ROOT_DIR, 'utils', 'parallel', 'x962')
-TRAIT_MODULE_PATH = 'dissect.traits'
+TRAIT_MODULE_PATH: str = 'dissect.traits'
 TRAIT_NAME_CONDITION = r'[ais][0-9][0-9]'
 TRAIT_NAMES: List[str] = [f.name for f in TRAIT_PATH.iterdir() if f.is_dir()
                           and re.search(TRAIT_NAME_CONDITION, f.name)]
-STD_SOURCES = [f.name for f in CURVE_PATH.iterdir() if f.is_dir() and "." not in f.name]
+STD_SOURCES: List[str] = [f.name for f in CURVE_PATH.iterdir() if f.is_dir() and "." not in f.name]
 STD_BITLENGTHS = set()
-STD_COFACTORS = set()
+STD_COFACTORS: Set[ZZ] = set()
 STD_CURVE_NAMES = []
 STD_CURVE_DICT = {}
 for source in STD_SOURCES:
