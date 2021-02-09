@@ -5,7 +5,8 @@ from dissect.traits.trait_utils import ext_cm_disc
 import dissect.traits.trait_utils as tu
 from dissect.utils.custom_curve import CustomCurve
 
-TIME=30
+TIME = 30
+
 
 def a06_curve_function(curve: CustomCurve, deg):
     """returns the factorization of the D_deg/D_1, where D_deg is the CM discriminant over the deg-th relative

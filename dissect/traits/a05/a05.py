@@ -21,7 +21,7 @@ def find_least_torsion(curve: CustomCurve, l):
     return min(roots[0].multiplicative_order(), roots[1].multiplicative_order())
 
 
-def find_full_torsion(curve:CustomCurve, l, least):
+def find_full_torsion(curve: CustomCurve, l, least):
     """
     Computes the smallest extension which contains full l-torsion subgroup
     Least is the result of find_least_torsion
@@ -34,13 +34,13 @@ def find_full_torsion(curve:CustomCurve, l, least):
         return k * least
     else:  # i.e. a==1, we have two options for the geometric multiplicity
         card = ext_card(curve, least)
-        if (card % l ** 2) == 0 and not is_torsion_cyclic(curve, l,least):  # geom. multiplicity is 2
+        if (card % l ** 2) == 0 and not is_torsion_cyclic(curve, l, least):  # geom. multiplicity is 2
             return least
         else:  # geom. multiplicity is 1
             return l * least
 
 
-def find_torsions(curve:CustomCurve, l):
+def find_torsions(curve: CustomCurve, l):
     """Returns a triple of extensions containing torsion"""
     least = find_least_torsion(curve, l)
     if least == l ** 2 - 1:

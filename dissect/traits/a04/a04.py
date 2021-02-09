@@ -2,7 +2,8 @@ from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 import dissect.traits.trait_utils as tu
 
-TIME=20
+TIME = 20
+
 
 def near_order_factorizations(n, sign='+', k=10, t=10):
     """Computer factorization of k*n+1 (k*n-1) if 'sign' is "+" ("-") in time 't' """
@@ -12,7 +13,7 @@ def near_order_factorizations(n, sign='+', k=10, t=10):
         m = k * n + 1
     else:
         m = k * n - 1
-    return tu.factorization(m,t)
+    return tu.factorization(m, t)
 
 
 def largest_factor_bitlen(factorization):
