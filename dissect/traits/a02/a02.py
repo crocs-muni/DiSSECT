@@ -1,9 +1,11 @@
 from sage.all import ZZ, sqrt, squarefree_part
 
-from dissect.traits.trait_interface import compute_results
 import dissect.traits.trait_utils as tu
+from dissect.traits.trait_interface import compute_results
 from dissect.traits.trait_utils import ext_cm_disc
 from dissect.utils.custom_curve import CustomCurve
+
+TRAIT_TIMEOUT = 20
 
 
 def a02_curve_function(curve: CustomCurve):
@@ -18,7 +20,7 @@ def a02_curve_function(curve: CustomCurve):
         disc *= 4
     curve_results = {}
     curve_results['cm_disc'] = disc
-    curve_results['factorization'] = tu.factorization(D)
+    curve_results['factorization'] = tu.factorization(D, timeout_duration=TRAIT_TIMEOUT)
     curve_results['max_conductor'] = ZZ(sqrt(D / disc))
     return curve_results
 

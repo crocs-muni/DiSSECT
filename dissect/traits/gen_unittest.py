@@ -10,6 +10,7 @@ from dissect.utils.json_handler import save_into_json, load_from_json
 
 traits_to_skip = ['a08']
 
+
 def load_params_local(local_params):
     if local_params:
         print("Input parameters: ")
@@ -90,8 +91,8 @@ def main():
     parser.add_argument('-s', action='store_true', help='only structure file flag (default: False)')
     requiredNamed = parser.add_argument_group('required named arguments')
     requiredNamed.add_argument('-n', '--trait_name', metavar='trait_name', type=str, action='store',
-                               help='List names of the traits seperated by comma or all; available traits: ' + ", ".join(
-                                   TRAIT_NAMES), required=True)
+                               help='List names of the traits seperated by comma or all; available traits: ' +
+                                    ", ".join(TRAIT_NAMES), required=True)
 
     args = parser.parse_args()
     if args.trait_name == "all":

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 from sage.all import ZZ, EllipticCurve, ecm, factor, product
-from dissect.traits.trait_interface import timeout
 from sage.functions.log import log
 from sage.rings.finite_rings.all import GF
 
+from dissect.traits.trait_interface import timeout
 from dissect.utils.custom_curve import CustomCurve
 
 
