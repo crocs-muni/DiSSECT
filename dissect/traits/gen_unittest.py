@@ -56,15 +56,15 @@ def create_structure_file(name):
 
 def create_unittest(name):
     results = load_from_json(Path(TRAIT_PATH, name, name + "_structure.json"))
-    if Path(TRAIT_PATH, "../unit_tests", "trait_" + name + ".py").is_file():
+    if Path(TRAIT_PATH, "../unit_tests", "test_" + name + ".py").is_file():
         answer = input("Unittest for " + name + " already exists, overwrite? [Y/n]")
         if answer in "[n,N]":
             return
-    f = open(Path(TRAIT_PATH, "../unit_tests", "trait_" + name + ".py"), "w")
+    f = open(Path(TRAIT_PATH, "../unit_tests", "test_" + name + ".py"), "w")
 
     f.write("import unittest, ast\n")
-    f.write("from DiSSECT.traits." + name + "." + name + " import " + name + "_curve_function\n")
-    f.write("from DiSSECT.traits.example_curves import curves, curve_names\n")
+    f.write("from dissect.traits." + name + "." + name + " import " + name + "_curve_function\n")
+    f.write("from dissect.traits.example_curves import curves, curve_names\n")
     f.write("results=" + str(results) + "\n")
     f.write("\nclass Test" + name[0].upper() + name[1:] + "(unittest.TestCase):\n \n")
     for curve in results.keys():
