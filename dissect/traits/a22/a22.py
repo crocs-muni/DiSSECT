@@ -1,9 +1,10 @@
 from sage.all import factor
 
 from dissect.traits.trait_interface import compute_results
+from dissect.utils.custom_curve import CustomCurve
 
 
-def a22_curve_function(curve, l):
+def a22_curve_function(curve: CustomCurve, l):
     """
     Computation factorization of l-th division polynomial
     Returns a dictionary (keys: 'factorization', 'degs_list', 'len' )

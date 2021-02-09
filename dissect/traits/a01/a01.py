@@ -1,8 +1,10 @@
 from sage.all import GF, ZZ
 
 from dissect.traits.trait_interface import compute_results, timeout
+from dissect.utils.custom_curve import CustomCurve
 
 # global time for one group computation
+
 TIME = 100
 
 
@@ -15,14 +17,13 @@ def compute_second_generator_order(E_ext):
         return gens[1].order
 
 
-def a01_curve_function(curve, deg):
+def a01_curve_function(curve: CustomCurve, deg):
     """returns the orders of the two generators of the curve over the deg-th relative extension"""
     curve_results = {}
-    t = TIME
     E = curve.EC
     q = curve.q
     E_ext = E.base_extend(GF(q ** deg))
-    curve_results['ord2'] = timeout(compute_second_generator_order, [E_ext], timeout_duration=t)
+    curve_results['ord2'] = timeout(compute_second_generator_order, [E_ext], timeout_duration=TIME)
     if isinstance(curve_results['ord2'], int):
         curve_results['ord1'] = ZZ(E_ext.cardinality() / curve_results['ord2'])
     else:

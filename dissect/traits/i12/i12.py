@@ -5,10 +5,11 @@ from sage.all import PolynomialRing, GF
 
 from dissect.definitions import EFD_PATH
 from dissect.traits.trait_interface import compute_results
+from dissect.utils.custom_curve import CustomCurve
 from dissect.utils.zvp.gen_zvp import ZVPFinder
 
 
-def i12_curve_function(curve, formula_file):
+def i12_curve_function(curve: CustomCurve, formula_file):
     """Tries to compute the variety of exceptional points where the formula fails"""
     q = curve.q
     _, _, _, a, b = curve.EC.ainvs()

@@ -2,6 +2,7 @@ from sage.all import ZZ, PolynomialRing, GF, Integers
 
 from dissect.traits.trait_interface import compute_results
 from dissect.traits.trait_utils import ext_card, is_torsion_cyclic
+from dissect.utils.custom_curve import CustomCurve
 
 
 def embedding_degree_q(q, l):
@@ -55,7 +56,7 @@ def find_torsions(E, q, order, l, field):
     return least, full, ZZ(full / least)
 
 
-def a05_curve_function(curve, l):
+def a05_curve_function(curve: CustomCurve, l):
     """Computes find_torsions for given l and returns a dictionary"""
     E = curve.EC
     q = curve.q

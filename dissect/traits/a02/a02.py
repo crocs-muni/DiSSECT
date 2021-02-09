@@ -1,13 +1,15 @@
-from dissect.traits.trait_utils import ext_cm_disc
 from sage.all import ZZ, sqrt, factor, squarefree_part
 
 from dissect.traits.trait_interface import compute_results, timeout
+from dissect.traits.trait_utils import ext_cm_disc
+from dissect.utils.custom_curve import CustomCurve
 
 # global time for one factorization
+
 TIME = 20
 
 
-def a02_curve_function(curve):
+def a02_curve_function(curve: CustomCurve):
     """
     Computation of d_K (cm_disc), v (max_conductor) and factorization of D where D=t^2-4q = v^2*d_K
     Returns a dictionary (keys: 'cm_disc', 'factorization', 'max_conductor')

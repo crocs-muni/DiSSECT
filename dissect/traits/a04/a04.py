@@ -1,8 +1,10 @@
 from sage.all import ecm
 
 from dissect.traits.trait_interface import compute_results, timeout
+from dissect.utils.custom_curve import CustomCurve
 
 # global time for one factorization
+
 TIME = 10
 
 
@@ -26,7 +28,7 @@ def largest_factor_bitlen(factorization):
     return bitlen
 
 
-def a04_curve_function(curve, k):
+def a04_curve_function(curve: CustomCurve, k):
     """
     Computes factorization of ord*k+1 and ord*k-1 and bit lengths of their largest factors
     Returns a dictionary

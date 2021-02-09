@@ -1,17 +1,17 @@
+from dissect.traits.trait_utils import ext_cm_disc
 from sage.all import kronecker, ZZ
 
 from dissect.traits.trait_interface import compute_results
+from dissect.utils.custom_curve import CustomCurve
 
 
-def a23_curve_function(curve, l):
+def a23_curve_function(curve: CustomCurve, l):
     """
     Computes the depth of volcano and the degree of the crater subgraph containing E
     Returns a dictionary (keys: 'crater_degree', 'depth')
     """
-    t = curve.trace
-    q = curve.q
+    D = ext_cm_disc(curve, deg=1)
     curve_results = {}
-    D = t ** 2 - 4 * q
     if l != 2:
         curve_results['crater_degree'] = kronecker(D, l) + 1
         curve_results['depth'] = ZZ.valuation(l)(D) // 2

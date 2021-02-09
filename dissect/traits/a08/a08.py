@@ -1,9 +1,10 @@
 from sage.all import PolynomialRing, NumberField, ZZ
 
 from dissect.traits.trait_interface import compute_results
+from dissect.utils.custom_curve import CustomCurve
 
 
-def a08_curve_function(curve):
+def a08_curve_function(curve: CustomCurve):
     """
     Computes the class number of the maximal order of the endomorphism algebra
     Time consuming

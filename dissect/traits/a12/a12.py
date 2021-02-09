@@ -1,9 +1,10 @@
 from sage.all import Integers, ZZ, euler_phi
 
 from dissect.traits.trait_interface import compute_results
+from dissect.utils.custom_curve import CustomCurve
 
 
-def a12_curve_function(curve, l):
+def a12_curve_function(curve: CustomCurve, l):
     """
     Computes the order of l (small prime) modulo curve order and bit length of the index of <l>
     Returns a dictionary

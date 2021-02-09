@@ -2,9 +2,10 @@ from sage.all import PolynomialRing, GF
 
 from dissect.traits.a05.a05 import ext_card, is_torsion_cyclic
 from dissect.traits.trait_interface import compute_results
+from dissect.utils.custom_curve import CustomCurve
 
 
-def eigenvalues(curve, l, s=1):
+def eigenvalues(curve: CustomCurve, l, s=1):
     """Computes the eigenvalues of Frobenius endomorphism in F_l, or in F_l if s=2"""
     x = PolynomialRing(GF(l ** s), 'x').gen()
     q = curve.q
@@ -13,7 +14,7 @@ def eigenvalues(curve, l, s=1):
     return f.roots()
 
 
-def i_finder(curve, l):
+def i_finder(curve: CustomCurve, l):
     """
     Finds the minimal degrees i_2,i_1 of extension of curve E/F_q where
     E/F_q**(i_2) - all l+1 isogenies are rational, E/F_q**(i_1) - at least 1 isogeny is rational
