@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from sage.all import ZZ, EllipticCurve, ecm
+from sage.all import ZZ, EllipticCurve, ecm, factor
 from dissect.traits.trait_interface import timeout
 from sage.functions.log import log
 from sage.rings.finite_rings.all import GF
@@ -86,7 +86,19 @@ def is_torsion_cyclic(curve: CustomCurve, l, deg, iterations=20):
 TIME = 10
 
 
-def factorization(m, t=None):
+def factorization(m, t=None,ecm = True):
     if t == None:
         t = TIME
-    timeout(ecm.factor, [m], timeout_duration=t)
+    if ecm:
+        return timeout(ecm.factor, [m], timeout_duration=t)
+    else:
+        return [i[0] for i in list(factor(m)) for _ in range(i[1])]
+
+
+def squarefree_part(x,t = None, ecm = True):
+    F = factorization(x,t,ecm)
+    n = x.parent()(1)
+    for p, e in F:
+        if e % 2:
+            n *= p
+    return n * F.unit()
