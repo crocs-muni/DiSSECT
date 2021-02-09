@@ -39,20 +39,20 @@ jobs, run `./run_traits.py -n a05 -c std -v -b 192 -a 1 2 -t 3 -j 100`.
 
 | name    | description                                                                       | implemented        |  computed\*        |time req.\*\* |memory req.\*\*\*
 |:-------:| ----------------------------------------------------------------------------------|:------------------:|:------------------:|:------------:|:---------:   
-a01    | group stucture of the curve in field extensions                                   | :white_check_mark: | :x:                | high         | low
-a02    | CM discriminant, its factorizations and max conductors in field extensions        | :white_check_mark: | :white_check_mark:                | high         | medium
-a04    | factorizations of $`kn\pm 1`$                                                     | :white_check_mark: | :white_check_mark:                | high         | high
-a05    | field extensions containing nontrivial/full $`l`$-torsion                         | :white_check_mark: | :white_check_mark: | medium       | low
-   a06    | Kronecker symbols of CM discriminants in field extensions w.r.t. small primes     | :white_check_mark: | :white_check_mark: | high         | medium
-   a08    | class number of the maximal order of the endomorphism ring                        | :white_check_mark: | :x:                | extreme      | low
-a12    | multiplicative orders of small primes modulo curve order                          | :white_check_mark: | :white_check_mark: | medium       | medium
-a22    | factorizations of small division polynomials                                      | :white_check_mark: | :white_check_mark:             | high         | high
-a23    | volcano depth and crater degree in the $`l`$-isogeny graph                        | :white_check_mark: | :white_check_mark: | high         | low
-a24    | field extensions containing nontrivial/full number of $`l`$-isogenies             | :white_check_mark: | :white_check_mark:             | medium       | low
-a25    | trace in field extensions and its factorization                                   | :white_check_mark: | :white_check_mark: | low          | low
-i06    | square parts of $`4q-1`$ and $`4n-1`$                                             | :white_check_mark: | :white_check_mark:                | low          | low
-i07    | distance of $`n`$ from the nearest power of two and multiple of 32/64             | :white_check_mark: | :white_check_mark:             | low          | low
-i10    | points satisfying ZVP conditions             | :white_check_mark: | :white_check_mark:             | medium          | extreme
+|a01      | group stucture of the curve in field extensions                                   | :white_check_mark: | :x:                | high         | low
+|a02      | factorization of the CM discriminant                                              | :white_check_mark: | :white_check_mark: | high         | medium
+|a04      | factorizations of $`kn\pm 1`$                                                     | :white_check_mark: | :white_check_mark: | high         | high
+|a05      | field extensions containing nontrivial/full $`l`$-torsion                         | :white_check_mark: | :white_check_mark: | medium       | low
+|a06      | factorizations of ratios of CM discriminants in extension fields and base fields  | :white_check_mark: | :white_check_mark: | high         | medium
+|a08      | class number of the maximal order of the endomorphism ring                        | :white_check_mark: | :x:                | extreme      | low
+|a12      | multiplicative orders of small primes modulo curve order                          | :white_check_mark: | :white_check_mark: | medium       | medium
+|a22      | factorizations of small division polynomials                                      | :white_check_mark: | :white_check_mark: | high         | high
+|a23      | volcano depth and crater degree in the $`l`$-isogeny graph                        | :white_check_mark: | :white_check_mark: | low          | low
+|a24      | field extensions containing nontrivial/full number of $`l`$-isogenies             | :white_check_mark: | :white_check_mark: | medium       | low
+|a25      | trace in field extensions and its factorization                                   | :white_check_mark: | :white_check_mark: | low          | low
+|i06      | square parts of $`4q-1`$ and $`4n-1`$                                             | :white_check_mark: | :white_check_mark: | low          | low
+|i07      | distance of $`n`$ from the nearest power of two and multiple of 32/64             | :white_check_mark: | :white_check_mark: | low          | low
+|i10      | points satisfying ZVP conditions                                                  | :white_check_mark: | :white_check_mark: | medium       | extreme
 
 Notation: $`n`$ is the curve order, $`q`$ is the order of the base field  
 \* on sim and std curves with at most 256 bits and cofactor 1    
