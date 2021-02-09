@@ -6,16 +6,11 @@ from sage.rings.finite_rings.all import GF
 from dissect.utils.custom_curve import CustomCurve
 
 
-def ext_card_curve(curve: CustomCurve, deg, sage=False):
+
+def ext_card(curve: CustomCurve, deg,sage=False):
     """returns curve cardinality over deg-th relative extension"""
-    if not sage:
-        return ext_card(curve.q, curve.cardinality, deg)
-    else:
+    if sage:
         return curve.EC.cardinality(extension_degree=deg)
-
-
-def ext_card(curve: CustomCurve, deg):
-    """returns curve cardinality over deg-th relative extension"""
     tr = curve.trace
     q = curve.q
     s_old, s_new = 2, tr
@@ -27,21 +22,13 @@ def ext_card(curve: CustomCurve, deg):
 
 def ext_trace(curve: CustomCurve, deg):
     """returns the trace of Frobenius over deg-th relative extension"""
-    q = curve.q
-    tr = curve.trace
-    a = 2
-    b = tr
-    for _ in range(deg - 1):
-        tmp = b
-        b = tr * b - q * a
-        a = tmp
-    return b
+    return curve.q**deg+1-ext_card(curve,deg)
 
 
 def ext_cm_disc(curve: CustomCurve, deg=1):
     """returns the CM discriminant (up to a square) over deg-th relative extension"""
     q = curve.q
-    card_ext = ext_card_curve(curve, deg)
+    card_ext = ext_card(curve, deg)
     ext_tr = q ** deg + 1 - card_ext
     return ext_tr ** 2 - 4 * q ** deg
 
@@ -85,9 +72,9 @@ def is_torsion_cyclic(curve: CustomCurve, l, deg, iterations=10):
     """
     True if the l-torsion is cyclic and False otherwise (bicyclic). Note that this is probabilistic only.
     """
-    card = ext_card(q, curve.cardinality, deg)
+    card = ext_card(curve, deg)
     m = ZZ(card / l)
-    EE = extend(curve.EC, curve.q, deg, curve.field)
+    EE = extend(curve, deg)
     for _ in range(iterations):
         P = EE.random_element()
         if not (m * P == EE(0)):
