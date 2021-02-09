@@ -1,3 +1,4 @@
+from dissect.traits.trait_utils import ext_cm_disc
 from sage.all import ZZ, sqrt, factor, squarefree_part
 
 from dissect.traits.trait_interface import compute_results, timeout
@@ -16,6 +17,7 @@ def a02_curve_function(curve):
     disc = d
     if d % 4 != 1:
         disc *= 4
+    curve_results = {}
     curve_results['cm_disc'] = disc
     t = TIME
     factorization = timeout(factor, [D], timeout_duration=t)
