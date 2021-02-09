@@ -4,6 +4,8 @@ import dissect.traits.trait_utils as tu
 from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 
+TRAIT_TIMEOUT = 30
+
 
 def i06_curve_function(curve: CustomCurve):
     """"Computes the square part of 4*p-1. 4*order-1 (result is square root of the square part)"""
@@ -11,8 +13,8 @@ def i06_curve_function(curve: CustomCurve):
     q = curve.q
     a = 4 * q - 1
     b = 4 * order - 1
-    a_squarefree_part = tu.squarefree_part(a)
-    b_squarefree_part = tu.squarefree_part(b)
+    a_squarefree_part = tu.squarefree_part(a, timeout_duration=TRAIT_TIMEOUT, use_ecm=False)
+    b_squarefree_part = tu.squarefree_part(b, timeout_duration=TRAIT_TIMEOUT, use_ecm=False)
     if a_squarefree_part == 'NO DATA (timed out)':
         a_square_part = a_squarefree_part
     else:
