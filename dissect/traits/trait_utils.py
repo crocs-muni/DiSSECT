@@ -67,7 +67,7 @@ def extend(curve: CustomCurve, deg):
     return EE
 
 
-def is_torsion_cyclic(curve: CustomCurve, l, deg, iterations=10):
+def is_torsion_cyclic(curve: CustomCurve, l, deg, iterations=20):
     """
     True if the l-torsion is cyclic and False otherwise (bicyclic). Note that this is probabilistic only.
     """
