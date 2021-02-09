@@ -1,13 +1,9 @@
 from sage.all import ZZ, sqrt, factor, squarefree_part
 
 from dissect.traits.trait_interface import compute_results, timeout
+import dissect.traits.trait_utils as tu
 from dissect.traits.trait_utils import ext_cm_disc
 from dissect.utils.custom_curve import CustomCurve
-
-# global time for one factorization
-
-TIME = 20
-
 
 def a02_curve_function(curve: CustomCurve):
     """
@@ -21,8 +17,7 @@ def a02_curve_function(curve: CustomCurve):
         disc *= 4
     curve_results = {}
     curve_results['cm_disc'] = disc
-    t = TIME
-    factorization = timeout(factor, [D], timeout_duration=t)
+    factorization = tu.factorization(D)
     if factorization == 'NO DATA (timed out)':
         curve_results['factorization'] = []
     else:

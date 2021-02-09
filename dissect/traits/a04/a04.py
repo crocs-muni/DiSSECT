@@ -2,11 +2,7 @@ from sage.all import ecm
 
 from dissect.traits.trait_interface import compute_results, timeout
 from dissect.utils.custom_curve import CustomCurve
-
-# global time for one factorization
-
-TIME = 10
-
+import dissect.traits.trait_utils as tu
 
 def near_order_factorizations(n, sign='+', k=10, t=10):
     """Computer factorization of k*n+1 (k*n-1) if 'sign' is "+" ("-") in time 't' """
@@ -16,7 +12,7 @@ def near_order_factorizations(n, sign='+', k=10, t=10):
         m = k * n + 1
     else:
         m = k * n - 1
-    return timeout(ecm.factor, [m], timeout_duration=t)
+    return tu.factorization(m,t)
 
 
 def largest_factor_bitlen(factorization):
