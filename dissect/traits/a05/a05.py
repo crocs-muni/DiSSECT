@@ -10,61 +10,52 @@ def embedding_degree_q(q, l):
     return (Integers(l)(q)).multiplicative_order()
 
 
-def find_least_torsion(q, order, l):
+def find_least_torsion(curve: CustomCurve, l):
     """
     Computes the smallest extension which contains a nontrivial l-torsion point
     Returns the degree
     """
     x = PolynomialRing(GF(l ** 2), 'x').gen()
-    t = q + 1 - order
-
-    f = x ** 2 - t * x + q
-
+    f = x ** 2 - curve.trace * x + curve.q
     roots = [r[0] for r in f.roots() for _ in range(r[1])]
-
     return min(roots[0].multiplicative_order(), roots[1].multiplicative_order())
 
 
-def find_full_torsion(E, q, order, l, least, field):
+def find_full_torsion(curve:CustomCurve, l, least):
     """
     Computes the smallest extension which contains full l-torsion subgroup
     Least is the result of find_least_torsion
     Returns the degree
     """
-    q_least = q ** least
-    k = embedding_degree_q(q_least, l)
+    k = embedding_degree_q(q ** least, l)
     # k satisfies l|a^k-1 where a,1 are eigenvalues of Frobenius of extended E
     if k > 1:  # i.e. a!=1
         return k * least
     else:  # i.e. a==1, we have two options for the geometric multiplicity
-        card = ext_card(q, order, least)
-        if (card % l ** 2) == 0 and not is_torsion_cyclic(E, q, order, l, least, field):  # geom. multiplicity is 2
+        card = ext_card(curve, least)
+        if (card % l ** 2) == 0 and not is_torsion_cyclic(curve, l,least):  # geom. multiplicity is 2
             return least
         else:  # geom. multiplicity is 1
             return l * least
 
 
-def find_torsions(E, q, order, l, field):
+def find_torsions(curve:CustomCurve, l):
     """Returns a triple of extensions containing torsion"""
-    least = find_least_torsion(q, order, l)
+    least = find_least_torsion(curve, l)
     if least == l ** 2 - 1:
         full = least
 
     else:
-        full = find_full_torsion(E, q, order, l, least, field)
+        full = find_full_torsion(curve, l, least)
 
     return least, full, ZZ(full / least)
 
 
 def a05_curve_function(curve: CustomCurve, l):
     """Computes find_torsions for given l and returns a dictionary"""
-    E = curve.EC
-    q = curve.q
-    order = curve.order * curve.cofactor
     curve_results = {}
-
     try:
-        least, full, relative = find_torsions(E, q, order, l, curve.field)
+        least, full, relative = find_torsions(curve, l)
 
     except (ArithmeticError, TypeError, ValueError) as _:
         least, full, relative = None, None, None
