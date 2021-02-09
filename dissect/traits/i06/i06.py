@@ -10,7 +10,15 @@ def i06_curve_function(curve: CustomCurve):
     q = curve.q
     a = 4 * q - 1
     b = 4 * order - 1
-    curve_results = {"p": sqrt(a // tu.squarefree_part(a)), "order": sqrt(b // tu.squarefree_part(b))}
+    if tu.squarefree_part(a) == 'NO DATA (timed out)':
+        a_square_part = 'NO DATA (timed out)'
+    else:
+        a_square_part = sqrt(a // tu.squarefree_part(a))
+    if tu.squarefree_part(b) == 'NO DATA (timed out)':
+        b_square_part = 'NO DATA (timed out)'
+    else:
+        b_square_part = sqrt(b // tu.squarefree_part(b))
+    curve_results = {"p": a_square_part, "order": b_square_part}
     return curve_results
 
 
