@@ -93,4 +93,7 @@ def factorization(x, timeout_duration=20, use_ecm=True):
 def squarefree_part(x, timeout_duration=20, use_ecm=True):
     """return the square free part of abs(x) or 'NO DATA (timed out)'"""
     F = factorization(x, timeout_duration=timeout_duration, use_ecm=use_ecm)
-    return product(set(F))
+    if F == 'NO DATA (timed out)':
+        return F
+    else:
+        return product(set(F))
