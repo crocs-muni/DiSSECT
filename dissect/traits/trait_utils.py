@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from sage.all import ZZ, EllipticCurve, ecm, factor, product
+from sage.all import ZZ, EllipticCurve, ecm, factor
 from sage.functions.log import log
 from sage.rings.finite_rings.all import GF
 
@@ -96,4 +96,8 @@ def squarefree_part(x, timeout_duration=20, use_ecm=True):
     if F == 'NO DATA (timed out)':
         return F
     else:
-        return product(set(F))
+        squarefree = 1
+        for p in set(F):
+            if F.count(p) % 2 == 1:
+                squarefree *= p
+        return squarefree
