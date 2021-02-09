@@ -1,12 +1,41 @@
 import ast
 import unittest
 
+from sage.all import ZZ
+
 from dissect.traits.a06.a06 import a06_curve_function
 from dissect.traits.example_curves import curve_names
 
-key = "{'l': 2, 'deg': 1}"
-results = {'secp112r2': {key: {'kronecker': -1}}, 'bn158': {key: {'kronecker': -1}},
-           'brainpoolP160r1': {key: {'kronecker': -1}}}
+key = "{'deg': 2}"
+results = {
+        'secp112r2':
+            {key: {"ratio_sqrt": 72213667414400864, "factorization": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            11,
+            205152464245457
+            ]
+                },
+            },
+        'bn158':
+            {key: {"ratio_sqrt": 454233058419889982668807, "factorization": [
+            2953,
+            153820879925462235919
+            ]
+                },
+            },
+        'brainpoolP160r1':
+            {key: {"ratio_sqrt": 519972310379544251229703, "factorization": [
+            3023,
+            49277,
+            3490581720239293
+            ]
+                },
+            },
+        }
 
 
 class TestA06(unittest.TestCase):

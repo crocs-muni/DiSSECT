@@ -1,29 +1,23 @@
-from sage.all import kronecker
+from sage.all import ZZ, ecm, sqrt
 
-from dissect.traits.a05.a05 import ext_card
-from dissect.traits.trait_interface import compute_results
+from dissect.traits.trait_interface import compute_results, timeout
+from dissect.traits.trait_utils import ext_cm_disc
+from dissect.utils.custom_curve import CustomCurve
 
+# global time for one factorization
 
-def ext_cm_disc(q, card_low, deg):
-    """returns the CM discriminant (up to a square) over deg-th relative extension"""
-    card_high = ext_card(q, card_low, deg)
-    ext_tr = q ** deg + 1 - card_high
-    return ext_tr ** 2 - 4 * q ** deg
+TIME = 20
 
 
-def a06_curve_function(curve, l, deg):
-    """returns the Kronecker symbol of the CM discriminant over the deg-th relative extension with respect to l"""
-    q = curve.q
+def a06_curve_function(curve: CustomCurve, deg):
+    """returns the factorization of the D_deg/D_1, where D_deg is the CM discriminant over the deg-th relative
+    extension with respect to l """
     curve_results = {}
-    order = curve.order * curve.cofactor
-    cm_disc = ext_cm_disc(q, order, deg)
-    while cm_disc % l ** 2 == 0:
-        cm_disc = cm_disc / l ** 2
-
-    if l == 2 and cm_disc % 4 != 1:
-        curve_results["kronecker"] = 0
-    else:
-        curve_results["kronecker"] = kronecker(cm_disc, l)
+    cm_disc_base = ext_cm_disc(curve, deg=1)
+    cm_disc_ext = ext_cm_disc(curve, deg=deg)
+    ratio_sqrt = ZZ(sqrt(cm_disc_ext / cm_disc_base))
+    curve_results["ratio_sqrt"] = ratio_sqrt
+    curve_results["factorization"] = timeout(ecm.factor, [ratio_sqrt], timeout_duration=TIME)
     return curve_results
 
 
