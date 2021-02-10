@@ -18,11 +18,10 @@ def near_order_factorizations(n, sign='+', k=10, t=10):
 
 def largest_factor_bitlen(factorization):
     """Computes bit length of largest factor(last item of list) of 'factorization' """
-    try:
-        bitlen = factorization[-1].nbits()
-    except AttributeError:
-        bitlen = factorization
-    return bitlen
+    if factorization == 'NO DATA (timed out)':
+        return factorization
+    else:
+        return factorization[-1].nbits()
 
 
 def a04_curve_function(curve: CustomCurve, k):

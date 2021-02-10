@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from sage.all import ZZ, EllipticCurve, ecm, factor
+from sage.all import ZZ, EllipticCurve, ecm, factor, Integers, sqrt
 from sage.functions.log import log
 from sage.rings.finite_rings.all import GF
 
@@ -26,7 +26,7 @@ def ext_trace(curve: CustomCurve, deg):
 
 
 def ext_disc(curve: CustomCurve, deg=1):
-    """returns the CM discriminant (up to a square) over deg-th relative extension"""
+    """returns the CM discriminant times the square of the max conductor over deg-th relative extension (cf. a02)"""
     q = curve.q
     card_ext = ext_card(curve, deg)
     ext_tr = q ** deg + 1 - card_ext
@@ -81,6 +81,11 @@ def is_torsion_cyclic(curve: CustomCurve, l, deg, iterations=20):
     return False
 
 
+def embedding_degree_q(q, l):
+    """returns the l-embedding degree with respect to q"""
+    return (Integers(l)(q)).multiplicative_order()
+
+
 def factorization(x, timeout_duration=20, use_ecm=True):
     """return the factorization of abs(x) as a list or 'NO DATA (timed out)'"""
     if use_ecm:
@@ -112,4 +117,22 @@ def squarefree_and_factorization(x, timeout_duration=20, use_ecm=True):
             sign = -1
         else:
             sign = 1
-        return (sign * squarefree, F)
+        return sign * squarefree, F
+
+
+def square_part(x, timeout_duration=20, use_ecm=True):
+    """return the square part of x or 'NO DATA (timed out)'"""
+    squarefree = squarefree_part(x=x, timeout_duration=timeout_duration, use_ecm=use_ecm)
+    if squarefree == 'NO DATA (timed out)':
+        return squarefree
+    else:
+        return ZZ(x // squarefree)
+
+
+def square_part_square_root(x, timeout_duration=20, use_ecm=True):
+    """return the square root of square part of x or 'NO DATA (timed out)'"""
+    square = square_part(x=x, timeout_duration=timeout_duration, use_ecm=use_ecm)
+    if square == 'NO DATA (timed out)':
+        return square
+    else:
+        return sqrt(square)

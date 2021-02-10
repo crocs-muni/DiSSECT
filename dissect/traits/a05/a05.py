@@ -1,13 +1,8 @@
-from sage.all import ZZ, PolynomialRing, GF, Integers
+from sage.all import ZZ, PolynomialRing, GF
 
 from dissect.traits.trait_interface import compute_results
-from dissect.traits.trait_utils import ext_card, is_torsion_cyclic
+from dissect.traits.trait_utils import ext_card, is_torsion_cyclic, embedding_degree_q
 from dissect.utils.custom_curve import CustomCurve
-
-
-def embedding_degree_q(q, l):
-    """returns embedding degree with respect to q"""
-    return (Integers(l)(q)).multiplicative_order()
 
 
 def find_least_torsion(curve: CustomCurve, l):
@@ -45,10 +40,8 @@ def find_torsions(curve: CustomCurve, l):
     least = find_least_torsion(curve, l)
     if least == l ** 2 - 1:
         full = least
-
     else:
         full = find_full_torsion(curve, l, least)
-
     return least, full, ZZ(full / least)
 
 
@@ -57,7 +50,6 @@ def a05_curve_function(curve: CustomCurve, l):
     curve_results = {}
     try:
         least, full, relative = find_torsions(curve, l)
-
     except (ArithmeticError, TypeError, ValueError) as _:
         least, full, relative = None, None, None
 
