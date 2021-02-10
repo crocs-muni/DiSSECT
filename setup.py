@@ -21,6 +21,7 @@ install_requires = [
     'ipywidgets',
     'IPython',
     'matplotlib'
+    'autopep8'
 ]
 
 setup(name='DiSSECT',
