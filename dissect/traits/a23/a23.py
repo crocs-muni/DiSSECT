@@ -1,7 +1,7 @@
-from dissect.traits.trait_utils import ext_cm_disc
 from sage.all import kronecker, ZZ
 
 from dissect.traits.trait_interface import compute_results
+from dissect.traits.trait_utils import ext_cm_disc
 from dissect.utils.custom_curve import CustomCurve
 
 

@@ -96,20 +96,20 @@ def get_curves(db: Database, filters: Any = {}, raw: bool = False) -> Iterable[C
             curve_filter["simulated"] = False
         elif filters.curve_type == "sample":
             curve_filter["simulated"] = False
-            curve_filter["name"] = { "$in": ["secp112r1", "secp192r1", "secp256r1"] }
+            curve_filter["name"] = {"$in": ["secp112r1", "secp192r1", "secp256r1"]}
         elif filters.curve_type != "all":
             curve_filter["name"] = filters.curve_type
 
     # Bit-length filter
     if hasattr(filters, "order_bound"):
-        curve_filter["field.bits"] = { "$lte": filters.order_bound }
+        curve_filter["field.bits"] = {"$lte": filters.order_bound}
 
     # Cofactor filter
     if hasattr(filters, "allowed_cofactors") and filters.allowed_cofactors:
-        curve_filter["cofactor"] = { "$in": list(map(hex, filters.allowed_cofactors)) }
+        curve_filter["cofactor"] = {"$in": list(map(hex, filters.allowed_cofactors))}
 
     cursor = db.curves.aggregate([
-        { "$match": curve_filter }
+        {"$match": curve_filter}
     ])
 
     if raw:
@@ -145,8 +145,9 @@ def _encode_ints(result: Any) -> Any:
     return result
 
 
-def store_trait_result(db: Database, curve: CustomCurve, trait: str, params: Dict[str, Any], result: Dict[str, Any]) -> bool:
-    trait_result = { "curve": curve.name }
+def store_trait_result(db: Database, curve: CustomCurve, trait: str, params: Dict[str, Any],
+                       result: Dict[str, Any]) -> bool:
+    trait_result = {"curve": curve.name}
     trait_result["params"] = _cast_sage_types(params)
     trait_result["result"] = _encode_ints(result)
     try:
@@ -156,7 +157,7 @@ def store_trait_result(db: Database, curve: CustomCurve, trait: str, params: Dic
 
 
 def is_solved(db: Database, curve: CustomCurve, trait: str, params: Dict[str, Any]) -> bool:
-    trait_result = { "curve": curve.name }
+    trait_result = {"curve": curve.name}
     trait_result["params"] = _cast_sage_types(params)
     return db[f"trait_{trait}"].find_one(trait_result) is not None
 
@@ -166,12 +167,12 @@ def get_trait_results(db: Database, trait: str, params: Dict[str, Any] = None, c
     if params:
         result_filter["params"] = params
     if curve:
-        result_filter["curve"] = { "$regex": curve }
+        result_filter["curve"] = {"$regex": curve}
 
     aggregate_pipeline = []
-    aggregate_pipeline.append({ "$match": result_filter })
+    aggregate_pipeline.append({"$match": result_filter})
     if limit:
-        aggregate_pipeline.append({ "$limit": limit })
+        aggregate_pipeline.append({"$limit": limit})
 
     return map(_decode_ints, map(_flatten_trait_result, db[f"trait_{trait}"].aggregate(aggregate_pipeline)))
 
@@ -208,6 +209,7 @@ def _decode_ints(source: Any) -> Any:
 
 if __name__ == "__main__":
     import sys
+
     if len(sys.argv) < 3 or not sys.argv[1] in ("curves", "results"):
         print(f"USAGE: python3 {sys.argv[0]} curves [database_uri] <curve_files...>", file=sys.stderr)
         print(f"   OR: python3 {sys.argv[0]} curves [database_uri] all", file=sys.stderr)
@@ -227,6 +229,7 @@ if __name__ == "__main__":
     print(f"Connecting to database {database_uri}")
     db = connect(database_uri)
 
+
     def upload_curves_from_files(curve_files_list):
         for curves_file in curve_files_list:
             print(f"Loading curves from file {curves_file}")
@@ -234,11 +237,13 @@ if __name__ == "__main__":
             uploaded, total = upload_curves(db, curves_file)
             print(f"Successfully uploaded {uploaded} out of {total}")
 
+
     def upload_results_from_file(trait_name, results_file):
         print(f"Loading trait {trait_name} results from file {results_file}")
         create_trait_index(db, trait_name)
         uploaded, total = upload_results(db, trait_name, results_file)
         print(f"Successfully uploaded {uploaded} out of {total}")
+
 
     if sys.argv[1] == "curves":
         if args == ['all']:

@@ -72,5 +72,6 @@ def main():
 
     merge_results(args.trait_name, verbose=args.verbosity)
 
+
 if __name__ == '__main__':
     main()

@@ -101,4 +101,3 @@ def squarefree_part(x, timeout_duration=20, use_ecm=True):
             if F.count(p) % 2 == 1:
                 squarefree *= p
         return squarefree
-
