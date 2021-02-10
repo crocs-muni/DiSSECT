@@ -60,7 +60,7 @@ def create_unittest(name):
     results = load_from_json(Path(TRAIT_PATH, name, name + "_structure.json"))
     if Path(TRAIT_PATH, "../unit_tests", "test_" + name + ".py").is_file():
         answer = input("Unittest for " + name + " already exists, overwrite? [Y/n]")
-        if answer in ["n","N"]:
+        if answer in ["n", "N"]:
             return
     f = open(Path(TRAIT_PATH, "../unit_tests", "test_" + name + ".py"), "w")
     to_write = ""

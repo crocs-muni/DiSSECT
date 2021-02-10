@@ -1,12 +1,12 @@
 #!/usr/bin/env sage
 
 import argparse
-import sys
-import os
-import pathlib
 import itertools
 import json
+import pathlib
+import sys
 from multiprocessing import Process, Queue, Lock
+
 from sage.all import sage_eval
 
 from dissect.definitions import TRAIT_NAMES, TRAIT_PATH, TRAIT_MODULE_PATH
@@ -86,7 +86,8 @@ def main():
     requiredNamed = parser.add_argument_group('required named arguments')
     requiredNamed.add_argument('-n', '--trait_name', metavar='trait_name', type=str, action='store',
                                help='the trait identifier; available traits: ' + ", ".join(TRAIT_NAMES), required=True)
-    requiredNamed.add_argument('-c', '--curve_type', metavar='curve_type', type=str, choices=["std", "sim", "sample", "all"],
+    requiredNamed.add_argument('-c', '--curve_type', metavar='curve_type', type=str,
+                               choices=["std", "sim", "sample", "all"],
                                help='the type of curves or which to compute traits; must be one of the following: std (all standard '
                                     'curves), sim (all simulated curves), sample (curves secp112r1, secp192r1, '
                                     'secp256r1), all (all curves in the database)',
@@ -105,7 +106,8 @@ def main():
     queue = Queue(1000)
     lock = Lock()
 
-    consumers = [Process(target=consumer, args=(i, args.database, args.trait_name, queue, lock)) for i in range(1, args.jobs + 1)]
+    consumers = [Process(target=consumer, args=(i, args.database, args.trait_name, queue, lock)) for i in
+                 range(1, args.jobs + 1)]
     for proc in consumers:
         proc.daemon = True
         proc.start()

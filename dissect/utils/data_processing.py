@@ -26,7 +26,8 @@ def load_curves(filters: Any = {}) -> pd.DataFrame:
         projection["curve"] = record["name"]
         projection["simulated"] = record["simulated"]
         projection["bitlength"] = int(record["field"]["bits"])
-        projection["cofactor"] = int(record["cofactor"], base=16) if isinstance(record["cofactor"], str) else int(record["cofactor"])
+        projection["cofactor"] = int(record["cofactor"], base=16) if isinstance(record["cofactor"], str) else int(
+            record["cofactor"])
         return projection
 
     df = pd.DataFrame(map(project, database.get_curves(db, filters, raw=True))).convert_dtypes()

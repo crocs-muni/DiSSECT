@@ -26,7 +26,8 @@ class ZVPFinder:
     def __init__(self, formula_file, multiple, verbose=False, one_point_dependent=False):
         self.formula_file = formula_file
         self.multiple = multiple
-        self.register = {"X1": self.Q(self.x1), "Y1": self.Q(self.y1), "X2": self.Q(self.x2), "Y2": self.Q(self.y2), "Z1": self.Q(1), "Z2": self.Q(1), "a": self.Q(self.a),
+        self.register = {"X1": self.Q(self.x1), "Y1": self.Q(self.y1), "X2": self.Q(self.x2), "Y2": self.Q(self.y2),
+                         "Z1": self.Q(1), "Z2": self.Q(1), "a": self.Q(self.a),
                          "b": self.Q(self.b)}
         self.zvp_set = set()
         self.zvp_set = self.fill_register()

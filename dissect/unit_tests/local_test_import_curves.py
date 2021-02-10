@@ -11,6 +11,7 @@ class TestImportSimCurves(unittest.TestCase):
         curves = import_curves(curve_type="sim", order_bound=128, allowed_cofactors=list(range(1, 1001)))
         self.assertEqual(len(curves), 93796)
 
+
 if __name__ == '__main__':
     unittest.main()
     print("Everything passed")
