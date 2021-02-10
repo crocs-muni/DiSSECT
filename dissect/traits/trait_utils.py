@@ -44,17 +44,16 @@ def extend(curve: CustomCurve, deg):
     """returns curve over the deg-th relative extension"""
     E = curve.EC
     q = curve.q
-    field = curve.field
+    K = curve.field
     if q % 2 != 0:
-        R = field['x']
+        R = K['x']
         pol = R.irreducible_element(deg)
         Fext = GF(q ** deg, name='z', modulus=pol)
         return E.base_extend(Fext)
-    K = field
     charac = K.characteristic()
     R = GF(charac)['x']
     ext_deg = q ** deg
-    pol = R.irreducible_element(deg * (log(q, charac)))
+    pol = R.irreducible_element(deg * ZZ(log(q, charac)))
     Kext = GF(ext_deg, name='ex', modulus=pol)
     gKext = Kext.gen()
 
