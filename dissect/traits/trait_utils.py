@@ -25,7 +25,7 @@ def ext_trace(curve: CustomCurve, deg):
     return curve.q ** deg + 1 - ext_card(curve, deg)
 
 
-def ext_cm_disc(curve: CustomCurve, deg=1):
+def ext_disc(curve: CustomCurve, deg=1):
     """returns the CM discriminant (up to a square) over deg-th relative extension"""
     q = curve.q
     card_ext = ext_card(curve, deg)
@@ -90,7 +90,16 @@ def factorization(x, timeout_duration=20, use_ecm=True):
 
 
 def squarefree_part(x, timeout_duration=20, use_ecm=True):
-    """return the square free part of abs(x) or 'NO DATA (timed out)'"""
+    """return the squarefree part of x or 'NO DATA (timed out)'"""
+    F = squarefree_and_factorization(x=x, timeout_duration=timeout_duration, use_ecm=use_ecm)
+    if F == 'NO DATA (timed out)':
+        return F
+    else:
+        return F[0]
+
+
+def squarefree_and_factorization(x, timeout_duration=20, use_ecm=True):
+    """return the (squarefree part of x and the factorization of abs(x)) or 'NO DATA (timed out)'"""
     F = factorization(x, timeout_duration=timeout_duration, use_ecm=use_ecm)
     if F == 'NO DATA (timed out)':
         return F
@@ -99,4 +108,8 @@ def squarefree_part(x, timeout_duration=20, use_ecm=True):
         for p in set(F):
             if F.count(p) % 2 == 1:
                 squarefree *= p
-        return squarefree
+        if x < 0:
+            sign = -1
+        else:
+            sign = 1
+        return (sign * squarefree, F)
