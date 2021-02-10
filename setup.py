@@ -20,8 +20,8 @@ install_requires = [
     'pandas',
     'ipywidgets',
     'IPython',
-    'matplotlib'
-    'autopep8'
+    'matplotlib',
+    'autopep8',
 ]
 
 setup(name='DiSSECT',
