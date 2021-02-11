@@ -72,7 +72,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Motivation:** this is partially relevant to a05
 
-**Distribution:** unknown
+**Distribution:** [Factorisation_patterns_of_division_polynomials](https://www.researchgate.net/publication/38339355_Factorisation_patterns_of_division_polynomials)
 
 ### a23
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}$, prime $l$
@@ -113,9 +113,9 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 ### i07
 **Input:** elliptic curve $E/\mathbb{F}_{p}$
 
-**Output:** distance of $n$ to the nearest power $2$ and the nearest multiple of 32 and 64, where $n=\#E(\mathbb{F}_p)$
+**Output:** distance of $n$ to the nearest power of $2$ and the nearest multiple of 32 and 64, where $n=\#E(\mathbb{F}_p)$
 
-**Motivation:** inspired by the paper [Big Numbers - Big Troubles](https://www.usenix.org/conference/usenixsecurity20/presentation/weiser)
+**Motivation:** the first part is related to scalar multiplication bias when not using rejection sampling, the second is inspired by the paper [Big Numbers - Big Troubles](https://www.usenix.org/conference/usenixsecurity20/presentation/weiser)
 
 **Distribution:** easily computable using Sato-Tate
 
