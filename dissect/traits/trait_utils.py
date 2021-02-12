@@ -91,7 +91,10 @@ def factorization(x, timeout_duration=20, use_ecm=True):
     if use_ecm:
         return timeout(ecm.factor, [abs(x)], timeout_duration=timeout_duration)
     else:
-        return [i[0] for i in list(factor(abs(x))) for _ in range(i[1])]
+        result = timeout(factor, [abs(x)], timeout_duration=timeout_duration)
+        if not isinstance(result, str):
+            result = [i[0] for i in list(result) for _ in range(i[1])]
+        return result
 
 
 def squarefree_part(x, timeout_duration=20, use_ecm=True):
