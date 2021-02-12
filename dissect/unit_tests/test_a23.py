@@ -3,6 +3,9 @@ import unittest
 
 from dissect.traits.a23.a23 import a23_curve_function
 from dissect.traits.example_curves import curve_names
+from dissect.utils.custom_curve import customize_curve
+from sage.all import EllipticCurve_from_j, GF
+
 
 results = {'secp112r2': {"{'l': 2}": {'crater_degree': 0, 'depth': 1}},
            'bn158': {"{'l': 2}": {'crater_degree': 0, 'depth': 0}},
@@ -29,6 +32,25 @@ class TestA23(unittest.TestCase):
         computed_result = a23_curve_function(curve_names["brainpoolP160r1"], *params)
         self.assertEqual(list(results["brainpoolP160r1"].values())[0], computed_result)
 
+    def test_l_2(self):
+        # ZZ.valuation(2)(D)%2==0 and d_K%4!=1
+        q = 101
+        E = EllipticCurve_from_j(GF(q)(1))
+        res = a23_curve_function(customize_curve(E),l=2)
+        self.assertEqual(1, res['crater_degree'])
+        self.assertEqual(1, res['depth'])
+
+        # ZZ.valuation(2)(D)%2==0 and d_K%4==1
+        q = 103
+        E = EllipticCurve_from_j(GF(q)(0))
+        res = a23_curve_function(customize_curve(E), l=2)
+        self.assertEqual(0, res['crater_degree'])
+        self.assertEqual(1, res['depth'])
+        # ZZ.valuation(2)(D)%2!=0
+        E = EllipticCurve_from_j(GF(q)(1))
+        res = a23_curve_function(customize_curve(E), l=2)
+        self.assertEqual(1, res['crater_degree'])
+        self.assertEqual(0, res['depth'])
 
 if __name__ == '__main__':
     unittest.main()
