@@ -200,19 +200,21 @@ def customize_curve(curve):
     db_curve['order'] = order
     db_curve['category'] = 'my'
     db_curve['form'] = "Weierstrass"
+
     def my_hex(x):
-        return format(ZZ(x),"#04x")
+        return format(ZZ(x), "#04x")
+
     if q % 2 != 0:
-        db_curve['params'] = {"a": {"raw": my_hex(curve.a2())}, "b": {"raw": my_hex(curve.a6())}}
-        db_curve['field'] = {"type": "Prime", "p": "0xe95e4a5f737059dc60dfc7ad95b3d8139515620f", "bits": 160}
-    else:
         db_curve['params'] = {"a": {"raw": my_hex(curve.a4())}, "b": {"raw": my_hex(curve.a6())}}
+        db_curve['field'] = {"type": "Prime", "p": my_hex(q), "bits": q.nbits()}
+    else:
+        db_curve['params'] = {"a": {"raw": my_hex(curve.a2())}, "b": {"raw": my_hex(curve.a6())}}
         db_curve['field'] = {"type": "Binary"}
-        db_curve['field']["poly"]=[{"power": deg, "coeff": my_hex(coef)} for deg, coef in
-                                                        curve.base_field().polynomial().dict().items()]
-        db_curve['field']["bits"]= curve.base_field().polynomial().degree()
-        db_curve['field']["degree"]= curve.base_field().polynomial().degree()
-        db_curve['field']["basis"]= "poly"
+        db_curve['field']["poly"] = [{"power": deg, "coeff": my_hex(coef)} for deg, coef in
+                                     curve.base_field().polynomial().dict().items()]
+        db_curve['field']["bits"] = curve.base_field().polynomial().degree()
+        db_curve['field']["degree"] = curve.base_field().polynomial().degree()
+        db_curve['field']["basis"] = "poly"
     db_curve['desc'] = ""
     db_curve['cofactor'] = curve.order() // order
     db_curve['generator'] = None
