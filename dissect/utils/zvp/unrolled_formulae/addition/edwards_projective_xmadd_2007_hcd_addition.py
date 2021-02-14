@@ -1,0 +1,40 @@
+from sage.all import *
+
+pr = PolynomialRing(ZZ, ('c', 'd', 'X1', 'X2', 'Y1', 'Y2'), 6)
+c, d, X1, X2, Y1, Y2 = pr.gens()
+Z1, Z2 = 1, 1
+formula = {}
+T0 = X1 * Y2
+formula['T0'] = T0
+T0 = T0 + Y1
+formula['T0'] = T0
+Y3 = Y1 * Y2
+formula['Y3'] = Y3
+T1 = Y3 * X1
+formula['T1'] = T1
+Y3 = Y3 - X1
+formula['Y3'] = Y3
+Z3 = Z1 * Z2
+formula['Z3'] = Z3
+X3 = T0 * Z3
+formula['X3'] = X3
+Y3 = Y3 * Z3
+formula['Y3'] = Y3
+T1 = d * T1
+formula['T1'] = T1
+Z3 = Z3 ** 2
+formula['Z3'] = Z3
+T0 = Z3 - T1
+formula['T0'] = T0
+Z3 = Z3 + T1
+formula['Z3'] = Z3
+X3 = X3 * T0
+formula['X3'] = X3
+Y3 = Y3 * Z3
+formula['Y3'] = Y3
+Z3 = Z3 * T0
+formula['Z3'] = Z3
+Z3 = c * Z3
+formula['Z3'] = Z3
+for key, value in formula.items():
+    print(f'{key} = {value}')

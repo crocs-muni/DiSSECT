@@ -14,11 +14,14 @@ PARALLEL_RESULTS_PATH = Path(ROOT_DIR, 'utils', 'parallel', 'results')
 ZVP_PATH = Path(ROOT_DIR, 'utils', 'zvp')
 EFD_PATH = Path(ROOT_DIR, 'utils', 'efd')
 EFD_SHORTW_PROJECTIVE_ADDITION_PATH = Path(EFD_PATH, 'shortw', 'projective', 'addition')
-EFD_SHORTW_PROJECTIVE_ADDITION_FORMULAS = [f for f in EFD_SHORTW_PROJECTIVE_ADDITION_PATH.iterdir() if
+EFD_SHORTW_PROJECTIVE_ADDITION_FORMULAE = [f for f in EFD_SHORTW_PROJECTIVE_ADDITION_PATH.iterdir() if
                                            f.suffix == '.op3']
 EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_PATH = Path(EFD_PATH, 'shortw', 'projective-3', 'addition')
-EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_FORMULAS = [f for f in EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_PATH.iterdir() if
+EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_FORMULAE = [f for f in EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_PATH.iterdir() if
                                                   f.suffix == '.op3']
+UNROLLED_ADDITION_FORMULAE_PATH = Path(ZVP_PATH, 'unrolled formulae', 'addition')
+UNROLLED_FORMULAE_PATH = [f for f in UNROLLED_ADDITION_FORMULAE_PATH.iterdir() if
+                          f.suffix == '.py']
 X962_PATH = Path(ROOT_DIR, 'utils', 'parallel', 'x962')
 TRAIT_MODULE_PATH: str = 'dissect.traits'
 TRAIT_NAME_CONDITION = r'[ais][0-9][0-9]'
