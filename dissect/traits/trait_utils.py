@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from sage.all import ZZ, EllipticCurve, ecm, factor, Integers, sqrt
+from sage.all import ZZ, EllipticCurve, ecm, factor, Integers, sqrt, PolynomialRing
 from sage.functions.log import log
 from sage.rings.finite_rings.all import GF
 
@@ -91,7 +91,10 @@ def factorization(x, timeout_duration=20, use_ecm=True):
     if use_ecm:
         return timeout(ecm.factor, [abs(x)], timeout_duration=timeout_duration)
     else:
-        return [i[0] for i in list(factor(abs(x))) for _ in range(i[1])]
+        result = timeout(factor, [abs(x)], timeout_duration=timeout_duration)
+        if not isinstance(result, str):
+            result = [i[0] for i in list(result) for _ in range(i[1])]
+        return result
 
 
 def squarefree_part(x, timeout_duration=20, use_ecm=True):
@@ -136,3 +139,11 @@ def square_part_square_root(x, timeout_duration=20, use_ecm=True):
         return square
     else:
         return sqrt(square)
+
+def eigenvalues(curve: CustomCurve, l, s=1):
+    """Computes the eigenvalues of Frobenius endomorphism in F_l, or in F_(l^2) if s=2"""
+    x = PolynomialRing(GF(l ** s), 'x').gen()
+    q = curve.q
+    t = curve.trace
+    f = x ** 2 - t * x + q
+    return f.roots()

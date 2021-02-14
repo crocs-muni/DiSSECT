@@ -1,4 +1,4 @@
-from sage.all import EllipticCurve, ZZ, GF  # import sage library
+from sage.all import EllipticCurve, ZZ, GF, factor  # import sage library
 
 
 # Converting functions using formulas in https://tools.ietf.org/id/draft-struik-lwip-curve-representations-00.html
@@ -190,3 +190,32 @@ class CustomCurve:
 
     def __lt__(self, other):
         return (self.order.nbits(), self.name) < (other.order.nbits(), other.name)
+
+
+def customize_curve(curve):
+    db_curve = {}
+    db_curve['name'] = 'joe'
+    q = curve.base_field().order()
+    order = factor(curve.order())[-1][0]
+    db_curve['order'] = order
+    db_curve['category'] = 'my'
+    db_curve['form'] = "Weierstrass"
+
+    def my_hex(x):
+        return format(ZZ(x), "#04x")
+
+    if q % 2 != 0:
+        db_curve['params'] = {"a": {"raw": my_hex(curve.a4())}, "b": {"raw": my_hex(curve.a6())}}
+        db_curve['field'] = {"type": "Prime", "p": my_hex(q), "bits": q.nbits()}
+    else:
+        db_curve['params'] = {"a": {"raw": my_hex(curve.a2())}, "b": {"raw": my_hex(curve.a6())}}
+        db_curve['field'] = {"type": "Binary"}
+        db_curve['field']["poly"] = [{"power": deg, "coeff": my_hex(coef)} for deg, coef in
+                                     curve.base_field().polynomial().dict().items()]
+        db_curve['field']["bits"] = curve.base_field().polynomial().degree()
+        db_curve['field']["degree"] = curve.base_field().polynomial().degree()
+        db_curve['field']["basis"] = "poly"
+    db_curve['desc'] = ""
+    db_curve['cofactor'] = curve.order() // order
+    db_curve['generator'] = None
+    return CustomCurve(db_curve)

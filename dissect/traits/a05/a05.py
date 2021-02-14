@@ -1,63 +1,46 @@
-from sage.all import ZZ, PolynomialRing, GF
-
 from dissect.traits.trait_interface import compute_results
-from dissect.traits.trait_utils import ext_card, is_torsion_cyclic, embedding_degree_q
+from dissect.traits.trait_utils import ext_card, is_torsion_cyclic
 from dissect.utils.custom_curve import CustomCurve
+from dissect.traits.trait_utils import eigenvalues
+from sage.all import lcm
 
 
-def find_least_torsion(curve: CustomCurve, l):
+def torsion_finder(curve: CustomCurve, l):
     """
-    Computes the smallest extension which contains a nontrivial l-torsion point
-    Returns the degree
+    Finds the minimal degrees k_2,k_1 of extension of curve E/F_q where
+    E/F_q**(k_2) contains E[l] and E/F_q**(k_1) has nontrivial intersection with E[l]
+    Returns k2, k1
     """
-    x = PolynomialRing(GF(l ** 2), 'x').gen()
-    f = x ** 2 - curve.trace * x + curve.q
-    roots = [r[0] for r in f.roots() for _ in range(r[1])]
-    return min(roots[0].multiplicative_order(), roots[1].multiplicative_order())
+    eig = eigenvalues(curve, l)
+    # Case with no eigenvalues
+    if not eig:
+        eig = eigenvalues(curve, l, s=2)
+        a_ord, b_ord = eig[0][0].multiplicative_order(), eig[1][0].multiplicative_order()
+        k2 = lcm(a_ord, b_ord)
+        k1 = k2
+        return k2, k1
 
+    a_ord = eig[0][0].multiplicative_order()
+    # Case with 2 eigenvalues
+    if len(eig) == 2:
+        b_ord = eig[1][0].multiplicative_order()
+        return lcm(a_ord, b_ord), min(a_ord, b_ord)
 
-def find_full_torsion(curve: CustomCurve, l, least):
-    """
-    Computes the smallest extension which contains full l-torsion subgroup
-    Least is the result of find_least_torsion
-    Returns the degree
-    """
-    q = curve.q
-    k = embedding_degree_q(q ** least, l)
-    # k satisfies l|a^k-1 where a,1 are eigenvalues of Frobenius of extended E
-    if k > 1:  # i.e. a!=1
-        return k * least
-    else:  # i.e. a==1, we have two options for the geometric multiplicity
-        card = ext_card(curve, least)
-        if (card % l ** 2) == 0 and not is_torsion_cyclic(curve, l, least):  # geom. multiplicity is 2
-            return least
-        else:  # geom. multiplicity is 1
-            return l * least
-
-
-def find_torsions(curve: CustomCurve, l):
-    """Returns a triple of extensions containing torsion"""
-    least = find_least_torsion(curve, l)
-    if least == l ** 2 - 1:
-        full = least
-    else:
-        full = find_full_torsion(curve, l, least)
-    return least, full, ZZ(full / least)
+    # Case with 1 eigenvalue
+    k1 = a_ord
+    k2 = k1
+    card = ext_card(curve, k1)
+    if card % l ** 2 != 0 or is_torsion_cyclic(curve, l, k1):
+        k2 = l
+    return k2, k1
 
 
 def a05_curve_function(curve: CustomCurve, l):
     """Computes find_torsions for given l and returns a dictionary"""
-    curve_results = {}
-    try:
-        least, full, relative = find_torsions(curve, l)
-    except (ArithmeticError, TypeError, ValueError) as _:
-        least, full, relative = None, None, None
-
-    curve_results['least'] = least
-    curve_results['full'] = full
-    curve_results['relative'] = relative
-
-    return curve_results
+    if curve.q%l==0:
+        return {'least': None, 'full': None, 'relative': None} 
+    k2, k1 = torsion_finder(curve, l)
+    return {'least': k1, 'full': k2, 'relative': k2 // k1}
 
 
 def compute_a05_results(curve_list, desc='', verbose=False):
