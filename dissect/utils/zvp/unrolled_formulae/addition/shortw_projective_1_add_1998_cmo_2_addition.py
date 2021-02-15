@@ -1,7 +1,11 @@
-from sage.all import *
+from sage.all import PolynomialRing, ZZ
 
 pr = PolynomialRing(ZZ, ('a', 'b', 'X1', 'X2', 'Y1', 'Y2'), 6)
 a, b, X1, X2, Y1, Y2 = pr.gens()
+ZZ1, ZZZ1, ZZ2, ZZZ2 = 1, 1, 1, 1
+b2 = 2 * b
+b4 = 4 * b
+half = 1 / 2
 Z1, Z2 = 1, 1
 formula = {}
 Y1Z2 = Y1 * Z2
@@ -46,5 +50,3 @@ Y3 = t7 - t6
 formula['Y3'] = Y3
 Z3 = vvv * Z1Z2
 formula['Z3'] = Z3
-for key, value in formula.items():
-    print(f'{key} = {value}')

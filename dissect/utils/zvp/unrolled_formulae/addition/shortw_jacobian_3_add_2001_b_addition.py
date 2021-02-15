@@ -1,7 +1,11 @@
-from sage.all import *
+from sage.all import PolynomialRing, ZZ
 
 pr = PolynomialRing(ZZ, ('a', 'b', 'X1', 'X2', 'Y1', 'Y2'), 6)
 a, b, X1, X2, Y1, Y2 = pr.gens()
+ZZ1, ZZZ1, ZZ2, ZZZ2 = 1, 1, 1, 1
+b2 = 2 * b
+b4 = 4 * b
+half = 1 / 2
 Z1, Z2 = 1, 1
 formula = {}
 ZZ1 = Z1 ** 2
@@ -50,5 +54,3 @@ t5 = d * gx
 formula['t5'] = t5
 Y3 = t5 - t4
 formula['Y3'] = Y3
-for key, value in formula.items():
-    print(f'{key} = {value}')

@@ -1,7 +1,8 @@
-from sage.all import *
+from sage.all import PolynomialRing, ZZ
 
 pr = PolynomialRing(ZZ, ('a', 'd', 'X1', 'X2', 'Y1', 'Y2'), 6)
 a, d, X1, X2, Y1, Y2 = pr.gens()
+k, d2 = 2 * d, 2 * d
 T1 = X1 * Y1
 T2 = X2 * Y2
 Z1, Z2 = 1, 1
@@ -40,5 +41,3 @@ T3 = E * H
 formula['T3'] = T3
 Z3 = F * G
 formula['Z3'] = Z3
-for key, value in formula.items():
-    print(f'{key} = {value}')
