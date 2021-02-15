@@ -20,6 +20,7 @@ EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_PATH = Path(EFD_PATH, 'shortw', 'projectiv
 EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_FORMULAE = [f for f in EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_PATH.iterdir() if
                                                   f.suffix == '.op3']
 UNROLLED_ADDITION_FORMULAE_PATH = Path(ZVP_PATH, 'unrolled_formulae', 'addition')
+UNROLLED_ADDITION_FORMULAE_MODULE_PATH = "dissect.utils.zvp.unrolled_formulae.addition"
 UNROLLED_ADDITION_FORMULAE = [f for f in UNROLLED_ADDITION_FORMULAE_PATH.iterdir() if
                           f.suffix == '.py']
 X962_PATH = Path(ROOT_DIR, 'utils', 'parallel', 'x962')
