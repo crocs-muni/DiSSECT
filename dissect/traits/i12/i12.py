@@ -26,7 +26,6 @@ def i12_curve_function(curve: CustomCurve, unrolled_formula_file):
     _, _, _, a, b = curve.EC.ainvs()
     output_polys_converted = [pr_clean(pr(poly)(a=a, b=b)) for poly in output_polys]
     I = pr_clean.ideal(Y1 ** 2 - X1 ** 3 - a * X1 - b, Y2 ** 2 - X2 ** 3 - a * X2 - b, *output_polys_converted)
-    print(I)
 
     # do the actual computation
     try:
