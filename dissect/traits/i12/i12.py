@@ -11,8 +11,12 @@ from dissect.utils.custom_curve import CustomCurve
 def i12_curve_function(curve: CustomCurve, unrolled_formula_file):
     """Tries to compute the variety of exceptional points where the unrolled_formula fails"""
 
-    if 'shortw' not in unrolled_formula_file:
-        return {"ideal": None, "dimension": None, "variety": None}
+    q = curve.q
+    _, _, _, aa, bb = curve.EC.ainvs()
+    curve_results = {"ideal": None, "dimension": None, "variety": None}
+    if ('shortw' not in unrolled_formula_file) or ("_0_" in unrolled_formula_file and aa != 0) or (
+            "_3_" in unrolled_formula_file and aa != -3):
+        return curve_results
 
     # get all output polynomials
     unrolled_formula = Path(UNROLLED_ADDITION_FORMULAE_PATH, unrolled_formula_file)
@@ -21,11 +25,9 @@ def i12_curve_function(curve: CustomCurve, unrolled_formula_file):
 
     # clean up the ring and convert the output polynomials
     a, b = pr.gens()[:2]
-    q = curve.q
     pr_clean = pr.remove_var(a).remove_var(b).change_ring(GF(q))
-    _, _, _, a, b = curve.EC.ainvs()
-    output_polys_converted = [pr_clean(pr(poly)(a=a, b=b)) for poly in output_polys]
-    I = pr_clean.ideal(Y1 ** 2 - X1 ** 3 - a * X1 - b, Y2 ** 2 - X2 ** 3 - a * X2 - b, *output_polys_converted)
+    output_polys_converted = [pr_clean(pr(poly)(a=aa, b=bb)) for poly in output_polys]
+    I = pr_clean.ideal(Y1 ** 2 - X1 ** 3 - aa * X1 - bb, Y2 ** 2 - X2 ** 3 - aa * X2 - bb, *output_polys_converted)
 
     # do the actual computation
     try:
