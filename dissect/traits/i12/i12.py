@@ -12,10 +12,13 @@ def i12_curve_function(curve: CustomCurve, unrolled_formula_file):
     """Tries to compute the variety of exceptional points where the unrolled_formula fails"""
 
     q = curve.q
+    K = GF(q)
     _, _, _, aa, bb = curve.EC.ainvs()
     curve_results = {"ideal": None, "dimension": None, "variety": None}
-    if ('shortw' not in unrolled_formula_file) or ("_0_" in unrolled_formula_file and aa != 0) or (
-            "_3_" in unrolled_formula_file and aa != -3):
+    if ('shortw' not in unrolled_formula_file)\
+            or ("_0_" in unrolled_formula_file and K(aa) != K(0)) \
+            or ("_1_" in unrolled_formula_file and K(aa) != K(-1)) \
+            or ("_3_" in unrolled_formula_file and K(aa) != K(-3)):
         return curve_results
 
     # get all output polynomials
@@ -25,7 +28,7 @@ def i12_curve_function(curve: CustomCurve, unrolled_formula_file):
 
     # clean up the ring and convert the output polynomials
     a, b = pr.gens()[:2]
-    pr_clean = pr.remove_var(a).remove_var(b).change_ring(GF(q))
+    pr_clean = pr.remove_var(a).remove_var(b).change_ring(K)
     output_polys_converted = [pr_clean(pr(poly)(a=aa, b=bb)) for poly in output_polys]
     I = pr_clean.ideal(Y1 ** 2 - X1 ** 3 - aa * X1 - bb, Y2 ** 2 - X2 ** 3 - aa * X2 - bb, *output_polys_converted)
 
