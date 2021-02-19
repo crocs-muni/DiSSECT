@@ -5,6 +5,6 @@
 	update = merge
 [submodule "dissect/utils/efd"]
 	path = dissect/utils/efd
-	url = https://github.com/J08nY/efd.git
+	url = https://github.com/VladaSedlacek/efd.git
 	branch = master
 	update = merge
