@@ -68,33 +68,33 @@ Notation: $`n`$ is the curve order, $`q`$ is the order of the base field
 
 | name    | description                                                                       | fully specified        
 |:-------:| ----------------------------------------------------------------------------------|:------------------:
-    a03   | distribution and sizes of isogeny classes                                         | :x: 
-    a09   | existence of pairing-friendly cycles                                              | :x: 
-    a10   | existence of factorization bases                                                  | :x: 
-    a11   | minimal codewords in elliptic codes                                               | :x: 
-    a13   | images of points under pairings                                                   | :x: 
-    a14   | conductor and modularity                                                          | :x: 
-    a15   | the lattice associated to the curve over $`C`$                                    | :x: 
-    a16   | the Neron model                                                                   | :x: 
-    a17   | the L-series                                                                      | :x: 
-    a18   | the invariant differential                                                        | :x: 
-    a19   | local heights                                                                     | :x: 
-    a20   | $`S`$-integral points                                                             | :x: 
-    a21   | Galois groups of various polynomials                                              | :x:
-    a26   | lifts of curves to other fields                                                   | :x: 
-    i01   | curves under parameter bitflips                                                   | :x:
-    i02   | curves with the same $`j`$-invariant/group order, but different $`q`$             | :x:
-    i03   | the number of modular reductions in various computations                          | :x:
-    i05   | vulnerability against $`\rho`$ and kangaroo                                       | :x:
-    i09   | properties of quadratic twists                                                    | :x:
-    s01   | statistical properties of scalar multiplication                                   | :x:
-    s02   | distribution of point coordinates in various intervals                            | :x:
-    s03   | properties of other curve models                                                  | :x:
-    s04   | modular polynomials in given $`j`$-invariant                                      | :x:
-    s05   | images of points under isogenies                                                  | :x:
-    s06   | summation polynomials                                                             | :x:
-    s07   | distributions of curves with similar properties                                   | :x:
-    s08   | properties of the function shifting a point by the generator                      | :x:
+a03       | distribution and sizes of isogeny classes                                         | :x: 
+a09       | existence of pairing-friendly cycles                                              | :x: 
+a10       | existence of factorization bases                                                  | :x: 
+a11       | minimal codewords in elliptic codes                                               | :x: 
+a13       | images of points under pairings                                                   | :x: 
+a14       | conductor and modularity                                                          | :x: 
+a15       | the lattice associated to the curve over $`C`$                                    | :x: 
+a16       | the Neron model                                                                   | :x: 
+a17       | the L-series                                                                      | :x: 
+a18       | the invariant differential                                                        | :x: 
+a19       | local heights                                                                     | :x: 
+a20       | $`S`$-integral points                                                             | :x: 
+a21       | Galois groups of various polynomials                                              | :x:
+a26       | lifts of curves to other fields                                                   | :x: 
+i01       | curves under parameter bitflips                                                   | :x:
+i02       | curves with the same $`j`$-invariant/group order, but different $`q`$             | :x:
+i03       | the number of modular reductions in various computations                          | :x:
+i05       | vulnerability against $`\rho`$ and kangaroo                                       | :x:
+i09       | properties of quadratic twists                                                    | :x:
+s01       | statistical properties of scalar multiplication                                   | :x:
+s02       | distribution of point coordinates in various intervals                            | :x:
+s03       | properties of other curve models                                                  | :x:
+s04       | modular polynomials in given $`j`$-invariant                                      | :x:
+s05       | images of points under isogenies                                                  | :x:
+s06       | summation polynomials                                                             | :x:
+s07       | distributions of curves with similar properties                                   | :x:
+s08       | properties of the function shifting a point by the generator                      | :x:
 
 ## Unit tests
 
