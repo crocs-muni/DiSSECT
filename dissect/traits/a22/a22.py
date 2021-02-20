@@ -7,16 +7,28 @@ from dissect.utils.custom_curve import CustomCurve
 def a22_curve_function(curve: CustomCurve, l):
     """
     Computation factorization of l-th division polynomial
-    Returns a dictionary (keys: 'factorization', 'degs_list', 'len' )
+    More precisely, computes a list of tuple [a,b]
+    where b is the number of irreducible polynomials of degree a in the factorization (with multiplicity)
+    Returns a dictionary
     """
-    pol = curve.EC.division_polynomial(l)
-    fact = [list(i) for i in list(factor(pol))]
-    # count multiplicities?
-    degs = [x.degree() for x, _ in fact]
-    fact_str = [[str(i[0]), i[1]] for i in fact]
-    curve_results = {'factorization': fact_str, 'degs_list': degs, 'len': len(degs)}
-    return curve_results
+    fact = map(
+        lambda x: (
+            x[0].degree(), x[1]), factor(
+            curve.EC.division_polynomial(l)))
+    result = {}
+    for deg, ex in fact:
+        if deg not in result:
+            result[deg] = 0
+        result[deg] += ex
+    # Converts tuples to lists for json
+    result = [list(i) for i in result.items()]
+    return {'factorization': result, 'len': len(result)}
 
 
 def compute_a22_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 'a22', a22_curve_function, desc=desc, verbose=verbose)
+    compute_results(
+        curve_list,
+        'a22',
+        a22_curve_function,
+        desc=desc,
+        verbose=verbose)
