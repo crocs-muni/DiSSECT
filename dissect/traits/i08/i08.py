@@ -4,6 +4,7 @@ from sage.all import ZZ, GF
 
 from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
+from dissect.utils.json_handler import FLOAT_PRECISION
 
 
 def i08_curve_function(curve: CustomCurve, k):
@@ -23,7 +24,7 @@ def i08_curve_function(curve: CustomCurve, k):
     bits = Hx.nbits()
     difference = ZZ(curve.cardinality).nbits() - bits
     ratio = bits / curve.nbits
-    curve_results = {"Hx": Hx, "bits": bits, "difference": difference, "ratio": ratio}
+    curve_results = {"Hx": Hx, "bits": bits, "difference": difference, "ratio": round(ratio, FLOAT_PRECISION)}
     return curve_results
 
 
