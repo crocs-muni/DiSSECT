@@ -99,6 +99,15 @@
   "params_local_names": []
 },
 
+"i08": {
+  "params_global": {
+      "k_range": "range(1, 11)"
+  },
+  "params_local_names": [
+      "k"
+  ]
+},
+
 "i10": {
   "params_global": {
     "multiple_range": "range(2, 6)",
