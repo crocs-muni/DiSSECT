@@ -3,13 +3,21 @@ import unittest
 
 from dissect.traits.example_curves import curve_names
 from dissect.traits.i07.i07 import i07_curve_function
+from dissect.utils.json_handler import FLOAT_PRECISION
 
-results = {'secp112r2': {
-    '{}': {'distance': 740611633441112928659565470072532, 'ratio': 6, 'distance 32': 12, 'distance 64': 20}}, 'bn158': {
-    '{}': {'distance': 23639966694374437715554742421545236103616790541, 'ratio': 8, 'distance 32': 13,
-           'distance 64': 13}}, 'brainpoolP160r1': {
-    '{}': {'distance': 129204038890858043376599793886101655442989974519, 'ratio': 10, 'distance 32': 9,
-           'distance 64': 9}}}
+results = {
+    'secp112r2': {
+        '{}': {'distance': 740611633441112928659565470072532, 'ratio': round(6.01082, FLOAT_PRECISION),
+               'distance 32': 12, 'distance 64': 20}},
+    'bn158': {
+        '{}': {'distance': 23639966694374437715554742421545236103616790541, 'ratio': round(8.72792, FLOAT_PRECISION),
+               'distance 32': 13,
+               'distance 64': 13}},
+    'brainpoolP160r1': {
+        '{}': {'distance': 129204038890858043376599793886101655442989974519, 'ratio': round(10.31158, FLOAT_PRECISION),
+               'distance 32': 9,
+               'distance 64': 9}}
+}
 
 
 class TestI07(unittest.TestCase):

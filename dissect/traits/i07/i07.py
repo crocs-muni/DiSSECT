@@ -17,7 +17,7 @@ def i07_curve_function(curve: CustomCurve):
     dist32 = min(abs(card % 32), 32 - abs(card % 32))
     dist64 = min(abs(card % 64), 64 - abs(card % 64))
     ratio = card / distance
-    curve_results = {"distance": distance, "ratio": round(ratio, FLOAT_PRECISION), DISTANCE_32: dist32,
+    curve_results = {"distance": distance, "ratio": round(float(ratio), FLOAT_PRECISION), DISTANCE_32: dist32,
                      DISTANCE_64: dist64}
     return curve_results
 

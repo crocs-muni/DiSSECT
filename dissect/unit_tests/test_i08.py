@@ -2,13 +2,15 @@ import unittest
 import ast
 from dissect.traits.i08.i08 import i08_curve_function
 from dissect.traits.example_curves import curve_names
+from dissect.utils.json_handler import FLOAT_PRECISION
+
 results = {
     'secp112r2': {
         "{'k': 1}": {
             'Hx': 1534098225527667214992304222930499,
             'bits': 111,
             'difference': 1,
-            'ratio': 1.009090909090909}},
+            'ratio': round(1.009090909090909, FLOAT_PRECISION)}},
     'bn158': {
         "{'k': 1}": {
             'Hx': 206327671360737302491015800744139033450591027218,
