@@ -14,11 +14,6 @@ def i08_curve_function(curve: CustomCurve, k):
         return {"Hx": None, "bits": None, "difference": None, "ratio": None}
     F = GF(curve.order)
     multiple = F(1) / k
-    try:
-        if k == 2:
-            assert ZZ(multiple) == ZZ((curve.order + 1) / 2)
-    except AssertionError:
-        print(curve.order, ZZ(multiple), ZZ((curve.order + 1) / 2))
     H = ZZ(multiple) * G
     Hx = ZZ(H[0])
     bits = Hx.nbits()
