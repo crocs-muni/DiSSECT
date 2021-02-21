@@ -15,9 +15,7 @@ def i12_curve_function(curve: CustomCurve, unrolled_formula_file):
     field = curve.field
     curve_results = {"ideal": None, "dimension": None, "variety": None}
 
-    if curve.form == "Weierstrass":
-        if "shortw" not in unrolled_formula_file:
-            return curve_results
+    if "shortw" in unrolled_formula_file:
         shortw_a, shortw_b = curve.EC.a4(), curve.EC.a6()
         if ("jacobian_0_" in unrolled_formula_file and shortw_a != field(0)) \
                 or ("w12_0_" in unrolled_formula_file and shortw_b != field(0)) \
@@ -25,16 +23,16 @@ def i12_curve_function(curve: CustomCurve, unrolled_formula_file):
                 or ("_3_" in unrolled_formula_file and shortw_a != field(-3)):
             return curve_results
 
-    elif curve.form == "TwistedEdwards":
-        if "twisted" not in unrolled_formula_file:
+    elif "twisted" in unrolled_formula_file:
+        if curve.form != "TwistedEdwards":
             return curve_results
         twisted_a = field(curve.params['a']['raw'])
         twisted_d = field(curve.params['d']['raw'])
         if "extended_1_" in unrolled_formula_file and twisted_a != field(-1):
             return curve_results
 
-    elif curve.form == "Edwards":
-        if "edwards" not in unrolled_formula_file:
+    elif "edwards" in unrolled_formula_file:
+        if curve.form != "Edwards":
             return curve_results
         edwards_c = field(curve.params['c']['raw'])
         edwards_d = field(curve.params['d']['raw'])
@@ -51,19 +49,19 @@ def i12_curve_function(curve: CustomCurve, unrolled_formula_file):
     gen1, gen2 = pr.gens()[:2]
     pr_clean = pr.remove_var(gen1).remove_var(gen2).change_ring(field)
 
-    if curve.form == "Weierstrass":
+    if "shortw" in unrolled_formula_file:
         output_polys_converted = [pr_clean(poly(a=shortw_a, b=shortw_b)) for poly in output_polys]
         I = pr_clean.ideal(Y1 ** 2 - X1 ** 3 - shortw_a * X1 - shortw_b,
                            Y2 ** 2 - X2 ** 3 - shortw_a * X2 - shortw_b,
                            *output_polys_converted)
 
-    elif curve.form == "TwistedEdwards":
+    elif "twisted" in unrolled_formula_file:
         output_polys_converted = [pr_clean(poly(a=twisted_a, d=twisted_d)) for poly in output_polys]
         I = pr_clean.ideal(twisted_a * X1 ** 2 + Y1 ** 2 - (1 + twisted_d * X1 ** 2 * Y1 ** 2),
                            twisted_a * X2 ** 2 + Y2 ** 2 - (1 + twisted_d * X2 ** 2 * Y2 ** 2),
                            *output_polys_converted)
 
-    elif curve.form == "Edwards":
+    elif "edwards" in unrolled_formula_file:
         output_polys_converted = [pr_clean(poly(c=edwards_c, d=edwards_d)) for poly in output_polys]
         I = pr_clean.ideal(X1 ** 2 + Y1 ** 2 - edwards_c * (1 + edwards_d * X1 ** 2 * Y1 ** 2),
                            X2 ** 2 + Y2 ** 2 - edwards_c * (1 + edwards_d * X2 ** 2 * Y2 ** 2),
