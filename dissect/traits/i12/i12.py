@@ -50,7 +50,7 @@ def i12_curve_function(curve: CustomCurve, unrolled_formula_file):
     pr_clean = pr.remove_var(gen1).remove_var(gen2).change_ring(field)
 
     if "shortw" in unrolled_formula_file:
-        output_polys_converted = [pr_clean(poly(a=shortw_a, b=shortw_b)) for poly in output_polys]
+        output_polys_converted = [pr_clean(pr(poly)(a=shortw_a, b=shortw_b)) for poly in output_polys]
         I = pr_clean.ideal(Y1 ** 2 - X1 ** 3 - shortw_a * X1 - shortw_b,
                            Y2 ** 2 - X2 ** 3 - shortw_a * X2 - shortw_b,
                            *output_polys_converted)
