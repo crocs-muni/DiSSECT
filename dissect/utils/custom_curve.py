@@ -131,6 +131,7 @@ class CustomCurve:
                 a = ZZ(self.params['a']["raw"])
                 b = ZZ(self.params['b']["raw"])
                 self.EC = EllipticCurve(K, [1, K.fetch_int(ZZ(a)), 0, 0, K.fetch_int(ZZ(b))])  # xy, x^2, y, x, 1
+                self.field = K
                 self.set_generator(binary=True)
 
             elif self.field_desc['type'] == 'Extension':
