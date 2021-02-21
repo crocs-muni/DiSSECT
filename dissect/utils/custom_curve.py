@@ -118,7 +118,6 @@ class CustomCurve:
             if self.field_desc['type'] == "Prime":
                 p = ZZ(self.field_desc['p'])
                 F = GF(p, proof=False)
-                self.field = F
                 a = ZZ(self.params['a']["raw"])
                 b = ZZ(self.params['b']["raw"])
                 self.EC = EllipticCurve(F, [a, b])
@@ -129,7 +128,6 @@ class CustomCurve:
                 F = GF(2)['w']
                 modulus = get_poly(self.field_desc["poly"], F)
                 K = GF(2 ** degree, 'w', modulus, proof=False)
-                self.field = K
                 a = ZZ(self.params['a']["raw"])
                 b = ZZ(self.params['b']["raw"])
                 self.EC = EllipticCurve(K, [1, K.fetch_int(ZZ(a)), 0, 0, K.fetch_int(ZZ(b))])  # xy, x^2, y, x, 1
@@ -141,7 +139,6 @@ class CustomCurve:
                 F = GF(base, proof=False)['w']
                 modulus = get_poly(self.field_desc["poly"], F)
                 K = GF(base ** degree, 'w', modulus, proof=False)
-                self.field = K
                 a = get_poly(self.params['a']['poly'], K)
                 b = get_poly(self.params['b']['poly'], K)
                 self.EC = EllipticCurve(K, [a, b])
@@ -153,7 +150,6 @@ class CustomCurve:
             B = ZZ(self.params['b']['raw'])
             p = ZZ(self.field_desc['p'])
             F = GF(p, proof=False)
-            self.field = F
             x, y = self.get_xy()
             a, b, u, v = montgomery_to_short_weierstrass(F, A, B, x, y)
             self.EC = EllipticCurve(F, [a, b])
@@ -177,7 +173,8 @@ class CustomCurve:
         else:
             self.EC = "Not implemented"
 
-        self.q = self.EC.base_field().order()
+        self.field = self.EC.base_field()
+        self.q = self.field.order()
         self.EC.set_order(self.cardinality, num_checks=0)
         self.trace = self.q + 1 - self.cardinality
 
