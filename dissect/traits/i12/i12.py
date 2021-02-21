@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import io
+from contextlib import redirect_stdout
 from pathlib import Path
 
 from sage.all import load, GF
@@ -70,15 +72,15 @@ def i12_curve_function(curve: CustomCurve, unrolled_formula_file):
                            *output_polys_converted)
 
     # do the actual computation
-    set_verbose(0)
-    try:
-        variety = I.variety()
-    except (ValueError, NotImplementedError):
-        variety = None
-    try:
-        dimension = I.dimension()
-    except NotImplementedError:
-        dimension = None
+    with redirect_stdout(io.StringIO()):
+        try:
+            variety = I.variety()
+        except (ValueError, NotImplementedError):
+            variety = None
+        try:
+            dimension = I.dimension()
+        except NotImplementedError:
+            dimension = None
     curve_results = {"ideal": I, "dimension": dimension, "variety": variety}
     return curve_results
 
