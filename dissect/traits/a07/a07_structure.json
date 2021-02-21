@@ -1,0 +1,20 @@
+{
+  "secp112r2": {
+    "{}": {
+      "embedding_degree_complement": 3,
+      "complement_bit_length": 2
+    }
+  },
+  "bn158": {
+    "{}": {
+      "embedding_degree_complement": 17193972613394775207584612209256717796717363201,
+      "complement_bit_length": 154
+    }
+  },
+  "brainpoolP160r1": {
+    "{}": {
+      "embedding_degree_complement": 3,
+      "complement_bit_length": 2
+    }
+  }
+}
