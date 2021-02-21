@@ -73,7 +73,7 @@ def i12_curve_function(curve: CustomCurve, unrolled_formula_file):
     with redirect_stdout(io.StringIO()):
         try:
             variety = I.variety()
-        except (ValueError, NotImplementedError):
+        except (ValueError, NotImplementedError, IndexError):
             variety = None
         try:
             dimension = I.dimension()
