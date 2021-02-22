@@ -5,9 +5,9 @@ def normalized_barplot(df, feature, title="Normalized bar plot", all_x_values = 
     std = df[df["simulated"] == False]
     sim = df[df["simulated"] == True]
 
+    if len(df) == 0:
+        return
     df_counts = df[feature].value_counts() / len(df)
-    std_counts = std[feature].value_counts() / len(std)
-    sim_counts = sim[feature].value_counts() / len(sim)
 
     if all_x_values:
         ticks = range(min(df_counts.index), max(df_counts.index) + 1)
@@ -15,8 +15,13 @@ def normalized_barplot(df, feature, title="Normalized bar plot", all_x_values = 
         ticks = sorted(list(df_counts.index))
 
     plt.figure(figsize=(10, 6))
-    plt.bar(std_counts.index.map(ticks.index) - 0.2, std_counts.values, width=0.4, label=f"Standard curves n={len(std)}")
-    plt.bar(sim_counts.index.map(ticks.index) + 0.2, sim_counts.values, width=0.4, label=f"Simulated curves n={len(sim)}")
+    if not len(std) == 0:
+        std_counts = std[feature].value_counts() / len(std)
+        plt.bar(std_counts.index.map(ticks.index) - 0.2, std_counts.values, width=0.4, label=f"Standard curves n={len(std)}")
+    if not len(sim) == 0:
+        sim_counts = sim[feature].value_counts() / len(sim)
+        plt.bar(sim_counts.index.map(ticks.index) + 0.2, sim_counts.values, width=0.4, label=f"Simulated curves n={len(sim)}")
+
     plt.xticks(range(len(ticks)), ticks)
     plt.legend()
     plt.title(title)
