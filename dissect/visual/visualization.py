@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 
-def normalized_barplot(df, feature, title="Normalized bar plot", xlab="Values", ylab="Normalized count"):
+def normalized_barplot(df, feature, title="Normalized bar plot", all_x_values = True, xlab="Values", ylab="Normalized count"):
     std = df[df["simulated"] == False]
     sim = df[df["simulated"] == True]
 
@@ -9,7 +9,10 @@ def normalized_barplot(df, feature, title="Normalized bar plot", xlab="Values", 
     std_counts = std[feature].value_counts() / len(std)
     sim_counts = sim[feature].value_counts() / len(sim)
 
-    ticks = sorted(list(df_counts.index))
+    if all_x_values:
+        ticks = range(min(df_counts.index), max(df_counts.index) + 1)
+    else:
+        ticks = sorted(list(df_counts.index))
 
     plt.figure(figsize=(10, 6))
     plt.bar(std_counts.index.map(ticks.index) - 0.2, std_counts.values, width=0.4, label=f"Standard curves n={len(std)}")
