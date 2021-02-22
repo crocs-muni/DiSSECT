@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import json
 from pathlib import Path
 from typing import Optional, Tuple, Iterable, Dict, Any
