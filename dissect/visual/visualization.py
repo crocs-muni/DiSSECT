@@ -1,7 +1,13 @@
 import matplotlib.pyplot as plt
 
 
-def normalized_barplot(df, feature, title="Normalized bar plot", all_x_values = True, xlab="Values", ylab="Normalized count"):
+def normalized_barplot(df, feature, modifier=lambda x: x, title="Normalized bar plot", all_x_ticks=True, xlab="Values",
+                       ylab="Normalized count"):
+    # make a copy of the dataframe and apply the modifier function to the feature row
+    df = df.copy(deep=False)
+    df[feature] = df[feature].apply(modifier)
+
+    # classify entries and count them
     std = df[df["simulated"] == False]
     sim = df[df["simulated"] == True]
 
@@ -9,7 +15,8 @@ def normalized_barplot(df, feature, title="Normalized bar plot", all_x_values = 
         return
     df_counts = df[feature].value_counts() / len(df)
 
-    if all_x_values:
+    # choose suitable x-axis ticks
+    if all_x_ticks:
         ticks = range(min(df_counts.index), max(df_counts.index) + 1)
     else:
         ticks = sorted(list(df_counts.index))
