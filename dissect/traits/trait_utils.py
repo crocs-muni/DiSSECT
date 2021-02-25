@@ -140,6 +140,7 @@ def square_part_square_root(x, timeout_duration=20, use_ecm=True):
     else:
         return sqrt(square)
 
+
 def eigenvalues(curve: CustomCurve, l, s=1):
     """Computes the eigenvalues of Frobenius endomorphism in F_l, or in F_(l^2) if s=2"""
     x = PolynomialRing(GF(l ** s), 'x').gen()

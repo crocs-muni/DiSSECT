@@ -1,7 +1,7 @@
 from dissect.traits.a05.a05 import ext_card, is_torsion_cyclic
 from dissect.traits.trait_interface import compute_results
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits.trait_utils import eigenvalues
+from dissect.utils.custom_curve import CustomCurve
 
 
 def isogeny_finder(curve: CustomCurve, l):
@@ -43,8 +43,8 @@ def a24_curve_function(curve, l):
     Computes i2,i1 (see i_finder) for all primes l<l_max
     Returns a dictionary (keys: 'least' (i1), 'full' (i2), 'relative' (i2/i1))
     """
-    if curve.q%l==0:
-        return {'least': None, 'full': None, 'relative': None} 
+    if curve.q % l == 0:
+        return {'least': None, 'full': None, 'relative': None}
     i2, i1 = isogeny_finder(curve, l)
     return {'least': i1, 'full': i2, 'relative': i2 // i1}
 
