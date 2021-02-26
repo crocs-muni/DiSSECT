@@ -23,7 +23,7 @@ def a01_curve_function(curve: CustomCurve, deg):
     curve_results = {}
     E_ext = extend(curve, deg)
     result = timeout(smith_normal_form, [E_ext], timeout_duration=TIME)
-    if result == 'NO DATA (timed out)':
+    if isinstance(result,str):
         result = result, result
     curve_results['ord1'], curve_results['ord2'] = result
     return curve_results

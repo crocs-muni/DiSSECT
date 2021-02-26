@@ -18,7 +18,7 @@ def near_order_factorizations(n, sign='+', k=10, t=10):
 
 def largest_factor_bitlen(factorization):
     """Computes bit length of largest factor(last item of list) of 'factorization' """
-    if factorization == 'NO DATA (timed out)':
+    if isinstance(factorization,str):
         return factorization
     else:
         return factorization[-1].nbits()
