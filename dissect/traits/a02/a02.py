@@ -14,7 +14,10 @@ def a02_curve_function(curve: CustomCurve):
     Returns a dictionary (keys: 'cm_disc', 'factorization', 'max_conductor')
     """
     D = ext_disc(curve, deg=1)
-    d, F = tu.squarefree_and_factorization(D)
+    res = tu.squarefree_and_factorization(D)
+    if isinstance(res,str):
+        return {'cm_disc':res,'factorization':res, 'max_conductor':res}
+    d,F = res
     cm_disc = d
     if d % 4 != 1:
         cm_disc *= 4
