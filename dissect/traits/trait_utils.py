@@ -100,7 +100,7 @@ def factorization(x, timeout_duration=20, use_ecm=True):
 def squarefree_part(x, timeout_duration=20, use_ecm=True):
     """return the squarefree part of x or 'NO DATA (timed out)'"""
     F = squarefree_and_factorization(x=x, timeout_duration=timeout_duration, use_ecm=use_ecm)
-    if isinstance(F,str):
+    if isinstance(F, str):
         return F
     else:
         return F[0]
@@ -109,7 +109,7 @@ def squarefree_part(x, timeout_duration=20, use_ecm=True):
 def squarefree_and_factorization(x, timeout_duration=20, use_ecm=True):
     """return the (squarefree part of x and the factorization of abs(x)) or 'NO DATA (timed out)'"""
     F = factorization(x, timeout_duration=timeout_duration, use_ecm=use_ecm)
-    if isinstance(F,str):
+    if isinstance(F, str):
         return F
     else:
         squarefree = 1
@@ -126,7 +126,7 @@ def squarefree_and_factorization(x, timeout_duration=20, use_ecm=True):
 def square_part(x, timeout_duration=20, use_ecm=True):
     """return the square part of x or 'NO DATA (timed out)'"""
     squarefree = squarefree_part(x=x, timeout_duration=timeout_duration, use_ecm=use_ecm)
-    if isinstance(squarefree,str):
+    if isinstance(squarefree, str):
         return squarefree
     else:
         return ZZ(x // squarefree)
@@ -135,7 +135,7 @@ def square_part(x, timeout_duration=20, use_ecm=True):
 def square_part_square_root(x, timeout_duration=20, use_ecm=True):
     """return the square root of square part of x or 'NO DATA (timed out)'"""
     square = square_part(x=x, timeout_duration=timeout_duration, use_ecm=use_ecm)
-    if isinstance(square,str):
+    if isinstance(square, str):
         return square
     else:
         return sqrt(square)

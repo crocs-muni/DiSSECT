@@ -15,9 +15,9 @@ def a02_curve_function(curve: CustomCurve):
     """
     D = ext_disc(curve, deg=1)
     res = tu.squarefree_and_factorization(D)
-    if isinstance(res,str):
-        return {'cm_disc':res,'factorization':res, 'max_conductor':res}
-    d,F = res
+    if isinstance(res, str):
+        return {'cm_disc': res, 'factorization': res, 'max_conductor': res}
+    d, F = res
     cm_disc = d
     if d % 4 != 1:
         cm_disc *= 4
