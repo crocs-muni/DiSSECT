@@ -2,26 +2,26 @@ import matplotlib.pyplot as plt
 
 
 def normalized_barplot(df, feature, modifier=lambda x: x, title=None, all_x_ticks=True, xlab="Values",
-                       ylab="Normalized count"):
+                       ylab="Normalized count", figsize=(10, 6)):
     # make a copy of the dataframe and apply the modifier function to the feature row
-    df = df.copy(deep=False)
-    df[feature] = df[feature].apply(modifier)
+    df2 = df.copy(deep=False)
+    df2[feature] = df2[feature].apply(modifier)
 
     # classify entries and count them
-    std = df[df["simulated"] == False]
-    sim = df[df["simulated"] == True]
-    if len(df) == 0:
+    std = df2[df2["simulated"] == False]
+    sim = df2[df2["simulated"] == True]
+    if len(df2) == 0:
         return
-    df_counts = df[feature].value_counts() / len(df)
+    df2_counts = df2[feature].value_counts() / len(df2)
 
     # choose suitable x-axis ticks
     if all_x_ticks:
-        ticks = range(min(df_counts.index), max(df_counts.index) + 1)
+        ticks = range(min(df2_counts.index), max(df2_counts.index) + 1)
     else:
-        ticks = sorted(list(df_counts.index))
+        ticks = sorted(list(df2_counts.index))
 
     # create the normalized barplot
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=figsize)
     if not len(std) == 0:
         std_counts = std[feature].value_counts() / len(std)
         plt.bar(std_counts.index.map(ticks.index) - 0.2, std_counts.values, width=0.4,
