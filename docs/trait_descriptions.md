@@ -13,9 +13,18 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 ### a02
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}$
 
-**Output:** the factorization of $D = t^2-4p = v^2d_K$, where $t$ is the trace oof Frobenius of E and $d_K$ is the discriminant of the endomorphism algebra of $E$
+**Output:** the factorization of $D = t^2-4p = v^2d_K$, where $t$ is the trace of Frobenius of E and $d_K$ is the discriminant of the endomorphism algebra of $E$
 
 **Motivation:** a large square factor of D has interesting implications
+
+**Distribution:** unknown, probably reducible to the distribution of factors of random numbers using Sato-Tate
+
+### a03
+**Input:** ordinary elliptic curve $E/\mathbb{F}_{p}, integer $r$
+
+**Output:** the factorization of the cardinality of the quadratic twist of $E(\mathbb{F}_{p^r})$
+
+**Motivation:** smooth cardinality of a quadratic twist might allow attacks on some implementations
 
 **Distribution:** unknown, probably reducible to the distribution of factors of random numbers using Sato-Tate
 

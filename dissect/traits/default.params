@@ -12,6 +12,15 @@
   "params_local_names": []
 },
 
+"a03": {
+  "params_global": {
+    "deg_range": "[1,2]"
+  },
+  "params_local_names": [
+  "deg"
+  ]
+},
+
 "a04": {
   "params_global": {
     "k_range": "range(1, 9)"

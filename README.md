@@ -41,10 +41,11 @@ jobs, run `./run_traits.py -n a05 -c std -v -b 192 -a 1 2 -t 3 -j 100`.
 |:-------:| ----------------------------------------------------------------------------------|:------------------:|:------------------:|:------------:|:---------:   
 |a01      | group stucture of the curve in field extensions                                   | :white_check_mark: | :x:                | high         | low
 |a02      | factorization of the CM discriminant                                              | :white_check_mark: | :white_check_mark: | high         | medium
+|a03      | factorization of the quadratic twist cardinality                                  | :white_check_mark: | :white_check_mark: | high         | medium
 |a04      | factorizations of $`kn\pm 1`$                                                     | :white_check_mark: | :white_check_mark: | high         | high
 |a05      | field extensions containing nontrivial/full $`l`$-torsion                         | :white_check_mark: | :white_check_mark: | medium       | low
 |a06      | factorizations of ratios of CM discriminants in extension fields and base fields  | :white_check_mark: | :white_check_mark: | high         | medium
-|a07      | embedding degree                                                                  | :white_check_mark: | :x:                | medium       | low
+|a07      | embedding degree                                                                  | :white_check_mark: | :white_check_mark: | medium       | low
 |a08      | class number of the maximal order of the endomorphism ring                        | :white_check_mark: | :x:                | extreme      | low
 |a12      | multiplicative orders of small primes modulo curve order                          | :white_check_mark: | :white_check_mark: | medium       | medium
 |a22      | factorizations of small division polynomials                                      | :white_check_mark: | :white_check_mark: | high         | high
@@ -68,7 +69,6 @@ Notation: $`n`$ is the curve order, $`q`$ is the order of the base field
 
 | name    | description                                                                       | fully specified        
 |:-------:| ----------------------------------------------------------------------------------|:------------------:
-a03       | distribution and sizes of isogeny classes                                         | :x: 
 a09       | existence of pairing-friendly cycles                                              | :x: 
 a10       | existence of factorization bases                                                  | :x: 
 a11       | minimal codewords in elliptic codes                                               | :x: 
@@ -82,11 +82,11 @@ a19       | local heights                                                       
 a20       | $`S`$-integral points                                                             | :x: 
 a21       | Galois groups of various polynomials                                              | :x:
 a26       | lifts of curves to other fields                                                   | :x: 
+a27       | distribution and sizes of isogeny classes                                         | :x: 
 i01       | curves under parameter bitflips                                                   | :x:
 i02       | curves with the same $`j`$-invariant/group order, but different $`q`$             | :x:
 i03       | the number of modular reductions in various computations                          | :x:
 i05       | vulnerability against $`\rho`$ and kangaroo                                       | :x:
-i09       | properties of quadratic twists                                                    | :x:
 s01       | statistical properties of scalar multiplication                                   | :x:
 s02       | distribution of point coordinates in various intervals                            | :x:
 s03       | properties of other curve models                                                  | :x:
