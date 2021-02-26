@@ -2,9 +2,11 @@ import matplotlib.pyplot as plt
 
 
 def normalized_barplot(df, feature, modifier=lambda x: x, title=None, all_x_ticks=True, xlab="Values",
-                       ylab="Normalized count", figsize=(10, 6)):
-    # make a copy of the dataframe and apply the modifier function to the feature row
+                       ylab="Normalized count", figsize=(10, 6), drop_timeouts=True):
+    # make a copy of the dataframe, drop timeouts if eligible and apply the modifier function to the feature row
     df2 = df.copy(deep=False)
+    if drop_timeouts:
+        df2 = df2[df2[feature] != "NO DATA (timed out)"]
     df2[feature] = df2[feature].apply(modifier)
 
     # classify entries and count them
