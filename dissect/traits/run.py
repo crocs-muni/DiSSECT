@@ -1,4 +1,4 @@
-#!/usr/bin/env sage
+#!/usr/bin/env python3
 
 import argparse
 import itertools

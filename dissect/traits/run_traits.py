@@ -1,4 +1,4 @@
-#!/usr/bin/env sage
+#!/usr/bin/env python3
 
 # A script for parallel running individual traits from the command line.
 

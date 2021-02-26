@@ -1,4 +1,4 @@
-#!/usr/bin/env sage
+#!/usr/bin/env python3
 import itertools
 import json
 import optparse
