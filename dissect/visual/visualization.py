@@ -22,7 +22,9 @@ def normalized_barplot(df, feature, modifier=lambda x: x, title=None, tick_spaci
         locs = range(len(ticks))
         labels = ticks
     else:
-        ticks = range(min(df2_counts.index), max(df2_counts.index) + 1)
+        low = min(df2_counts.index) - (min(df2_counts.index) % tick_spacing)
+        high = max(df2_counts.index) - (max(df2_counts.index) % tick_spacing) + tick_spacing
+        ticks = range(low, high + 1)
         locs = [i for i in range(len(ticks)) if i % tick_spacing == 0]
         labels = [t for t in ticks if t % tick_spacing == 0]
 
