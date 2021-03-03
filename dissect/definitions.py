@@ -22,7 +22,7 @@ EFD_SHORTW_PROJECTIVE_MINUS3_ADDITION_FORMULAE = [f for f in EFD_SHORTW_PROJECTI
 UNROLLED_ADDITION_FORMULAE_PATH = Path(EFD_PATH, 'unrolled_formulae', 'addition')
 UNROLLED_ADDITION_FORMULAE_MODULE_PATH = "dissect.utils.efd.unrolled_formulae.addition"
 UNROLLED_ADDITION_FORMULAE = [f for f in UNROLLED_ADDITION_FORMULAE_PATH.iterdir() if
-                          f.suffix == '.py']
+                              f.suffix == '.py']
 X962_PATH = Path(ROOT_DIR, 'utils', 'parallel', 'x962')
 TRAIT_MODULE_PATH: str = 'dissect.traits'
 TRAIT_NAME_CONDITION = r'[ais][0-9][0-9]'
@@ -58,3 +58,26 @@ SIM_BITLENGTHS = [128, 160, 192, 224, 256]
 SIM_COFACTORS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
                  29, 30, 31]
 ALL_COFACTORS = sorted(set(STD_COFACTORS + SIM_COFACTORS))
+
+TRAIT_DESCRIPTIONS = {
+    'a01': "group stucture of the curve in field extensions",
+    'a02': "factorization of the CM discriminant",
+    'a03': "factorization of the quadratic twist cardinality",
+    'a04': "factorizations of kn±1",
+    'a05': "field extensions containing nontrivial/full l-torsion",
+    'a06': "factorizations of ratios of CM discriminants in extension fields and base fields",
+    'a07': "embedding degree",
+    'a08': "class number of the maximal order of the endomorphism ring",
+    'a12': "multiplicative orders of small primes modulo n",
+    'a22': "factorizations of small division polynomials",
+    'a23': "volcano depth and crater degree in the l-isogeny graph",
+    'a24': "field extensions containing nontrivial/full number of l-isogenies",
+    'a25': "trace in field extensions and its factorization",
+    'i04': "number of points with low Hamming weight",
+    'i06': "square parts of 4q−14 and 4n−1",
+    'i07': "distance of n from the nearest power of two and multiple of 32/64",
+    'i08': "bit length of small inverted generator multiples",
+    'i10': "points satisfying ZVP conditions",
+    'i11': "points satisfying ZVP independently of the multiple",
+    'i12': "exceptional points w.r.t. given formulas",
+}
