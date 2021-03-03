@@ -1,4 +1,32 @@
 import matplotlib.pyplot as plt
+from sage.all import RR, ZZ
+
+
+class Modifier:
+    """a class of lambda functions for easier modifications if visualised values"""
+
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def identity():
+        return lambda x: x
+
+    @staticmethod
+    def ratio(ratio_precision=10):
+        return lambda x: RR(x).numerical_approx(digits=ratio_precision)
+
+    @staticmethod
+    def bits():
+        return lambda x: ZZ(x).nbits()
+
+    @staticmethod
+    def factorization_bits(factor_index=-1):
+        return lambda x: ZZ(x[factor_index]).nbits()
+
+    @staticmethod
+    def length():
+        return lambda x: len(x)
 
 
 def normalized_barplot(df, feature, modifier=lambda x: x, title=None, tick_spacing=0, xlab="Values",
