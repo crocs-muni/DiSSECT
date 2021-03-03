@@ -35,6 +35,14 @@ def load_curves(filters: Any = {}) -> pd.DataFrame:
     return df
 
 
+def get_trait_df(curves, trait_name):
+    # load all results for the given trait
+    df_trait = load_trait(trait_name)
+    # join curve metadata to trait results
+    df_trait = curves.merge(df_trait, "right", "curve")
+    return df_trait
+
+
 def filter_df(df, choices):
     # TODO this way of checking is expensive - add curve categories to DB
     allowed_curves = []
