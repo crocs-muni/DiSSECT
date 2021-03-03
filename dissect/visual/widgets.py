@@ -4,8 +4,10 @@ from pathlib import Path
 
 import ipywidgets as widgets
 from IPython.core.display import display
+from sage.all import sage_eval
 
 from dissect.definitions import STD_SOURCES, STD_BITLENGTHS, ALL_COFACTORS
+from dissect.definitions import TRAIT_PATH, TRAIT_NAMES
 from dissect.utils.json_handler import load_from_json
 
 
@@ -20,8 +22,8 @@ def trait_selection_widget():
 
 
 def multi_checkbox_widget(name, preselected, others):
-    """ Inspired by from https://gist.github.com/pbugnion/5bb7878ff212a0116f0f1fbc9f431a5c """
-    """ Widget with a search field and lots of checkboxes """
+    """ Widget with a search field and lots of checkboxes;
+    inspired by https://gist.github.com/pbugnion/5bb7878ff212a0116f0f1fbc9f431a5c """
 
     # Get rid of overlapping elements and convert everything to strings, but sort numerically when possible
     others_strings = list(map(str, set(others) - set(preselected)))
@@ -37,7 +39,8 @@ def multi_checkbox_widget(name, preselected, others):
 
     description_widget = widgets.Label(value=f"{name}:", layout=widgets.Layout(position="top"))
     search_widget = widgets.Text(layout=widgets.Layout(width="auto"))
-    select_all_widget = widgets.Checkbox(description="(un)select all", value=False, style=style, layout=widgets.Layout(width="110px"))
+    select_all_widget = widgets.Checkbox(description="(un)select all", value=False, style=style,
+                                         layout=widgets.Layout(width="110px"))
     select_preselected_widget = widgets.Checkbox(value=True)
     options_dict = {**{option: widgets.Checkbox(description=option, value=True,
                                                 layout=layout, style=style) for option in preselected},
