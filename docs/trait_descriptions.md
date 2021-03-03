@@ -81,7 +81,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Motivation:** small $m$ might have implications for scalar multiplication
 
-**Distribution:** unknown
+**Distribution:** unknown, but see [Artin’s primitive root conjecture](https://guests.mpim-bonn.mpg.de/moree/surva.pdf)
 
 ### a22
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, prime $l$
