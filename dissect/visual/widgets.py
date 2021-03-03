@@ -6,16 +6,17 @@ import ipywidgets as widgets
 from IPython.core.display import display
 from sage.all import sage_eval
 
-from dissect.definitions import STD_SOURCES, STD_BITLENGTHS, ALL_COFACTORS
+from dissect.definitions import STD_SOURCES, STD_BITLENGTHS, ALL_COFACTORS, TRAIT_DESCRIPTIONS
 from dissect.definitions import TRAIT_PATH, TRAIT_NAMES
 from dissect.utils.json_handler import load_from_json
 
 
 def trait_selection_widget():
     trait_selection = widgets.Dropdown(
-        options=TRAIT_NAMES,
-        value='a05',
+        options=['{} ({})'.format(tn, TRAIT_DESCRIPTIONS[tn]) for tn in TRAIT_NAMES],
+        value='a03 (factorization of the quadratic twist cardinality)',
         description='Trait name:',
+        layout=widgets.Layout(width="auto")
     )
     display(trait_selection)
     return trait_selection
