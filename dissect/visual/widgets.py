@@ -7,9 +7,16 @@ from IPython.core.display import display
 
 from dissect.definitions import STD_SOURCES, STD_BITLENGTHS, ALL_COFACTORS
 from dissect.utils.json_handler import load_from_json
-from dissect.utils.data_processing import filter_df
-from dissect.definitions import TRAIT_PATH
-from sage.all import sage_eval
+
+
+def trait_selection_widget():
+    trait_selection = widgets.Dropdown(
+        options=TRAIT_NAMES,
+        value='a05',
+        description='Trait name:',
+    )
+    display(trait_selection)
+    return trait_selection
 
 
 def multi_checkbox_widget(name, preselected, others):
