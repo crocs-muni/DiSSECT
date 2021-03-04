@@ -74,7 +74,7 @@ TRAIT_DESCRIPTIONS = {
     'a24': "field extensions containing nontrivial/full number of l-isogenies",
     'a25': "trace in field extensions and its factorization",
     'i04': "number of points with low Hamming weight",
-    'i06': "square parts of 4q−14 and 4n−1",
+    'i06': "square parts of 4q−1 and 4n−1",
     'i07': "distance of n from the nearest power of two and multiple of 32/64",
     'i08': "bit length of small inverted generator multiples",
     'i10': "points satisfying ZVP conditions",
