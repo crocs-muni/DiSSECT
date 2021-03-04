@@ -56,6 +56,8 @@ def filter_df(df, choices):
         df = df[df.curve.isin(allowed_curves) | (df.simulated == True)]
 
     del choices["source"]
+    del choices['Feature:']
+    del choices['Modifier:']
 
     for key, value in choices.items():
         options = list(map(int, value))

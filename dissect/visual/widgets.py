@@ -1,9 +1,9 @@
-#!/usr/bin/env python3
 import difflib
 from pathlib import Path
 
 import ipywidgets as widgets
 from IPython.core.display import display
+from dissect.visual.visualization import Modifier
 from sage.all import sage_eval
 
 from dissect.definitions import STD_SOURCES, STD_BITLENGTHS, ALL_COFACTORS, TRAIT_DESCRIPTIONS
@@ -91,12 +91,38 @@ def trait_filtering_widgets(trait_name):
     return param_choice
 
 
-def get_filtering_widgets(trait_name):
-    filtering_widgets = [*common_filtering_widgets(), *trait_filtering_widgets(trait_name)]
-    hbox = widgets.HBox(filtering_widgets,
-                        layout=widgets.Layout(justify_content='space-around', flex_flow='row wrap', height='250px'))
-    display(hbox)
-    return filtering_widgets
+def features_filtering_widgets(trait_name, trait_df):
+    features = get_trait_features(trait_name, trait_df)
+    features_widgets = widgets.RadioButtons(
+        options=features,
+        value=features[0],
+        description='Feature:',
+    )
+
+    modifiers_widgets = widgets.RadioButtons(
+        options=[method for method in dir(Modifier) if '__' not in method],
+        value='identity',
+        description='Modifier:',
+    )
+
+    return [features_widgets, modifiers_widgets]
+
+
+def get_filtering_widgets(trait_name, trait_df):
+    curves_and_params_widgets = [*common_filtering_widgets(), *trait_filtering_widgets(trait_name)]
+    curves_and_params_hbox = widgets.HBox(curves_and_params_widgets,
+                                          layout=widgets.Layout(justify_content='space-around',
+                                                                flex_flow='row wrap', height='250px'))
+    features_widgets = features_filtering_widgets(trait_name, trait_df)
+    features_hbox = widgets.HBox(features_widgets,
+                                 layout=widgets.Layout(justify_content='space-around',
+                                                       flex_flow='row wrap', height='250px'))
+    tab = widgets.Tab()
+    tab.children = [curves_and_params_hbox, features_hbox]
+    tab.set_title(0, 'Curves & parameters')
+    tab.set_title(1, 'Features & modifiers')
+    display(tab)
+    return curves_and_params_widgets, features_widgets
 
 
 def get_trait_params_dict(trait_name):
@@ -110,8 +136,17 @@ def get_trait_params_dict(trait_name):
     return params_dict_sorted
 
 
-def get_choices(filtering_widgets):
+def get_trait_features(trait_name, trait_df):
+    return [feature for feature in trait_df.columns if feature not in
+            ["curve", "simulated", "bitlength", "cofactor"] + list(get_trait_params_dict(trait_name).keys())]
+
+
+def get_choices(filtering_widgets_tabs):
     result = {}
-    for subwidget in filtering_widgets:
-        result[subwidget.name] = [w.description for w in subwidget.children[-1].children if w.value]
+    for tab_widget in filtering_widgets_tabs:
+        for subwidget in tab_widget:
+            try:
+                result[subwidget.name] = [w.description for w in subwidget.children[-1].children if w.value]
+            except AttributeError:
+                result[subwidget.description] = subwidget.value
     return result
