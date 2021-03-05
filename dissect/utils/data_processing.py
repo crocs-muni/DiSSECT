@@ -1,6 +1,7 @@
 from typing import Dict, Any
 
 import pandas as pd
+from dissect.visual.visualization import Modifier
 
 import dissect.utils.database_handler as database
 from dissect.definitions import STD_CURVE_DICT
@@ -43,6 +44,18 @@ def get_trait_df(curves, trait_name):
     return df_trait
 
 
+def filter_choices(choices, ignored):
+    filtered = {}
+    for key in choices:
+        if key not in ignored:
+            filtered[key] = choices[key]
+    return filtered
+
+
+def get_params(choices):
+    return filter_choices(choices, ["source", "bitlength", "cofactor", "Feature:", "Modifier:"])
+
+
 def filter_df(df, choices):
     # TODO this way of checking is expensive - add curve categories to DB
     allowed_curves = []
@@ -55,12 +68,18 @@ def filter_df(df, choices):
     if "std" not in choices["source"]:
         df = df[df.curve.isin(allowed_curves) | (df.simulated == True)]
 
-    del choices["source"]
-    del choices['Feature:']
-    del choices['Modifier:']
+    filtered = filter_choices(choices, ["source", "Feature:", "Modifier:"])
 
-    for key, value in choices.items():
+    for key, value in filtered.items():
         options = list(map(int, value))
         df = df[df[key].isin(options)]
 
     return df
+
+
+def get_all(df, choices):
+    df = filter_df(df, choices)
+    params = get_params(choices)
+    feature = choices["Feature:"]
+    modifier = getattr(Modifier, choices["Modifier:"])()
+    return df, params, feature, modifier
