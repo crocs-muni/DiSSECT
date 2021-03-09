@@ -88,27 +88,32 @@ def create_unittest(name):
 tests_to_skip = ['a08']
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description='Create unit traits or structure files or both(default).')
-    parser.add_argument("-u", action='store_true', help='only unittest flag (default: False)')
-    parser.add_argument('-s', action='store_true', help='only structure file flag (default: False)')
-    requiredNamed = parser.add_argument_group('required named arguments')
-    requiredNamed.add_argument('-n', '--trait_name', metavar='trait_name', type=str, action='store',
-                               help='List names of the traits seperated by comma or all; available traits: ' +
-                                    ", ".join(TRAIT_NAMES), required=True)
+def main(trait_name = None, u = False, s = False):
+    if trait_name==None:
+        parser = argparse.ArgumentParser(
+            description='Create unit traits or structure files or both(default).')
+        parser.add_argument("-u", action='store_true', help='only unittest flag (default: False)')
+        parser.add_argument('-s', action='store_true', help='only structure file flag (default: False)')
+        requiredNamed = parser.add_argument_group('required named arguments')
+        requiredNamed.add_argument('-n', '--trait_name', metavar='trait_name', type=str, action='store',
+                                   help='List names of the traits seperated by comma or all; available traits: ' +
+                                        ", ".join(TRAIT_NAMES), required=True)
 
-    args = parser.parse_args()
-    if args.trait_name == "all":
+        args = parser.parse_args()
+        trait_name = args.trait_name
+        u = args.u
+        s = args.s
+
+    if trait_name == "all":
         trait_name = TRAIT_NAMES
     else:
-        trait_name = [n.strip() for n in args.trait_name.split(",")]
+        trait_name = [n.strip() for n in trait_name.split(",")]
     trait_name = list(set(trait_name) - set(traits_to_skip))
     for name in trait_name:
-        if args.u:
+        if u:
             create_unittest(name)
             continue
-        if args.s:
+        if s:
             create_structure_file(name)
             continue
         if create_structure_file(name):
