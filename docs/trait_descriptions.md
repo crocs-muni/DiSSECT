@@ -119,6 +119,16 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Distribution:** probably reducible to the distribution of factors of random numbers (using Sato-Tate)
 
+### a28
+**Input:** elliptic curve $E/\mathbb{F}_{p}$, small prime $l$
+
+**Output:** Number of roots of $\Phi_l(j(E),x)$ where $\Phi_l$ is the $l$-th modular polynomial.
+
+**Motivation:** These roots correspond to $l$-isogenous curves.
+
+**Distribution:** Except for finite number of cases there should be only 2 or 0 roots (equally distributed).
+
+
 ### i04
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, integer $k$
 
@@ -179,3 +189,4 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 **Motivation:** might allow exceptional point attacks
 
 **Distribution:** unknown
+
