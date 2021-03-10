@@ -78,8 +78,11 @@ def filter_df(df, choices):
 
 
 def get_all(df, choices):
-    df = filter_df(df, choices)
-    params = get_params(choices)
-    feature = choices["Feature:"]
-    modifier = getattr(Modifier, choices["Modifier:"])()
-    return df, params, feature, modifier
+    param,values = get_params(choices).popitem()
+    choices.pop(param)
+    for v in values:
+        param_choice = choices.copy()
+        param_choice[param] = [v]
+        feature = choices["Feature:"]
+        modifier = getattr(Modifier, choices["Modifier:"])()
+        yield filter_df(df, param_choice), feature, modifier
