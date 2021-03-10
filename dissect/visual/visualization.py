@@ -29,7 +29,7 @@ class Modifier:
         return lambda x: len(x)
 
 
-def normalized_barplot(df, feature, modifier=lambda x: x, title=None, tick_spacing=0, xlab="Values",
+def normalized_barplot(df,param, feature, modifier=lambda x: x, title=None, tick_spacing=0, xlab="Values",
                        ylab="Normalized count", figsize=(10, 6), drop_timeouts=True):
     # make a copy of the dataframe, drop timeouts if eligible and apply the modifier function to the feature row
     df2 = df.copy(deep=False)
@@ -67,10 +67,11 @@ def normalized_barplot(df, feature, modifier=lambda x: x, title=None, tick_spaci
         plt.bar(sim_counts.index.map(ticks.index) + 0.2, sim_counts.values, width=0.4,
                 label=f"Simulated curves n={len(sim)}")
 
+    p,v = param.popitem()
     plt.xticks(locs, labels)
     plt.legend()
     if title is None:
-        title = f"Normalized barplot of {feature}"
+        title = f"Normalized barplot of {feature} for {p}={v[0]}"
     plt.title(title)
     plt.xlabel(xlab)
     plt.ylabel(ylab)

@@ -85,4 +85,4 @@ def get_all(df, choices):
         param_choice[param] = [v]
         feature = choices["Feature:"]
         modifier = getattr(Modifier, choices["Modifier:"])()
-        yield filter_df(df, param_choice), feature, modifier
+        yield filter_df(df, param_choice), param_choice, feature, modifier
