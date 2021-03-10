@@ -19,5 +19,6 @@
   "i10": "points satisfying ZVP conditions",
   "i11": "points satisfying ZVP independently of the multiple",
   "i12": "exceptional points w.r.t. given formulas",
-  "a28": " Number of j-invariants adjacent to the curve by l-isogeny"
+  "a28": " Number of j-invariants adjacent to the curve by l-isogeny",
+  "s01": "todo"
 }
