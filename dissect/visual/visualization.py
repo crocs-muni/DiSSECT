@@ -13,7 +13,7 @@ class Modifier:
         return lambda x: x
 
     @staticmethod
-    def ratio(ratio_precision=10):
+    def ratio(ratio_precision=3):
         return lambda x: RR(x).numerical_approx(digits=ratio_precision)
 
     @staticmethod
