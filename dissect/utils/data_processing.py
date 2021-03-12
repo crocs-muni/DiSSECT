@@ -2,10 +2,10 @@ from typing import Dict, Any
 
 import pandas as pd
 from dissect.visual.visualization import Modifier
+from tqdm.contrib import tmap
 
 import dissect.utils.database_handler as database
-from dissect.definitions import STD_CURVE_DICT
-
+from dissect.definitions import STD_CURVE_DICT, ALL_CURVE_COUNT
 db = None
 
 
@@ -14,7 +14,8 @@ def load_trait(trait: str, params: Dict[str, Any] = None, curve: str = None) -> 
     if not db:
         db = database.connect()
 
-    return pd.DataFrame(database.get_trait_results(db, trait)).convert_dtypes()
+    trait_results = database.get_trait_results(db, trait)
+    return pd.DataFrame(trait_results).convert_dtypes()
 
 
 def load_curves(filters: Any = {}) -> pd.DataFrame:
@@ -31,8 +32,8 @@ def load_curves(filters: Any = {}) -> pd.DataFrame:
             record["cofactor"])
         return projection
 
-    df = pd.DataFrame(map(project, database.get_curves(db, filters, raw=True))).convert_dtypes()
-
+    curve_records = database.get_curves(db, filters, raw=True)
+    df = pd.DataFrame(tmap(project, curve_records, desc="Loading curves", total=ALL_CURVE_COUNT)).convert_dtypes()
     return df
 
 

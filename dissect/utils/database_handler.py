@@ -10,6 +10,7 @@ from sage.all import Integer
 
 from dissect.definitions import CURVE_PATH, CURVE_PATH_SIM, TRAIT_NAMES, TRAIT_PATH
 from dissect.utils.custom_curve import CustomCurve
+from tqdm.contrib import tmap
 
 
 def connect(database: Optional[str] = None) -> Database:
@@ -175,7 +176,8 @@ def get_trait_results(db: Database, trait: str, params: Dict[str, Any] = None, c
     if limit:
         aggregate_pipeline.append({"$limit": limit})
 
-    return map(_decode_ints, map(_flatten_trait_result, db[f"trait_{trait}"].aggregate(aggregate_pipeline)))
+    aggregated = list(db[f"trait_{trait}"].aggregate(aggregate_pipeline))
+    return tmap(_decode_ints, map(_flatten_trait_result, aggregated), desc='Loading trait results', total=len(aggregated))
 
 
 def _flatten_trait_result(record: Dict[str, Any]):
