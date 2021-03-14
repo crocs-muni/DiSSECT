@@ -15,16 +15,16 @@ from dissect.utils.json_handler import save_into_json, load_from_json
 
 def get_timestamp():
     """Returns the current datetime as CEST."""
-    cest = pytz.timezone('Europe/Prague')
+    cest = pytz.timezone("Europe/Prague")
     now = datetime.now()
     now = cest.localize(now)
-    return datetime.isoformat(now, sep='_', timespec='seconds')[:-6]
+    return datetime.isoformat(now, sep="_", timespec="seconds")[:-6]
 
 
 class Logs:
     """Class for managing logs for each curve trait."""
 
-    def __init__(self, trait_name, desc=''):
+    def __init__(self, trait_name, desc=""):
         self.desc = desc
         self.main_log_file = None
         self.main_log = None
@@ -36,20 +36,20 @@ class Logs:
 
     def init_log_paths(self, trait_name):
         self.main_log_file = Path(TRAIT_PATH, trait_name, trait_name + ".log")
-        self.log_dir = Path(TRAIT_PATH, trait_name, 'logs')
+        self.log_dir = Path(TRAIT_PATH, trait_name, "logs")
         timestamp = get_timestamp()
-        if not self.desc == '':
+        if not self.desc == "":
             name = timestamp + "_" + self.desc
         else:
             name = timestamp
-        self.current_log_file = Path(self.log_dir, name + '.log')
+        self.current_log_file = Path(self.log_dir, name + ".log")
 
     def create_logs(self):
         self.log_dir.mkdir(exist_ok=True)
-        self.main_log = open(self.main_log_file, 'a+')
-        self.current_log = open(self.current_log_file, 'w')
+        self.main_log = open(self.main_log_file, "a+")
+        self.current_log = open(self.current_log_file, "w")
 
-    def write_to_logs(self, text, frmt='{:s}', newlines=0, verbose_print=False):
+    def write_to_logs(self, text, frmt="{:s}", newlines=0, verbose_print=False):
         if verbose_print:
             print(frmt.format(text), end=newlines * "\n")
         for f in [self.main_log, self.current_log]:
@@ -61,15 +61,21 @@ class Logs:
             f.close()
 
 
-def init_json_paths(trait_name, desc=''):
+def init_json_paths(trait_name, desc=""):
     """Deduces paths to JSON files from the trait name."""
-    path_main_json = Path(TRAIT_PATH, trait_name, trait_name + '.json')
-    path_json = Path(TRAIT_PATH, trait_name, trait_name + '_' + desc + '_' + get_timestamp() + '.json')
+    path_main_json = Path(TRAIT_PATH, trait_name, trait_name + ".json")
+    path_json = Path(
+        TRAIT_PATH,
+        trait_name,
+        trait_name + "_" + desc + "_" + get_timestamp() + ".json",
+    )
     # tmp name must be unique for parallel trait runs
-    path_tmp = Path("%s_%04x.tmp" % (path_json.with_suffix(''), random.randrange(2 ** 32)))
-    path_params = Path(TRAIT_PATH, trait_name, trait_name + '.params')
+    path_tmp = Path(
+        "%s_%04x.tmp" % (path_json.with_suffix(""), random.randrange(2 ** 32))
+    )
+    path_params = Path(TRAIT_PATH, trait_name, trait_name + ".params")
     if not path_json.is_file():
-        save_into_json({}, path_json, 'w')
+        save_into_json({}, path_json, "w")
     return path_main_json, path_json, path_tmp, path_params
 
 
@@ -101,7 +107,7 @@ def compare_structures(struct1, struct2):
 
 def get_model_structure(curve_function):
     name = curve_function.__name__.split("_", 1)[0]
-    with open(Path(TRAIT_PATH, name, name + "_structure.json"), 'r') as f:
+    with open(Path(TRAIT_PATH, name, name + "_structure.json"), "r") as f:
         results = json.load(f)
     return list(list(results.values())[0].values())[0]
 
@@ -114,9 +120,19 @@ def is_structure_new(old, curve_function, curve):
     return not compare_structures(model_structure, computed)
 
 
-def update_curve_results(curve, curve_function, params_global, params_local_names, old_results, log_obj, verbose=False):
+def update_curve_results(
+    curve,
+    curve_function,
+    params_global,
+    params_local_names,
+    old_results,
+    log_obj,
+    verbose=False,
+):
     """Tries to run traits for each individual curve; called by compute_results."""
-    log_obj.write_to_logs("Processing curve " + curve.name + ":", newlines=1, verbose_print=verbose)
+    log_obj.write_to_logs(
+        "Processing curve " + curve.name + ":", newlines=1, verbose_print=verbose
+    )
     new_results = {}
     new_struct = is_structure_new(old_results, curve_function, curve)
     if curve.name not in old_results:
@@ -126,23 +142,33 @@ def update_curve_results(curve, curve_function, params_global, params_local_name
 
     for params_local_values in itertools.product(*params_global.values()):
         params_local = dict(zip(params_local_names, params_local_values))
-        log_obj.write_to_logs("    Processing params " + str(params_local), frmt='{:.<107}', verbose_print=verbose)
-        if curve.name in old_results and str(params_local) in old_results[curve.name] and not new_struct:
+        log_obj.write_to_logs(
+            "    Processing params " + str(params_local),
+            frmt="{:.<107}",
+            verbose_print=verbose,
+        )
+        if (
+            curve.name in old_results
+            and str(params_local) in old_results[curve.name]
+            and not new_struct
+        ):
             log_obj.write_to_logs("Already computed", newlines=1, verbose_print=verbose)
         else:
-            new_results[curve.name][str(params_local)] = curve_function(curve, *params_local_values)
+            new_results[curve.name][str(params_local)] = curve_function(
+                curve, *params_local_values
+            )
             log_obj.write_to_logs("Done", newlines=1, verbose_print=verbose)
     return new_results[curve.name]
 
 
-def compute_results(curve_list, trait_name, curve_function, desc='', verbose=False):
+def compute_results(curve_list, trait_name, curve_function, desc="", verbose=False):
     """A universal function for running traits on curve lists; it is called by each trait file which has its own curve
     function. Each trait is assumed to have a params file in its folder; the results and logs are created there as
-    well. """
+    well."""
     main_json_file, json_file, tmp_file, params_file = init_json_paths(trait_name, desc)
     if curve_list == []:
         print("No input curves found, terminating the trait run.")
-        save_into_json({}, json_file, 'w')
+        save_into_json({}, json_file, "w")
         return
     log_obj = Logs(trait_name, desc)
     try:
@@ -163,7 +189,9 @@ def compute_results(curve_list, trait_name, curve_function, desc='', verbose=Fal
     total_time = 0
     timestamp = get_timestamp()
 
-    log_obj.write_to_logs("Current datetime: " + timestamp, newlines=1, verbose_print=verbose)
+    log_obj.write_to_logs(
+        "Current datetime: " + timestamp, newlines=1, verbose_print=verbose
+    )
     std_count = 0
     sim_count = 0
     for curve in curve_list:
@@ -172,25 +200,50 @@ def compute_results(curve_list, trait_name, curve_function, desc='', verbose=Fal
         else:
             std_count += 1
     log_obj.write_to_logs(
-        "Hold on to your hat! Running trait " + str(trait_name) + " on " + str(std_count) + " std curves and " + str(
-            sim_count) + " sim curves with global parameters:\n" + str(params_global), newlines=2,
-        verbose_print=verbose)
+        "Hold on to your hat! Running trait "
+        + str(trait_name)
+        + " on "
+        + str(std_count)
+        + " std curves and "
+        + str(sim_count)
+        + " sim curves with global parameters:\n"
+        + str(params_global),
+        newlines=2,
+        verbose_print=verbose,
+    )
 
     for curve in curve_list:
         start_time = time.time()
 
-        new_results[curve.name] = update_curve_results(curve, curve_function, params_global, params_local_names,
-                                                       old_results, log_obj, verbose=verbose)
+        new_results[curve.name] = update_curve_results(
+            curve,
+            curve_function,
+            params_global,
+            params_local_names,
+            old_results,
+            log_obj,
+            verbose=verbose,
+        )
 
         end_time = time.time()
         diff_time = end_time - start_time
         total_time += diff_time
 
-        log_obj.write_to_logs("Done, time elapsed: " + str(diff_time), newlines=2, verbose_print=verbose)
-        save_into_json(new_results, tmp_file, 'w')
+        log_obj.write_to_logs(
+            "Done, time elapsed: " + str(diff_time), newlines=2, verbose_print=verbose
+        )
+        save_into_json(new_results, tmp_file, "w")
 
-    log_obj.write_to_logs(80 * '.' + "\n" + "Finished, total time elapsed: " + str(total_time) + "\n\n" + 80 * '#',
-                          newlines=3, verbose_print=verbose)
+    log_obj.write_to_logs(
+        80 * "."
+        + "\n"
+        + "Finished, total time elapsed: "
+        + str(total_time)
+        + "\n\n"
+        + 80 * "#",
+        newlines=3,
+        verbose_print=verbose,
+    )
     log_obj.close_logs()
 
     json_file.unlink()
@@ -199,7 +252,7 @@ def compute_results(curve_list, trait_name, curve_function, desc='', verbose=Fal
 
 def timeout(func, args=(), kwargs=None, timeout_duration=10):
     """Stops the function func after 'timeout_duration' seconds, taken from
-    https://ask.sagemath.org/question/10112/kill-the-thread-in-a-long-computation/. """
+    https://ask.sagemath.org/question/10112/kill-the-thread-in-a-long-computation/."""
     if kwargs is None:
         kwargs = {}
 

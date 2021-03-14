@@ -31,7 +31,9 @@ def upload_curves(db: Database, path: str) -> Tuple[int, int]:
         with open(path, "r") as f:
             curves = json.load(f)
 
-        if not isinstance(curves, list):  # inconsistency between simulated and standard format
+        if not isinstance(
+            curves, list
+        ):  # inconsistency between simulated and standard format
             curves = curves["curves"]
     except Exception:  # invalid format
         return 0, 0
@@ -77,7 +79,7 @@ def upload_results(db: Database, trait_name: str, path: str) -> Tuple[int, int]:
             record = {
                 "curve": curve,
                 "params": json.loads(params),
-                "result": _encode_ints(values)
+                "result": _encode_ints(values),
             }
             try:
                 if db[f"trait_{trait_name}"].insert_one(record):
@@ -87,7 +89,9 @@ def upload_results(db: Database, trait_name: str, path: str) -> Tuple[int, int]:
     return success, total
 
 
-def get_curves(db: Database, filters: Any = {}, raw: bool = False) -> Iterable[CustomCurve]:
+def get_curves(
+    db: Database, filters: Any = {}, raw: bool = False
+) -> Iterable[CustomCurve]:
     curve_filter: Dict[str, Any] = {}
 
     # Curve type filter
@@ -110,9 +114,7 @@ def get_curves(db: Database, filters: Any = {}, raw: bool = False) -> Iterable[C
     if hasattr(filters, "allowed_cofactors") and filters.allowed_cofactors:
         curve_filter["cofactor"] = {"$in": list(map(hex, filters.allowed_cofactors))}
 
-    cursor = db.curves.aggregate([
-        {"$match": curve_filter}
-    ])
+    cursor = db.curves.aggregate([{"$match": curve_filter}])
 
     if raw:
         return map(_decode_ints, cursor)
@@ -147,8 +149,13 @@ def _encode_ints(result: Any) -> Any:
     return result
 
 
-def store_trait_result(db: Database, curve: CustomCurve, trait: str, params: Dict[str, Any],
-                       result: Dict[str, Any]) -> bool:
+def store_trait_result(
+    db: Database,
+    curve: CustomCurve,
+    trait: str,
+    params: Dict[str, Any],
+    result: Dict[str, Any],
+) -> bool:
     trait_result = {"curve": curve.name}
     trait_result["params"] = _cast_sage_types(params)
     trait_result["result"] = _encode_ints(result)
@@ -158,13 +165,21 @@ def store_trait_result(db: Database, curve: CustomCurve, trait: str, params: Dic
         return False
 
 
-def is_solved(db: Database, curve: CustomCurve, trait: str, params: Dict[str, Any]) -> bool:
+def is_solved(
+    db: Database, curve: CustomCurve, trait: str, params: Dict[str, Any]
+) -> bool:
     trait_result = {"curve": curve.name}
     trait_result["params"] = _cast_sage_types(params)
     return db[f"trait_{trait}"].find_one(trait_result) is not None
 
 
-def get_trait_results(db: Database, trait: str, params: Dict[str, Any] = None, curve: str = None, limit: int = None):
+def get_trait_results(
+    db: Database,
+    trait: str,
+    params: Dict[str, Any] = None,
+    curve: str = None,
+    limit: int = None,
+):
     result_filter = {}
     if params:
         result_filter["params"] = params
@@ -177,7 +192,12 @@ def get_trait_results(db: Database, trait: str, params: Dict[str, Any] = None, c
         aggregate_pipeline.append({"$limit": limit})
 
     aggregated = list(db[f"trait_{trait}"].aggregate(aggregate_pipeline))
-    return tmap(_decode_ints, map(_flatten_trait_result, aggregated), desc='Loading trait results', total=len(aggregated))
+    return tmap(
+        _decode_ints,
+        map(_flatten_trait_result, aggregated),
+        desc="Loading trait results",
+        total=len(aggregated),
+    )
 
 
 def _flatten_trait_result(record: Dict[str, Any]):
@@ -190,7 +210,9 @@ def _flatten_trait_result(record: Dict[str, Any]):
     return output
 
 
-def _flatten_trait_result_rec(record: Dict[str, Any], prefix: str, output: Dict[str, Any]):
+def _flatten_trait_result_rec(
+    record: Dict[str, Any], prefix: str, output: Dict[str, Any]
+):
     for key in record:
         if isinstance(record[key], dict):
             _flatten_trait_result_rec(record[key], key + "_", output)
@@ -214,11 +236,24 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) < 3 or not sys.argv[1] in ("curves", "results"):
-        print(f"USAGE: python3 {sys.argv[0]} curves [database_uri] <curve_files...>", file=sys.stderr)
-        print(f"   OR: python3 {sys.argv[0]} curves [database_uri] all", file=sys.stderr)
-        print(f"   OR: python3 {sys.argv[0]} results [database_uri] <trait_name> <results_file>", file=sys.stderr)
-        print(f"   OR: python3 {sys.argv[0]} results [database_uri] <trait_name> auto", file=sys.stderr)
-        print(f"   OR: python3 {sys.argv[0]} results [database_uri] all", file=sys.stderr)
+        print(
+            f"USAGE: python3 {sys.argv[0]} curves [database_uri] <curve_files...>",
+            file=sys.stderr,
+        )
+        print(
+            f"   OR: python3 {sys.argv[0]} curves [database_uri] all", file=sys.stderr
+        )
+        print(
+            f"   OR: python3 {sys.argv[0]} results [database_uri] <trait_name> <results_file>",
+            file=sys.stderr,
+        )
+        print(
+            f"   OR: python3 {sys.argv[0]} results [database_uri] <trait_name> auto",
+            file=sys.stderr,
+        )
+        print(
+            f"   OR: python3 {sys.argv[0]} results [database_uri] all", file=sys.stderr
+        )
         sys.exit(1)
 
     database_uri = "mongodb://localhost:27017/"
@@ -232,7 +267,6 @@ if __name__ == "__main__":
     print(f"Connecting to database {database_uri}")
     db = connect(database_uri)
 
-
     def upload_curves_from_files(curve_files_list):
         for curves_file in curve_files_list:
             print(f"Loading curves from file {curves_file}")
@@ -240,16 +274,14 @@ if __name__ == "__main__":
             uploaded, total = upload_curves(db, curves_file)
             print(f"Successfully uploaded {uploaded} out of {total}")
 
-
     def upload_results_from_file(trait_name, results_file):
         print(f"Loading trait {trait_name} results from file {results_file}")
         create_trait_index(db, trait_name)
         uploaded, total = upload_results(db, trait_name, results_file)
         print(f"Successfully uploaded {uploaded} out of {total}")
 
-
     if sys.argv[1] == "curves":
-        if args == ['all']:
+        if args == ["all"]:
             import glob
 
             upload_curves_from_files(glob.glob(str(CURVE_PATH) + "/*/*.json"))
@@ -257,13 +289,13 @@ if __name__ == "__main__":
         else:
             upload_curves_from_files(args)
     elif sys.argv[1] == "results":
-        if args == ['all']:
+        if args == ["all"]:
             for trait_name in TRAIT_NAMES:
                 results_file = Path(TRAIT_PATH, trait_name, str(trait_name) + ".json")
                 upload_results_from_file(trait_name, results_file)
         else:
             trait_name = args[0]
-            if args[1] == 'auto':
+            if args[1] == "auto":
                 results_file = Path(TRAIT_PATH, trait_name, str(trait_name) + ".json")
             else:
                 results_file = args[1]

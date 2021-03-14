@@ -44,10 +44,10 @@ def a24_curve_function(curve, l):
     Returns a dictionary (keys: 'least' (i1), 'full' (i2), 'relative' (i2/i1))
     """
     if curve.q % l == 0:
-        return {'least': None, 'full': None, 'relative': None}
+        return {"least": None, "full": None, "relative": None}
     i2, i1 = isogeny_finder(curve, l)
-    return {'least': i1, 'full': i2, 'relative': i2 // i1}
+    return {"least": i1, "full": i2, "relative": i2 // i1}
 
 
-def compute_a24_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 'a24', a24_curve_function, desc=desc, verbose=verbose)
+def compute_a24_results(curve_list, desc="", verbose=False):
+    compute_results(curve_list, "a24", a24_curve_function, desc=desc, verbose=verbose)

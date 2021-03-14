@@ -16,7 +16,10 @@ def torsion_finder(curve: CustomCurve, l):
     # Case with no eigenvalues
     if not eig:
         eig = eigenvalues(curve, l, s=2)
-        a_ord, b_ord = eig[0][0].multiplicative_order(), eig[1][0].multiplicative_order()
+        a_ord, b_ord = (
+            eig[0][0].multiplicative_order(),
+            eig[1][0].multiplicative_order(),
+        )
         k2 = lcm(a_ord, b_ord)
         k1 = k2
         return k2, k1
@@ -39,10 +42,10 @@ def torsion_finder(curve: CustomCurve, l):
 def a05_curve_function(curve: CustomCurve, l):
     """Computes find_torsions for given l and returns a dictionary"""
     if curve.q % l == 0:
-        return {'least': None, 'full': None, 'relative': None}
+        return {"least": None, "full": None, "relative": None}
     k2, k1 = torsion_finder(curve, l)
-    return {'least': k1, 'full': k2, 'relative': k2 // k1}
+    return {"least": k1, "full": k2, "relative": k2 // k1}
 
 
-def compute_a05_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 'a05', a05_curve_function, desc=desc, verbose=verbose)
+def compute_a05_results(curve_list, desc="", verbose=False):
+    compute_results(curve_list, "a05", a05_curve_function, desc=desc, verbose=verbose)

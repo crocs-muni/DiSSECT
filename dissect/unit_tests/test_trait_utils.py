@@ -18,7 +18,6 @@ deg = 3
 
 
 class TestTraitUtils(unittest.TestCase):
-
     def test_ext_card(self):
         self.assertEqual(1073731736, tu.ext_card(customize_curve(binE), deg))
         self.assertEqual(1029924, tu.ext_card(customize_curve(E), deg))
@@ -56,30 +55,49 @@ class TestTraitUtils(unittest.TestCase):
         self.assertEqual([p, q, q], tu.factorization(p * q ** 2))
         self.assertEqual([p, q, q], tu.factorization(p * q ** 2, use_ecm=False))
         self.assertEqual([p, q, q], tu.factorization(-p * q ** 2))
-        self.assertEqual('NO DATA (timed out)', tu.factorization(N, timeout_duration=timeout, use_ecm=False))
+        self.assertEqual(
+            "NO DATA (timed out)",
+            tu.factorization(N, timeout_duration=timeout, use_ecm=False),
+        )
 
     def test_squarefree_part(self):
         self.assertEqual(-p * r, tu.squarefree_part(n))
         self.assertEqual(-p * r, tu.squarefree_part(n, use_ecm=False))
-        self.assertEqual('NO DATA (timed out)', tu.squarefree_part(N, timeout_duration=timeout, use_ecm=False))
+        self.assertEqual(
+            "NO DATA (timed out)",
+            tu.squarefree_part(N, timeout_duration=timeout, use_ecm=False),
+        )
 
     def test_squarefree_and_factorization(self):
-        self.assertEqual((-p * r, [p, q, q, r, r, r]), tu.squarefree_and_factorization(n))
-        self.assertEqual((-p * r, [p, q, q, r, r, r]), tu.squarefree_and_factorization(n, use_ecm=False))
-        self.assertEqual('NO DATA (timed out)',
-                         tu.squarefree_and_factorization(N, timeout_duration=timeout, use_ecm=False))
+        self.assertEqual(
+            (-p * r, [p, q, q, r, r, r]), tu.squarefree_and_factorization(n)
+        )
+        self.assertEqual(
+            (-p * r, [p, q, q, r, r, r]),
+            tu.squarefree_and_factorization(n, use_ecm=False),
+        )
+        self.assertEqual(
+            "NO DATA (timed out)",
+            tu.squarefree_and_factorization(N, timeout_duration=timeout, use_ecm=False),
+        )
 
     def test_square_part(self):
         self.assertEqual((q * r) ** 2, tu.square_part(n))
         self.assertEqual((q * r) ** 2, tu.square_part(n, use_ecm=False))
-        self.assertEqual('NO DATA (timed out)', tu.square_part(N, timeout_duration=timeout, use_ecm=False))
+        self.assertEqual(
+            "NO DATA (timed out)",
+            tu.square_part(N, timeout_duration=timeout, use_ecm=False),
+        )
 
     def test_square_part_square_root(self):
         self.assertEqual((q * r), tu.square_part_square_root(n))
         self.assertEqual((q * r), tu.square_part_square_root(n, use_ecm=False))
-        self.assertEqual('NO DATA (timed out)', tu.square_part_square_root(N, timeout_duration=timeout, use_ecm=False))
+        self.assertEqual(
+            "NO DATA (timed out)",
+            tu.square_part_square_root(N, timeout_duration=timeout, use_ecm=False),
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
     print("Everything passed")

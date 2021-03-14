@@ -16,13 +16,13 @@ from sage.all import ZZ
 from dissect.utils.json_handler import IntegerEncoder
 from dissect.utils.parallel.x962.simulations_x962 import generate_x962_curves
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Sage experiment runner')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Sage experiment runner")
 
-    parser.add_argument('-c', '--count', action='store', help='')
-    parser.add_argument('-p', '--prime', action='store', help='')
-    parser.add_argument('-s', '--seed', action='store', help='')
-    parser.add_argument('-f', '--outfile', action='store', help='')
+    parser.add_argument("-c", "--count", action="store", help="")
+    parser.add_argument("-p", "--prime", action="store", help="")
+    parser.add_argument("-s", "--seed", action="store", help="")
+    parser.add_argument("-f", "--outfile", action="store", help="")
     args = parser.parse_args()
     print(args)
 
@@ -33,5 +33,5 @@ if __name__ == '__main__':
     r = generate_x962_curves(count, p, seed)
 
     # Save results to the output file
-    with open(args.outfile, 'w+') as fh:
+    with open(args.outfile, "w+") as fh:
         json.dump(r, fh, cls=IntegerEncoder)

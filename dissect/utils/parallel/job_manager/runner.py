@@ -101,7 +101,9 @@ def escape_shell(inp):
 
 
 class AsyncRunner:
-    def __init__(self, cmd, args=None, stdout=None, stderr=None, cwd=None, shell=True, env=None):
+    def __init__(
+        self, cmd, args=None, stdout=None, stderr=None, cwd=None, shell=True, env=None
+    ):
         self.cmd = cmd
         self.args = args
         self.on_finished = None
@@ -173,7 +175,9 @@ class AsyncRunner:
         cmd = self.cmd
         if self.shell:
             args_str = (
-                " ".join(self.args) if isinstance(self.args, (list, tuple)) else self.args
+                " ".join(self.args)
+                if isinstance(self.args, (list, tuple))
+                else self.args
             )
 
             if isinstance(cmd, (list, tuple)):
@@ -196,7 +200,7 @@ class AsyncRunner:
 
         run_args = {}
         if self.preexec_setgrp:
-            run_args['preexec_fn'] = preexec_function
+            run_args["preexec_fn"] = preexec_function
 
         p = run(
             cmd,

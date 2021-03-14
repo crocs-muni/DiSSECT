@@ -25,9 +25,9 @@ def a01_curve_function(curve: CustomCurve, deg):
     result = timeout(smith_normal_form, [E_ext], timeout_duration=TIME)
     if isinstance(result, str):
         result = result, result
-    curve_results['ord1'], curve_results['ord2'] = result
+    curve_results["ord1"], curve_results["ord2"] = result
     return curve_results
 
 
-def compute_a01_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 'a01', a01_curve_function, desc=desc, verbose=verbose)
+def compute_a01_results(curve_list, desc="", verbose=False):
+    compute_results(curve_list, "a01", a01_curve_function, desc=desc, verbose=verbose)

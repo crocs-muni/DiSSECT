@@ -37,5 +37,5 @@ def s01_curve_function(curve: CustomCurve):
     return curve_results
 
 
-def compute_s01_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 's01', s01_curve_function, desc=desc, verbose=verbose)
+def compute_s01_results(curve_list, desc="", verbose=False):
+    compute_results(curve_list, "s01", s01_curve_function, desc=desc, verbose=verbose)

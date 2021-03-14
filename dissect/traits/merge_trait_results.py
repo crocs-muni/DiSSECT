@@ -24,12 +24,17 @@ def dict_update_rec(a, b):
 
 def merge_results(trait_name, verbose=False):
     """Merge all JSONS with partial results of the given trait together with current results. Assumes that the partial
-    results will fit into memory. """
+    results will fit into memory."""
 
     # iterate through partial results in the same folder and interatively merge them together
     new_results = {}
-    files = sorted([item for item in Path(TRAIT_PATH, trait_name).iterdir() if
-                    item.is_file() and item.suffix == '.json' and "part" in item.name])
+    files = sorted(
+        [
+            item
+            for item in Path(TRAIT_PATH, trait_name).iterdir()
+            if item.is_file() and item.suffix == ".json" and "part" in item.name
+        ]
+    )
     for file in files:
         partial_results = load_from_json(file)
         dict_update_rec(new_results, partial_results)
@@ -37,22 +42,22 @@ def merge_results(trait_name, verbose=False):
             print("Results from " + file.name + " merged")
 
     # merge the new results with the old ones, if they exist
-    total_results_name = Path(TRAIT_PATH, trait_name, trait_name + '.json')
+    total_results_name = Path(TRAIT_PATH, trait_name, trait_name + ".json")
     if total_results_name.is_file():
         if verbose:
             print("Merging with the old results...")
         total_results = load_from_json(total_results_name)
         dict_update_rec(new_results, total_results)
-        tmp_file_name = Path(TRAIT_PATH, trait_name, trait_name + '.tmp')
+        tmp_file_name = Path(TRAIT_PATH, trait_name, trait_name + ".tmp")
         if verbose:
             print("Saving into JSON...")
-        save_into_json(new_results, tmp_file_name, 'w+')
+        save_into_json(new_results, tmp_file_name, "w+")
         total_results_name.unlink()
         tmp_file_name.rename(total_results_name)
     else:
         if verbose:
             print("Saving into JSON...")
-        save_into_json(new_results, total_results_name, 'w+')
+        save_into_json(new_results, total_results_name, "w+")
 
     # delete the partial results
     if verbose:
@@ -62,9 +67,11 @@ def merge_results(trait_name, verbose=False):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Trait results merger')
-    parser.add_argument('-n', '--trait_name', type=str, help='Name of the trait')
-    parser.add_argument('-v', '--verbosity', action='store_true', help='verbosity flag (default: False)')
+    parser = argparse.ArgumentParser(description="Trait results merger")
+    parser.add_argument("-n", "--trait_name", type=str, help="Name of the trait")
+    parser.add_argument(
+        "-v", "--verbosity", action="store_true", help="verbosity flag (default: False)"
+    )
     args = parser.parse_args()
     if args.trait_name not in TRAIT_NAMES:
         print("please enter a valid trait identifier, e.g., a02")
@@ -73,5 +80,5 @@ def main():
     merge_results(args.trait_name, verbose=args.verbosity)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

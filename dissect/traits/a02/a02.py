@@ -16,17 +16,17 @@ def a02_curve_function(curve: CustomCurve):
     D = ext_disc(curve, deg=1)
     res = tu.squarefree_and_factorization(D)
     if isinstance(res, str):
-        return {'cm_disc': res, 'factorization': res, 'max_conductor': res}
+        return {"cm_disc": res, "factorization": res, "max_conductor": res}
     d, F = res
     cm_disc = d
     if d % 4 != 1:
         cm_disc *= 4
     curve_results = {}
-    curve_results['cm_disc'] = cm_disc
-    curve_results['factorization'] = F
-    curve_results['max_conductor'] = ZZ(sqrt(D / cm_disc))
+    curve_results["cm_disc"] = cm_disc
+    curve_results["factorization"] = F
+    curve_results["max_conductor"] = ZZ(sqrt(D / cm_disc))
     return curve_results
 
 
-def compute_a02_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 'a02', a02_curve_function, desc=desc, verbose=verbose)
+def compute_a02_results(curve_list, desc="", verbose=False):
+    compute_results(curve_list, "a02", a02_curve_function, desc=desc, verbose=verbose)

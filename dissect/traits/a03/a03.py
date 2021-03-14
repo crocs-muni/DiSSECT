@@ -17,5 +17,5 @@ def a03_curve_function(curve: CustomCurve, deg):
     return curve_results
 
 
-def compute_a03_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 'a03', a03_curve_function, desc=desc, verbose=verbose)
+def compute_a03_results(curve_list, desc="", verbose=False):
+    compute_results(curve_list, "a03", a03_curve_function, desc=desc, verbose=verbose)

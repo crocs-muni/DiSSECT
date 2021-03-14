@@ -11,14 +11,14 @@ def a08_curve_function(curve: CustomCurve):
     """
     q = curve.q
     trace = curve.trace
-    Q = PolynomialRing(ZZ, 'x')
+    Q = PolynomialRing(ZZ, "x")
     x = Q.gen()
     f = x ** 2 - trace * x + q
-    K = NumberField(f, 'c')
+    K = NumberField(f, "c")
     h = K.class_number()
     curve_results = {"class_number": h}
     return curve_results
 
 
-def compute_a08_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 'a08', a08_curve_function, desc=desc, verbose=verbose)
+def compute_a08_results(curve_list, desc="", verbose=False):
+    compute_results(curve_list, "a08", a08_curve_function, desc=desc, verbose=verbose)

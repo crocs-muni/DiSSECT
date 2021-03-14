@@ -22,5 +22,5 @@ def i11_curve_function(curve: CustomCurve, formula_file):
     return curve_results
 
 
-def compute_i11_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 'i11', i11_curve_function, desc=desc, verbose=verbose)
+def compute_i11_results(curve_list, desc="", verbose=False):
+    compute_results(curve_list, "i11", i11_curve_function, desc=desc, verbose=verbose)

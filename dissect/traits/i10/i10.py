@@ -21,5 +21,5 @@ def i10_curve_function(curve: CustomCurve, multiple, formula_file):
     return curve_results
 
 
-def compute_i10_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 'i10', i10_curve_function, desc=desc, verbose=verbose)
+def compute_i10_results(curve_list, desc="", verbose=False):
+    compute_results(curve_list, "i10", i10_curve_function, desc=desc, verbose=verbose)

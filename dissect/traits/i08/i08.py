@@ -19,9 +19,14 @@ def i08_curve_function(curve: CustomCurve, k):
     bits = Hx.nbits()
     difference = ZZ(curve.cardinality).nbits() - bits
     ratio = bits / curve.nbits
-    curve_results = {"Hx": Hx, "bits": bits, "difference": difference, "ratio": round(ratio, FLOAT_PRECISION)}
+    curve_results = {
+        "Hx": Hx,
+        "bits": bits,
+        "difference": difference,
+        "ratio": round(ratio, FLOAT_PRECISION),
+    }
     return curve_results
 
 
-def compute_i08_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 'i08', i08_curve_function, desc=desc, verbose=verbose)
+def compute_i08_results(curve_list, desc="", verbose=False):
+    compute_results(curve_list, "i08", i08_curve_function, desc=desc, verbose=verbose)

@@ -16,9 +16,9 @@ def a12_curve_function(curve: CustomCurve, l):
     except ArithmeticError:
         mul_ord = None
         complement_bit_length = None
-    curve_results = {'order': mul_ord, 'complement_bit_length': complement_bit_length}
+    curve_results = {"order": mul_ord, "complement_bit_length": complement_bit_length}
     return curve_results
 
 
-def compute_a12_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 'a12', a12_curve_function, desc=desc, verbose=verbose)
+def compute_a12_results(curve_list, desc="", verbose=False):
+    compute_results(curve_list, "a12", a12_curve_function, desc=desc, verbose=verbose)

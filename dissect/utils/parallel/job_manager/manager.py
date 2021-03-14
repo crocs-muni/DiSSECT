@@ -41,7 +41,7 @@ def get_runner(cli, cwd=None, env=None):
 def is_task_done(file_path):
     if not os.path.isfile(file_path):
         return False
-    with open(file_path, 'r') as f:
+    with open(file_path, "r") as f:
         content = json.load(f)
         if not isinstance(content, dict):
             return False
@@ -111,7 +111,11 @@ class ParallelRunner:
         return self.parallel_tasks * 100
 
     def pull_jobs(self):
-        cur_jobs = [x for _, x in zip(range(self.queue_threshold()), self.job_iterator) if x is not None]
+        cur_jobs = [
+            x
+            for _, x in zip(range(self.queue_threshold()), self.job_iterator)
+            if x is not None
+        ]
         for i, j in enumerate(cur_jobs):
             j.idx = self.last_job_id + i
 
@@ -128,10 +132,15 @@ class ParallelRunner:
         self.comp_jobs = [None] * self.parallel_tasks  # type: List[Optional[Task]]
         self.pull_jobs()
 
-        logger.info("Starting Experiment runner, threads: %s, jobs: %s"
-                    % (self.parallel_tasks, self.job_queue.qsize()))
+        logger.info(
+            "Starting Experiment runner, threads: %s, jobs: %s"
+            % (self.parallel_tasks, self.job_queue.qsize())
+        )
 
-        while not self.job_queue.empty() or sum([1 for x in self.runners if x is not None]) > 0:
+        while (
+            not self.job_queue.empty()
+            or sum([1 for x in self.runners if x is not None]) > 0
+        ):
             time.sleep(self.tick_time)
 
             # Realloc work
@@ -142,8 +151,10 @@ class ParallelRunner:
                 was_empty = self.runners[i] is None
                 if not was_empty:
                     self.job_queue.task_done()
-                    logger.info("Task %d done, job queue size: %d, running: %s"
-                                % (i, self.job_queue.qsize(), self.get_num_running()))
+                    logger.info(
+                        "Task %d done, job queue size: %d, running: %s"
+                        % (i, self.job_queue.qsize(), self.get_num_running())
+                    )
                     self.on_finished(self.comp_jobs[i], self.runners[i], i)
 
                 # Start a new task, if any
@@ -161,14 +172,18 @@ class ParallelRunner:
                     continue
 
                 job.skipped = False
-                params = job.params if isinstance(job.params, str) else ' '.join(job.params)
-                cli = '%s %s' % (job.wrapper, params)
+                params = (
+                    job.params if isinstance(job.params, str) else " ".join(job.params)
+                )
+                cli = "%s %s" % (job.wrapper, params)
                 self.comp_jobs[i] = job
                 self.runners[i] = get_runner(shlex.split(cli))
                 logger.info("Starting async command %s, %s" % (job.idx, cli))
                 self.runners[i].start()
-                logger.info("Runner %s started, job queue size: %d, running: %s"
-                            % (i, self.job_queue.qsize(), self.get_num_running()))
+                logger.info(
+                    "Runner %s started, job queue size: %d, running: %s"
+                    % (i, self.job_queue.qsize(), self.get_num_running())
+                )
 
                 # Re-fill job queue with some data
                 if self.job_queue.qsize() < self.queue_threshold() / 2:
@@ -186,32 +201,40 @@ class ParallelRunner:
 
         :return:
         """
-        raise ValueError('Standalone execution is not implemented yet')
+        raise ValueError("Standalone execution is not implemented yet")
 
     def main(self):
-        logger.debug('App started')
+        logger.debug("App started")
 
         parser = self.argparser()
         self.args = parser.parse_args()
-        self.parallel_tasks = self.args.tasks or try_fnc(lambda: int(os.getenv('EC_PARALLEL', None))) or 1
+        self.parallel_tasks = (
+            self.args.tasks or try_fnc(lambda: int(os.getenv("EC_PARALLEL", None))) or 1
+        )
         self.process_input()
         self.work()
 
     def argparser(self):
-        parser = argparse.ArgumentParser(description='Parallelization of jobs!')
-        parser.add_argument('-t', '--tasks', type=int,
-                            help='Maximal number of parallel tasks')
-        parser.add_argument('-w', '--wrapper',
-                            help='Wrapper script absolute path')
+        parser = argparse.ArgumentParser(description="Parallelization of jobs!")
+        parser.add_argument(
+            "-t", "--tasks", type=int, help="Maximal number of parallel tasks"
+        )
+        parser.add_argument("-w", "--wrapper", help="Wrapper script absolute path")
 
-        parser.add_argument('-ei', '--exp-import',
-                            help='Experiment definition script import path')
-        parser.add_argument('-ep', '--exp-path',
-                            help='Experiment definition script path')
+        parser.add_argument(
+            "-ei", "--exp-import", help="Experiment definition script import path"
+        )
+        parser.add_argument(
+            "-ep", "--exp-path", help="Experiment definition script path"
+        )
 
-        parser.add_argument('-c', '--config', type=int,
-                            help='Experiment configuration file.'
-                                 'Passed to job-gen to generate individual jobs & tasks.')
+        parser.add_argument(
+            "-c",
+            "--config",
+            type=int,
+            help="Experiment configuration file."
+            "Passed to job-gen to generate individual jobs & tasks.",
+        )
         return parser
 
 
@@ -220,5 +243,5 @@ def main():
     return pr.main()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

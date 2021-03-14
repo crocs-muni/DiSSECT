@@ -1,29 +1,39 @@
 import json
 from hashlib import sha1
 
-from sage.all import Integers, ZZ, floor, ceil, GF, is_prime, PolynomialRing, EllipticCurve, prime_range, \
-    is_pseudoprime, \
-    sqrt
+from sage.all import (
+    Integers,
+    ZZ,
+    floor,
+    ceil,
+    GF,
+    is_prime,
+    PolynomialRing,
+    EllipticCurve,
+    prime_range,
+    is_pseudoprime,
+    sqrt,
+)
 
 
 # hex string to binary string
 def sha1_bin(x):
-    return format(ZZ(sha1(bytes.fromhex(x)).hexdigest(), 16), '0160b')
+    return format(ZZ(sha1(bytes.fromhex(x)).hexdigest(), 16), "0160b")
 
 
 def sha1_hex(x):
-    return format(ZZ(sha1(x), 2), '0160x')
+    return format(ZZ(sha1(x), 2), "0160x")
 
 
 def int_to_hex_string(x):
-    f = '0' + str(ceil(x.nbits() / 8) * 2) + 'X'
+    f = "0" + str(ceil(x.nbits() / 8) * 2) + "X"
     return format(ZZ(x, 16), f)
 
 
 def increment_seed(seed, i=1):
     """accepts a hex string as input (not starting with 0x)"""
     g = ZZ(seed, 16).nbits()
-    f = '0' + str(len(seed)) + 'X'
+    f = "0" + str(len(seed)) + "X"
     return format(ZZ(Integers(2 ** g)(ZZ(seed, 16) + i)), f)
 
 
@@ -37,18 +47,18 @@ def generate_r(seed, p):
     H = sha1_bin(seed)
     c0 = H[-h:]
     c0_modified = list(c0)
-    c0_modified[0] = '0'
+    c0_modified[0] = "0"
     W = [0] * (s + 1)
-    W[0] = ''.join(c0_modified)
+    W[0] = "".join(c0_modified)
     for i in range(1, s + 1):
         input_i = increment_seed(seed, i)
         W[i] = sha1_bin(input_i)
-    W_joint = ''.join(W)
-    assert (len(W_joint) == t)
+    W_joint = "".join(W)
+    assert len(W_joint) == t
     r = 0
     for i in range(1, t + 1):
         r += ZZ(W_joint[i - 1]) * 2 ** (t - i)
-    assert (r == ZZ(W_joint, 2))
+    assert r == ZZ(W_joint, 2)
     F = GF(p)
     return F(r)
 
@@ -86,7 +96,7 @@ def embedding_degree(E, r):
 def has_points_of_low_order(E, l_max=4):
     # deterministic method utilizing division polynomials, useful for 256 bit E with l_max = 4 (see docs/division_early_abort)
     p = E.base_field().order()
-    R = PolynomialRing(GF(p), 'x')
+    R = PolynomialRing(GF(p), "x")
     x = R.gen()
     weier = x ** 3 + x * E.ainvs()[-2] + E.ainvs()[-1]
     for l in prime_range(l_max):
@@ -141,12 +151,18 @@ def verify_security(E, embedding_degree_bound=20, verbose=False):
 
 def generate_x962_curves(count, p, seed):
     bits = p.nbits()
-    sim_curves = {"name": "x962_sim_" + str(bits), "desc": "simulated curves generated according to the X9.62 standard",
-                  "initial_seed": seed, "seeds_tried": count, "curves": [], "seeds_successful": 0}
+    sim_curves = {
+        "name": "x962_sim_" + str(bits),
+        "desc": "simulated curves generated according to the X9.62 standard",
+        "initial_seed": seed,
+        "seeds_tried": count,
+        "curves": [],
+        "seeds_successful": 0,
+    }
 
     # bitlens, primes and corresponding seeds, case a=-3 (curves r1, prime fields only)
     # https://www.secg.org/sec2-v2.pdf
-    with open('x962/parameters_x962.json', 'r') as f:
+    with open("x962/parameters_x962.json", "r") as f:
         params = json.load(f)
         original_seed = params[str(bits)][1]
 
@@ -175,7 +191,7 @@ def generate_x962_curves(count, p, seed):
         if not secure:
             continue
 
-        seed_diff = ZZ('0X' + original_seed) - ZZ('0X' + current_seed)
+        seed_diff = ZZ("0X" + original_seed) - ZZ("0X" + current_seed)
         sim_curve = {
             "name": "x962_sim_" + str(bits) + "_seed_diff_" + str(seed_diff),
             "category": sim_curves["name"],
@@ -186,23 +202,13 @@ def generate_x962_curves(count, p, seed):
                 "bits": bits,
             },
             "form": "Weierstrass",
-            "params": {
-                "a": {"raw": str(hex(-3))},
-                "b": {"raw": str(hex(b))}
-            },
-            "generator": {
-                "x": {
-                    "raw": ""
-                },
-                "y": {
-                    "raw": ""
-                }
-            },
+            "params": {"a": {"raw": str(hex(-3))}, "b": {"raw": str(hex(b))}},
+            "generator": {"x": {"raw": ""}, "y": {"raw": ""}},
             "order": n,
             "cofactor": h,
             "characteristics": None,
             "seed": current_seed,
-            "seed_diff": seed_diff
+            "seed_diff": seed_diff,
         }
         sim_curves["curves"].append(sim_curve)
         sim_curves["seeds_successful"] += 1

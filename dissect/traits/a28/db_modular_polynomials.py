@@ -34,13 +34,14 @@ def _dbz_to_string(name):
         '0\n1\n'
     """
     from sage.env import SAGE_SHARE
-    dblocation = os.path.join(SAGE_SHARE, 'kohel')
+
+    dblocation = os.path.join(SAGE_SHARE, "kohel")
     filename = os.path.join(dblocation, name)
     try:
-        with open(filename, 'rb') as f:
+        with open(filename, "rb") as f:
             data = bz2.decompress(f.read())
     except IOError:
-        raise ValueError('file not found in the Kohel database')
+        raise ValueError("file not found in the Kohel database")
     return bytes_to_str(data)
 
 
@@ -64,9 +65,11 @@ def _dbz_to_integer_list(name):
         [[3, 0, 1], [2, 0, 48], [1, 1, -1], [1, 0, 768], [0, 0, 4096]]
     """
     from sage.rings.integer import Integer
+
     data = _dbz_to_string(name)
-    return [[Integer(v) for v in row.strip().split(" ")]
-            for row in data.split("\n")[:-1]]
+    return [
+        [Integer(v) for v in row.strip().split(" ")] for row in data.split("\n")[:-1]
+    ]
 
 
 def _dbz_to_integers(name):
@@ -78,6 +81,7 @@ def _dbz_to_integers(name):
         [0, 1]
     """
     from sage.rings.integer import Integer
+
     return [Integer(i) for i in _dbz_to_string(name).split()]
 
 
@@ -194,6 +198,7 @@ class ClassicalModularPolynomialDatabase(ModularPolynomialDatabase):
     The database of classical modular polynomials, i.e. the polynomials
     Phi_N(X,Y) relating the j-functions j(q) and j(q^N).
     """
+
     model = "Cls"
 
 
@@ -203,6 +208,7 @@ class DedekindEtaModularPolynomialDatabase(ModularPolynomialDatabase):
     of Dedekind eta functions, well-defined on X_0(N), relating x(q) and
     the j-function j(q).
     """
+
     model = "Eta"
 
 
@@ -221,6 +227,7 @@ class AtkinModularPolynomialDatabase(ModularPolynomialDatabase):
     x is a function on invariant under the Atkin-Lehner invariant,
     with pole of minimal order at infinity.
     """
+
     model = "Atk"
 
 

@@ -46,23 +46,25 @@ def extend(curve: CustomCurve, deg):
     q = curve.q
     K = curve.field
     if q % 2 != 0:
-        R = K['x']
+        R = K["x"]
         pol = R.irreducible_element(deg)
-        Fext = GF(q ** deg, name='z', modulus=pol)
+        Fext = GF(q ** deg, name="z", modulus=pol)
         return E.base_extend(Fext)
     charac = K.characteristic()
-    R = GF(charac)['x']
+    R = GF(charac)["x"]
     ext_deg = q ** deg
     pol = R.irreducible_element(deg * ZZ(log(q, charac)))
-    Kext = GF(ext_deg, name='ex', modulus=pol)
+    Kext = GF(ext_deg, name="ex", modulus=pol)
     gKext = Kext.gen()
 
     h = gKext ** ((ext_deg - 1) // (q - 1))
     assert charac ** (h.minpoly().degree()) == q
-    H = GF(q, name='h', modulus=h.minpoly())
+    H = GF(q, name="h", modulus=h.minpoly())
     inclusion = H.hom([h])
 
-    new_coefficients = [inclusion(stupid_coerce_K_to_L(a, K, H)) for a in E.a_invariants()]
+    new_coefficients = [
+        inclusion(stupid_coerce_K_to_L(a, K, H)) for a in E.a_invariants()
+    ]
     EE = EllipticCurve(Kext, new_coefficients)
     return EE
 
@@ -99,7 +101,9 @@ def factorization(x, timeout_duration=20, use_ecm=True):
 
 def squarefree_part(x, timeout_duration=20, use_ecm=True):
     """return the squarefree part of x or 'NO DATA (timed out)'"""
-    F = squarefree_and_factorization(x=x, timeout_duration=timeout_duration, use_ecm=use_ecm)
+    F = squarefree_and_factorization(
+        x=x, timeout_duration=timeout_duration, use_ecm=use_ecm
+    )
     if isinstance(F, str):
         return F
     else:
@@ -125,7 +129,9 @@ def squarefree_and_factorization(x, timeout_duration=20, use_ecm=True):
 
 def square_part(x, timeout_duration=20, use_ecm=True):
     """return the square part of x or 'NO DATA (timed out)'"""
-    squarefree = squarefree_part(x=x, timeout_duration=timeout_duration, use_ecm=use_ecm)
+    squarefree = squarefree_part(
+        x=x, timeout_duration=timeout_duration, use_ecm=use_ecm
+    )
     if isinstance(squarefree, str):
         return squarefree
     else:
@@ -143,7 +149,7 @@ def square_part_square_root(x, timeout_duration=20, use_ecm=True):
 
 def eigenvalues(curve: CustomCurve, l, s=1):
     """Computes the eigenvalues of Frobenius endomorphism in F_l, or in F_(l^2) if s=2"""
-    x = PolynomialRing(GF(l ** s), 'x').gen()
+    x = PolynomialRing(GF(l ** s), "x").gen()
     q = curve.q
     t = curve.trace
     f = x ** 2 - t * x + q

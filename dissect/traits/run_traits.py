@@ -14,7 +14,7 @@ try:
 
     coloredlogs.install(level=logging.INFO)
 except ModuleNotFoundError:
-    print('E: Package coloredlogs is not installed. No logs will be displayed')
+    print("E: Package coloredlogs is not installed. No logs will be displayed")
 
 logger = logging.getLogger(__name__)
 
@@ -23,35 +23,78 @@ def load_trait_parameters(args):
     jobs_total = args.jobs
     while args.jobs > 0:
         chunk = jobs_total - args.jobs + 1
-        yield {'trait_name': args.trait_name, 'curve_type': args.curve_type, 'order_bound': args.order_bound,
-               'allowed_cofactors': args.allowed_cofactors,
-               'description': "part_" + str(chunk).zfill(4) + "_of_" + str(jobs_total).zfill(4),
-               'chunks_total': jobs_total,
-               'chunk': chunk}
+        yield {
+            "trait_name": args.trait_name,
+            "curve_type": args.curve_type,
+            "order_bound": args.order_bound,
+            "allowed_cofactors": args.allowed_cofactors,
+            "description": "part_"
+            + str(chunk).zfill(4)
+            + "_of_"
+            + str(jobs_total).zfill(4),
+            "chunks_total": jobs_total,
+            "chunk": chunk,
+        }
         args.jobs -= 1
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Experiment parallelizer')
-    parser.add_argument('-t', '--tasks', type=int, default=1,
-                        help='Number of tasks to run in parallel (default: 1')
-    parser.add_argument('-j', '--jobs', type=int, default=1,
-                        help='Number of jobs to run in parallel (default: 1')
-    parser.add_argument('-s', '--sage', default='sage',
-                        help='Path to the sage')
-    requiredNamed = parser.add_argument_group('required named arguments')
-    requiredNamed.add_argument('-n', '--trait_name', metavar='trait_name', type=str, action='store',
-                               help='the trait identifier; available traits: ' + ", ".join(TRAIT_NAMES), required=True)
-    requiredNamed.add_argument('-c', '--curve_type', metavar='curve_type', type=str,
-                               help='the type of curves for which to compute traits; must be one of the following: std (all standard '
-                                    'curves), sim (all simulated curves), sample (curves secp112r1, secp192r1, '
-                                    'secp256r1), all (all curves in the database)',
-                               required=True)
-    parser.add_argument('-v', '--verbosity', action='store_true', help='verbosity flag (default: False)')
-    parser.add_argument('-b', '--order_bound', action='store', type=int, metavar='order_bound', default=256,
-                        help='upper bound for curve order bitsize (default: 256)')
-    parser.add_argument('-a', '--allowed_cofactors', nargs='+', metavar='allowed_cofactors', default=[1],
-                        help='the list of cofactors the curve can have (default: [1])')
+    parser = argparse.ArgumentParser(description="Experiment parallelizer")
+    parser.add_argument(
+        "-t",
+        "--tasks",
+        type=int,
+        default=1,
+        help="Number of tasks to run in parallel (default: 1",
+    )
+    parser.add_argument(
+        "-j",
+        "--jobs",
+        type=int,
+        default=1,
+        help="Number of jobs to run in parallel (default: 1",
+    )
+    parser.add_argument("-s", "--sage", default="sage", help="Path to the sage")
+    requiredNamed = parser.add_argument_group("required named arguments")
+    requiredNamed.add_argument(
+        "-n",
+        "--trait_name",
+        metavar="trait_name",
+        type=str,
+        action="store",
+        help="the trait identifier; available traits: " + ", ".join(TRAIT_NAMES),
+        required=True,
+    )
+    requiredNamed.add_argument(
+        "-c",
+        "--curve_type",
+        metavar="curve_type",
+        type=str,
+        help="the type of curves for which to compute traits; must be one of the following: std (all standard "
+        "curves), sim (all simulated curves), sample (curves secp112r1, secp192r1, "
+        "secp256r1), all (all curves in the database)",
+        required=True,
+    )
+    parser.add_argument(
+        "-v", "--verbosity", action="store_true", help="verbosity flag (default: False)"
+    )
+    parser.add_argument(
+        "-b",
+        "--order_bound",
+        action="store",
+        type=int,
+        metavar="order_bound",
+        default=256,
+        help="upper bound for curve order bitsize (default: 256)",
+    )
+    parser.add_argument(
+        "-a",
+        "--allowed_cofactors",
+        nargs="+",
+        metavar="allowed_cofactors",
+        default=[1],
+        help="the list of cofactors the curve can have (default: [1])",
+    )
 
     args = parser.parse_args()
     if args.trait_name not in TRAIT_NAMES:
@@ -59,7 +102,7 @@ def main():
         exit()
     print(args)
 
-    wrapper_path = os.path.join(TRAIT_PATH, 'run_traits_single.py')
+    wrapper_path = os.path.join(TRAIT_PATH, "run_traits_single.py")
 
     pr = ParallelRunner()
     pr.parallel_tasks = args.tasks
@@ -79,12 +122,12 @@ def main():
         The function can also store its own state.
         """
         for p in load_trait_parameters(args):
-            allowed_cofactors_string = ' '.join(map(str, p['allowed_cofactors']))
-            del p['allowed_cofactors']
-            cli = ' '.join(['--%s=%s' % (k, p[k]) for k in p.keys()])
+            allowed_cofactors_string = " ".join(map(str, p["allowed_cofactors"]))
+            del p["allowed_cofactors"]
+            cli = " ".join(["--%s=%s" % (k, p[k]) for k in p.keys()])
 
-            cli = ' '.join([cli, '-a', allowed_cofactors_string])
-            t = Task(args.sage, '%s %s' % (wrapper_path, cli))
+            cli = " ".join([cli, "-a", allowed_cofactors_string])
+            t = Task(args.sage, "%s %s" % (wrapper_path, cli))
             yield t
 
     def prerun(j: Task):
@@ -102,7 +145,10 @@ def main():
         You also could open the result file and analyze it, but this could slow-down
         the job manager loop (callbacks are executed on manager thread).
         """
-        logger.info("Task %s finished, code: %s, fails: %s" % (r.job.idx, r.ret_code, r.job.failed_attempts))
+        logger.info(
+            "Task %s finished, code: %s, fails: %s"
+            % (r.job.idx, r.ret_code, r.job.failed_attempts)
+        )
         if r.ret_code != 0 and r.job.failed_attempts < 3:
             pr.enqueue(r.job)
 
@@ -112,5 +158,5 @@ def main():
     pr.work()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

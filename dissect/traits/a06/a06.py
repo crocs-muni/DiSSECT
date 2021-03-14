@@ -16,9 +16,11 @@ def a06_curve_function(curve: CustomCurve, deg):
     disc_ext = ext_disc(curve, deg=deg)
     ratio_sqrt = ZZ(sqrt(disc_ext / disc_base))
     curve_results["ratio_sqrt"] = ratio_sqrt
-    curve_results["factorization"] = tu.factorization(ratio_sqrt, timeout_duration=TRAIT_TIMEOUT)
+    curve_results["factorization"] = tu.factorization(
+        ratio_sqrt, timeout_duration=TRAIT_TIMEOUT
+    )
     return curve_results
 
 
-def compute_a06_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 'a06', a06_curve_function, desc=desc, verbose=verbose)
+def compute_a06_results(curve_list, desc="", verbose=False):
+    compute_results(curve_list, "a06", a06_curve_function, desc=desc, verbose=verbose)

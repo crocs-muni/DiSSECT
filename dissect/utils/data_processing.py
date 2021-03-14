@@ -6,10 +6,13 @@ from tqdm.contrib import tmap
 
 import dissect.utils.database_handler as database
 from dissect.definitions import STD_CURVE_DICT, ALL_CURVE_COUNT
+
 db = None
 
 
-def load_trait(trait: str, params: Dict[str, Any] = None, curve: str = None) -> pd.DataFrame:
+def load_trait(
+    trait: str, params: Dict[str, Any] = None, curve: str = None
+) -> pd.DataFrame:
     global db
     if not db:
         db = database.connect()
@@ -28,12 +31,17 @@ def load_curves(filters: Any = {}) -> pd.DataFrame:
         projection["curve"] = record["name"]
         projection["simulated"] = record["simulated"]
         projection["bitlength"] = int(record["field"]["bits"])
-        projection["cofactor"] = int(record["cofactor"], base=16) if isinstance(record["cofactor"], str) else int(
-            record["cofactor"])
+        projection["cofactor"] = (
+            int(record["cofactor"], base=16)
+            if isinstance(record["cofactor"], str)
+            else int(record["cofactor"])
+        )
         return projection
 
     curve_records = database.get_curves(db, filters, raw=True)
-    df = pd.DataFrame(tmap(project, curve_records, desc="Loading curves", total=ALL_CURVE_COUNT)).convert_dtypes()
+    df = pd.DataFrame(
+        tmap(project, curve_records, desc="Loading curves", total=ALL_CURVE_COUNT)
+    ).convert_dtypes()
     return df
 
 
@@ -54,7 +62,9 @@ def filter_choices(choices, ignored):
 
 
 def get_params(choices):
-    return filter_choices(choices, ["source", "bitlength", "cofactor", "Feature:", "Modifier:"])
+    return filter_choices(
+        choices, ["source", "bitlength", "cofactor", "Feature:", "Modifier:"]
+    )
 
 
 def filter_df(df, choices):
@@ -79,7 +89,7 @@ def filter_df(df, choices):
 
 
 def get_all(df, choices):
-    param,values = get_params(choices).popitem()
+    param, values = get_params(choices).popitem()
     choices.pop(param)
     for v in values:
         param_choice = choices.copy()

@@ -11,10 +11,12 @@ def a07_curve_function(curve: CustomCurve):
     embedding_degree = (Integers(l)(q)).multiplicative_order()
     embedding_degree_complement = ZZ(euler_phi(l) / embedding_degree)
     complement_bit_length = embedding_degree_complement.nbits()
-    curve_results = {"embedding_degree_complement": embedding_degree_complement,
-                     "complement_bit_length": complement_bit_length}
+    curve_results = {
+        "embedding_degree_complement": embedding_degree_complement,
+        "complement_bit_length": complement_bit_length,
+    }
     return curve_results
 
 
-def compute_a07_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 'a07', a07_curve_function, desc=desc, verbose=verbose)
+def compute_a07_results(curve_list, desc="", verbose=False):
+    compute_results(curve_list, "a07", a07_curve_function, desc=desc, verbose=verbose)

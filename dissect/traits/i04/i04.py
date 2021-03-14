@@ -16,15 +16,19 @@ def i04_curve_function(curve: CustomCurve, weight):
     for combination in combination_list:
         binary = "0" * bit_length
         for bit in combination:
-            binary = binary[:bit] + "1" + binary[bit + 1:]
+            binary = binary[:bit] + "1" + binary[bit + 1 :]
         x_coord = ZZ("0b" + binary)
         if E.is_x_coord(x_coord):
             x_coord_count += 1
     expected = len(combination_list) // 2
     ratio = expected / x_coord_count
-    curve_results = {"x_coord_count": x_coord_count, "expected": expected, "ratio": round(ratio, FLOAT_PRECISION)}
+    curve_results = {
+        "x_coord_count": x_coord_count,
+        "expected": expected,
+        "ratio": round(ratio, FLOAT_PRECISION),
+    }
     return curve_results
 
 
-def compute_i04_results(curve_list, desc='', verbose=False):
-    compute_results(curve_list, 'i04', i04_curve_function, desc=desc, verbose=verbose)
+def compute_i04_results(curve_list, desc="", verbose=False):
+    compute_results(curve_list, "i04", i04_curve_function, desc=desc, verbose=verbose)
