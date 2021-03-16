@@ -1,5 +1,5 @@
 image:
-  name: sagemath/sagemath:latest
+  name: sagemath/sagemath-dev:develop
   entrypoint: [ "" ]
 
 variables:
@@ -13,5 +13,6 @@ test:
     - shared-fi
   script:
     - export PATH=$PATH:`sage -c "import sys; import os; print(os.path.join([x for x in sys.path if 'src/bin' in x][0],'../../local/bin') + ':' + \":\".join(sys.path))" 2>/dev/null`
+    - sage -i database_kohel
     - sage --python3 setup.py install
     - sage --python3 -m unittest discover dissect/unit_tests
