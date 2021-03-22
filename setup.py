@@ -22,6 +22,8 @@ install_requires = [
     'IPython',
     'matplotlib',
     'autopep8',
+    'tqdm',
+    'flask',
 ]
 
 setup(name='DiSSECT',

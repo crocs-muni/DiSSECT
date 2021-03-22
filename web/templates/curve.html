@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% set active_page = "curve" %}
+
+{% block content %}
+<h1>Curve detail</h1>
+
+<h2>Description</h2>
+<table class="table table-hover">
+    <thead>
+        <tr><th>Key</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+        {% for key in curve %}
+        <tr><td>{{ key }}</td><td>{{ curve[key] }}</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Traits</h2>
+<table class="table table-hover">
+    <thead>
+        <tr><th>Trait name</th><th>Params</th><th>Result</th></tr>
+    </thead>
+    <tbody>
+        {% for trait in traits %}
+        <tr><td>{{ trait["trait"] }}</td><td>{{ trait["params"] }}</td><td>{{ trait["result"] }}</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+
