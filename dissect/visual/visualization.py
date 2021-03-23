@@ -1,10 +1,11 @@
 import matplotlib.pyplot as plt
 from dissect.utils.data_processing import get_all
 from dissect.visual.widgets import get_choices
-from ipywidgets import interact, fixed
+from ipywidgets import widgets, interact, fixed
 
 
 def normalized_barplot(
+        ax,
         df,
         param,
         feature,
@@ -13,7 +14,6 @@ def normalized_barplot(
         tick_spacing=0,
         xlab="Values",
         ylab="Normalized count",
-        figsize=(10, 6),
         drop_timeouts=True,
 ):
     # make a copy of the dataframe, drop timeouts if eligible and apply the modifier function to the feature row
@@ -46,10 +46,9 @@ def normalized_barplot(
         labels = [t for t in ticks if t % tick_spacing == 0]
 
     # create the normalized barplot
-    plt.figure(figsize=figsize)
     if not len(std) == 0:
         std_counts = std[feature].value_counts() / len(std)
-        plt.bar(
+        ax.bar(
             std_counts.index.map(ticks.index) - 0.2,
             std_counts.values,
             width=0.4,
@@ -57,7 +56,7 @@ def normalized_barplot(
         )
     if not len(sim) == 0:
         sim_counts = sim[feature].value_counts() / len(sim)
-        plt.bar(
+        ax.bar(
             sim_counts.index.map(ticks.index) + 0.2,
             sim_counts.values,
             width=0.4,
@@ -65,14 +64,16 @@ def normalized_barplot(
         )
 
     p, v = param.popitem()
-    plt.xticks(locs, labels)
-    plt.legend()
+    ax.set_xticks(locs)
+    ax.set_xticklabels(labels)
+    ax.legend()
     if title is None:
-        title = f"Normalized barplot of {feature} for {p}={v[0]}"
-    plt.title(title)
-    plt.xlabel(xlab)
-    plt.ylabel(ylab)
-    plt.show()
+        # title = f"Normalized barplot of {feature} for {p}={v[0]}"
+        title = f"{p}={v[0]}"
+    ax.title.set_text(title)
+    ax.set_xlabel(xlab)
+    ax.set_ylabel(ylab)
+    # plt.show()
 
 
 def normalized_bubbleplot(
@@ -114,10 +115,26 @@ def normalized_bubbleplot(
     plt.show()
 
 
-def multiplot(height, width, trait_df, filtering_widgets):
-    for df, param, feature, modifier in get_all(trait_df, get_choices(filtering_widgets)):
-        normalized_barplot(df, param, feature, modifier, tick_spacing=0, figsize=(height, width))
+def multiplot(height, width, columns, trait_df, filtering_widgets):
+    results = list(get_all(trait_df, get_choices(filtering_widgets)))
+    nrows = len(results) // columns + 1
+    fig, axes = plt.subplots(figsize=(width, height), nrows=nrows, ncols=columns)
+    fig.tight_layout(pad=4.0, rect=[0, 0.03, 1, 0.95])
+    if nrows > 1 and columns > 1:
+        axes = [item for sublist in axes for item in sublist]
+    for ax in axes[len(results):]:
+        fig.delaxes(ax)
+    for result, ax in zip(results, axes):
+        df, param, feature, modifier = result
+        normalized_barplot(ax, df, param, feature, modifier, tick_spacing=0)
+    title = f"Normalized barplot of {feature}"
+    fig.suptitle(title)
+    plt.show()
 
 
 def interact_multiplot(trait_df, filtering_widgets):
-    interact(multiplot, height=8, width=6, trait_df=fixed(trait_df), filtering_widgets=fixed(filtering_widgets))
+    # interact(multiplot, height=widgets.IntSlider(min=1, max=30, step=1, value=10), width=widgets.IntSlider(min=1, max=30, step=1, value=7), columns=widgets.IntSlider(min=1, max=10, step=1, value=1), results=fixed(results.values()))
+    interact(multiplot, height=widgets.IntSlider(min=1, max=30, step=1, value=10),
+             width=widgets.IntSlider(min=1, max=30, step=1, value=7),
+             columns=widgets.IntSlider(min=1, max=10, step=1, value=1), trait_df=fixed(trait_df),
+             filtering_widgets=fixed(filtering_widgets))
