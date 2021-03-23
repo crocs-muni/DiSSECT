@@ -1,45 +1,20 @@
 import matplotlib.pyplot as plt
-from sage.all import RR, ZZ
-
-
-class Modifier:
-    """a class of lambda functions for easier modifications if visualised values"""
-
-    def __init__(self):
-        pass
-
-    @staticmethod
-    def identity():
-        return lambda x: x
-
-    @staticmethod
-    def ratio(ratio_precision=3):
-        return lambda x: RR(x).numerical_approx(digits=ratio_precision)
-
-    @staticmethod
-    def bits():
-        return lambda x: ZZ(x).nbits()
-
-    @staticmethod
-    def factorization_bits(factor_index=-1):
-        return lambda x: ZZ(x[factor_index]).nbits()
-
-    @staticmethod
-    def length():
-        return lambda x: len(x)
+from dissect.utils.data_processing import get_all
+from dissect.visual.widgets import get_choices
+from ipywidgets import interact, fixed
 
 
 def normalized_barplot(
-    df,
-    param,
-    feature,
-    modifier=lambda x: x,
-    title=None,
-    tick_spacing=0,
-    xlab="Values",
-    ylab="Normalized count",
-    figsize=(10, 6),
-    drop_timeouts=True,
+        df,
+        param,
+        feature,
+        modifier=lambda x: x,
+        title=None,
+        tick_spacing=0,
+        xlab="Values",
+        ylab="Normalized count",
+        figsize=(10, 6),
+        drop_timeouts=True,
 ):
     # make a copy of the dataframe, drop timeouts if eligible and apply the modifier function to the feature row
     df2 = df.copy(deep=False)
@@ -62,9 +37,9 @@ def normalized_barplot(
     else:
         low = min(df2_counts.index) - (min(df2_counts.index) % tick_spacing)
         high = (
-            max(df2_counts.index)
-            - (max(df2_counts.index) % tick_spacing)
-            + tick_spacing
+                max(df2_counts.index)
+                - (max(df2_counts.index) % tick_spacing)
+                + tick_spacing
         )
         ticks = range(low, high + 1)
         locs = [i for i in range(len(ticks)) if i % tick_spacing == 0]
@@ -101,7 +76,7 @@ def normalized_barplot(
 
 
 def normalized_bubbleplot(
-    df, xfeature, yfeature, title="Normalized bubble plot", xlab=None, ylab=None
+        df, xfeature, yfeature, title="Normalized bubble plot", xlab=None, ylab=None
 ):
     if not xlab:
         xlab = xfeature
@@ -137,3 +112,12 @@ def normalized_bubbleplot(
     plt.xlabel(xlab)
     plt.ylabel(ylab)
     plt.show()
+
+
+def multiplot(height, width, trait_df, filtering_widgets):
+    for df, param, feature, modifier in get_all(trait_df, get_choices(filtering_widgets)):
+        normalized_barplot(df, param, feature, modifier, tick_spacing=0, figsize=(height, width))
+
+
+def interact_multiplot(trait_df, filtering_widgets):
+    interact(multiplot, height=8, width=6, trait_df=fixed(trait_df), filtering_widgets=fixed(filtering_widgets))

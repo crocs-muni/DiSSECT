@@ -1,17 +1,44 @@
 from typing import Dict, Any
 
 import pandas as pd
-from dissect.visual.visualization import Modifier
 from tqdm.contrib import tmap
 
+from sage.all import RR, ZZ
 import dissect.utils.database_handler as database
 from dissect.definitions import STD_CURVE_DICT, ALL_CURVE_COUNT
 
 db = None
 
 
+class Modifier:
+    """a class of lambda functions for easier modifications if visualised values"""
+
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def identity():
+        return lambda x: x
+
+    @staticmethod
+    def ratio(ratio_precision=3):
+        return lambda x: RR(x).numerical_approx(digits=ratio_precision)
+
+    @staticmethod
+    def bits():
+        return lambda x: ZZ(x).nbits()
+
+    @staticmethod
+    def factorization_bits(factor_index=-1):
+        return lambda x: ZZ(x[factor_index]).nbits()
+
+    @staticmethod
+    def length():
+        return lambda x: len(x)
+
+
 def load_trait(
-    trait: str, params: Dict[str, Any] = None, curve: str = None
+        trait: str, params: Dict[str, Any] = None, curve: str = None
 ) -> pd.DataFrame:
     global db
     if not db:

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import ipywidgets as widgets
 from IPython.core.display import display
-from dissect.visual.visualization import Modifier
+from dissect.utils.data_processing import Modifier
 from sage.all import sage_eval
 
 from dissect.definitions import (
@@ -185,8 +185,8 @@ def get_trait_features(trait_name, trait_df):
         feature
         for feature in trait_df.columns
         if feature
-        not in ["curve", "simulated", "bitlength", "cofactor"]
-        + list(get_trait_params_dict(trait_name).keys())
+           not in ["curve", "simulated", "bitlength", "cofactor"]
+           + list(get_trait_params_dict(trait_name).keys())
     ]
 
 
