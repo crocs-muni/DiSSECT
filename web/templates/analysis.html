@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% set active_page = "analysis" %}
+
+{% block content %}
+<h1>Analysis</h1>
+
+<canvas id="myChart"></canvas>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+    var ctx = document.getElementById('myChart');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'bar',
+
+        // The data for our dataset
+        data: {
+            labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+            datasets: [{
+                label: 'X.962 Standard',
+                backgroundColor: '#ff6384',
+                borderColor: '#ff6384',
+                data: [3, 10, 5, 2, 20, 30, 45, 20]
+            },
+                {
+                label: 'Other Standard',
+                backgroundColor: '#36a2eb',
+                borderColor: '#36a2eb',
+                data: [6, 2, 7, 2, 10, 15, 55, 10]
+            }]
+        },
+
+        // Configuration options go here
+        options: {
+            scales: {
+                xAxes: [{
+                    stacked: true
+                }],
+                yAxes: [{
+                    stacked: true
+                }]
+            }
+        }
+    });
+</script>
+{% endblock %}
