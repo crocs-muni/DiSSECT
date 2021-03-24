@@ -115,7 +115,8 @@ def normalized_bubbleplot(
     plt.show()
 
 
-def multiplot(height, width, columns, trait_df, filtering_widgets):
+def multiplot(height, width, columns, trait_df, filtering_widgets,modifier = None, tick_spacing = None):
+    custom_modifier = True if modifier!=None else False
     results = list(get_all(trait_df, get_choices(filtering_widgets)))
     nrows = len(results) // columns + 1
     fig, axes = plt.subplots(figsize=(width, height), nrows=nrows, ncols=columns)
@@ -125,16 +126,21 @@ def multiplot(height, width, columns, trait_df, filtering_widgets):
     for ax in axes[len(results):]:
         fig.delaxes(ax)
     for result, ax in zip(results, axes):
-        df, param, feature, modifier = result
-        normalized_barplot(ax, df, param, feature, modifier, tick_spacing=0)
-    title = f"Normalized barplot of {feature}"
+        df, param, feature, picked_modifier, modifier_name = result
+        picked_modifier = modifier if custom_modifier else picked_modifier
+        picked_tick_spacing = tick_spacing if tick_spacing!=None else 0
+        normalized_barplot(ax, df, param, feature, picked_modifier, tick_spacing=picked_tick_spacing)
+    modifier_title = "custom" if custom_modifier else modifier_name
+    title = f"Normalized barplot of {feature} with modifier: {modifier_title}"
     fig.suptitle(title)
     plt.show()
 
 
-def interact_multiplot(trait_df, filtering_widgets):
+def interact_multiplot(trait_df, filtering_widgets, modifier = None, tick_spacing = 0):
     # interact(multiplot, height=widgets.IntSlider(min=1, max=30, step=1, value=10), width=widgets.IntSlider(min=1, max=30, step=1, value=7), columns=widgets.IntSlider(min=1, max=10, step=1, value=1), results=fixed(results.values()))
     interact(multiplot, height=widgets.IntSlider(min=1, max=30, step=1, value=10),
              width=widgets.IntSlider(min=1, max=30, step=1, value=7),
              columns=widgets.IntSlider(min=1, max=10, step=1, value=1), trait_df=fixed(trait_df),
-             filtering_widgets=fixed(filtering_widgets))
+             filtering_widgets=fixed(filtering_widgets),
+             modifier = fixed(modifier),
+             tick_spacing= fixed(tick_spacing))
