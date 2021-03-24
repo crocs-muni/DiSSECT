@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from sage.all import ZZ, EllipticCurve, ecm, factor, Integers, sqrt, PolynomialRing
+from sage.all import ZZ, EllipticCurve, factor, Integers, sqrt, PolynomialRing #,ecm
 from sage.functions.log import log
 from sage.rings.finite_rings.all import GF
 
@@ -91,7 +91,8 @@ def embedding_degree_q(q, l):
 def factorization(x, timeout_duration=20, use_ecm=True):
     """return the factorization of abs(x) as a list or 'NO DATA (timed out)'"""
     if use_ecm:
-        return timeout(ecm.factor, [abs(x)], timeout_duration=timeout_duration)
+        return 'NO DATA (timed out)'
+        #return timeout(ecm.factor, [abs(x)], timeout_duration=timeout_duration)
     else:
         result = timeout(factor, [abs(x)], timeout_duration=timeout_duration)
         if not isinstance(result, str):
