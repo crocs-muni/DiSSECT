@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from dissect.utils.data_processing import get_all
+from dissect.utils.data_processing import get_all, filter_df
 from dissect.visual.widgets import get_choices
 from ipywidgets import widgets, interact, fixed
 
@@ -144,3 +144,4 @@ def interact_multiplot(trait_df, filtering_widgets, modifier = None, tick_spacin
              filtering_widgets=fixed(filtering_widgets),
              modifier = fixed(modifier),
              tick_spacing= fixed(tick_spacing))
+    return filter_df(trait_df, get_choices(filtering_widgets))
