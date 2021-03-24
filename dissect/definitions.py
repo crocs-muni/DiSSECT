@@ -33,11 +33,11 @@ UNROLLED_ADDITION_FORMULAE = [
 X962_PATH = Path(ROOT_DIR, "utils", "parallel", "x962")
 TRAIT_MODULE_PATH: str = "dissect.traits"
 TRAIT_NAME_CONDITION = r"[ais][0-9][0-9]"
-TRAIT_NAMES: List[str] = [
+TRAIT_NAMES: List[str] = sorted([
     f.name
     for f in TRAIT_PATH.iterdir()
     if f.is_dir() and re.search(TRAIT_NAME_CONDITION, f.name)
-]
+])
 STD_SOURCES: List[str] = [
     f.name for f in CURVE_PATH.iterdir() if f.is_dir() and "." not in f.name
 ]
@@ -104,4 +104,4 @@ SIM_COFACTORS = [
 ]
 ALL_COFACTORS = sorted(set(STD_COFACTORS + SIM_COFACTORS))
 
-TRAIT_DESCRIPTIONS = load_from_json(Path(TRAIT_PATH, "trait_descriptions"))
+TRAIT_DESCRIPTIONS = dict(sorted(load_from_json(Path(TRAIT_PATH, "trait_descriptions")).items(), key=lambda item: item[0]))
