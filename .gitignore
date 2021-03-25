@@ -1,6 +1,6 @@
 data/
 local/
-venv/
+*venv/
 .idea/
 *.log
 *.tmp
