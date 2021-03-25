@@ -18,5 +18,7 @@
   "i08": "bit length of small inverted generator multiples",
   "i10": "points satisfying ZVP conditions",
   "i11": "points satisfying ZVP independently of the multiple",
-  "s01": "todo"
+  "i12": "exceptional points w.r.t. given formulas",
+  "s01": "todo",
+  "a28": "Number of j-invariants adjacent to the curve by l-isogeny"
 }
