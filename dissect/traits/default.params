@@ -109,7 +109,7 @@
   },
   "i08": {
     "params_global": {
-      "k_range": "range(1, 11)"
+      "k_range": "range(1, 1000)"
     },
     "params_local_names": [
       "k"
