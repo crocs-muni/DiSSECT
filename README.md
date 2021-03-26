@@ -12,7 +12,7 @@
 - Clone with  ```git clone --recurse-submodules https://gitlab.fi.muni.cz/x408178/DiSSECT.git```
 - Create virtual environment for python in sage: `sage --python3 -m venv --system-site-packages environment`
 - Activate the environment: `source environment/bin/activate`
-- Run `pip3 install --editable .` in DiSSECT folder
+- Run `sage --pip install --editable .` in DiSSECT folder
 
 **Alternatively without virtual environment (not recommended)**:  
 From the root directory, run `sage --python3 setup.py develop --user` to initialize the project.
