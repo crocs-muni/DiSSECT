@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from dissect.utils.data_processing import get_all, filter_df
 from dissect.visual.widgets import get_choices
 from ipywidgets import widgets, interact, fixed
-
+from IPython.display import display
 
 def normalized_barplot(
         ax,
@@ -72,47 +72,6 @@ def normalized_barplot(
     ax.legend()
     ax.set_xlabel(xlab)
     ax.set_ylabel(ylab)
-    # plt.show()
-
-
-def normalized_bubbleplot(
-        df, xfeature, yfeature, title="Normalized bubble plot", xlab=None, ylab=None
-):
-    if not xlab:
-        xlab = xfeature
-    if not ylab:
-        ylab = yfeature
-
-    df = df[["simulated", xfeature, yfeature]]
-    df = df.dropna(subset=(xfeature, yfeature))
-
-    std = df[df["simulated"] == False]
-    std = std.drop(["simulated"], axis=1)
-    sim = df[df["simulated"] == True]
-    sim = sim.drop(["simulated"], axis=1)
-
-    std_counts = std.value_counts()
-    sim_counts = sim.value_counts()
-
-    std_positions = zip(*std_counts.index)
-    sim_positions = zip(*sim_counts.index)
-
-    std_area = 30 ** 2 * std_counts.values / sum(std_counts.values)
-    sim_area = 30 ** 2 * sim_counts.values / sum(sim_counts.values)
-
-    plt.figure(figsize=(10, 6))
-    plt.scatter(
-        *std_positions, s=std_area, alpha=0.5, label=f"Standard curves n={len(std)}"
-    )
-    plt.scatter(
-        *sim_positions, s=sim_area, alpha=0.5, label=f"Simulated curves n={len(sim)}"
-    )
-    plt.legend()
-    plt.title(title)
-    plt.xlabel(xlab)
-    plt.ylabel(ylab)
-    plt.show()
-
 
 def multiplot(height, width, columns, trait_df, filtering_widgets,modifier = None, tick_spacing = None):
     custom_modifier = True if modifier!=None else False
@@ -134,15 +93,20 @@ def multiplot(height, width, columns, trait_df, filtering_widgets,modifier = Non
     modifier_title = "custom" if custom_modifier else modifier_name
     title = f"Normalized barplot of {feature} with modifier: {modifier_title}"
     fig.suptitle(title)
-    plt.show()
+    return fig
 
+def change_size(figure,width,height):
+    figure.set_figheight(height)
+    figure.set_figwidth(width)
+    display(figure)
 
-def interact_multiplot(trait_df, filtering_widgets, modifier = None, tick_spacing = 0):
-    # interact(multiplot, height=widgets.IntSlider(min=1, max=30, step=1, value=10), width=widgets.IntSlider(min=1, max=30, step=1, value=7), columns=widgets.IntSlider(min=1, max=10, step=1, value=1), results=fixed(results.values()))
-    interact(multiplot, height=widgets.IntSlider(min=1, max=30, step=1, value=10),
-             width=widgets.IntSlider(min=1, max=30, step=1, value=7),
-             columns=widgets.IntSlider(min=1, max=10, step=1, value=1), trait_df=fixed(trait_df),
-             filtering_widgets=fixed(filtering_widgets),
-             modifier = fixed(modifier),
-             tick_spacing= fixed(tick_spacing))
+def interact_multiplot(trait_df, filtering_widgets, modifier = None, tick_spacing = 0, columns = 1):
+    def_height, def_width= 10, 7
+    fig = multiplot(def_height, def_width, columns, trait_df, filtering_widgets,modifier = modifier, tick_spacing = tick_spacing)
+    plt.close()
+    heightSlider = widgets.IntSlider(description='height',min=1, max=30, step=1, value=10)
+    widthSlider = widgets.IntSlider(description='width',min=1, max=30, step=1, value=7)
+    ui = widgets.HBox([heightSlider,widthSlider])
+    out = widgets.interactive_output(change_size, {'width': widthSlider, 'height': heightSlider, 'figure': fixed(fig)})
+    display(ui, out)
     return filter_df(trait_df, get_choices(filtering_widgets))
