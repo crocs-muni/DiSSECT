@@ -62,15 +62,14 @@ def normalized_barplot(
             width=0.4,
             label=f"Simulated curves n={len(sim)}",
         )
-
-    p, v = param.popitem()
+    if len(param)>0 and title is None:
+        p, v = param.popitem()
+        # title = f"Normalized barplot of {feature} for {p}={v[0]}"
+        title = f"{p}={v[0]}"
+        ax.title.set_text(title)
     ax.set_xticks(locs)
     ax.set_xticklabels(labels)
     ax.legend()
-    if title is None:
-        # title = f"Normalized barplot of {feature} for {p}={v[0]}"
-        title = f"{p}={v[0]}"
-    ax.title.set_text(title)
     ax.set_xlabel(xlab)
     ax.set_ylabel(ylab)
     # plt.show()
@@ -117,9 +116,11 @@ def normalized_bubbleplot(
 
 def multiplot(height, width, columns, trait_df, filtering_widgets,modifier = None, tick_spacing = None):
     custom_modifier = True if modifier!=None else False
-    results = list(get_all(trait_df, get_choices(filtering_widgets)))
+    results = get_all(trait_df, get_choices(filtering_widgets))
     nrows = len(results) // columns + 1
     fig, axes = plt.subplots(figsize=(width, height), nrows=nrows, ncols=columns)
+    if nrows==1 and columns==1:
+        axes = [axes]
     fig.tight_layout(pad=4.0, rect=[0, 0.03, 1, 0.95])
     if nrows > 1 and columns > 1:
         axes = [item for sublist in axes for item in sublist]
