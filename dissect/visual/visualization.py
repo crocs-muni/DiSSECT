@@ -4,6 +4,7 @@ from dissect.visual.widgets import get_choices
 from ipywidgets import widgets, interact, fixed
 from IPython.display import display
 
+
 def normalized_barplot(
         ax,
         df,
@@ -62,7 +63,7 @@ def normalized_barplot(
             width=0.4,
             label=f"Simulated curves n={len(sim)}",
         )
-    if len(param)>0 and title is None:
+    if len(param) > 0 and title is None:
         p, v = param.popitem()
         # title = f"Normalized barplot of {feature} for {p}={v[0]}"
         title = f"{p}={v[0]}"
@@ -73,12 +74,13 @@ def normalized_barplot(
     ax.set_xlabel(xlab)
     ax.set_ylabel(ylab)
 
-def multiplot(height, width, columns, trait_df, filtering_widgets,modifier = None, tick_spacing = None):
-    custom_modifier = True if modifier!=None else False
+
+def multiplot(height, width, columns, trait_df, filtering_widgets, modifier=None, tick_spacing=None):
+    custom_modifier = True if modifier != None else False
     results = get_all(trait_df, get_choices(filtering_widgets))
     nrows = len(results) // columns + 1
     fig, axes = plt.subplots(figsize=(width, height), nrows=nrows, ncols=columns)
-    if nrows==1 and columns==1:
+    if nrows == 1 and columns == 1:
         axes = [axes]
     fig.tight_layout(pad=4.0, rect=[0, 0.03, 1, 0.95])
     if nrows > 1 and columns > 1:
@@ -88,25 +90,28 @@ def multiplot(height, width, columns, trait_df, filtering_widgets,modifier = Non
     for result, ax in zip(results, axes):
         df, param, feature, picked_modifier, modifier_name = result
         picked_modifier = modifier if custom_modifier else picked_modifier
-        picked_tick_spacing = tick_spacing if tick_spacing!=None else 0
+        picked_tick_spacing = tick_spacing if tick_spacing != None else 0
         normalized_barplot(ax, df, param, feature, picked_modifier, tick_spacing=picked_tick_spacing)
     modifier_title = "custom" if custom_modifier else modifier_name
     title = f"Normalized barplot of {feature} with modifier: {modifier_title}"
     fig.suptitle(title)
     return fig
 
-def change_size(figure,width,height):
+
+def change_size(figure, width, height):
     figure.set_figheight(height)
     figure.set_figwidth(width)
     display(figure)
 
-def interact_multiplot(trait_df, filtering_widgets, modifier = None, tick_spacing = 0, columns = 1):
-    def_height, def_width= 10, 7
-    fig = multiplot(def_height, def_width, columns, trait_df, filtering_widgets,modifier = modifier, tick_spacing = tick_spacing)
+
+def interact_multiplot(trait_df, filtering_widgets, modifier=None, tick_spacing=0, columns=1):
+    def_height, def_width = 10, 7
+    fig = multiplot(def_height, def_width, columns, trait_df, filtering_widgets, modifier=modifier,
+                    tick_spacing=tick_spacing)
     plt.close()
-    heightSlider = widgets.IntSlider(description='height',min=1, max=30, step=1, value=10)
-    widthSlider = widgets.IntSlider(description='width',min=1, max=30, step=1, value=7)
-    ui = widgets.HBox([heightSlider,widthSlider])
+    heightSlider = widgets.IntSlider(description='height', min=1, max=30, step=1, value=10)
+    widthSlider = widgets.IntSlider(description='width', min=1, max=30, step=1, value=7)
+    ui = widgets.HBox([heightSlider, widthSlider])
     out = widgets.interactive_output(change_size, {'width': widthSlider, 'height': heightSlider, 'figure': fixed(fig)})
     display(ui, out)
     return filter_df(trait_df, get_choices(filtering_widgets))

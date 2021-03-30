@@ -58,6 +58,7 @@ def load_curves(filters: Any = {}) -> pd.DataFrame:
         projection["curve"] = record["name"]
         projection["simulated"] = record["simulated"]
         projection["bitlength"] = int(record["field"]["bits"])
+        projection["field"] = record["field"]["type"]
         projection["cofactor"] = (
             int(record["cofactor"], base=16)
             if isinstance(record["cofactor"], str)
@@ -90,7 +91,7 @@ def filter_choices(choices, ignored):
 
 def get_params(choices):
     return filter_choices(
-        choices, ["source", "bitlength", "cofactor", "Feature:", "Modifier:"]
+        choices, ["source", "bitlength","field", "cofactor", "Feature:", "Modifier:"]
     )
 
 
@@ -106,7 +107,8 @@ def filter_df(df, choices):
     if "std" not in choices["source"]:
         df = df[df.curve.isin(allowed_curves) | (df.simulated == True)]
 
-    filtered = filter_choices(choices, ["source", "Feature:", "Modifier:"])
+    df = df[df.field.isin(choices["field"])]
+    filtered = filter_choices(choices, ["source", "field","Feature:", "Modifier:"])
 
     for key, value in filtered.items():
         options = list(map(int, value))

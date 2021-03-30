@@ -110,7 +110,10 @@ def common_filtering_widgets():
     cofactor_choice = multi_checkbox_widget(
         "cofactor", preselected=[1], others=ALL_COFACTORS
     )
-    return [source_choice, bitlength_choice, cofactor_choice]
+    field_choice = multi_checkbox_widget(
+        "field", preselected=["Prime", "Binary", "Extension"], others = ["Prime", "Binary", "Extension"]
+    )
+    return [source_choice, bitlength_choice, cofactor_choice, field_choice]
 
 
 def trait_filtering_widgets(trait_name):
@@ -144,12 +147,16 @@ def features_filtering_widgets(trait_name, trait_df):
 
 
 def get_filtering_widgets(trait_name, trait_df):
-    curves_and_params_widgets = [
-        *common_filtering_widgets(),
-        *trait_filtering_widgets(trait_name),
-    ]
-    curves_and_params_hbox = widgets.HBox(
-        curves_and_params_widgets,
+    curves_widgets = [*common_filtering_widgets()]
+    curves_hbox = widgets.HBox(
+        curves_widgets,
+        layout=widgets.Layout(
+            justify_content="space-around", flex_flow="row wrap", height="250px"
+        ),
+    )
+    params_widgets = [*trait_filtering_widgets(trait_name)]
+    params_hbox = widgets.HBox(
+        params_widgets,
         layout=widgets.Layout(
             justify_content="space-around", flex_flow="row wrap", height="250px"
         ),
@@ -162,11 +169,14 @@ def get_filtering_widgets(trait_name, trait_df):
         ),
     )
     tab = widgets.Tab()
-    tab.children = [curves_and_params_hbox, features_hbox]
-    tab.set_title(0, "Curves & parameters")
-    tab.set_title(1, "Features & modifiers")
+    tab.children = [curves_hbox, params_hbox, features_hbox]
+    tab.set_title(0, "Curves")
+    tab.set_title(1, "Trait parameters")
+    tab.set_title(2, "Features & modifiers")
     display(tab)
-    return curves_and_params_widgets, features_widgets
+    return curves_widgets,params_widgets, features_widgets
+
+
 
 
 def get_trait_params_dict(trait_name):
@@ -185,7 +195,7 @@ def get_trait_features(trait_name, trait_df):
         feature
         for feature in trait_df.columns
         if feature
-           not in ["curve", "simulated", "bitlength", "cofactor"]
+           not in ["curve", "simulated", "bitlength", "cofactor","field"]
            + list(get_trait_params_dict(trait_name).keys())
     ]
 
