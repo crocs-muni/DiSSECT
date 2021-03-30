@@ -24,6 +24,7 @@ install_requires = [
     'autopep8',
     'tqdm',
     'flask',
+    'console-menu'
 ]
 
 setup(name='DiSSECT',
