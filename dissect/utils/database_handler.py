@@ -14,7 +14,7 @@ from tqdm.contrib import tmap
 
 
 def connect(database: Optional[str] = None) -> Database:
-    client = MongoClient(database)
+    client = MongoClient(database, connect=False)
     return client["dissect"]
 
 
