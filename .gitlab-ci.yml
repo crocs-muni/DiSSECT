@@ -1,5 +1,5 @@
 image:
-  name: sagemath/sagemath-dev:9.2
+  name: sagemath/sagemath-dev:latest
   entrypoint: [ "" ]
 
 variables:
