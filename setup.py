@@ -26,6 +26,7 @@ install_requires = [
     'flask',
     'console-menu',
     'python-dateutil>=2.7.3',
+    'numpy>=1.16.5'
 ]
 
 setup(name='DiSSECT',
