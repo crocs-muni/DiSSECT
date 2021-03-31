@@ -24,7 +24,8 @@ install_requires = [
     'autopep8',
     'tqdm',
     'flask',
-    'console-menu'
+    'console-menu',
+    'python-dateutil>=2.7.3',
 ]
 
 setup(name='DiSSECT',
