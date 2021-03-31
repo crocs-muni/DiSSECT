@@ -6,10 +6,15 @@
 
 <form id="curve-table-filter">
     <div class="row">
-        <div class="col form-group">
+        <div class="col-11 form-group">
             <label for="name">Name</label>
             <input type="text" class="form-control" id="name" placeholder="name">
         </div>
+        <div class="col-1">
+            <input type="reset" class="btn btn-outline-secondary" style="margin-top: 32px;" value="Clear">
+        </div>
+    </div>
+    <div class="row">
         <div class="col form-group">
             <label for="category">Category</label>
             <select class="form-control" id="category">
@@ -48,10 +53,19 @@
             </select>
         </div>
         <div class="col form-group">
+            <label for="field">Field type</label>
+            <select class="form-control" id="field">
+                <option value="any">any</option>
+                <option value="Prime">Prime</option>
+                <option value="Binary">Binary</option>
+                <option value="Extension">Extension</option>
+            </select>
+        </div>
+        <div class="col form-group">
             <label for="cofactor">Cofactor</label>
             <select class="form-control" id="cofactor">
                 <option value="0">any</option>
-                {% for cofactor in range(1, 10) %}
+                {% for cofactor in range(1, 11) %}
                 <option value="{{ cofactor }}">{{ cofactor }}</option>
                 {% endfor %}
                 <option value="11">more</option>
@@ -62,10 +76,10 @@
 
 <table class="table table-hover">
     <thead>
-        <tr><th>Name</th><th>Category</th><th>Bitlength</th><th>Cofactor</th></tr>
+        <tr><th>Name</th><th>Category</th><th>Cofactor</th><th>Field type</th><th>Bitlength</th></tr>
     </thead>
     <tbody id="curve-table">
-        <tr><td colspan="4" style="text-align: center;"><i>Data is being loaded …</i></td></tr>
+        <tr><td colspan="5" style="text-align: center;"><i>Data is being loaded …</i></td></tr>
     </tbody>
 </table>
 
@@ -81,7 +95,8 @@
                 "name": $("#name").val(),
                 "category": $("#category").val(),
                 "bitlength": $("#bitlength").val(),
-                "cofactor": $("#cofactor").val()
+                "cofactor": $("#cofactor").val(),
+                "field": $("#field").val()
             }
         }
 
@@ -96,7 +111,7 @@
             var table = $("#curve-table");
             var counter = 0;
             $.each(data, function(i, item){
-                var row = $("<tr><td>" + item["name"] + "</td><td>" + item["category"] + "</td><td>" + item["bitlength"] + "</td><td>" + item["cofactor"] + "</td></tr>");
+                var row = $("<tr><td>" + item["name"] + "</td><td>" + item["category"] + "</td><td>" + item["cofactor"] + "</td><td>" + item["field"] + "</td><td>" + item["bitlength"] + "</td></tr>");
                 row.click(function() {
                     window.location='/curve/' + item["name"];
                 });
@@ -128,8 +143,10 @@
                 });
         }
 
-        $("#curve-table-filter").on("input", function() {
-            updateData(false);
+        $("#curve-table-filter").on("input reset", function(e) {
+            setTimeout(function() {
+                updateData(false);
+            }, 1); // otherwise the changes from reset are not applied
         });
         $("#load-more").on("click", function() {
             updateData(true);

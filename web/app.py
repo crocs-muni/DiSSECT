@@ -67,9 +67,12 @@ def curves_api():
         curve_filter["field.bits"] = it
     if (it := int(request.args.get("cofactor", 0))):
         if it > 10:
-            curve_filter["cofactor"] = {"$nin": list(map(hex, range(10)))}
+            curve_filter["cofactor"] = {"$nin": list(map(hex, range(1, 11)))}
         else:
             curve_filter["cofactor"] = hex(it)
+    if (it := request.args.get("field")) and it != "any":
+        curve_filter["field.type"] = it
+
 
     offset = int(request.args.get("page", 0)) * 50
 
@@ -79,6 +82,7 @@ def curves_api():
             "name": curve["name"],
             "category": curve["category"],
             "bitlength": curve["field"]["bits"],
-            "cofactor": int(curve["cofactor"], 16)
+            "cofactor": int(curve["cofactor"], 16),
+            "field": curve["field"]["type"]
         }
     return result
