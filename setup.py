@@ -23,7 +23,6 @@ install_requires = [
     'matplotlib',
     'autopep8',
     'tqdm',
-    'flask',
     'console-menu',
     'python-dateutil>=2.7.3',
     'numpy>=1.16.5'

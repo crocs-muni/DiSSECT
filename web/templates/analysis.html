@@ -2,7 +2,8 @@
 {% set active_page = "analysis" %}
 
 {% block content %}
-<iframe src="{{ request.host_url.replace(":5000", ":8888") }}" title="Jupyter Notebook Analysis" style="border: none; position: absolute; left: 0; width: 100%; min-height: calc(100vh - 80px);"></iframe>
+<iframe src="https://{{ config.SERVER_NAME.split(':')[0] }}:9999" title="Jupyter Notebook Analysis" style="border: none; position: absolute; left: 0; width: 100%; min-height: calc(100vh - 80px);"></iframe>
+
 {% endblock %}
 
 {% block script %}
