@@ -1,7 +1,6 @@
-from sage.all import PolynomialRing
+from sage.all import PolynomialRing, ClassicalModularPolynomialDatabase
 from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
-from dissect.traits.a28.db_modular_polynomials import ClassicalModularPolynomialDatabase
 
 
 def a28_curve_function(curve: CustomCurve, l):
