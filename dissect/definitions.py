@@ -31,6 +31,8 @@ UNROLLED_ADDITION_FORMULAE = [
     f for f in UNROLLED_ADDITION_FORMULAE_PATH.iterdir() if f.suffix == ".py"
 ]
 X962_PATH = Path(ROOT_DIR, "utils", "parallel", "x962")
+BRAINPOOL_PATH = Path(ROOT_DIR, "utils", "parallel", "brainpool")
+STANDARDS = ["brainpool, x962"]
 TRAIT_MODULE_PATH: str = "dissect.traits"
 TRAIT_NAME_CONDITION = r"[ais][0-9][0-9]"
 TRAIT_NAMES: List[str] = sorted([
