@@ -10,8 +10,6 @@ from dissect.definitions import TRAIT_PATH, TRAIT_MODULE_PATH, TRAIT_NAMES
 from dissect.traits.example_curves import curves
 from dissect.utils.json_handler import save_into_json, load_from_json
 
-traits_to_skip = ["a08"]
-
 
 def load_params_local(local_params):
     if local_params:
@@ -111,8 +109,6 @@ def create_unittest(name):
     f.close()
 
 
-tests_to_skip = ["a08"]
-
 
 def main(trait_name=None, u=False, s=False):
     if trait_name == None:
@@ -146,7 +142,6 @@ def main(trait_name=None, u=False, s=False):
         trait_name = TRAIT_NAMES
     else:
         trait_name = [n.strip() for n in trait_name.split(",")]
-    trait_name = list(set(trait_name) - set(traits_to_skip))
     for name in trait_name:
         if u:
             create_unittest(name)

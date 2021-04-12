@@ -6,7 +6,6 @@
   "a05": "field extensions containing nontrivial/full l-torsion",
   "a06": "factorizations of ratios of CM discriminants in extension fields and base fields",
   "a07": "embedding degree",
-  "a08": "class number of the maximal order of the endomorphism ring",
   "a12": "multiplicative orders of small primes modulo n",
   "a22": "factorizations of small division polynomials",
   "a23": "volcano depth and crater degree in the l-isogeny graph",
@@ -20,5 +19,6 @@
   "i11": "points satisfying ZVP independently of the multiple",
   "i12": "exceptional points w.r.t. given formulas",
   "s01": "todo",
-  "a28": "Number of j-invariants adjacent to the curve by l-isogeny"
+  "a28": "Number of j-invariants adjacent to the curve by l-isogeny",
+  "a08": "Upper and lower bound for the class number of the endomorphism algebra"
 }

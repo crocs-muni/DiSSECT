@@ -11,8 +11,6 @@ from dissect.definitions import TRAIT_PATH, TRAIT_MODULE_PATH, TRAIT_NAMES
 from dissect.traits.example_curves import curves
 from dissect.utils.json_handler import save_into_json, load_from_json
 
-traits_to_skip = ["a08"]
-
 
 def compute_results(trait_name):
     module_name = TRAIT_MODULE_PATH + "." + trait_name + "." + trait_name
@@ -50,8 +48,6 @@ def compute_results(trait_name):
 def main(imported=False):
     if imported:
         for filename in TRAIT_NAMES:
-            if filename in traits_to_skip:
-                continue
             compute_results(filename)
         return
     parser = optparse.OptionParser()
@@ -66,8 +62,6 @@ def main(imported=False):
     options, args = parser.parse_args()
     if options.trait == "all":
         for filename in TRAIT_NAMES:
-            if filename in traits_to_skip:
-                continue
             compute_results(filename)
     else:
         traits = options.trait.split(",")
