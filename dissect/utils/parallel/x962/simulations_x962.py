@@ -8,7 +8,7 @@ from sage.all import (
     ceil,
     GF,
     is_prime,
-    PolynomialRing,
+    Integer,
     EllipticCurve,
     prime_range,
     is_pseudoprime,
@@ -93,28 +93,11 @@ def embedding_degree(E, r):
     return embedding_degree_q(q, r)
 
 
-def has_points_of_low_order(E, l_max=4):
-    # deterministic method utilizing division polynomials, useful for 256 bit E with l_max = 4 (see docs/division_early_abort)
-    p = E.base_field().order()
-    R = PolynomialRing(GF(p), "x")
-    x = R.gen()
-    weier = x ** 3 + x * E.ainvs()[-2] + E.ainvs()[-1]
-    for l in prime_range(l_max):
-        div_pol = E.division_polynomial(l)
-        roots = div_pol.roots(GF(p))
-        for root, mult in roots:
-            if weier(R(root)).is_square():
-                return True
-            else:
-                continue
-    return False
-
-
 # A2.2 in http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.202.2977&rep=rep1&type=pdf
 def verify_near_primality(u, r_min, l_max=255):
     n = u
     h = 1
-    for l in prime_range(l_max):
+    for l in prime_range(58,l_max): #58 is added as smaller primes are tested during ellsea computation
         while n % l == 0:
             n = ZZ(n / l)
             h = h * l
@@ -129,7 +112,10 @@ def verify_security(E, embedding_degree_bound=20, verbose=False):
     if verbose:
         print("Computing order")
     q = E.base_field().order()
-    order = E.order()
+    order = E.__pari__().ellsea(1)
+    if order==0:
+        return False, None, None
+    order = Integer(order)
     # a somewhat arbitrary bound (slightly more strict than in the standard), but it will speed up the generation process
     r_min_bits = order.nbits() - 5
     r_min = max(2 ** r_min_bits, 4 * sqrt(q))
@@ -176,16 +162,6 @@ def generate_x962_curves(count, p, seed):
         if b is None or 4 * a ** 3 + 27 * b ** 2 == 0:
             continue
         E = EllipticCurve(GF(p), [a, b])
-
-        # a heuristic for speeding up the generation process in exchange for sacrificing some curves with low cofactor
-        if bits < 224:
-            l_max = 3
-            if bits < 192:
-                l_max = 2
-        else:
-            l_max = 4
-        if has_points_of_low_order(E, l_max):
-            continue
 
         secure, h, n = verify_security(E)
         if not secure:
