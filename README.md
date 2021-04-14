@@ -46,7 +46,7 @@ jobs, run `./run_traits.py -n a05 -c std -v -b 192 -a 1 2 -t 3 -j 100`.
 |a05      | field extensions containing nontrivial/full $`l`$-torsion                         | :white_check_mark: | :white_check_mark: | medium       | low
 |a06      | factorizations of ratios of CM discriminants in extension fields and base fields  | :white_check_mark: | :white_check_mark: | high         | medium
 |a07      | embedding degree                                                                  | :white_check_mark: | :white_check_mark: | medium       | low
-|a08      | class number of the maximal order of the endomorphism ring                        | :white_check_mark: | :x:                | extreme      | low
+|a08      | class number of the maximal order of the endomorphism ring                        | :white_check_mark: | :x:                | high         | low
 |a12      | multiplicative orders of small primes modulo curve order                          | :white_check_mark: | :white_check_mark: | medium       | medium
 |a22      | factorizations of small division polynomials                                      | :white_check_mark: | :white_check_mark: | high         | high
 |a23      | volcano depth and crater degree in the $`l`$-isogeny graph                        | :white_check_mark: | :white_check_mark: | low          | low
