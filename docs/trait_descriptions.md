@@ -33,7 +33,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Output:** the factorizations of $kn+1$ , $kn-1$, where $n=\#E(\mathbb{F}_p)$
 
-**Motivation:** scalar multiplication by $kn\pm1$ is the identity or negation, respectively
+**Motivation:** scalar multiplication by $kn\pm1$ is the identity or negation, respectively; it can be seen as a generalization of https://link.springer.com/content/pdf/10.1007%2F11761679_1.pdf
 
 **Distribution:** unknown, probably reducible to the distribution of factors of random numbers using Sato-Tate
 
