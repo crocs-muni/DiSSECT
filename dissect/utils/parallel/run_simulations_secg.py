@@ -5,9 +5,9 @@ import logging
 import os
 from sage.all import ZZ
 from job_manager.manager import ParallelRunner, Task, TaskResult
-from x962.simulations_x962 import increment_seed
+from secg.simulations_secg import increment_seed
 
-STANDARD = 'x962'
+STANDARD = 'secg'
 RESULTS_DIR = os.path.join('results', STANDARD)
 CONFIG_PATH =os.path.join(STANDARD,"parameters_"+STANDARD+".json")
 WRAPPER_PATH = os.path.join(STANDARD,"simulations_"+STANDARD+"_wrapper.py")
@@ -27,7 +27,7 @@ def get_file_name(params, resdir=None):
     return fname if resdir is None else os.path.join(resdir, fname)
 
 
-def load_x962_parameters(
+def load_secg_parameters(
     config_path, num_bits, total_count, count, offset, resdir=None
 ):
     with open(config_path, "r") as f:
@@ -98,7 +98,7 @@ def main():
         The function also has an access to `pr` so it can adapt to job already being done.
         The function can also store its own state.
         """
-        for p in load_x962_parameters(
+        for p in load_secg_parameters(
             args.configpath,
             args.bits,
             args.total_count,
@@ -129,6 +129,8 @@ def main():
             "Task %s finished, code: %s, fails: %s"
             % (r.job.idx, r.ret_code, r.job.failed_attempts)
         )
+        with open('error', 'w') as f:
+            f.write(str(r.stderr))
         if r.ret_code != 0 and r.job.failed_attempts < 3:
             pr.enqueue(r.job)
 

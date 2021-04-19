@@ -6,8 +6,13 @@ import os
 
 from sage.all import ZZ
 
-from dissect.utils.parallel.job_manager.manager import ParallelRunner, Task, TaskResult
-from dissect.utils.parallel.brainpool.simulations_brainpool import update_seed
+from job_manager.manager import ParallelRunner, Task, TaskResult
+from brainpool.brainpool import update_seed
+
+STANDARD = 'brainpool'
+RESULTS_DIR = os.path.join('results', STANDARD)
+CONFIG_PATH = os.path.join(STANDARD, "parameters_" + STANDARD + ".json")
+WRAPPER_PATH = os.path.join(STANDARD, "simulations_" + STANDARD + "_wrapper.py")
 
 try:
     import coloredlogs
@@ -25,7 +30,7 @@ def get_file_name(params, resdir=None):
 
 
 def load_brainpool_parameters(
-    config_path, num_bits, total_count, count, offset, resdir=None
+        config_path, num_bits, total_count, count, offset, resdir=None
 ):
     with open(config_path, "r") as f:
         params = json.load(f)
@@ -54,7 +59,7 @@ def main():
     parser.add_argument(
         "--tasks", type=int, default=10, help="Number of tasks to run in parallel"
     )
-    parser.add_argument("-s", "--sage", default="sage", help="Path to the sage")
+    parser.add_argument("-s", "--sage", default="python3", help="Path to the sage")
     parser.add_argument("-c", "--count", type=int, default=16, help="")
     parser.add_argument(
         "-t", "--totalcount", dest="total_count", type=int, default=32, help=""
@@ -64,11 +69,11 @@ def main():
     parser.add_argument(
         "--resdir",
         dest="resdir",
-        default=os.path.join("./results/brainpool", str(parser.parse_args().bits)),
+        default=os.path.join(RESULTS_DIR, str(parser.parse_args().bits)),
         help="Where to store experiment results",
     )
     parser.add_argument(
-        "-p", "--configpath", default="brainpool/parameters_brainpool.json", help=""
+        "-p", "--configpath", default=CONFIG_PATH, help=""
     )
     args = parser.parse_args()
     print(args)
@@ -76,7 +81,7 @@ def main():
     os.makedirs(args.resdir, exist_ok=True)  # make sure resdir exists
 
     script_path = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
-    wrapper_path = os.path.join(script_path, "brainpool/simulations_brainpool_wrapper.py")
+    wrapper_path = os.path.join(script_path, WRAPPER_PATH)
 
     pr = ParallelRunner()
     pr.parallel_tasks = args.tasks
@@ -96,12 +101,12 @@ def main():
         The function can also store its own state.
         """
         for p in load_brainpool_parameters(
-            args.configpath,
-            args.bits,
-            args.total_count,
-            args.count,
-            args.offset,
-            args.resdir,
+                args.configpath,
+                args.bits,
+                args.total_count,
+                args.count,
+                args.offset,
+                args.resdir,
         ):
             cli = " ".join(["--%s=%s" % (k, p[k]) for k in p.keys()])
             t = Task(args.sage, "%s %s" % (wrapper_path, cli))
@@ -126,6 +131,8 @@ def main():
             "Task %s finished, code: %s, fails: %s"
             % (r.job.idx, r.ret_code, r.job.failed_attempts)
         )
+        with open('error', 'w') as f:
+            f.write(str(r.stderr))
         if r.ret_code != 0 and r.job.failed_attempts < 3:
             pr.enqueue(r.job)
 
