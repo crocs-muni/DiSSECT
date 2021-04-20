@@ -131,8 +131,6 @@ def main():
             "Task %s finished, code: %s, fails: %s"
             % (r.job.idx, r.ret_code, r.job.failed_attempts)
         )
-        with open('error', 'w') as f:
-            f.write(str(r.stderr))
         if r.ret_code != 0 and r.job.failed_attempts < 3:
             pr.enqueue(r.job)
 
