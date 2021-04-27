@@ -89,7 +89,7 @@ def consumer(identifier, database, trait, queue, lock):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Welcome to Curve analyzer! It allows you to run traits on a selected subset of standard or "
+        description="Welcome to DiSSECT! It allows you to run traits on a selected subset of standard or "
         "simulated curves."
     )
     requiredNamed = parser.add_argument_group("required named arguments")
