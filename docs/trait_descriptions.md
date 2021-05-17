@@ -128,6 +128,18 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Distribution:** Except for finite number of cases there should be only 2 or 0 roots (equally distributed).
 
+### a29
+
+**Input:** elliptic curve $E/\mathbb{F}_{p}:y^2=x^3+ax+b$
+
+**Output:** Torsion order of $E'(\mathbb{Q})$ where $E'$ is is given by the same equation $y^2=x^3+ax+b$
+
+**Motivation:** Inspired by the lifting of ECDLP to curve over $\mathbb{Q}$.
+
+**Distribution:** Mazur's theorem states that the order is bounded by 16. 
+
+
+
 
 ### i04
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, integer $k$

@@ -1,0 +1,17 @@
+{
+  "secp112r2": {
+    "{}": {
+      "Q_torsion": 1
+    }
+  },
+  "bn158": {
+    "{}": {
+      "Q_torsion": 1
+    }
+  },
+  "brainpoolP160r1": {
+    "{}": {
+      "Q_torsion": 1
+    }
+  }
+}

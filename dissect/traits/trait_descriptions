@@ -20,5 +20,6 @@
   "i12": "exceptional points w.r.t. given formulas",
   "s01": "todo",
   "a28": "Number of j-invariants adjacent to the curve by l-isogeny",
-  "a08": "Upper and lower bound for the class number of the endomorphism algebra"
+  "a08": "Upper and lower bound for the class number of the endomorphism algebra",
+  "a29": "Torsion order of the lift of E to Q"
 }

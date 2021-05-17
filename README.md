@@ -55,6 +55,8 @@ jobs, run `./run_traits.py -n a05 -c std -v -b 192 -a 1 2 -t 3 -j 100`.
 
 |a28     | Number of j-invariants adjacent to the curve by l-isogeny  |:white_check_mark:|:x:| medium | low
 
+|a29     |Torsion order of the lift of E to curve over Q                          |:white_check_mark:|:x:|low | low 
+
 |i04      | number of points with low Hamming weight                                          | :white_check_mark: | :white_check_mark: | medium       | low
 |i06      | square parts of $`4q-1`$ and $`4n-1`$                                             | :white_check_mark: | :white_check_mark: | low          | low
 |i07      | distance of $`n`$ from the nearest power of two and multiple of 32/64             | :white_check_mark: | :white_check_mark: | low          | low
