@@ -3,8 +3,8 @@ from typing import List
 TRAIT_INFO = {}
 
 TRAIT_INFO["a01"] = {
-    "description": "Group structure of the curve in field extensions",
-    "motivation": "The group structure is not an isogeny invariant",
+    "description": "The smith normal form of the group in an extension field, i.e. $(n_1,n_2)$ where $n_1$ divides $n_2$",
+    "motivation": "The group structure is not an isogeny invariant.",
     "input": {
         "r": (int, "Integer $r$")
     },
@@ -15,30 +15,30 @@ TRAIT_INFO["a01"] = {
 }
 
 TRAIT_INFO["a02"] = {
-    "description": "Factorization of the CM discriminant",
-    "motivation": "A large square factor of D has interesting implications",
+    "description": "Factorization of the discriminant of the Frobenius polynomial, i.e. factorization of  $t^2-4p=v^2d_K$, where $t$ is the trace of Frobenius, $v$ is the maximal conductor and $d_K$ is the CM discriminant.",
+    "motivation": "A large conductor has interesting implications",
     "input": {},
     "output": {
-        "cm_disc": (int, "Discriminant"),
-        "factorization": (List[int], "Factorization of $D = t^2-4p = v^2d_K$, where $t$ is the trace of Frobenius of E and $d_K$ is the discriminant of the endomorphism algebra of $E$"),
-        "max_conductor": (int, "Max conductor")
+        "cm_disc": (int, "CM discriminant"),
+        "factorization": (List[int], "Factorization of $D = t^2-4p$"),
+        "max_conductor": (int, "Maximal conductor $v$")
     }
 }
 
 TRAIT_INFO["a03"] = {
-    "description": "Factorization of the quadratic twist cardinality",
+    "description": "Factorization of the quadratic twist cardinality in an extension, i.e. $\#E(\mathbb{F}_{p^d})$",
     "motivation": "Smooth cardinality of a quadratic twist might allow attacks on some implementations",
     "input": {
-        "deg": (int, "Integer")
+        "deg": (int, "Degree of extension")
     },
     "output": {
-        "twist_cardinality": (int, "Twist Cardinality"),
-        "factorization": (List[int], "The factorization of the cardinality of the quadratic twist of $E(\mathbb{F}_{p^r})$")
+        "twist_cardinality": (int, "Twist cardinality"),
+        "factorization": (List[int], "Factorization of the cardinality")
     }
 }
 
 TRAIT_INFO["a04"] = {
-    "description": "Factorization of $kn \pm 1$ where $n$ is the order of $E/F_p$",
+    "description": "Factorization of $kn \pm 1$ where $n$ is the cardinality of the curve",
     "motivation": "Scalar multiplication by $kn \pm 1$ is the identity or negation, respectively; it can be seen as a generalization of https://link.springer.com/content/pdf/10.1007%2F11761679_1.pdf",
     "input": {
         "k": (int, "Integer")
@@ -52,7 +52,7 @@ TRAIT_INFO["a04"] = {
 }
 
 TRAIT_INFO["a05"] = {
-    "description": "Field extensions containing nontrivial/full l-torsion",
+    "description": "Degrees of field extensions containing the least nontrivial $l$-torsion, the full $l$-torsion and their relative degree of extension.",
     "motivation": "Low $k_1, k_2$ might lead to computable pairings",
     "input": {
         "l": (int, "$l$-torsion")
@@ -65,8 +65,8 @@ TRAIT_INFO["a05"] = {
 }
 
 TRAIT_INFO["a06"] = {
-    "description": "Factorization of ratios of CM discriminants in extension fields and base fields",
-    "motivation": "The prime factors of $D_r/D_1$ determine for which $l$ does the $l$-crater of E grow in the $r$-th extension",
+    "description": "Factorization of ratio of the maximal conductors of cm-field over an extension and over a basefield.",
+    "motivation": "The prime factors of the ratio determine for which $l$ does the $l$-crater of the curve grows in the given extension",
     "input": {
         "deg": (int, "Integer")
     },
@@ -77,7 +77,7 @@ TRAIT_INFO["a06"] = {
 }
 
 TRAIT_INFO["a07"] = {
-    "description": "Embedding degree",
+    "description": "The complement of the embedding degree, i.e. $(n-1)/e$ where $n$ is the prime-subgroup order and $e$ is the embedding degree.",
     "motivation": "Low embedding degrees might allow the MOV attack",
     "input": {},
     "output": {
@@ -87,7 +87,7 @@ TRAIT_INFO["a07"] = {
 }
 
 TRAIT_INFO["a08"] = {
-    "description": "Upper and lower bound for the class number of the endomorphism algebra",
+    "description": "Upper and lower bound for the class number of the cm-field.",
     "motivation": "The class number is a classical invariant",
     "input": {},
     "output": {
@@ -97,8 +97,8 @@ TRAIT_INFO["a08"] = {
 }
 
 TRAIT_INFO["a12"] = {
-    "description": "Multiplicative orders of small primes modulo $n$",
-    "motivation": "Small $m$ might have implications for scalar multiplication",
+    "description": "Multiplicative orders of small primes modulo the prime-subgroup order",
+    "motivation": "Small orders might have implications for scalar multiplication",
     "input": {
         "l": (int, "Small prime")
     },
@@ -121,7 +121,7 @@ TRAIT_INFO["a22"] = {
 }
 
 TRAIT_INFO["a23"] = {
-    "description": "Volcano depth and crater degree in the l-isogeny graph",
+    "description": "Volcano depth and crater degree of the l-isogeny graph",
     "motivation": "The volcano structure might be relevant for cryptanalysis",
     "input": {
         "l": (int, "Prime")
@@ -133,7 +133,7 @@ TRAIT_INFO["a23"] = {
 }
 
 TRAIT_INFO["a24"] = {
-    "description": "Field extensions containing nontrivial/full number of l-isogenies",
+    "description": "The least field extensions containing a nontrivial number amd full number of l-isogenies and their relative ratio.",
     "motivation": "This is loosely related to a05 and a06",
     "input": {
         "l": (int, "Prime")
@@ -146,7 +146,7 @@ TRAIT_INFO["a24"] = {
 }
 
 TRAIT_INFO["a25"] = {
-    "description": "Trace in field extensions and its factorization",
+    "description": "Factorization of trace in field extensions",
     "motivation": "Loosely speaking, this somehow measures the \"extent of supersingularity\" (if we regard it as a spectrum)",
     "input": {
         "deg": (int, "Integer")
@@ -159,13 +159,13 @@ TRAIT_INFO["a25"] = {
 }
 
 TRAIT_INFO["i04"] = {
-    "description": "Number of points with low Hamming weight",
+    "description": "Number of points with low Hamming weight of the x-coordinate and the expected weight.",
     "motivation": "Might be relevant for faulty RNG",
     "input": {
         "weight": (int, "Integer")
     },
     "output": {
-        "x_coord_count": (int, "X coordinate count"),
+        "x_coord_count": (int, "X coordinate weight"),
         "expected": (int, "Expected"),
         "ratio": (float, "Ratio")
     }
@@ -194,14 +194,14 @@ TRAIT_INFO["i07"] = {
 }
 
 TRAIT_INFO["i08"] = {
-    "description": "Bit length of small inverted generator multiples",
-    "motivation": "The strange behaviour of secp224k1 and secp256k1 for k=2",
+    "description": "Bitlength of the x-coordinate of small inverted generator scalar multiples, i.e. x-coordinate of $P$ where $kP=G$. The difference and ratio to the bitlength of the whole group is also considered.",
+    "motivation": "The strange behaviour of secp224k1 and secp256k1 for the scalar $k=2$",
     "input": {
         "k": (int, "Integer")
     },
     "output": {
-        "Hx": (int, "X"),
-        "bits": (int, "Bits"),
+        "Hx": (int, "x-coordinate"),
+        "bits": (int, "Bitlength of x"),
         "difference": (int, "Difference"),
         "ratio": (float, "Ratio")
     }
@@ -245,24 +245,14 @@ TRAIT_INFO["i12"] = {
     }
 }
 
-TRAIT_INFO["s01"] = {
-    "description": "TODO",
-    "motivation": "TODO",
-    "input": {},
-    "output": {
-        "histogram": (List[int], "Histogram"),
-        "value": (str, "Value"),
-    }
-}
-
 TRAIT_INFO["a28"] = {
-    "description": "Number of $j$-invariants adjacent to the curve by $l$-isogeny",
-    "motivation": "These roots correspond to $l$-isogenous curves",
+    "description": "Number of $j$-invariants adjacent to the curve by $l$-isogeny. This is the degree of the point in the $l$-isogeny graph.",
+    "motivation": "The volcano structure might be relevant for cryptanalysis.",
     "input": {
         "l": (int, "Small prime")
     },
     "output": {
-        "len": (int, "Length")
+        "len": (int, "Number of adjacent curves")
     }
 }
 
