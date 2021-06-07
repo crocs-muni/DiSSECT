@@ -202,3 +202,14 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Distribution:** unknown
 
+
+
+### i13
+
+**Input:** elliptic curve $E/\mathbb{F}_{p}:y^2=x^3+ax+b$
+
+**Output:** $r = \frac{a^3}{b^2}$
+
+**Motivation:** The value $r$ is used for generation of curves in various standards including x962, FIPS, SECG etc.
+
+**Distribution:** Uniform

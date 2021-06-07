@@ -137,10 +137,6 @@
       "formula_file"
     ]
   },
-  "s01": {
-    "params_global": {},
-    "params_local_names": []
-  },
   "a28": {
     "params_global": {
       "l_range": "prime_range(7)"
@@ -154,6 +150,10 @@
     "params_local_names": []
   },
   "a29": {
+    "params_global": {},
+    "params_local_names": []
+  },
+  "i13": {
     "params_global": {},
     "params_local_names": []
   }

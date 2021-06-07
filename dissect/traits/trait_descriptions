@@ -18,8 +18,8 @@
   "i10": "points satisfying ZVP conditions",
   "i11": "points satisfying ZVP independently of the multiple",
   "i12": "exceptional points w.r.t. given formulas",
-  "s01": "todo",
   "a28": "Number of j-invariants adjacent to the curve by l-isogeny",
   "a08": "Upper and lower bound for the class number of the endomorphism algebra",
-  "a29": "Torsion order of the lift of E to Q"
+  "a29": "Torsion order of the lift of E to Q",
+  "i13": "Computation of a^3/b^2 which is used for generation of curves in x962, secg, fips etc."
 }

@@ -61,6 +61,7 @@ jobs, run `./run_traits.py -n a05 -c std -v -b 192 -a 1 2 -t 3 -j 100`.
 |i10      | points satisfying ZVP conditions                                                  | :white_check_mark: | :white_check_mark: | medium       | extreme
 |i11      | points satisfying ZVP independently of the multiple                               | :white_check_mark: | :white_check_mark: | medium       | low
 |i12      | exceptional points w.r.t. given formulas                                          | :white_check_mark: | :white_check_mark: | medium       | medium
+|i12      | exceptional points w.r.t. given formulas                                          | :x: | :x: | low       | low
 
 Notation: $`n`$ is the curve order, $`q`$ is the order of the base field  
 \* on sim and std curves with at most 256 bits and cofactor 1    
@@ -71,20 +72,20 @@ Notation: $`n`$ is the curve order, $`q`$ is the order of the base field
 
 | name    | description                                                                       | fully specified        
 |:-------:| ----------------------------------------------------------------------------------|:------------------:
-a09       | existence of pairing-friendly cycles                                              | :x: 
-a10       | existence of factorization bases                                                  | :x: 
-a11       | minimal codewords in elliptic codes                                               | :x: 
-a13       | images of points under pairings                                                   | :x: 
-a14       | conductor and modularity                                                          | :x: 
-a15       | the lattice associated to the curve over $`C`$                                    | :x: 
-a16       | the Neron model                                                                   | :x: 
-a17       | the L-series                                                                      | :x: 
-a18       | the invariant differential                                                        | :x: 
-a19       | local heights                                                                     | :x: 
-a20       | $`S`$-integral points                                                             | :x: 
+a09       | existence of pairing-friendly cycles                                              | :x:
+a10       | existence of factorization bases                                                  | :x:
+a11       | minimal codewords in elliptic codes                                               | :x:
+a13       | images of points under pairings                                                   | :x:
+a14       | conductor and modularity                                                          | :x:
+a15       | the lattice associated to the curve over $`C`$                                    | :x:
+a16       | the Neron model                                                                   | :x:
+a17       | the L-series                                                                      | :x:
+a18       | the invariant differential                                                        | :x:
+a19       | local heights                                                                     | :x:
+a20       | $`S`$-integral points                                                             | :x:
 a21       | Galois groups of various polynomials                                              | :x:
-a26       | lifts of curves to other fields                                                   | :x: 
-a27       | distribution and sizes of isogeny classes                                         | :x: 
+a26       | lifts of curves to other fields                                                   | :x:
+a27       | distribution and sizes of isogeny classes                                         | :x:
 i01       | curves under parameter bitflips                                                   | :x:
 i02       | curves with the same $`j`$-invariant/group order, but different $`q`$             | :x:
 i03       | the number of modular reductions in various computations                          | :x:
