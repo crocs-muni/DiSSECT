@@ -17,6 +17,7 @@ DiSSECT is written in Python 3 and imports the SageMath library. The database of
 - Vladimír Sedláček
 - Vojtěch Suchánek
 - Antonín Dufka
+
 Thanks to Ján Jančár for help with the curve database and CRoCS members for fruitful discussions. Computational resources were supplied by the project "e-Infrastruktura CZ" (e-INFRA LM2018140) provided within the program Projects of Large Research, Development and Innovations Infrastructures.
 
 # Setup
