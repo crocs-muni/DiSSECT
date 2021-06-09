@@ -6,7 +6,21 @@
 [![traits](https://badgen.net/badge/traits/13/blue)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/tree/master/curve_analyzer/traits)
 [![curves](https://badgen.net/badge/curves/160%20std,%20217188%20sim?list=|)](https://github.com/J08nY/std-curves)
 
+
+
+DiSSECT is, to the best of our knowledge, the largest publicly available database of standardized elliptic curves (taken from our [sister project](https://neuromancer.sk/std/)) and offers generation of simulated curves according to the mentioned standards. The tool contains over 20 tests (which we call traits), each computing curve properties, ranging from classical algebraic ones to unconventional ones and those connected to implementations. After obtaining their empirical distributions, the traits allow us to compare the simulated curves to the standard ones. Finally, DiSSECT provides an easy-to-use interface for implementations of custom traits and their interactive visualization via Jupyter notebook. 
+
+DiSSECT is written in Python 3 and imports the SageMath library. The database of the standardized elliptic curves as well as the simulated ones with the results of the traits, including the visualization, can be found at https://dissect.crocs.fi.muni.cz/. DiSSECT is open-source and we welcome any collaborators who have an idea for a new trait, new simulation method, or just want to contribute in another way.
+
+### Authors
+
+- Vladimír Sedláček
+- Vojtěch Suchánek
+- Antonín Dufka
+Thanks to Ján Jančár for help with the curve database and CRoCS members for fruitful discussions. Computational resources were supplied by the project "e-Infrastruktura CZ" (e-INFRA LM2018140) provided within the program Projects of Large Research, Development and Innovations Infrastructures.
+
 # Setup
+
 **Using virtual environment**:
 
 - Clone with  ```git clone --recurse-submodules https://gitlab.fi.muni.cz/x408178/DiSSECT.git```
