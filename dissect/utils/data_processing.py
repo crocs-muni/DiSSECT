@@ -7,9 +7,6 @@ from sage.all import RR, ZZ
 import dissect.utils.database_handler as database
 from dissect.definitions import STD_CURVE_DICT, ALL_CURVE_COUNT
 
-db = None
-
-
 class Modifier:
     """a class of lambda functions for easier modifications if visualised values"""
 
@@ -38,9 +35,8 @@ class Modifier:
 
 
 def load_trait(
-        trait: str, params: Dict[str, Any] = None, curve: str = None
+        trait: str, params: Dict[str, Any] = None, curve: str = None, db = None
 ) -> pd.DataFrame:
-    global db
     if not db:
         db = database.connect()
 
@@ -48,8 +44,7 @@ def load_trait(
     return pd.DataFrame(trait_results).convert_dtypes()
 
 
-def load_curves(filters: Any = {}) -> pd.DataFrame:
-    global db
+def load_curves(filters: Any = {}, db=None) -> pd.DataFrame:
     if not db:
         db = database.connect()
 
@@ -73,9 +68,9 @@ def load_curves(filters: Any = {}) -> pd.DataFrame:
     return df
 
 
-def get_trait_df(curves, trait_name):
+def get_trait_df(curves, trait_name, db=None):
     # load all results for the given trait
-    df_trait = load_trait(trait_name)
+    df_trait = load_trait(trait_name, db=db)
     # join curve metadata to trait results
     df_trait = curves.merge(df_trait, "right", "curve")
     return df_trait
