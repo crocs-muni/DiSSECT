@@ -76,7 +76,7 @@ jobs, run `./run_traits.py -n a05 -c std -v -b 192 -a 1 2 -t 3 -j 100`.
 |i10      | points satisfying ZVP conditions                                                  | :white_check_mark: | :white_check_mark: | medium       | extreme
 |i11      | points satisfying ZVP independently of the multiple                               | :white_check_mark: | :white_check_mark: | medium       | low
 |i12      | exceptional points w.r.t. given formulas                                          | :white_check_mark: | :white_check_mark: | medium       | medium
-|i13      | a^3/b^2, i.e. value used in x962, fips,secg                                          | :x: | :x: | low       | low
+|i13      | a^3/b^2, i.e. value used in x962, fips,secg                                       | :white_check_mark: | :x:                | low          | low
 
 Notation: $`n`$ is the curve order, $`q`$ is the order of the base field  
 \* on sim and std curves with at most 256 bits and cofactor 1    
