@@ -7,26 +7,8 @@ from setuptools import setup, find_packages
 
 from dissect.definitions import TRAIT_PATH
 
-install_requires = [
-    'sage>=9.0',
-    'pathlib',
-    'pytz',
-    'sarge',
-    'psutil',
-    'pid>=2.0.1',
-    'coloredlogs',
-    'shellescape',
-    'pymongo',
-    'pandas',
-    'ipywidgets',
-    'IPython',
-    'matplotlib',
-    'autopep8',
-    'tqdm',
-    'console-menu',
-    'python-dateutil>=2.7.3',
-    'numpy>=1.16.5'
-]
+with open('requirements.txt') as f:
+    install_requires = f.read().splitlines()
 
 setup(name='DiSSECT',
       version='0.3',
