@@ -245,6 +245,15 @@ TRAIT_INFO["i12"] = {
     }
 }
 
+TRAIT_INFO["i13"] = {
+    "description": "Computation of $a^3/b^2$",
+    "motivation": "Value used in several standards",
+    "input": {},
+    "output": {
+        "r": (int, "Integer r")
+    }
+}
+
 TRAIT_INFO["a28"] = {
     "description": "Number of $j$-invariants adjacent to the curve by $l$-isogeny. This is the degree of the point in the $l$-isogeny graph.",
     "motivation": "The volcano structure might be relevant for cryptanalysis.",
