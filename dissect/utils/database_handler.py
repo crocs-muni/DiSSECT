@@ -221,7 +221,7 @@ def _flatten_trait_result_rec(
 
 
 def _decode_ints(source: Any) -> Any:
-    if isinstance(source, str) and source[:2] == "0x":
+    if isinstance(source, str) and (source[:2] == "0x" or source[:3] == "-0x"):
         return int(source, base=16)
     if isinstance(source, dict):
         for key, value in source.items():
