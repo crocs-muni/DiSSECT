@@ -45,12 +45,13 @@ def get_trait_function(trait):
 
 
 def producer(database, trait, args, queue, lock):
-    create_trait_index(connect(database), trait)
+    db = connect(database)
+    create_trait_index(db, trait)
 
     with lock:
         print("Producer starting ...")
 
-    curves = get_curves(database, filters=args)
+    curves = get_curves(db, filters=args)
     for curve in curves:
         for params in params_range(trait):
             # TODO check if curve is not mutated ~ if it can be safely passed into the queue

@@ -24,8 +24,8 @@ def normalized_barplot(
     df2[feature] = df2[feature].apply(modifier)
 
     # classify entries and count them
-    std = df2[df2["simulated"] == False]
-    sim = df2[df2["simulated"] == True]
+    std = df2[df2["standard"] == True]
+    sim = df2[df2["standard"] == False]
     if len(df2) == 0:
         return
     df2_counts = df2[feature].value_counts() / len(df2)

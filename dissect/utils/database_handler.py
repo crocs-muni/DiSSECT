@@ -24,6 +24,61 @@ def create_curves_index(db: Database) -> None:
 def create_trait_index(db: Database, trait: str) -> None:
     db[f"trait_{trait}"].create_index([("curve", 1), ("params", 1)], unique=True)
 
+def _format_curve(curve):
+    c = dict()
+    c["name"] = curve["name"]
+    c["category"] = curve["category"]
+    if curve.get("aliases"):
+        c["aliases"] = curve["aliases"]
+    if curve.get("oid"):
+        c["oid"] = curve["oid"]
+    if curve.get("desc"):
+        c["desc"] = curve["desc"]
+    c["form"] = curve["form"]
+    c["field"] = curve["field"]
+    c["params"] = curve["params"]
+    try:
+        if (curve["generator"]["x"]["raw"] or curve["generator"]["x"]["poly"]) and (curve["generator"]["y"]["raw"] or curve["generator"]["y"]["poly"]):
+            c["generator"] = curve["generator"]
+    except:
+        pass
+
+    if isinstance(curve["order"], int):
+        c["order"] = hex(curve["order"])
+    elif isinstance(curve["order"], str): # Workaround for std database
+        c["order"] = hex(int(curve["order"], base=16))
+
+    if isinstance(curve["cofactor"], int):
+        c["cofactor"] = hex(curve["cofactor"])
+    elif isinstance(curve["cofactor"], str): # Workaround for std database
+        c["cofactor"] = hex(int(curve["cofactor"], base=16))
+
+    c["standard"] = False if "sim" in curve["category"] else True
+
+    if curve.get("simulation"):
+        sim = curve["simulation"]
+    else:
+        sim = {}
+        if "seed" in curve and curve["seed"]:
+            sim["seed"] = hex(int(curve["seed"], base=16))
+        elif "characteristics" in curve and "seed" in curve["characteristics"] and curve["characteristics"]["seed"]:
+            sim["seed"] = hex(int(curve["characteristics"]["seed"], base=16))
+
+    if sim:
+        c["simulation"] = sim
+
+
+    if curve.get("properties"):
+        properties = curve["properties"]
+    else:
+        properties = {}
+
+    if properties:
+        c["properties"] = properties
+
+    return c
+
+
 
 def upload_curves(db: Database, path: str) -> Tuple[int, int]:
     try:
@@ -37,24 +92,10 @@ def upload_curves(db: Database, path: str) -> Tuple[int, int]:
     except Exception:  # invalid format
         return 0, 0
 
-    for curve in curves:
-        curve["simulated"] = True if "sim" in curve["category"] else False
-        if isinstance(curve["order"], int):
-            curve["order"] = hex(curve["order"])
-        # unify hex representation
-        elif isinstance(curve["order"], str):
-            curve["order"] = hex(int(curve["order"], base=16))
-
-        if isinstance(curve["cofactor"], int):
-            curve["cofactor"] = hex(curve["cofactor"])
-        # unify hex representation
-        elif isinstance(curve["cofactor"], str):
-            curve["cofactor"] = hex(int(curve["cofactor"], base=16))
-
     success = 0
     for curve in curves:
         try:
-            if db["curves"].insert_one(curve):
+            if db["curves"].insert_one(_format_curve(curve)):
                 success += 1
         except DuplicateKeyError:
             pass
@@ -96,11 +137,11 @@ def get_curves(
     # Curve type filter
     if hasattr(filters, "curve_type"):
         if filters.curve_type == "sim":
-            curve_filter["simulated"] = True
+            curve_filter["standard"] = False
         elif filters.curve_type == "std":
-            curve_filter["simulated"] = False
+            curve_filter["standard"] = True
         elif filters.curve_type == "sample":
-            curve_filter["simulated"] = False
+            curve_filter["standard"] = True
             curve_filter["name"] = {"$in": ["secp112r1", "secp192r1", "secp256r1"]}
         elif filters.curve_type != "all":
             curve_filter["name"] = filters.curve_type

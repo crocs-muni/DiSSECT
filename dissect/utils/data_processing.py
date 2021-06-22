@@ -55,7 +55,7 @@ def load_curves(source: str) -> pd.DataFrame:
     def project(record: Dict[str, Any]):
         projection = {}
         projection["curve"] = record["name"]
-        projection["simulated"] = record["simulated"]
+        projection["standard"] = record["standard"]
         projection["bitlength"] = int(record["field"]["bits"])
         projection["field"] = record["field"]["type"]
         projection["cofactor"] = (
@@ -107,13 +107,13 @@ def filter_df(df, choices):
         allowed_curves += STD_CURVE_DICT.get(source, [])
 
     if "sim" not in choices["source"]:
-        df = df[df.simulated == False]
+        df = df[df.standard == True]
 
     if "std" not in choices["source"]:
-        df = df[df.curve.isin(allowed_curves) | (df.simulated == True)]
+        df = df[df.curve.isin(allowed_curves) | (df.standard == False)]
 
     df = df[df.field.isin(choices["field"])]
-    filtered = filter_choices(choices, ["source", "field","Feature:", "Modifier:"])
+    filtered = filter_choices(choices, ["source", "field", "Feature:", "Modifier:"])
 
     for key, value in filtered.items():
         options = list(map(int, value))

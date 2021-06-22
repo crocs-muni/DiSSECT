@@ -195,7 +195,7 @@ def get_trait_features(trait_name, trait_df):
         feature
         for feature in trait_df.columns
         if feature
-           not in ["curve", "simulated", "bitlength", "cofactor","field"]
+           not in ["curve", "standard", "bitlength", "cofactor","field"]
            + list(get_trait_params_dict(trait_name).keys())
     ]
 

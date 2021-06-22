@@ -63,19 +63,23 @@ class CustomCurve:
         self.field_desc = db_curve["field"]
         self.form = db_curve["form"]
         self.params = db_curve["params"]
-        self.desc = db_curve["desc"]
         self.cofactor = ZZ(db_curve["cofactor"])
         self.cardinality = self.order * self.cofactor
         self.nbits = self.order.nbits()
-        self.generator_desc = db_curve["generator"]
         self.field = None
         self.EC = None
         self.generator = None
         self.q = None
         self.trace = None
         """the "variable" part of attributes"""
+        if "desc" in db_curve:
+            self.desc = db_curve["desc"]
+        if "generator" in db_curve:
+            self.generator_desc = db_curve["generator"]
+        else:
+            self.generator_desc = None
         try:
-            self.seed = db_curve["seed"]
+            self.seed = db_curve["simulation"]["seed"]
         except KeyError:
             self.seed = None
         try:
