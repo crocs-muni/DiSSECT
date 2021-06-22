@@ -12,7 +12,6 @@ ipywidgets
 IPython
 matplotlib
 autopep8
-tqdm
 console-menu
 python-dateutil>=2.7.3
 numpy>=1.16.5

@@ -1,7 +1,9 @@
 from typing import Dict, Any
+import urllib.request
+import json
+import bz2
 
 import pandas as pd
-from tqdm.contrib import tmap
 
 from sage.all import RR, ZZ
 import dissect.utils.database_handler as database
@@ -35,19 +37,21 @@ class Modifier:
 
 
 def load_trait(
-        trait: str, params: Dict[str, Any] = None, curve: str = None, db = None
-) -> pd.DataFrame:
-    if not db:
-        db = database.connect()
+        source: str, trait: str, params: Dict[str, Any] = None, curve: str = None) -> pd.DataFrame:
+    if source.startswith("mongodb"):
+        trait_results = database.get_trait_results(database.connect(source), trait)
+    elif source.startswith("http"):
+        with urllib.request.urlopen(source + f"dissect.trait_{trait}.json.bz2") as f:
+            trait_results = json.loads(bz2.decompress(f.read()).decode("utf-8"))
+            trait_results = map(database._decode_ints, map(database._flatten_trait_result, trait_results))
+    else:
+        with open(file, "r") as f:
+            trait_results = json.load(f)
 
-    trait_results = database.get_trait_results(db, trait)
     return pd.DataFrame(trait_results).convert_dtypes()
 
 
-def load_curves(filters: Any = {}, db=None) -> pd.DataFrame:
-    if not db:
-        db = database.connect()
-
+def load_curves(source: str) -> pd.DataFrame:
     def project(record: Dict[str, Any]):
         projection = {}
         projection["curve"] = record["name"]
@@ -61,16 +65,22 @@ def load_curves(filters: Any = {}, db=None) -> pd.DataFrame:
         )
         return projection
 
-    curve_records = database.get_curves(db, filters, raw=True)
-    df = pd.DataFrame(
-        tmap(project, curve_records, desc="Loading curves", total=ALL_CURVE_COUNT)
-    ).convert_dtypes()
+    if source.startswith("mongodb"):
+        curve_records = database.get_curves(database.connect(source), dict(), raw=True)
+    elif source.startswith("http"):
+        with urllib.request.urlopen(source + "dissect.curves.json.bz2") as f:
+            curve_records = json.loads(bz2.decompress(f.read()).decode("utf-8"))
+    else:
+        with open(file, "r") as f:
+            curve_records = json.load(f)
+
+    df = pd.DataFrame(map(project, curve_records)).convert_dtypes()
     return df
 
 
-def get_trait_df(curves, trait_name, db=None):
+def get_trait_df(source: str, curves, trait_name):
     # load all results for the given trait
-    df_trait = load_trait(trait_name, db=db)
+    df_trait = load_trait(source, trait_name)
     # join curve metadata to trait results
     df_trait = curves.merge(df_trait, "right", "curve")
     return df_trait
