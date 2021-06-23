@@ -14,17 +14,27 @@ def a02_curve_function(curve: CustomCurve):
     Returns a dictionary (keys: 'cm_disc', 'factorization', 'max_conductor')
     """
     D = ext_disc(curve, deg=1)
-    res = tu.squarefree_and_factorization(D)
-    if isinstance(res, str):
-        return {"cm_disc": res, "factorization": res, "max_conductor": res}
-    d, F = res
-    cm_disc = d
-    if d % 4 != 1:
-        cm_disc *= 4
-    curve_results = {}
-    curve_results["cm_disc"] = cm_disc
-    curve_results["factorization"] = F
-    curve_results["max_conductor"] = ZZ(sqrt(D / cm_disc))
+    if curve.cm_discriminant is not None:
+        cm_disc = curve.cm_discriminant
+        max_conductor = ZZ(sqrt(D / cm_disc))
+        conductor_fact = tu.factorization(max_conductor)
+        if isinstance(conductor_fact, str):
+            return {"cm_disc": conductor_fact, "factorization": conductor_fact, "max_conductor": conductor_fact}
+        cm_fact = tu.factorization(cm_disc)
+        if isinstance(cm_fact, str):
+            return {"cm_disc": conductor_fact, "factorization": conductor_fact, "max_conductor": conductor_fact}
+        F = sorted(conductor_fact+conductor_fact+cm_fact)
+    else:
+        res = tu.squarefree_and_factorization(D)
+        if isinstance(res, str):
+            return {"cm_disc": res, "factorization": res, "max_conductor": res}
+        d, F = res
+        cm_disc = d
+        if d % 4 != 1:
+            cm_disc *= 4
+        max_conductor = ZZ(sqrt(D / cm_disc))
+
+    curve_results = {"cm_disc": cm_disc, "factorization": F, "max_conductor": max_conductor}
     return curve_results
 
 

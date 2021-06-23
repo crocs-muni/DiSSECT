@@ -72,6 +72,36 @@ B1 = CustomCurve(
     }
 )
 
+C1 = CustomCurve({
+    "name": "x962_sim_256_seed_diff_302361",
+    "category": "x962_sim_256",
+    "form": "Weierstrass",
+    "field": {
+        "type": "Prime",
+        "p": "0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff",
+        "bits": 256
+    },
+    "params": {
+        "a": {
+            "raw": "-0x3"
+        },
+        "b": {
+            "raw": "0x226c4993ea4df0010cfc11dbb66cbbfedb0ace35bf1f3020473c4bd94a2e339a"
+        }
+    },
+    "order": "0x333333330000000033333333333333334ae9ac61625e7d64f1938eea1e41a96f",
+    "cofactor": "0x5",
+    "simulation": {
+        "seed": "0xc49d360886e704936a6678e1139d26b7819ae177"
+    },
+    "properties": {
+        "j_invariant": "0x1e4c0d9bbd81cdf4ba3ce44a8842ad0a6af882d2c59cd05a88aa2029a511528e",
+        "trace": "-0x76905de5ebd872f8b7e1ca9297484f2b",
+        "embedding_degree": "0x19999999800000001999999999999999a574d630b12f3eb278c9c7750f20d4b7",
+        "cm_discriminant": "-0x3c9169802457a46aa509f7a93178aed253fa77232a89157b657997522a5546ec3"
+    }
+})
+
 B1_results = {
     "cofactor": 2,
     "a": 1,
@@ -80,6 +110,12 @@ B1_results = {
     "gen_x": 0x02FE13C0537BBC11ACAA07D793DE4E6D5E5C94EEE8,
     "gen_y": 0x0289070FB05D38FF58321F2E800536D538CCDAA3D9,
 }
+
+C1_results = {'j_invariant': 13703759755872812151735812950849952450951590630043982456996394172744381584014,
+              'trace': -157598498730582091775914883381658668843,
+              'embedding_degree': 11579208921035624876269744694940757353024374191402089628730954619224875652279,
+              'cm_discriminant': -438331070039291709857874918580369842723641589116797303447967004994457652457155
+              }
 
 
 class TestCustomCurve(unittest.TestCase):
@@ -118,6 +154,12 @@ class TestCustomCurve(unittest.TestCase):
         self.assertEqual(
             B1.y, B1_results["gen_y"], "Should be " + str(B1_results["gen_y"])
         )
+
+    def test_C1_constructor(self):
+        self.assertEqual(C1.j_invariant, C1_results['j_invariant'])
+        self.assertEqual(C1.trace, C1_results['trace'])
+        self.assertEqual(C1.embedding_degree, C1_results['embedding_degree'])
+        self.assertEqual(C1.cm_discriminant, C1_results['cm_discriminant'])
 
 
 if __name__ == "__main__":

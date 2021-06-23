@@ -2,7 +2,7 @@ from sage.all import ceil, log, sqrt, pi, floor, ln, gcd
 
 from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
-from dissect.traits.trait_utils import squarefree_and_factorization
+import dissect.traits.trait_utils as tu
 
 
 def a08_curve_function(curve: CustomCurve):
@@ -18,14 +18,23 @@ def a08_curve_function(curve: CustomCurve):
     https://mathworld.wolfram.com/ClassNumber.html
 
     """
-    q = curve.q
-    trace = curve.trace
-    D = trace ** 2 - 4 * q
-    d, fact = squarefree_and_factorization(D)
-    fact_d = [f for f in set(fact) if fact.count(f) % 2 == 1]
-    if d % 4 != 1:
-        d *= 4
-        fact_d.append(2)
+    if curve.cm_discriminant is not None:
+        d = curve.cm_discriminant
+        fact_d = tu.factorization(d)
+        if isinstance(fact_d, str):
+            return {"upper": fact_d, "lower": fact_d}
+    else:
+        q = curve.q
+        trace = curve.trace
+        D = trace ** 2 - 4 * q
+        s_a_f = tu.squarefree_and_factorization(D)
+        if isinstance(s_a_f, str):
+            return {"upper": s_a_f, "lower": s_a_f}
+        d, fact = s_a_f
+        fact_d = [f for f in set(fact) if fact.count(f) % 2 == 1]
+        if d % 4 != 1:
+            d *= 4
+            fact_d.append(2)
 
     w = {4: 4, 3: 6}.get(-d, 2)
     upper_bound = ceil(log(-d) * sqrt(-d) * w / (2 * pi))

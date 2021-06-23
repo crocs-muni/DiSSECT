@@ -102,6 +102,12 @@ curve_sec = CustomCurve(
         },
         "order": "0x36df0aafd8b8d7597ca10520d04b",
         "cofactor": "0x04",
+        "properties": {
+        "j_invariant": "0x597e254b44d77100b6eb01a0fecc",
+        "trace": "0x1008df2aa29df60",
+        "embedding_degree": "0x124a58e5483d9d1dd435ac60456e",
+        "cm_discriminant": "-0x9b351dbd00959c5113358ac3078b"
+        },
         "characteristics": {
             "seed": "002757A1114D696E6768756151755316C05E0BD4",
             "discriminant": "3350974381310990100142288157262754",

@@ -12,6 +12,10 @@ def a23_curve_function(curve: CustomCurve, l):
     """
     D = ext_disc(curve, deg=1)
     curve_results = {}
+    if curve.cm_discriminant is not None:
+        curve_results['crater_degree'] = kronecker(curve.cm_discriminant,l)+1
+        curve_results["depth"] = ZZ.valuation(l)(D) // 2
+        return curve_results
     if l != 2:
         curve_results["crater_degree"] = kronecker(D, l) + 1
         curve_results["depth"] = ZZ.valuation(l)(D) // 2

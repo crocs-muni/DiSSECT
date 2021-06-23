@@ -8,7 +8,8 @@ def a07_curve_function(curve: CustomCurve):
     """Computes the embedding degree (with respect to the generator order) and its complement"""
     q = curve.q
     l = curve.order
-    embedding_degree = (Integers(l)(q)).multiplicative_order()
+    embedding_degree = curve.embedding_degree if curve.embedding_degree is not None else (
+        Integers(l)(q)).multiplicative_order()
     embedding_degree_complement = ZZ(euler_phi(l) / embedding_degree)
     complement_bit_length = embedding_degree_complement.nbits()
     curve_results = {

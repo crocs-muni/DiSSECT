@@ -71,6 +71,9 @@ class CustomCurve:
         self.generator = None
         self.q = None
         self.trace = None
+        self.j_invariant = None
+        self.embedding_degree = None
+        self.cm_discriminant = None
         """the "variable" part of attributes"""
         if "desc" in db_curve:
             self.desc = db_curve["desc"]
@@ -88,7 +91,8 @@ class CustomCurve:
         except (TypeError, KeyError):
             self.x = None
             self.y = None
-        self.set()
+        self.curve_form()
+        self.properties(db_curve)
 
     def get_xy(self, extension=False):
         if self.generator_desc is None:
@@ -119,7 +123,7 @@ class CustomCurve:
             else:
                 self.generator = self.EC(x, y)
 
-    def set(self):
+    def curve_form(self):
         if self.form == "Weierstrass":
             if self.field_desc["type"] == "Prime":
                 p = ZZ(self.field_desc["p"])
@@ -182,21 +186,29 @@ class CustomCurve:
         else:
             self.EC = "Not implemented"
 
+    def properties(self, db_curve):
         self.field = self.EC.base_field()
         self.q = self.field.order()
         self.EC.set_order(self.cardinality, num_checks=0)
-        self.trace = self.q + 1 - self.cardinality
+        try:
+            properties = db_curve['properties']
+            self.cm_discriminant = ZZ(properties['cm_discriminant'])
+            self.embedding_degree = ZZ(properties['embedding_degree'])
+            self.j_invariant = ZZ(properties['j_invariant'])
+            self.trace = ZZ(properties['trace'])
+        except KeyError:
+            self.trace = self.q + 1 - self.cardinality
 
     def __repr__(self):
         return (
-            self.name
-            + ": "
-            + str(self.nbits)
-            + "-bit curve in "
-            + self.form
-            + " form over "
-            + self.field_desc["type"]
-            + " field"
+                self.name
+                + ": "
+                + str(self.nbits)
+                + "-bit curve in "
+                + self.form
+                + " form over "
+                + self.field_desc["type"]
+                + " field"
         )
 
     def __str__(self):

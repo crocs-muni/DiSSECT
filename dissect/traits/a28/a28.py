@@ -9,7 +9,8 @@ def a28_curve_function(curve: CustomCurve, l):
     """
     Phi = ClassicalModularPolynomialDatabase()[l]
     x = PolynomialRing(curve.field, "x").gen()
-    f = Phi(curve.EC.j_invariant(), x)
+    j = curve.j_invariant if curve.j_invariant is not None else curve.EC.j_invariant()
+    f = Phi(j, x)
     return {"len": sum([i[1] for i in f.roots()])}
 
 
