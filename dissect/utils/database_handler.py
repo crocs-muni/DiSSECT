@@ -140,14 +140,11 @@ def get_curves(
             curve_filter["standard"] = False
         elif filters.curve_type == "std":
             curve_filter["standard"] = True
-        elif filters.curve_type == "sample":
-            curve_filter["standard"] = True
-            curve_filter["name"] = {"$in": ["secp112r1", "secp192r1", "secp256r1"]}
         elif filters.curve_type != "all":
-            curve_filter["name"] = filters.curve_type
+            curve_filter["category"] = filters.curve_type
 
     # Bit-length filter
-    if hasattr(filters, "order_bound"):
+    if hasattr(filters, "order_bound") and filters.order_bound != 0:
         curve_filter["field.bits"] = {"$lte": filters.order_bound}
 
     # Cofactor filter

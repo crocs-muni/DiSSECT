@@ -107,10 +107,7 @@ def main():
         "--curve_type",
         metavar="curve_type",
         type=str,
-        choices=["std", "sim", "sample", "all"],
-        help="the type of curves or which to compute traits; must be one of the following: std (all standard "
-        "curves), sim (all simulated curves), sample (curves secp112r1, secp192r1, "
-        "secp256r1), all (all curves in the database)",
+        help="curve category: either category name, or \"std\" (all standard curves), \"sim\" (all simulated curves), \"all\" (all curves in the database)",
         required=True,
     )
     parser.add_argument(
@@ -119,8 +116,8 @@ def main():
         action="store",
         type=int,
         metavar="order_bound",
-        default=256,
-        help="upper bound for curve order bitsize (default: 256)",
+        default=0,
+        help="upper bound for curve order bitsize (default: unlimited)",
     )
     parser.add_argument(
         "-a",
