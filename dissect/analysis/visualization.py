@@ -4,6 +4,11 @@ from dissect.analysis.widgets import get_choices
 from ipywidgets import widgets, interact, fixed
 from IPython.display import display
 
+def violin(df, feature):
+    plt.figure(figsize=(12,8), dpi=100, facecolor='w', edgecolor='k')
+    plt.violinplot([df[feature].tolist()])
+    plt.show()
+
 def normalized_barplot(
         ax,
         df,
