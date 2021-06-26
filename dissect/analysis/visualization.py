@@ -1,9 +1,8 @@
 import matplotlib.pyplot as plt
-from dissect.utils.data_processing import get_all, filter_df
-from dissect.visual.widgets import get_choices
+from dissect.analysis.data_processing import get_all, filter_df
+from dissect.analysis.widgets import get_choices
 from ipywidgets import widgets, interact, fixed
 from IPython.display import display
-
 
 def normalized_barplot(
         ax,
