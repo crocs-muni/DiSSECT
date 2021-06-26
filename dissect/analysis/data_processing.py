@@ -4,6 +4,7 @@ import json
 import bz2
 
 import pandas as pd
+from sklearn.neighbors import LocalOutlierFactor
 
 import dissect.utils.database_handler as database
 from dissect.definitions import STD_CURVE_DICT, ALL_CURVE_COUNT
@@ -136,3 +137,11 @@ def get_all(df, choices):
         param_choice[param] = [v]
         results.append((filter_df(df, param_choice), param_choice, feature, modifier, choices["Modifier:"]))
     return results
+
+
+def find_outliers(df, features):
+    lof = LocalOutlierFactor()
+    data = df[features]
+    lof.fit(data)
+    predictions = lof.fit_predict(data)
+    return df[predictions == -1]
