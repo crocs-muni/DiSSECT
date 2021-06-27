@@ -4,10 +4,12 @@ import json
 import bz2
 
 import pandas as pd
+from sklearn.neighbors import LocalOutlierFactor
+from sklearn.preprocessing import MinMaxScaler
 
-from sage.all import RR, ZZ
 import dissect.utils.database_handler as database
 from dissect.definitions import STD_CURVE_DICT, ALL_CURVE_COUNT
+
 
 class Modifier:
     """a class of lambda functions for easier modifications if visualised values"""
@@ -136,3 +138,14 @@ def get_all(df, choices):
         param_choice[param] = [v]
         results.append((filter_df(df, param_choice), param_choice, feature, modifier, choices["Modifier:"]))
     return results
+
+
+def find_outliers(df, features):
+    df = df.copy(deep=True)
+    mms = MinMaxScaler()
+    df[features] = mms.fit_transform(df[features].values)
+    lof = LocalOutlierFactor()
+    data = df[features]
+    lof.fit(data)
+    predictions = lof.fit_predict(data)
+    return df[predictions == -1]

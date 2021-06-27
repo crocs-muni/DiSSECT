@@ -17,22 +17,7 @@ from dissect.utils.database_handler import (
     get_curves,
     create_trait_index,
 )
-
-
-def params_range(trait_name):
-    with open(
-        pathlib.Path(TRAIT_PATH, trait_name, trait_name + ".params"), "r"
-    ) as params_file:
-        params = json.load(params_file)
-
-    params_names = params["params_local_names"]
-    params_ranges = {}
-    for key in params["params_global"].keys():
-        params_ranges[key] = sage_eval(params["params_global"][key])
-
-    for params_values in itertools.product(*params_ranges.values()):
-        # TODO this IMO is not guaranteed to work -> relies on ordering of hashmap
-        yield dict(zip(params_names, params_values))
+from dissect.traits.trait_info import params_iter
 
 
 def get_trait_function(trait):
@@ -53,7 +38,7 @@ def producer(database, trait, args, queue, lock):
 
     curves = get_curves(db, filters=args)
     for curve in curves:
-        for params in params_range(trait):
+        for params in params_iter(trait):
             # TODO check if curve is not mutated ~ if it can be safely passed into the queue
             queue.put((curve, params), block=True)
 

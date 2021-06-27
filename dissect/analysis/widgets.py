@@ -3,8 +3,8 @@ from pathlib import Path
 
 import ipywidgets as widgets
 from IPython.core.display import display
-from dissect.utils.data_processing import Modifier
-from sage.all import sage_eval
+from sage.all import sage_eval, RR, ZZ
+
 
 from dissect.definitions import (
     STD_SOURCES,
@@ -14,6 +14,7 @@ from dissect.definitions import (
 )
 from dissect.definitions import TRAIT_PATH, TRAIT_NAMES
 from dissect.utils.json_handler import load_from_json
+from dissect.analysis.data_processing import Modifier
 
 
 def trait_selection_widget():
