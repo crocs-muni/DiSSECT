@@ -1,4 +1,11 @@
 from typing import List
+import pathlib
+import json
+import itertools
+from dissect.definitions import TRAIT_PATH
+
+from sage.all import sage_eval
+
 
 TRAIT_INFO = {}
 
@@ -26,7 +33,7 @@ TRAIT_INFO["a02"] = {
 }
 
 TRAIT_INFO["a03"] = {
-    "description": "Factorization of the quadratic twist cardinality in an extension, i.e. $\#E(\mathbb{F}_{p^d})$",
+    "description": "Factorization of the quadratic twist cardinality in an extension, i.e. $#E(\\mathbb{F}_{p^d})$",
     "motivation": "Smooth cardinality of a quadratic twist might allow attacks on some implementations",
     "input": {
         "deg": (int, "Degree of extension")
@@ -38,8 +45,8 @@ TRAIT_INFO["a03"] = {
 }
 
 TRAIT_INFO["a04"] = {
-    "description": "Factorization of $kn \pm 1$ where $n$ is the cardinality of the curve",
-    "motivation": "Scalar multiplication by $kn \pm 1$ is the identity or negation, respectively; it can be seen as a generalization of https://link.springer.com/content/pdf/10.1007%2F11761679_1.pdf",
+    "description": "Factorization of $kn \\pm 1$ where $n$ is the cardinality of the curve",
+    "motivation": "Scalar multiplication by $kn \\pm 1$ is the identity or negation, respectively; it can be seen as a generalization of https://link.springer.com/content/pdf/10.1007%2F11761679_1.pdf",
     "input": {
         "k": (int, "Integer")
     },
@@ -172,7 +179,7 @@ TRAIT_INFO["i04"] = {
 }
 
 TRAIT_INFO["i06"] = {
-    "description": "Square parts of $4q \pm 1$ and $4n \pm 1$",
+    "description": "Square parts of $4q \\pm 1$ and $4n \\pm 1$",
     "motivation": "Inspired by the [4p-1 paper](https://crocs.fi.muni.cz/public/papers/Secrypt2019)",
     "input": {},
     "output": {
@@ -267,9 +274,31 @@ TRAIT_INFO["a28"] = {
 
 TRAIT_INFO["a29"] = {
     "description": "Torsion order of the lift of E to Q",
-    "motivation": "Inspired by the lifting of ECDLP to curve over $\mathbb{Q}$.",
+    "motivation": "Inspired by the lifting of ECDLP to curve over $\\mathbb{Q}$.",
     "input": {},
     "output": {
         "Q_torsion": (int, "Q torsion")
     }
 }
+
+def params_iter(trait_name):
+    with open(pathlib.Path(TRAIT_PATH, trait_name, trait_name + ".params"), "r") as params_file:
+        params = json.load(params_file)
+
+    params_names = params["params_local_names"]
+    params_ranges = {}
+    for key in params["params_global"].keys():
+        params_ranges[key] = sage_eval(params["params_global"][key])
+
+    for params_values in itertools.product(*params_ranges.values()):
+        yield dict(zip(params_names, params_values))
+
+
+def numeric_outputs(trait_name):
+    outputs = []
+
+    for output, info in TRAIT_INFO[trait_name]["output"].items():
+        if info[0] == int or info[0] == float:
+            outputs.append(output)
+
+    return outputs

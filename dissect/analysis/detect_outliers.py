@@ -1,38 +1,12 @@
 #!/usr/bin/env python3
 
-import pathlib
-import json
-import itertools
 import pandas as pd
 import argparse
 
-from sage.all import sage_eval
-
 from dissect.definitions import TRAIT_NAMES, TRAIT_PATH
-from dissect.traits.trait_info import TRAIT_INFO
+from dissect.traits.trait_info import TRAIT_INFO, params_iter, numeric_outputs
 import dissect.analysis.data_processing as dp
 
-def params_range(trait_name):
-    with open(pathlib.Path(TRAIT_PATH, trait_name, trait_name + ".params"), "r") as params_file:
-        params = json.load(params_file)
-
-    params_names = params["params_local_names"]
-    params_ranges = {}
-    for key in params["params_global"].keys():
-        params_ranges[key] = sage_eval(params["params_global"][key])
-
-    for params_values in itertools.product(*params_ranges.values()):
-        yield dict(zip(params_names, params_values))
-
-
-def numeric_outputs(trait_name):
-    outputs = []
-
-    for output, info in TRAIT_INFO[trait_name]["output"].items():
-        if info[0] == int or info[0] == float:
-            outputs.append(output)
-
-    return outputs
 
 def main(source, trait_name, bitlength=0, cofactor=0, output="print"):
     curves = dp.load_curves(source)
@@ -49,7 +23,7 @@ def main(source, trait_name, bitlength=0, cofactor=0, output="print"):
 
     outlier_df = pd.DataFrame()
 
-    for params in params_range(trait_name):
+    for params in params_iter(trait_name):
         t = trait
         for param in params:
             t = t[t[param] == params[param]]
