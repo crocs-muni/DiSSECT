@@ -29,10 +29,9 @@ def a04_curve_function(curve: CustomCurve, k):
     Computes factorization of ord*k+1 and ord*k-1 and bit lengths of their largest factors
     Returns a dictionary
     """
-    card = curve.cardinality
+    card = curve.cardinality()
     t = TRAIT_TIMEOUT
-    curve_results = {}
-    curve_results["(+)factorization"] = near_order_factorizations(card, "+", k, t)
+    curve_results = {"(+)factorization": near_order_factorizations(card, "+", k, t)}
     curve_results["(+)largest_factor_bitlen"] = largest_factor_bitlen(
         curve_results["(+)factorization"]
     )

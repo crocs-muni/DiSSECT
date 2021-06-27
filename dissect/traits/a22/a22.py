@@ -11,7 +11,7 @@ def a22_curve_function(curve: CustomCurve, l):
     where b is the number of irreducible polynomials of degree a in the factorization (with multiplicity)
     Returns a dictionary
     """
-    fact = map(lambda x: (x[0].degree(), x[1]), factor(curve.EC.division_polynomial(l)))
+    fact = map(lambda x: (x[0].degree(), x[1]), factor(curve.ec().division_polynomial(l)))
     result = {}
     for deg, ex in fact:
         if deg not in result:

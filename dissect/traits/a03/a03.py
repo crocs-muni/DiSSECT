@@ -8,8 +8,8 @@ TRAIT_TIMEOUT = 30
 
 def a03_curve_function(curve: CustomCurve, deg):
     """Returns the factorization of the cardinality of the quadratic twist of the curve"""
-    tr = tu.ext_trace(curve, deg)
-    card = tu.ext_card(curve, deg)
+    tr = curve.extended_trace(deg)
+    card = curve.extended_cardinality(deg)
     twist_card = card + 2 * tr
     f = tu.factorization(twist_card, timeout_duration=TRAIT_TIMEOUT)
 

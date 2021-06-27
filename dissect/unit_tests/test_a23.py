@@ -3,7 +3,7 @@ import unittest
 
 from dissect.traits.a23.a23 import a23_curve_function
 from dissect.traits.example_curves import curve_names
-from dissect.utils.custom_curve import customize_curve
+from dissect.traits.trait_utils import customize_curve
 from sage.all import EllipticCurve_from_j, GF
 
 

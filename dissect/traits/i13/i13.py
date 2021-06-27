@@ -7,8 +7,9 @@ def i13_curve_function(curve: CustomCurve):
     """
     Computation of r=a^3/b^2 which is used during the generation in x962, secg, fips and others
     """
-    a,b = curve.EC.a4(),curve.EC.a6()
-    return {"r": ZZ((a**3)/(b**2))}
+    a, b = curve.a(), curve.b()
+    return {"r": ZZ(curve.field()((a ** 3) / (b ** 2)))}
+
 
 def compute_i13_results(curve_list, desc="", verbose=False):
     compute_results(curve_list, "i13", i13_curve_function, desc=desc, verbose=verbose)

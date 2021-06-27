@@ -158,7 +158,7 @@ def import_curves(
             single_curve,
             allowed_cofactors,
         ),
-        key=lambda item: item.order,
+        key=lambda item: item.order(),
     )
     if verbose:
         print("")

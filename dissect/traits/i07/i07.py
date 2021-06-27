@@ -8,7 +8,7 @@ DISTANCE_64 = "distance 64"
 
 def i07_curve_function(curve: CustomCurve):
     """Computes the distance of curve cardinality to the nearest power of 2 and to the nearest multiple of 32 and 64"""
-    card = curve.cardinality
+    card = curve.cardinality()
     l = card.nbits() - 1
     u = l + 1
     L = 2 ** l

@@ -12,11 +12,11 @@ from dissect.utils.custom_curve import CustomCurve
 
 def i12_curve_function(curve: CustomCurve, unrolled_formula_file):
     """Tries to compute the variety of exceptional points where the unrolled_formula fails"""
-    field = curve.field
+    field = curve.field()
     curve_results = {"ideal": None, "dimension": None, "variety": None}
 
     if "shortw" in unrolled_formula_file:
-        shortw_a, shortw_b = curve.EC.a4(), curve.EC.a6()
+        shortw_a, shortw_b = curve.a(), curve.b()
         if (
             ("jacobian_0_" in unrolled_formula_file and shortw_a != field(0))
             or ("w12_0_" in unrolled_formula_file and shortw_b != field(0))
@@ -26,18 +26,18 @@ def i12_curve_function(curve: CustomCurve, unrolled_formula_file):
             return curve_results
 
     elif "twisted" in unrolled_formula_file:
-        if curve.form != "TwistedEdwards":
+        if curve.form().form() != "edwards":
             return curve_results
-        twisted_a = field(curve.params["a"]["raw"])
-        twisted_d = field(curve.params["d"]["raw"])
+        twisted_a = field(curve.params()["a"]["raw"])
+        twisted_d = field(curve.params()["d"]["raw"])
         if "extended_1_" in unrolled_formula_file and twisted_a != field(-1):
             return curve_results
 
     elif "edwards" in unrolled_formula_file:
-        if curve.form != "Edwards":
+        if curve.form().form() != "edwards":
             return curve_results
-        edwards_c = field(curve.params["c"]["raw"])
-        edwards_d = field(curve.params["d"]["raw"])
+        edwards_c = field(curve.params()["c"]["raw"])
+        edwards_d = field(curve.params()["d"]["raw"])
 
     else:
         return curve_results

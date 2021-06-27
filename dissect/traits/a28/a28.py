@@ -8,8 +8,8 @@ def a28_curve_function(curve: CustomCurve, l):
     Computes number of j-invariants j2 such that Phi_l(j,j2) where Phi_l is the l-modular polynomial.
     """
     Phi = ClassicalModularPolynomialDatabase()[l]
-    x = PolynomialRing(curve.field, "x").gen()
-    j = curve.j_invariant if curve.j_invariant is not None else curve.EC.j_invariant()
+    x = PolynomialRing(curve.field(), "x").gen()
+    j = curve.j_invariant()
     f = Phi(j, x)
     return {"len": sum([i[1] for i in f.roots()])}
 

@@ -11,8 +11,8 @@ from dissect.utils.zvp.gen_zvp import ZVPFinder
 
 def i11_curve_function(curve: CustomCurve, formula_file):
     """Computes the roots given by ZVP conditions that depend on one point only"""
-    q = curve.q
-    _, _, _, a, b = curve.EC.ainvs()
+    q = curve.q()
+    _, _, _, a, b = curve.ec().ainvs()
     formula_path = Path(EFD_PATH, formula_file)
     ZVP = ZVPFinder(formula_path, multiple=1, one_point_dependent=True)
     points = []

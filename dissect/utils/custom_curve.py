@@ -1,255 +1,226 @@
-from sage.all import EllipticCurve, ZZ, GF, factor  # import sage library
-
-
-# Converting functions using formulas in https://tools.ietf.org/id/draft-struik-lwip-curve-representations-00.html
-
-
-def montgomery_to_short_weierstrass(F, A, B, x, y):
-    a = F((3 - A ** 2) / (3 * B ** 2))
-    b = F((2 * A ** 3 - 9 * A) / (27 * B ** 3))
-    if x == "" or y == "" or x is None or y is None:
-        return a, b, None, None
-    else:
-        u = F((3 * x + A) / (3 * B))
-        v = F(y / B)
-        assert (u, v) in EllipticCurve(F, [a, b])
-    return a, b, u, v
-
-
-def twisted_edwards_to_montgomery(F, a, d, u, v, scaling=True):
-    A = F((2 * a + 2 * d) / (a - d))
-    B = F(4 / (a - d))
-    if not B.is_square():
-        scaling = False
-    s = F(1 / B).sqrt()
-
-    if u == "" or v == "" or u is None or v is None:
-        if scaling:
-            return A, 1, None, None
-        else:
-            return A, B, None, None
-    else:
-        x = F((1 + v) / (1 - v))
-        y = F((1 + v) / ((1 - v) * u))
-        if scaling:
-            assert (x, y / s) in EllipticCurve(F, [0, A, 0, 1, 0])
-            return A, 1, x, y / s
-        return A, B, x, y
-
-
-def twisted_edwards_to_short_weierstrass(F, aa, d, x, y):
-    A, B, x, y = twisted_edwards_to_montgomery(F, aa, d, x, y, True)
-    a, b, u, v = montgomery_to_short_weierstrass(F, A, B, x, y)
-    assert (u, v) in EllipticCurve(F, [a, b])
-    return a, b, u, v
-
-
-def get_poly(poly_dict, K):
-    w = K.gens()[0]
-    poly = 0
-    for mono in poly_dict:
-        poly += ZZ(mono["coeff"]) * w ** ZZ(mono["power"])
-    return K(poly)
+from sage.all import EllipticCurve, ZZ, GF, Integers, factor  # import sage library
+from dissect.utils.curve_form import dict_to_poly, CurveForm
+from dissect.traits.trait_interface import timeout
 
 
 class CustomCurve:
     """Class for unified representation of curves from databases"""
 
     def __init__(self, db_curve):
-        """the "fixed" part of attributes"""
-        self.name = db_curve["name"]
-        self.order = ZZ(db_curve["order"])
-        self.source = db_curve["category"]
-        self.field_desc = db_curve["field"]
-        self.form = db_curve["form"]
-        self.params = db_curve["params"]
-        self.cofactor = ZZ(db_curve["cofactor"])
-        self.cardinality = self.order * self.cofactor
-        self.nbits = self.order.nbits()
-        self.field = None
-        self.EC = None
-        self.generator = None
-        self.q = None
-        self.trace = None
-        self.j_invariant = None
-        self.embedding_degree = None
-        self.cm_discriminant = None
-        """the "variable" part of attributes"""
-        if "desc" in db_curve:
-            self.desc = db_curve["desc"]
-        if "generator" in db_curve:
-            self.generator_desc = db_curve["generator"]
+        self._name = db_curve["name"]
+        self._order = ZZ(db_curve["order"])
+        self._category = db_curve["category"]
+        self._params = db_curve["params"]
+        self._cofactor = ZZ(db_curve["cofactor"])
+        self._cardinality = self._order * self._cofactor
+        self._nbits = self._order.nbits()
+        self._field = None
+        self._field_type = None
+        self._q = None
+        self._form = None
+        self._ec = None
+        self.set_field(db_curve["field"])
+        self.set_form(db_curve["form"])
+        self.set_ec()
+        # Non-mandatory attributes:
+        self._trace = None
+        self._j_invariant = None
+        self._embedding_degree = None
+        self._cm_discriminant = None
+        self._frobenius_disc_factorization = None
+        self.set_properties(db_curve)
+        self._generator = None
+        self.set_generator(db_curve)
+        self._desc = db_curve.get("desc", None)
+        self._seed = db_curve.get("simulation", {}).get("seed", None)
+
+    def name(self):
+        return self._name
+
+    def order(self):
+        return self._order
+
+    def category(self):
+        return self._category
+
+    def params(self):
+        return self._params
+
+    def cofactor(self):
+        return self._cofactor
+
+    def cardinality(self):
+        return self._cardinality
+
+    def nbits(self):
+        return self._nbits
+
+    def field(self):
+        return self._field
+
+    def field_type(self):
+        return self._field_type
+
+    def q(self):
+        return self._q
+
+    def form(self):
+        return self._form
+
+    def ec(self):
+        return self._ec
+
+    def description(self):
+        return self._desc
+
+    def seed(self):
+        return self._seed
+
+    def is_over_binary(self):
+        return self._field.characteristic() % 2 == 0
+
+    def a(self):
+        return self._form.a()
+
+    def b(self):
+        return self._form.b()
+
+    def generator(self):
+        return self._generator
+
+    def embedding_degree(self):
+        if self._embedding_degree is None:
+            self._embedding_degree = (Integers(self._order)(self._q)).multiplicative_order()
+        return self._embedding_degree
+
+    def trace(self):
+        return self._trace
+
+    def j_invariant(self):
+        j = self._j_invariant
+        if self.is_over_binary():
+            j = self._field(j).integer_representation()
+        return j
+
+    def cm_discriminant(self):
+        if self._cm_discriminant is None:
+            d = squarefree_and_factorization(self.trace() ** 2 - 4 * self._q)
+            if isinstance(d, str):
+                return self._cm_discriminant
+            self._cm_discriminant = 4 * d[0] if d[0] % 4 != 1 else d[0]
+            self._frobenius_disc_factorization = d[1]
+        return self._cm_discriminant
+
+    def frobenius_disc_factorization(self):
+        self.cm_discriminant()
+        if self._frobenius_disc_factorization is None:
+            self._frobenius_disc_factorization = timeout(factor, [self.trace() ** 2 - 4 * self._q])
+        return self._frobenius_disc_factorization
+
+    def is_over_extension(self):
+        return not (self.field().is_prime_field() or self.is_over_binary())
+
+    def is_over_prime(self):
+        return self.field().is_prime_field()
+
+    def set_field(self, field_dict):
+        self._field_type = field_dict["type"]
+        if field_dict["type"] == "Prime":
+            p = ZZ(field_dict["p"])
+            self._field = GF(p, proof=False)
+            self._q = p
         else:
-            self.generator_desc = None
+            base = ZZ(2) if field_dict["type"] == "Binary" else ZZ(field_dict["base"])
+            degree = ZZ(field_dict["degree"])
+            modulus = dict_to_poly(field_dict["poly"], GF(base)["w"])
+            self._field = GF(base ** degree, "w", modulus, proof=False)
+            self._q = base ** degree
+
+    def set_form(self, form_desc):
+        if form_desc in ["Edwards", "TwistedEdwards"]:
+            a = 1 if form_desc == "Edwards" else self._params["a"]
+            d = self._params["d"]
+            self._form = CurveForm(self._field, {"form": "edwards", "a": a, "d": d})
+        if form_desc == "Montgomery":
+            a, b = self._params["a"], self._params["b"]
+            self._form = CurveForm(self._field, {"form": "montgomery", "a": a, "b": b})
+        if form_desc == "Weierstrass":
+            a, b = self._params["a"], self._params["b"]
+            self._form = CurveForm(self._field, {"form": "weierstrass", "a": a, "b": b})
+
+    def set_ec(self):
+        if self.is_over_binary():
+            self._ec = EllipticCurve(self.field(), [1, self.a(), 0, 0, self.b()])
+        else:
+            self._ec = EllipticCurve(self.field(), [self.a(), self.b()])
+        self._ec.set_order(self._cardinality, num_checks=0)
+
+    def set_generator(self, db_curve):
         try:
-            self.seed = db_curve["simulation"]["seed"]
-        except KeyError:
-            self.seed = None
-        try:
-            self.x = ZZ(db_curve["generator"]["x"]["raw"])
-            self.y = ZZ(db_curve["generator"]["y"]["raw"])
-        except (TypeError, KeyError):
-            self.x = None
-            self.y = None
-        self.curve_form()
-        self.properties(db_curve)
+            generator = db_curve['generator']
+            x, y = generator["x"], generator["y"]
+            to_skip = ["", None]
+            if x not in to_skip and y not in to_skip:
+                x, y = self.form().point(x, y)
+                self._generator = self._ec(x, y)
+        except (KeyError, TypeError):
+            pass
 
-    def get_xy(self, extension=False):
-        if self.generator_desc is None:
-            return None, None
-        if extension:
-            x = get_poly(self.generator_desc["x"]["poly"], self.field)
-            y = get_poly(self.generator_desc["y"]["poly"], self.field)
-        else:
-            x = self.generator_desc["x"]["raw"]
-            y = self.generator_desc["y"]["raw"]
-            try:
-                x = ZZ(x)
-                y = ZZ(y)
-            except TypeError:
-                pass
-        return x, y
-
-    def set_generator(self, binary=False, extension=False, x=None, y=None):
-        if x is None or y is None:
-            x, y = self.get_xy(extension)
-        if x is None or y is None or x == "" or y == "":
-            self.generator = None
-        else:
-            if binary:
-                self.generator = self.EC(
-                    self.field.fetch_int(x), self.field.fetch_int(y)
-                )
-            else:
-                self.generator = self.EC(x, y)
-
-    def curve_form(self):
-        if self.form == "Weierstrass":
-            if self.field_desc["type"] == "Prime":
-                p = ZZ(self.field_desc["p"])
-                F = GF(p, proof=False)
-                a = ZZ(self.params["a"]["raw"])
-                b = ZZ(self.params["b"]["raw"])
-                self.EC = EllipticCurve(F, [a, b])
-                self.set_generator()
-
-            elif self.field_desc["type"] == "Binary":
-                degree = ZZ(self.field_desc["degree"])
-                F = GF(2)["w"]
-                modulus = get_poly(self.field_desc["poly"], F)
-                K = GF(2 ** degree, "w", modulus, proof=False)
-                a = ZZ(self.params["a"]["raw"])
-                b = ZZ(self.params["b"]["raw"])
-                self.EC = EllipticCurve(
-                    K, [1, K.fetch_int(ZZ(a)), 0, 0, K.fetch_int(ZZ(b))]
-                )  # xy, x^2, y, x, 1
-                self.field = K
-                self.set_generator(binary=True)
-
-            elif self.field_desc["type"] == "Extension":
-                base = ZZ(self.field_desc["base"])
-                degree = ZZ(self.field_desc["degree"])
-                F = GF(base, proof=False)["w"]
-                modulus = get_poly(self.field_desc["poly"], F)
-                K = GF(base ** degree, "w", modulus, proof=False)
-                a = get_poly(self.params["a"]["poly"], K)
-                b = get_poly(self.params["b"]["poly"], K)
-                self.EC = EllipticCurve(K, [a, b])
-                self.set_generator(extension=True)
-
-        elif self.form == "Montgomery":
-            assert self.field_desc["type"] != "Extension"  # TO DO
-            A = ZZ(self.params["a"]["raw"])
-            B = ZZ(self.params["b"]["raw"])
-            p = ZZ(self.field_desc["p"])
-            F = GF(p, proof=False)
-            x, y = self.get_xy()
-            a, b, u, v = montgomery_to_short_weierstrass(F, A, B, x, y)
-            self.EC = EllipticCurve(F, [a, b])
-            self.set_generator(x=u, y=v)
-
-        elif self.form in ["Edwards", "TwistedEdwards"]:
-            # we assume c=1
-            assert self.field_desc["type"] != "Extension"  # TO DO
-            if self.form == "Edwards":
-                aa = 1
-            else:
-                # TwistedEdwards case
-                aa = ZZ(self.params["a"]["raw"])
-            d = ZZ(self.params["d"]["raw"])
-            p = ZZ(self.field_desc["p"])
-            F = GF(p, proof=False)
-            x, y = self.get_xy()
-            a, b, xx, yy = twisted_edwards_to_short_weierstrass(F, aa, d, x, y)
-            self.EC = EllipticCurve(F, [a, b])
-            self.set_generator(x=xx, y=yy)
-        else:
-            self.EC = "Not implemented"
-
-    def properties(self, db_curve):
-        self.field = self.EC.base_field()
-        self.q = self.field.order()
-        self.EC.set_order(self.cardinality, num_checks=0)
+    def set_properties(self, db_curve):
         try:
             properties = db_curve['properties']
-            self.cm_discriminant = ZZ(properties['cm_discriminant'])
-            self.embedding_degree = ZZ(properties['embedding_degree'])
-            self.j_invariant = ZZ(properties['j_invariant'])
-            self.trace = ZZ(properties['trace'])
+            self._cm_discriminant = ZZ(properties['cm_discriminant'])
+            self._embedding_degree = ZZ(properties['embedding_degree'])
+            self._j_invariant = ZZ(properties['j_invariant'])
+            self._trace = ZZ(properties['trace'])
         except KeyError:
-            self.trace = self.q + 1 - self.cardinality
+            self._j_invariant = self._ec.j_invariant()
+            self._trace = self._q + 1 - self._cardinality
+
+    def extended_ec(self, deg):
+        ext_q = self._q ** deg
+        ext_field = GF(ext_q, name="z", modulus=self._field['x'].irreducible_element(deg * self._field.degree()))
+        if self.is_over_prime():
+            return self._ec.base_extend(ext_field)
+        # perhaps unnecessarily complicated coercion (str.replace :P)
+        h = ext_field.gen() ** ((ext_q - 1) // (self._q - 1))
+        hf = GF(self._q, name="h", modulus=h.minpoly())
+        i = hf.hom([h])
+        new_coeffs = list(map(lambda x: i(hf(str(x).replace(str(self._field.gen()), "h"))), self._ec.a_invariants()))
+        return EllipticCurve(ext_field, new_coeffs)
+
+    def extended_cardinality(self, deg):
+        """returns curve cardinality over deg-th relative extension"""
+        s_old, s_new = 2, self._trace
+        for _ in range(2, deg + 1):
+            s_old, s_new = s_new, self._trace * s_new - self._q * s_old
+        return self._q ** deg + 1 - s_new
+
+    def extended_trace(self, deg):
+        """returns the trace of Frobenius over deg-th relative extension"""
+        return self._q ** deg + 1 - self.extended_cardinality(deg)
+
+    def extended_frobenius_disc(self, deg=1):
+        """returns the Frobenius discriminant (i.e. t^2-4q) over deg-th relative extension"""
+        return self.extended_trace(deg) ** 2 - 4 * self._q ** deg
 
     def __repr__(self):
-        return (
-                self.name
-                + ": "
-                + str(self.nbits)
-                + "-bit curve in "
-                + self.form
-                + " form over "
-                + self.field_desc["type"]
-                + " field"
-        )
+        return f"{self._name}: {self._nbits}-bit curve in {self._form} form over {self._field_type} field"
 
     def __str__(self):
         return self.__repr__()
 
     def __lt__(self, other):
-        return (self.order.nbits(), self.name) < (other.order.nbits(), other.name)
+        return (self._nbits, self._name) < (other.nbits(), other.name())
 
 
-def customize_curve(curve):
-    db_curve = {}
-    db_curve["name"] = "joe"
-    q = curve.base_field().order()
-    order = factor(curve.order())[-1][0]
-    db_curve["order"] = order
-    db_curve["category"] = "my"
-    db_curve["form"] = "Weierstrass"
-
-    def my_hex(x):
-        return format(ZZ(x), "#04x")
-
-    if q % 2 != 0:
-        db_curve["params"] = {
-            "a": {"raw": my_hex(curve.a4())},
-            "b": {"raw": my_hex(curve.a6())},
-        }
-        db_curve["field"] = {"type": "Prime", "p": my_hex(q), "bits": q.nbits()}
-    else:
-        db_curve["params"] = {
-            "a": {"raw": my_hex(curve.a2())},
-            "b": {"raw": my_hex(curve.a6())},
-        }
-        db_curve["field"] = {"type": "Binary"}
-        db_curve["field"]["poly"] = [
-            {"power": deg, "coeff": my_hex(coef)}
-            for deg, coef in curve.base_field().polynomial().dict().items()
-        ]
-        db_curve["field"]["bits"] = curve.base_field().polynomial().degree()
-        db_curve["field"]["degree"] = curve.base_field().polynomial().degree()
-        db_curve["field"]["basis"] = "poly"
-    db_curve["desc"] = ""
-    db_curve["cofactor"] = curve.order() // order
-    db_curve["generator"] = None
-    return CustomCurve(db_curve)
+def squarefree_and_factorization(x):
+    """squarefree part of x and the factorization of x or 'NO DATA (timed out)'"""
+    fct = timeout(factor, [x], timeout_duration=20)
+    if isinstance(fct, str):
+        return fct
+    n = 1
+    for p, e in fct:
+        if e % 2:
+            n *= p
+    return n * fct.unit(), fct

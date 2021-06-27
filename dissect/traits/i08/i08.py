@@ -9,16 +9,16 @@ from dissect.utils.json_handler import FLOAT_PRECISION
 
 def i08_curve_function(curve: CustomCurve, k):
     """Computes the bit length of the x-coordinate of the generator multiplied by 1/k"""
-    G = curve.generator
+    G = curve.generator()
     if G is None:
         return {"Hx": None, "bits": None, "difference": None, "ratio": None}
-    F = GF(curve.order)
+    F = GF(curve.order())
     multiple = F(1) / k
     H = ZZ(multiple) * G
     Hx = ZZ(H[0])
     bits = Hx.nbits()
-    difference = ZZ(curve.cardinality).nbits() - bits
-    ratio = bits / curve.nbits
+    difference = ZZ(curve.cardinality()).nbits() - bits
+    ratio = bits / curve.nbits()
     curve_results = {
         "Hx": Hx,
         "bits": bits,

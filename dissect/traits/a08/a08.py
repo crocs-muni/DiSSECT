@@ -18,32 +18,22 @@ def a08_curve_function(curve: CustomCurve):
     https://mathworld.wolfram.com/ClassNumber.html
 
     """
-    if curve.cm_discriminant is not None:
-        d = curve.cm_discriminant
-        fact_d = tu.factorization(d)
-        if isinstance(fact_d, str):
-            return {"upper": fact_d, "lower": fact_d}
-    else:
-        q = curve.q
-        trace = curve.trace
-        D = trace ** 2 - 4 * q
-        s_a_f = tu.squarefree_and_factorization(D)
-        if isinstance(s_a_f, str):
-            return {"upper": s_a_f, "lower": s_a_f}
-        d, fact = s_a_f
-        fact_d = [f for f in set(fact) if fact.count(f) % 2 == 1]
-        if d % 4 != 1:
-            d *= 4
-            fact_d.append(2)
+    cm_disc = curve.cm_discriminant()
+    frob_disc_factor = curve.frobenius_disc_factorization()
+    if isinstance(frob_disc_factor, str):
+        return {"upper": frob_disc_factor, "lower": frob_disc_factor}
+    fact_d = [f for f, e in frob_disc_factor if e % 2 == 1]
+    if cm_disc % 4 == 0:
+        fact_d.append(2)
 
-    w = {4: 4, 3: 6}.get(-d, 2)
-    upper_bound = ceil(log(-d) * sqrt(-d) * w / (2 * pi))
+    w = {4: 4, 3: 6}.get(-cm_disc, 2)
+    upper_bound = ceil(log(-cm_disc) * sqrt(-cm_disc) * w / (2 * pi))
 
     fact_d = sorted(fact_d)[:-1]
     lower_bound = 1
     for f in fact_d:
-        lower_bound *= (1 - floor(2 * sqrt(f)) / (f + 1)) * ln(-d)
-    if gcd(d, 5077) == 1:
+        lower_bound *= (1 - floor(2 * sqrt(f)) / (f + 1)) * ln(-cm_disc)
+    if gcd(cm_disc, 5077) == 1:
         lower_bound *= (1 / 55)
     else:
         lower_bound *= (1 / 7000)

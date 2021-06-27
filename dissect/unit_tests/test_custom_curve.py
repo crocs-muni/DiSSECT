@@ -1,36 +1,7 @@
 import unittest
+from dissect.utils.custom_curve import CustomCurve
 
-from sage.all import GF
-
-from dissect.utils.custom_curve import (
-    twisted_edwards_to_short_weierstrass,
-    twisted_edwards_to_montgomery,
-    CustomCurve,
-)
-
-# Test vectors: https://tools.ietf.org/id/draft-struik-lwip-curve-representations-00.html#rfc.appendix.C.3
-
-p = 2 ** 255 - 19
-F = GF(p)
-a = -1
-d = F(-121665) / (121666)
-x = 15112221349535400772501151409588531511454012693041857206046113283949847762202
-y = F(4) / (5)
-
-Wei25519 = {
-    "a": 19298681539552699237261830834781317975544997444273427339909597334573241639236,
-    "b": 55751746669818908907645289078257140818241103727901012315294400837956729358436,
-    "x": 19298681539552699237261830834781317975544997444273427339909597334652188435546,
-    "y": 14781619447589544791020593568409986887264606134616475288964881837755586237401,
-}
-
-Mon25519 = {
-    "A": 486662,
-    "B": 1,
-    "u": 9,
-    "v": 14781619447589544791020593568409986887264606134616475288964881837755586237401,
-}
-B1 = CustomCurve(
+BINARY = CustomCurve(
     {
         "name": "sect163k1",
         "category": "secg",
@@ -72,7 +43,37 @@ B1 = CustomCurve(
     }
 )
 
-C1 = CustomCurve({
+MONTGOMERY = CustomCurve({
+    "name": "M-221",
+    "category": "other",
+    "desc": "Curve from https://eprint.iacr.org/2013/647.pdf",
+    "field": {
+        "type": "Prime",
+        "p": "0x1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD",
+        "bits": 221
+    },
+    "form": "Montgomery",
+    "params": {
+        "a": {
+            "raw": "0x01c93a"
+        },
+        "b": {
+            "raw": "0x01"
+        }
+    },
+    "generator": {
+        "x": {
+            "raw": "0x04"
+        },
+        "y": {
+            "raw": "0x0f7acdd2a4939571d1cef14eca37c228e61dbff10707dc6c08c5056d"
+        }
+    },
+    "order": "0x040000000000000000000000000015A08ED730E8A2F77F005042605B",
+    "cofactor": "0x8"
+})
+
+WEIERSTRASS = CustomCurve({
     "name": "x962_sim_256_seed_diff_302361",
     "category": "x962_sim_256",
     "form": "Weierstrass",
@@ -102,64 +103,147 @@ C1 = CustomCurve({
     }
 })
 
-B1_results = {
-    "cofactor": 2,
-    "a": 1,
-    "b": 1,
-    "order": 0x04000000000000000000020108A2E0CC0D99F8A5EF,
-    "gen_x": 0x02FE13C0537BBC11ACAA07D793DE4E6D5E5C94EEE8,
-    "gen_y": 0x0289070FB05D38FF58321F2E800536D538CCDAA3D9,
-}
-
-C1_results = {'j_invariant': 13703759755872812151735812950849952450951590630043982456996394172744381584014,
-              'trace': -157598498730582091775914883381658668843,
-              'embedding_degree': 11579208921035624876269744694940757353024374191402089628730954619224875652279,
-              'cm_discriminant': -438331070039291709857874918580369842723641589116797303447967004994457652457155
-              }
+EXTENSION = CustomCurve({
+    "name": "Fp254n2BNa",
+    "category": "other",
+    "desc": "Curve used in: https://eprint.iacr.org/2010/354.pdf",
+    "field": {
+        "type": "Extension",
+        "base": "0x2370fb049d410fbe4e761a9886e502417d023f40180000017e80600000000001",
+        "bits": 508,
+        "degree": 2,
+        "poly": [
+            {
+                "power": 2,
+                "coeff": "0x01"
+            },
+            {
+                "power": 0,
+                "coeff": "0x05"
+            }
+        ]
+    },
+    "form": "Weierstrass",
+    "params": {
+        "a": {
+            "poly": [
+                {
+                    "power": 0,
+                    "coeff": "0x00"
+                }
+            ]
+        },
+        "b": {
+            "poly": [
+                {
+                    "power": 1,
+                    "coeff": "0x2370fb049d410fbe4e761a9886e502417d023f40180000017e80600000000000"
+                }
+            ]
+        }
+    },
+    "generator": {
+        "x": {
+            "poly": [
+                {
+                    "power": 1,
+                    "coeff": "0xa1cf585585a61c6e9880b1f2a5c539f7d906fff238fa6341e1de1a2e45c3f72"
+                },
+                {
+                    "power": 0,
+                    "coeff": "0x19b0bea4afe4c330da93cc3533da38a9f430b471c6f8a536e81962ed967909b5"
+                }
+            ]
+        },
+        "y": {
+            "poly": [
+                {
+                    "power": 1,
+                    "coeff": "0x0ee97d6de9902a27d00e952232a78700863bc9aa9be960C32f5bf9fd0a32d345"
+                },
+                {
+                    "power": 0,
+                    "coeff": "0x17abd366ebbd65333e49c711a80a0cf6d24adf1b9b3990eedcc91731384d2627"
+                }
+            ]
+        }
+    },
+    "order": "0x2370fb049d410fbe4e761a9886e502411dc1af70120000017e80600000000001",
+    "cofactor": "0x2370fb049d410fbe4e761a9886e50241dc42cf101e0000017e80600000000001"
+})
 
 
 class TestCustomCurve(unittest.TestCase):
-    def test_Ed_to_Wei(self):
-        result = twisted_edwards_to_short_weierstrass(F, a, d, x, y)
-        self.assertEqual(result[0], Wei25519["a"], "Should be " + str(Wei25519["a"]))
-        self.assertEqual(result[1], Wei25519["b"], "Should be " + str(Wei25519["b"]))
-        self.assertEqual(result[2], Wei25519["x"], "Should be " + str(Wei25519["x"]))
-        self.assertEqual(result[3], Wei25519["y"], "Should be " + str(Wei25519["y"]))
 
-    def test_Ed_to_Mon(self):
-        result = twisted_edwards_to_montgomery(F, a, d, x, y)
-        self.assertEqual(result[0], Mon25519["A"], "Should be " + str(Mon25519["A"]))
-        self.assertEqual(result[1], Mon25519["B"], "Should be " + str(Mon25519["B"]))
-        self.assertEqual(result[2], Mon25519["u"], "Should be " + str(Mon25519["u"]))
-        self.assertEqual(result[3], Mon25519["v"], "Should be " + str(Mon25519["v"]))
+    def test_BINARY(self):
+        self.assertEqual(BINARY.cofactor(), 2)
+        self.assertEqual(BINARY.a(), 1)
+        self.assertEqual(BINARY.b(), 1)
+        self.assertEqual(BINARY.order(), 0x04000000000000000000020108A2E0CC0D99F8A5EF)
+        self.assertEqual(BINARY.generator()[0].integer_representation(), 0x02FE13C0537BBC11ACAA07D793DE4E6D5E5C94EEE8)
+        self.assertEqual(BINARY.generator()[1].integer_representation(), 0x0289070FB05D38FF58321F2E800536D538CCDAA3D9)
+        self.assertEqual(BINARY.j_invariant(), 1)
+        self.assertEqual(BINARY.trace(), -4845466632539410776804317)
+        self.assertEqual(BINARY.cm_discriminant(), -7)
+        self.assertEqual(BINARY.nbits(), 163)
+        self.assertFalse(BINARY.is_over_extension())
+        self.assertFalse(BINARY.is_over_prime())
+        self.assertTrue(BINARY.is_over_binary())
 
-    def test_B1_constructor(self):
-        self.assertEqual(
-            B1.cofactor,
-            B1_results["cofactor"],
-            "Should be " + str(B1_results["cofactor"]),
-        )
-        self.assertEqual(
-            B1.EC.a2(), B1_results["a"], "Should be " + str(B1_results["a"])
-        )
-        self.assertEqual(
-            B1.EC.a6(), B1_results["b"], "Should be " + str(B1_results["b"])
-        )
-        self.assertEqual(
-            B1.order, B1_results["order"], "Should be " + str(B1_results["order"])
-        )
-        self.assertEqual(
-            B1.x, B1_results["gen_x"], "Should be " + str(B1_results["gen_x"])
-        )
-        self.assertEqual(
-            B1.y, B1_results["gen_y"], "Should be " + str(B1_results["gen_y"])
-        )
+    def test_MONTGOMERY(self):
+        self.assertEqual(MONTGOMERY.cofactor(), 8)
+        self.assertEqual(MONTGOMERY.order(), 421249166674228746791672110734682167926895081980396304944335052891)
+        self.assertEqual(MONTGOMERY.j_invariant(), 2198635150322943370581460256665771755915443349493942401782889387523)
+        self.assertEqual(MONTGOMERY.trace(), -3509210517603025598879416729141978)
+        self.assertEqual(MONTGOMERY.cm_discriminant(), -0x2c43ddd54943526ae6d55085b3a85fd81970f09e26691124ae6f794)
+        self.assertEqual(MONTGOMERY.nbits(), 219)
 
-    def test_C1_constructor(self):
-        self.assertEqual(C1.j_invariant, C1_results['j_invariant'])
-        self.assertEqual(C1.trace, C1_results['trace'])
-        self.assertEqual(C1.embedding_degree, C1_results['embedding_degree'])
-        self.assertEqual(C1.cm_discriminant, C1_results['cm_discriminant'])
+    def test_WEIERSTRASS(self):
+        self.assertEqual(WEIERSTRASS.name(), "x962_sim_256_seed_diff_302361")
+        self.assertEqual(WEIERSTRASS.order(), 0x333333330000000033333333333333334ae9ac61625e7d64f1938eea1e41a96f)
+        self.assertEqual(WEIERSTRASS.category(), "x962_sim_256")
+        self.assertEqual(WEIERSTRASS.params(), {"a": {"raw": "-0x3"}, "b": {
+            "raw": "0x226c4993ea4df0010cfc11dbb66cbbfedb0ace35bf1f3020473c4bd94a2e339a"}})
+        self.assertEqual(WEIERSTRASS.cofactor(), 5)
+        self.assertEqual(WEIERSTRASS.cardinality(), 0xffffffff00000001000000000000000076905de6ebd872f8b7e1ca9297484f2b)
+        self.assertEqual(WEIERSTRASS.nbits(), 254)
+        p = 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff
+        self.assertEqual(WEIERSTRASS.field().order(), p)
+        self.assertEqual(WEIERSTRASS.field_type(), "Prime")
+        self.assertEqual(WEIERSTRASS.q(), p)
+        self.assertEqual(WEIERSTRASS.form().form(), "weierstrass")
+        self.assertEqual(WEIERSTRASS.description(), None)
+        self.assertEqual(WEIERSTRASS.seed(), "0xc49d360886e704936a6678e1139d26b7819ae177")
+        self.assertFalse(WEIERSTRASS.is_over_binary())
+        self.assertEqual(WEIERSTRASS.a(), -3)
+        self.assertEqual(WEIERSTRASS.b(), 0x226c4993ea4df0010cfc11dbb66cbbfedb0ace35bf1f3020473c4bd94a2e339a)
+        self.assertEqual(WEIERSTRASS.generator(), None)
+        self.assertFalse(WEIERSTRASS.is_over_extension())
+        self.assertTrue(WEIERSTRASS.is_over_prime())
+        self.assertEqual(WEIERSTRASS.trace(), -157598498730582091775914883381658668843)
+        self.assertEqual(WEIERSTRASS.cm_discriminant(),
+                         -0x3c9169802457a46aa509f7a93178aed253fa77232a89157b657997522a5546ec3)
+        self.assertEqual(WEIERSTRASS.j_invariant(),
+                         13703759755872812151735812950849952450951590630043982456996394172744381584014)
+        self.assertEqual(WEIERSTRASS.embedding_degree(),
+                         11579208921035624876269744694940757353024374191402089628730954619224875652279)
+
+    def test_EXTENSION(self):
+        self.assertEqual(EXTENSION.cofactor(), 0x2370fb049d410fbe4e761a9886e50241dc42cf101e0000017e80600000000001)
+        self.assertEqual(EXTENSION.a().lift(), 0)
+        self.assertEqual(EXTENSION.b().matrix()[1][0],
+                         0x2370fb049d410fbe4e761a9886e502417d023f40180000017e80600000000000)
+        self.assertEqual(EXTENSION.order(), 0x2370fb049d410fbe4e761a9886e502411dc1af70120000017e80600000000001)
+        self.assertEqual(EXTENSION.generator()[0].norm(),
+                         11281539936611307808114476023359139338266750998829135672729497725604682084229)
+        self.assertEqual(EXTENSION.generator()[1].norm(),
+                         12123625036987721582261441339415773604879084932378194785387869031552991984941)
+        self.assertEqual(EXTENSION.j_invariant(), 0)
+        self.assertEqual(EXTENSION.trace(), 0x2370fb049d410fbdc02400000000000000000000000000000000000000000001)
+        self.assertEqual(EXTENSION.nbits(), 254)
+        self.assertTrue(EXTENSION.is_over_extension())
+        self.assertFalse(EXTENSION.is_over_prime())
+        self.assertFalse(EXTENSION.is_over_binary())
 
 
 if __name__ == "__main__":

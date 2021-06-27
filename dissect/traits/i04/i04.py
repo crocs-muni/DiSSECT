@@ -9,8 +9,8 @@ from dissect.utils.json_handler import FLOAT_PRECISION
 
 def i04_curve_function(curve: CustomCurve, weight):
     """Computes the number of curve points whose x-coord has the given Hamming weight"""
-    bit_length = ZZ(curve.cardinality).nbits()
-    E = curve.EC
+    bit_length = ZZ(curve.cardinality()).nbits()
+    E = curve.ec()
     x_coord_count = 0
     combination_list = Combinations(range(bit_length), weight).list()
     for combination in combination_list:

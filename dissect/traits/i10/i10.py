@@ -10,8 +10,8 @@ from dissect.utils.zvp.gen_zvp import ZVPFinder
 
 def i10_curve_function(curve: CustomCurve, multiple, formula_file):
     """Computes the roots given by ZVP conditions"""
-    q = curve.q
-    _, _, _, a, b = curve.EC.ainvs()
+    q = curve.q()
+    _, _, _, a, b = curve.ec().ainvs()
     formula_path = Path(EFD_PATH, formula_file)
     ZVP = ZVPFinder(formula_path, multiple)
     points = []
