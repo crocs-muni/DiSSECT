@@ -5,6 +5,7 @@ import bz2
 
 import pandas as pd
 from sklearn.neighbors import LocalOutlierFactor
+from sklearn.preprocessing import MinMaxScaler
 
 import dissect.utils.database_handler as database
 from dissect.definitions import STD_CURVE_DICT, ALL_CURVE_COUNT
@@ -140,6 +141,9 @@ def get_all(df, choices):
 
 
 def find_outliers(df, features):
+    df = df.copy(deep=True)
+    mms = MinMaxScaler()
+    df[features] = mms.fit_transform(df[features].values)
     lof = LocalOutlierFactor()
     data = df[features]
     lof.fit(data)
