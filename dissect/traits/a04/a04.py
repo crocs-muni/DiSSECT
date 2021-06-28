@@ -1,4 +1,4 @@
-import dissect.traits.trait_utils as tu
+from dissect.utils.utils import Factorization
 from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 
@@ -13,7 +13,7 @@ def near_order_factorizations(n, sign="+", k=10, t=10):
         m = k * n + 1
     else:
         m = k * n - 1
-    return tu.factorization(m, timeout_duration=t)
+    return Factorization(m, timeout_duration=t).factorization()
 
 
 def largest_factor_bitlen(factorization):

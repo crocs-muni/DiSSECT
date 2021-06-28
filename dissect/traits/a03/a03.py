@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import dissect.traits.trait_utils as tu
+from dissect.utils.utils import Factorization
 from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 
@@ -11,9 +11,9 @@ def a03_curve_function(curve: CustomCurve, deg):
     tr = curve.extended_trace(deg)
     card = curve.extended_cardinality(deg)
     twist_card = card + 2 * tr
-    f = tu.factorization(twist_card, timeout_duration=TRAIT_TIMEOUT)
+    f = Factorization(twist_card, timeout_duration=TRAIT_TIMEOUT)
 
-    curve_results = {"twist_cardinality": twist_card, "factorization": f}
+    curve_results = {"twist_cardinality": twist_card, "factorization": f.factorization()}
     return curve_results
 
 

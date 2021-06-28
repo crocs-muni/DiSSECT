@@ -1,6 +1,6 @@
-from sage.all import EllipticCurve, ZZ, GF, Integers, factor  # import sage library
+from sage.all import EllipticCurve, ZZ, GF, Integers, PolynomialRing  # import sage library
 from dissect.utils.curve_form import dict_to_poly, CurveForm
-from dissect.traits.trait_interface import timeout
+from dissect.utils.utils import Factorization
 
 
 class CustomCurve:
@@ -27,7 +27,7 @@ class CustomCurve:
         self._j_invariant = None
         self._embedding_degree = None
         self._cm_discriminant = None
-        self._frobenius_disc_factorization = None
+        self._cm_factorization = None
         self.set_properties(db_curve)
         self._generator = None
         self.set_generator(db_curve)
@@ -104,18 +104,18 @@ class CustomCurve:
 
     def cm_discriminant(self):
         if self._cm_discriminant is None:
-            d = squarefree_and_factorization(self.trace() ** 2 - 4 * self._q)
-            if isinstance(d, str):
-                return self._cm_discriminant
-            self._cm_discriminant = 4 * d[0] if d[0] % 4 != 1 else d[0]
-            self._frobenius_disc_factorization = d[1]
+            f = self.frobenius_disc_factorization()
+            if f.timeout():
+                return f.timeout_message()
+            self._cm_discriminant = f.cm_squarefree()
+            self._cm_factorization = f
         return self._cm_discriminant
 
     def frobenius_disc_factorization(self):
-        self.cm_discriminant()
-        if self._frobenius_disc_factorization is None:
-            self._frobenius_disc_factorization = timeout(factor, [self.trace() ** 2 - 4 * self._q])
-        return self._frobenius_disc_factorization
+        if self._cm_factorization is None:
+            self._cm_factorization = Factorization(self.trace() ** 2 - 4 * self._q)
+        return self._cm_factorization
+
 
     def is_over_extension(self):
         return not (self.field().is_prime_field() or self.is_over_binary())
@@ -179,7 +179,8 @@ class CustomCurve:
 
     def extended_ec(self, deg):
         ext_q = self._q ** deg
-        ext_field = GF(ext_q, name="z", modulus=self._field['x'].irreducible_element(deg * self._field.degree()))
+        prime_field = GF(self._field.characteristic())
+        ext_field = GF(ext_q, name="z", modulus=prime_field['z'].irreducible_element(deg * self._field.degree()))
         if self.is_over_prime():
             return self._ec.base_extend(ext_field)
         # perhaps unnecessarily complicated coercion (str.replace :P)
@@ -204,23 +205,30 @@ class CustomCurve:
         """returns the Frobenius discriminant (i.e. t^2-4q) over deg-th relative extension"""
         return self.extended_trace(deg) ** 2 - 4 * self._q ** deg
 
+    def is_torsion_cyclic(self, prime, deg, iterations=20):
+        """ True if the l-torsion is cyclic and False otherwise (bicyclic). Note that this is probabilistic only."""
+        card = self.extended_cardinality(deg)
+        m = ZZ(card / prime)
+        ext_ec = self.extended_ec(deg)
+        for _ in range(iterations):
+            point = ext_ec.random_element()
+            if not (m * point == ext_ec(0)):
+                return True
+        return False
+
+    def eigenvalues(self, prime, s=1):
+        """Computes the eigenvalues of Frobenius endomorphism in F_l, or in F_(l^2) if s=2"""
+        x = PolynomialRing(GF(prime ** s), "x").gen()
+        q = self.q()
+        t = self.trace()
+        f = x ** 2 - t * x + q
+        return f.roots()
+
     def __repr__(self):
-        return f"{self._name}: {self._nbits}-bit curve in {self._form} form over {self._field_type} field"
+        return f"{self._name}: {self._nbits}-bit curve in {self._form.form()} form over {self._field_type} field"
 
     def __str__(self):
         return self.__repr__()
 
     def __lt__(self, other):
         return (self._nbits, self._name) < (other.nbits(), other.name())
-
-
-def squarefree_and_factorization(x):
-    """squarefree part of x and the factorization of x or 'NO DATA (timed out)'"""
-    fct = timeout(factor, [x], timeout_duration=20)
-    if isinstance(fct, str):
-        return fct
-    n = 1
-    for p, e in fct:
-        if e % 2:
-            n *= p
-    return n * fct.unit(), fct

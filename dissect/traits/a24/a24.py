@@ -1,5 +1,4 @@
 from dissect.traits.trait_interface import compute_results
-from dissect.traits.trait_utils import eigenvalues, is_torsion_cyclic
 from dissect.utils.custom_curve import CustomCurve
 
 
@@ -9,10 +8,10 @@ def isogeny_finder(curve: CustomCurve, l):
     E/F_q**(i_2) - all l+1 isogenies are rational, E/F_q**(i_1) - at least 1 isogeny is rational
     Returns i2, i1
     """
-    eig = eigenvalues(curve, l)
+    eig = curve.eigenvalues(l)
     # Case with no eigenvalues
     if not eig:
-        eig = eigenvalues(curve, l, s=2)
+        eig = curve.eigenvalues(l, s=2)
         a, b = eig[0][0], eig[1][0]
         i2 = (a * b ** (-1)).multiplicative_order()
         i1 = i2
@@ -32,7 +31,7 @@ def isogeny_finder(curve: CustomCurve, l):
     # deg = k1
     card = curve.extended_cardinality(deg)
     # now check whether k1=k2:
-    if card % l ** 2 != 0 or is_torsion_cyclic(curve, l, deg):
+    if card % l ** 2 != 0 or curve.is_torsion_cyclic(l, deg):
         i2 *= l
     return i2, i1
 

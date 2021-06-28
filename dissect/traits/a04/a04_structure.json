@@ -8,8 +8,16 @@
         505965776926277
       ],
       "(+)largest_factor_bitlen": 49,
-      "(-)factorization": "NO DATA (timed out)",
-      "(-)largest_factor_bitlen": "NO DATA (timed out)"
+      "(-)factorization": [
+        3,
+        227,
+        347,
+        811,
+        3361,
+        4663,
+        1482153143043691933
+      ],
+      "(-)largest_factor_bitlen": 61
     }
   },
   "bn158": {

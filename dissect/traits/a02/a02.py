@@ -10,14 +10,11 @@ def a02_curve_function(curve: CustomCurve):
     Returns a dictionary (keys: 'cm_disc', 'factorization', 'max_conductor')
     """
     curve_result = {"cm_disc": None, "factorization": None, "max_conductor": None}
-    frob_disc = curve.extended_frobenius_disc()
     frob_disc_factor = curve.frobenius_disc_factorization()
-    if isinstance(frob_disc_factor, str):
+    if frob_disc_factor.timeout():
         return curve_result
-    if curve.cm_discriminant() is None:
-        return {"cm_disc": None, "factorization": None, "max_conductor": None}
-    return {"cm_disc": curve.cm_discriminant(), "factorization": [f for f, e in frob_disc_factor for _ in range(e)],
-            "max_conductor": ZZ(sqrt(frob_disc // curve.cm_discriminant()))}
+    return {"cm_disc": curve.cm_discriminant(), "factorization": frob_disc_factor.factorization(unpack=True),
+            "max_conductor": frob_disc_factor.cm_conductor()}
 
 
 def compute_a02_results(curve_list, desc="", verbose=False):

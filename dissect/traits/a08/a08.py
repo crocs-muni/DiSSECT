@@ -2,7 +2,7 @@ from sage.all import ceil, log, sqrt, pi, floor, ln, gcd
 
 from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
-import dissect.traits.trait_utils as tu
+
 
 
 def a08_curve_function(curve: CustomCurve):
@@ -20,9 +20,9 @@ def a08_curve_function(curve: CustomCurve):
     """
     cm_disc = curve.cm_discriminant()
     frob_disc_factor = curve.frobenius_disc_factorization()
-    if isinstance(frob_disc_factor, str):
+    if frob_disc_factor.timeout():
         return {"upper": frob_disc_factor, "lower": frob_disc_factor}
-    fact_d = [f for f, e in frob_disc_factor if e % 2 == 1]
+    fact_d = [f for f, e in frob_disc_factor.factorization(unpack=False) if e % 2 == 1]
     if cm_disc % 4 == 0:
         fact_d.append(2)
 

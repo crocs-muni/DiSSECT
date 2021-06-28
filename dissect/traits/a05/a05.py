@@ -1,7 +1,6 @@
 from sage.all import lcm
 
 from dissect.traits.trait_interface import compute_results
-from dissect.traits.trait_utils import eigenvalues, is_torsion_cyclic
 from dissect.utils.custom_curve import CustomCurve
 
 
@@ -11,10 +10,10 @@ def torsion_finder(curve: CustomCurve, l):
     E/F_q**(k_2) contains E[l] and E/F_q**(k_1) has nontrivial intersection with E[l]
     Returns k2, k1
     """
-    eig = eigenvalues(curve, l)
+    eig = curve.eigenvalues(l)
     # Case with no eigenvalues
     if not eig:
-        eig = eigenvalues(curve, l, s=2)
+        eig = curve.eigenvalues(l, s=2)
         a_ord, b_ord = (
             eig[0][0].multiplicative_order(),
             eig[1][0].multiplicative_order(),
@@ -33,7 +32,7 @@ def torsion_finder(curve: CustomCurve, l):
     k1 = a_ord
     k2 = k1
     card = curve.extended_cardinality(k1)
-    if card % l ** 2 != 0 or is_torsion_cyclic(curve, l, k1):
+    if card % l ** 2 != 0 or curve.is_torsion_cyclic(l, k1):
         k2 = l
     return k2, k1
 

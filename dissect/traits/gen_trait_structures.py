@@ -19,7 +19,7 @@ def compute_results(trait_name):
     params_file = Path(TRAIT_PATH, trait_name, trait_name + ".params")
     results = {}
     for curve in curves:
-        results[curve.name] = {}
+        results[curve.name()] = {}
     with open(params_file, "r") as f:
         params = json.load(f)
     for key in params["params_global"].keys():
@@ -29,7 +29,7 @@ def compute_results(trait_name):
     params_local_values = list(itertools.product(*params_global.values()))[0]
     params_local = dict(zip(params_local_names, params_local_values))
     for curve in curves:
-        results[curve.name][str(params_local)] = curve_function(
+        results[curve.name()][str(params_local)] = curve_function(
             curve, *params_local_values
         )
 

@@ -1,5 +1,7 @@
 import unittest
 from dissect.utils.custom_curve import CustomCurve
+from sage.all import EllipticCurve, EllipticCurve_from_j, GF, ZZ
+from dissect.utils.utils import customize_curve
 
 BINARY = CustomCurve(
     {
@@ -189,6 +191,7 @@ class TestCustomCurve(unittest.TestCase):
         self.assertFalse(BINARY.is_over_extension())
         self.assertFalse(BINARY.is_over_prime())
         self.assertTrue(BINARY.is_over_binary())
+        self.assertEqual(BINARY.embedding_degree(),17932535427373041941149514581590332356837787037)
 
     def test_MONTGOMERY(self):
         self.assertEqual(MONTGOMERY.cofactor(), 8)
@@ -197,6 +200,7 @@ class TestCustomCurve(unittest.TestCase):
         self.assertEqual(MONTGOMERY.trace(), -3509210517603025598879416729141978)
         self.assertEqual(MONTGOMERY.cm_discriminant(), -0x2c43ddd54943526ae6d55085b3a85fd81970f09e26691124ae6f794)
         self.assertEqual(MONTGOMERY.nbits(), 219)
+        self.assertEqual(MONTGOMERY.embedding_degree(),0x2000000000000000000000000000ad0476b9874517bbf802821302d)
 
     def test_WEIERSTRASS(self):
         self.assertEqual(WEIERSTRASS.name(), "x962_sim_256_seed_diff_302361")
@@ -244,6 +248,39 @@ class TestCustomCurve(unittest.TestCase):
         self.assertTrue(EXTENSION.is_over_extension())
         self.assertFalse(EXTENSION.is_over_prime())
         self.assertFalse(EXTENSION.is_over_binary())
+
+    def test_extensions(self):
+        p = 101
+        ec = EllipticCurve_from_j(GF(p)(1))
+        bin_size = 2**10
+        bin_ec = EllipticCurve(GF(bin_size), [1, 1, 0, 0, 1])
+        deg = 3
+        custom_ec = CustomCurve(customize_curve(ec))
+        custom_bin_ec = CustomCurve(customize_curve(bin_ec))
+        self.assertEqual(1073731736, custom_bin_ec.extended_cardinality(deg))
+        self.assertEqual(1029924, custom_ec.extended_cardinality(deg))
+        self.assertEqual(10089, custom_bin_ec.extended_trace(deg))
+        self.assertEqual(378, custom_ec.extended_trace(deg))
+        self.assertEqual(-4193179375, custom_bin_ec.extended_frobenius_disc(deg))
+        self.assertEqual(-3978320, custom_ec.extended_frobenius_disc(deg))
+        ext = custom_bin_ec.extended_ec(deg)
+        self.assertEqual([ZZ(i) for i in bin_ec.a_invariants()], [ZZ(i) for i in ext.a_invariants()])
+        self.assertEqual(bin_size**deg, ext.base_field().order())
+        ext = custom_ec.extended_ec(deg)
+        self.assertEqual(101 ** deg, ext.base_field().order())
+        self.assertEqual(ec.change_ring(ext.base_field()), ext)
+
+    def test_is_torsion_cyclic(self):
+        field = GF(101)
+        ec = EllipticCurve_from_j(field(10))
+        custom_ec = CustomCurve(customize_curve(ec))
+        self.assertTrue(custom_ec.is_torsion_cyclic(prime=5, deg=1))
+        ec = EllipticCurve_from_j(field(4))
+        custom_ec = CustomCurve(customize_curve(ec))
+        self.assertTrue(custom_ec.is_torsion_cyclic(prime=5, deg=1))
+        ec = EllipticCurve_from_j(field(11))
+        custom_ec = CustomCurve(customize_curve(ec))
+        self.assertFalse(custom_ec.is_torsion_cyclic(prime=5, deg=1))
 
 
 if __name__ == "__main__":

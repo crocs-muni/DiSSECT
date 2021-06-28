@@ -3,7 +3,8 @@ import unittest
 
 from dissect.traits.a23.a23 import a23_curve_function
 from dissect.traits.example_curves import curve_names
-from dissect.traits.trait_utils import customize_curve
+from dissect.utils.utils import customize_curve
+from dissect.utils.custom_curve import CustomCurve
 from sage.all import EllipticCurve_from_j, GF
 
 
@@ -37,19 +38,19 @@ class TestA23(unittest.TestCase):
         # ZZ.valuation(2)(D)%2==0 and d_K%4!=1
         q = 101
         E = EllipticCurve_from_j(GF(q)(1))
-        res = a23_curve_function(customize_curve(E), l=2)
+        res = a23_curve_function(CustomCurve(customize_curve(E)), l=2)
         self.assertEqual(1, res["crater_degree"])
         self.assertEqual(1, res["depth"])
 
         # ZZ.valuation(2)(D)%2==0 and d_K%4==1
         q = 103
         E = EllipticCurve_from_j(GF(q)(0))
-        res = a23_curve_function(customize_curve(E), l=2)
+        res = a23_curve_function(CustomCurve(customize_curve(E)), l=2)
         self.assertEqual(0, res["crater_degree"])
         self.assertEqual(1, res["depth"])
         # ZZ.valuation(2)(D)%2!=0
         E = EllipticCurve_from_j(GF(q)(1))
-        res = a23_curve_function(customize_curve(E), l=2)
+        res = a23_curve_function(CustomCurve(customize_curve(E)), l=2)
         self.assertEqual(1, res["crater_degree"])
         self.assertEqual(0, res["depth"])
 

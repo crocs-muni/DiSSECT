@@ -1,6 +1,6 @@
 from sage.all import ZZ, sqrt
 
-import dissect.traits.trait_utils as tu
+from dissect.utils.utils import Factorization
 from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 
@@ -15,9 +15,7 @@ def a06_curve_function(curve: CustomCurve, deg):
     disc_ext =  curve.extended_frobenius_disc(deg)
     ratio_sqrt = ZZ(sqrt(disc_ext / disc_base))
     curve_results["ratio_sqrt"] = ratio_sqrt
-    curve_results["factorization"] = tu.factorization(
-        ratio_sqrt, timeout_duration=TRAIT_TIMEOUT
-    )
+    curve_results["factorization"] = Factorization(ratio_sqrt, timeout_duration=TRAIT_TIMEOUT).factorization()
     return curve_results
 
 
