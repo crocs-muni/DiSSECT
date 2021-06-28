@@ -193,7 +193,7 @@ def store_trait_result(
     params: Dict[str, Any],
     result: Dict[str, Any],
 ) -> bool:
-    trait_result = {"curve": curve.name}
+    trait_result = {"curve": curve.name()}
     trait_result["params"] = _cast_sage_types(params)
     trait_result["result"] = _encode_ints(result)
     try:
@@ -205,7 +205,7 @@ def store_trait_result(
 def is_solved(
     db: Database, curve: CustomCurve, trait: str, params: Dict[str, Any]
 ) -> bool:
-    trait_result = {"curve": curve.name}
+    trait_result = {"curve": curve.name()}
     trait_result["params"] = _cast_sage_types(params)
     return db[f"trait_{trait}"].find_one(trait_result) is not None
 
