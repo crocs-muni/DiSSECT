@@ -21,7 +21,7 @@ def a08_curve_function(curve: CustomCurve):
     cm_disc = curve.cm_discriminant()
     frob_disc_factor = curve.frobenius_disc_factorization()
     if frob_disc_factor.timeout():
-        return {"upper": frob_disc_factor, "lower": frob_disc_factor}
+        return {"upper": frob_disc_factor.timeout_message(), "lower": frob_disc_factor.timeout_message()}
     fact_d = [f for f, e in frob_disc_factor.factorization(unpack=False) if e % 2 == 1]
     if cm_disc % 4 == 0:
         fact_d.append(2)
