@@ -185,7 +185,13 @@ class CustomCurve:
         hf = GF(self._q, name="h", modulus=h.minpoly())
         i = hf.hom([h])
         new_coeffs = list(map(lambda x: i(hf(str(x).replace(str(self._field.gen()), "h"))), self._ec.a_invariants()))
-        return EllipticCurve(ext_field, new_coeffs)
+        ext_ec = EllipticCurve(ext_field, new_coeffs)
+        # compute order of extended ec
+        s_old, s_new = 2, self._trace
+        for _ in range(2, deg + 1):
+            s_old, s_new = s_new, self._trace * s_new - self._q * s_old
+        ext_ec.set_order(self._q ** deg + 1 - s_new, num_checks=0)
+        return ext_ec
 
     def extended_cardinality(self, deg):
         """returns curve cardinality over deg-th relative extension"""
