@@ -8,12 +8,12 @@ class CurveForm:
         self._field = field
         self._form = curve['form']
         self._a, self._b, self._ma, self._mb, self._ea, self._ed = [None] * 6
-        if self._form == "weierstrass":
+        if self._form == "Weierstrass":
             self._a, self._b = self.field_conversion(curve['a'], curve['b'])
-        if self._form == "montgomery":
+        elif self._form == "Montgomery":
             self._ma, self._mb = self.field_conversion(curve['a'], curve['b'])
             self.montgomery_to_weierstrass()
-        if self._form == "edwards":
+        else:
             self._ea, self._ed = self.field_conversion(curve['a'], curve['d'])
             self._edwards_scaling = 1
             self.twisted_edwards_to_montgomery()
@@ -40,11 +40,11 @@ class CurveForm:
 
     def point(self, x, y):
         x, y = self.field_conversion(x, y)
-        if self._form == "weierstrass":
+        if self._form == "Weierstrass":
             return x, y
-        if self._form == "edwards":
-            return self.twisted_edwards_to_weierstrass_point(x, y)
-        return self.montgomery_to_weierstrass_point(x, y)
+        if self._form == "Montgomery":
+            return self.montgomery_to_weierstrass_point(x, y)
+        return self.twisted_edwards_to_weierstrass_point(x, y)
 
     def montgomery_to_weierstrass(self):
         self._a = self._field((3 - self._ma ** 2) / (3 * self._mb ** 2))
@@ -62,8 +62,7 @@ class CurveForm:
         v = self._field(y / self._mb)
         return u, v
 
-    def twisted_edwards_to_montgomery_point(self, u, v, scaling=True):
-        s = self._field(1 / self._mb).sqrt()
+    def twisted_edwards_to_montgomery_point(self, u, v):
         x = self._field((1 + v) / (1 - v))
         y = self._field((1 + v) / ((1 - v) * u)) / self._edwards_scaling
         return x, y
