@@ -138,15 +138,12 @@ class CustomCurve:
 
     def set_form(self, form_desc):
         if form_desc in ["Edwards", "TwistedEdwards"]:
-            a = 1 if form_desc == "Edwards" else self._params["a"]
+            a = {"raw":"0x1"} if form_desc == "Edwards" else self._params["a"]
             d = self._params["d"]
-            self._form = CurveForm(self._field, {"form": "edwards", "a": a, "d": d})
-        if form_desc == "Montgomery":
+            self._form = CurveForm(self._field, {"form": form_desc, "a": a, "d": d})
+        else:
             a, b = self._params["a"], self._params["b"]
-            self._form = CurveForm(self._field, {"form": "montgomery", "a": a, "b": b})
-        if form_desc == "Weierstrass":
-            a, b = self._params["a"], self._params["b"]
-            self._form = CurveForm(self._field, {"form": "weierstrass", "a": a, "b": b})
+            self._form = CurveForm(self._field, {"form": form_desc, "a": a, "b": b})
 
     def set_ec(self):
         if self.is_over_binary():

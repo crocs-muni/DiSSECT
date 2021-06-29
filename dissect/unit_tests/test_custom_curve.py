@@ -215,7 +215,7 @@ class TestCustomCurve(unittest.TestCase):
         self.assertEqual(WEIERSTRASS.field().order(), p)
         self.assertEqual(WEIERSTRASS.field_type(), "Prime")
         self.assertEqual(WEIERSTRASS.q(), p)
-        self.assertEqual(WEIERSTRASS.form().form(), "weierstrass")
+        self.assertEqual(WEIERSTRASS.form().form(), "Weierstrass")
         self.assertEqual(WEIERSTRASS.description(), None)
         self.assertEqual(WEIERSTRASS.seed(), "0xc49d360886e704936a6678e1139d26b7819ae177")
         self.assertFalse(WEIERSTRASS.is_over_binary())
