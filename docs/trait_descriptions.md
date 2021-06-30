@@ -1,5 +1,5 @@
 ### Distributions
-Most distributions are considered over all the set of all (isogeny/isomorphism classes of) elliptic curves over $\mathbb{F}_{p}$ for fixed $p$. In some cases, we only consider (isogeny/isomorpism classes of) ordinary curves.
+Most distributions are considered over all the set of all (isogeny/isomorphism classes of) elliptic curves over $\mathbb{F}_{p}$ for fixed $p$. In some cases, we only consider (isogeny/isomorpism classes of) ordinary curves. Also denote $N$ as the cardinality of $E$ and $t=\log(N)$.
 
 ### a01
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, integer $r$
@@ -10,6 +10,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Distribution:** unknown (though Sato-Tate describes the distribution of $mn$)
 
+**Time complexity:** Baby-step giant-step algorithm: O(\sqrt{N})
+
 ### a02
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}$
 
@@ -18,6 +20,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 **Motivation:** a large square factor of D has interesting implications
 
 **Distribution:** unknown, probably reducible to the distribution of factors of random numbers using Sato-Tate
+
+**Time complexity:** Factorization of $t$-bit number
 
 ### a03
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}, integer $r$
@@ -28,6 +32,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Distribution:** unknown, probably reducible to the distribution of factors of random numbers using Sato-Tate
 
+**Time complexity:** Factorization of $t$-bit number
+
 ### a04
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, integer $k$
 
@@ -36,6 +42,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 **Motivation:** scalar multiplication by $kn\pm1$ is the identity or negation, respectively; it can be seen as a generalization of https://link.springer.com/content/pdf/10.1007%2F11761679_1.pdf
 
 **Distribution:** unknown, probably reducible to the distribution of factors of random numbers using Sato-Tate
+
+**Time complexity:** Factorization of $t$-bit number
 
 ### a05
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, prime $l$
@@ -46,6 +54,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Distribution:** unknown (but see page 50 in [Vojtěch Suchánek's diploma thesis](https://github.com/vojtechsu/isogenies/blob/master/master_thesis.pdf))
 
+**Time complexity:**Up to 20 scalar multiplications on $t$-bit curve
+
 ### a06
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}$, integer $r$
 
@@ -54,6 +64,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 **Motivation:** the prime factors of $D_r/D_1$ determine for which $l$ does the $l$-crater of E grow in the $r$-th extension
 
 **Distribution:** unknown, probably reducible to the distribution of a02
+
+**Time complexity:** Factorization of $t/2$-bit number
 
 ### a07
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}$
@@ -64,6 +76,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Distribution:** unknown
 
+**Time complexity:** Computation of multiplicative order in $t$-bit prime field. (precomputed)
+
 ### a08
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}$
 
@@ -72,6 +86,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 **Motivation:** the class number is a classical invariant
 
 **Distribution:** unknown
+
+**Time complexity:** Factorization of $t$-bit number (precomputed).
 
 
 ### a12
@@ -83,6 +99,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Distribution:** unknown, but see [Artin’s primitive root conjecture](https://guests.mpim-bonn.mpg.de/moree/surva.pdf)
 
+**Time complexity:** Computation of multiplicative order in $t$-bit prime field. 
+
 ### a22
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, prime $l$
 
@@ -91,6 +109,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 **Motivation:** this is partially relevant to a05
 
 **Distribution:** [Factorisation_patterns_of_division_polynomials](https://www.researchgate.net/publication/38339355_Factorisation_patterns_of_division_polynomials)
+
+**Time complexity:** Factorization of $(l^2-1)$-degree polynomial over $t$-bit prime field
 
 ### a23
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}$, prime $l$
@@ -101,6 +121,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Distribution:** probably reducible (using Sato-Tate) to Chebotarev's theorem for the crater and to an elementary calculation for the depth (depth $s$ is equivalent to $t^2-4p$ being divisible by $l^{2s}$, where $t$ is the trace of Frobenius of $E$)
 
+**Time complexity:** Legendre symbol of $t$-bit number modulo small prime
+
 ### a24
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, prime $l$
 
@@ -109,6 +131,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 **Motivation:** this is loosely related to a05 and a06
 
 **Distribution:** unknown (but see page 50 in [Vojtěch Suchánek's diploma thesis](https://github.com/vojtechsu/isogenies/blob/master/master_thesis.pdf))
+
+**Time complexity:** Up to 20 scalar multiplications on $t$-bit curve
 
 ### a25
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, integer $r$
@@ -119,6 +143,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Distribution:** probably reducible to the distribution of factors of random numbers (using Sato-Tate)
 
+**Time complexity:** Factorization of $(deg\cdot t)$-bit number
+
 ### a28
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, small prime $l$
 
@@ -127,6 +153,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 **Motivation:** These roots correspond to $l$-isogenous curves.
 
 **Distribution:** Except for finite number of cases there should be only 2 or 0 roots (equally distributed).
+
+**Time complexity:** Factorization of $(l+1)$-degree polynomial over $t$-bit prime field
 
 ### a29
 
@@ -138,7 +166,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Distribution:** Mazur's theorem states that the order is bounded by 16. 
 
-
+**Time complexity:** Doud's algorithm: $O(t^3)$
 
 
 ### i04
@@ -150,6 +178,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Distribution:** binomial with mean $\frac{1}{2} ⋅\choose{⌈\log p⌉+1}{k}
 
+**Time complexity:** Binomial($\log(n)$,$k$)-many Legendre symbols in $t$-bit prime field
+
 ### i06
 **Input:** elliptic curve $E/\mathbb{F}_{p}$
 
@@ -159,12 +189,16 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Distribution:** probably reducible to the distribution of factors of random numbers (using Sato-Tate in the $4n-1$ case)
 
+**Time complexity:** Factorization of $t$-bit number
+
 ### i07
 **Input:** elliptic curve $E/\mathbb{F}_{p}$
 
 **Output:** distance of $n$ to the nearest power of $2$ and the nearest multiple of 32 and 64, where $n=\#E(\mathbb{F}_p)$
 
 **Motivation:** the first part is related to scalar multiplication bias when not using rejection sampling, the second is inspired by the paper [Big Numbers - Big Troubles](https://www.usenix.org/conference/usenixsecurity20/presentation/weiser)
+
+**Time complexity:** Division in $t$-bit prime field
 
 ### i08
 **Input:** elliptic curve $E/\mathbb{F}_{p}$ with generator $G$, integer $k$
@@ -174,6 +208,8 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 **Motivation:** the strange behaviour of secp224k1 and secp256k1 for k=2
 
 **Distribution:** presumably geometric with quotient $\frac{1}{2}$
+
+**Time complexity:** One scalar multiplication on $t$-bit curve
 
 ### i10
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, integer $k$, addition formula
@@ -213,3 +249,5 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 **Motivation:** The value $r$ is used for generation of curves in various standards including x962, FIPS, SECG etc.
 
 **Distribution:** Uniform
+
+**Time complexity:** Division in $t$-bit prime field
