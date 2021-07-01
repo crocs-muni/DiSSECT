@@ -302,3 +302,13 @@ def numeric_outputs(trait_name):
             outputs.append(output)
 
     return outputs
+
+
+def nonnumeric_outputs(trait_name):
+    outputs = []
+
+    for output, info in TRAIT_INFO[trait_name]["output"].items():
+        if not (info[0] == int or info[0] == float):
+            outputs.append(output)
+
+    return outputs

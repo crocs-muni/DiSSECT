@@ -10,7 +10,7 @@ import dissect.analysis.data_processing as dp
 
 def main(source, trait_name, bitlength=0, cofactor=0, output="print"):
     curves = dp.load_curves(source)
-    trait = dp.load_trait(source, trait_name)
+    trait = dp.load_trait(source, trait_name, skip_timeouts=True)
     trait = curves.merge(trait, "inner", on="curve")
 
     if bitlength:
