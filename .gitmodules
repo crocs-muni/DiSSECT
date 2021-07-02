@@ -1,8 +1,3 @@
-[submodule "dissect/curves_json"]
-	path = dissect/curves_json
-	url = https://github.com/crocs-muni/std-curves.git
-	branch = data
-	update = merge
 [submodule "dissect/utils/efd"]
 	path = dissect/utils/efd
 	url = https://github.com/VladaSedlacek/efd.git
