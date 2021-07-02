@@ -7,7 +7,6 @@ from sage.all import ZZ
 from dissect.utils.json_handler import load_from_json
 
 ROOT_DIR: Union[Path, Any] = Path(__file__).parent  # This is the project root
-CURVE_PATH = Path(ROOT_DIR, "curves_json")
 CURVE_PATH_SIM = Path(ROOT_DIR, "curves_json_sim")
 TRAIT_PATH = Path(ROOT_DIR, "traits")
 PARALLEL_RESULTS_PATH = Path(ROOT_DIR, "utils", "parallel", "results")
@@ -41,23 +40,14 @@ TRAIT_NAMES: List[str] = sorted([
     for f in TRAIT_PATH.iterdir()
     if f.is_dir() and re.search(TRAIT_NAME_CONDITION, f.name)
 ])
-STD_SOURCES: List[str] = [
-    f.name for f in CURVE_PATH.iterdir() if f.is_dir() and "." not in f.name
-]
+
 STD_BITLENGTHS = set()
 STD_COFACTORS: Set[ZZ] = set()
 STD_CURVE_NAMES = []
 STD_CURVE_DICT = {}
-for source in STD_SOURCES:
-    STD_CURVE_DICT[source] = []
-    curves = load_from_json(Path(CURVE_PATH, source, "curves.json"))["curves"]
-    for curve in curves:
-        STD_CURVE_DICT[source].append(curve["name"])
-        STD_CURVE_NAMES.append(curve["name"])
-        STD_BITLENGTHS.add(curve["field"]["bits"])
-        STD_COFACTORS.add(ZZ(curve["cofactor"]))
 STD_CURVE_COUNT = len(STD_CURVE_NAMES)
 STD_COFACTORS = sorted(STD_COFACTORS)
+STD_SOURCES = ["anssi","bls","bn","brainpool","gost","mnt","nist","nums","oakley","oscaa","other","secg","wtls","x962","x963"]
 STD_BITLENGTHS = sorted(STD_BITLENGTHS)
 
 # SIM_BITLENGTHS = list(map(ZZ, [d.name for d in Path(CURVE_PATH_SIM, "x962_sim").iterdir() if d.is_dir()]))
@@ -107,4 +97,5 @@ SIM_COFACTORS = [
 ]
 ALL_COFACTORS = sorted(set(STD_COFACTORS + SIM_COFACTORS))
 
-TRAIT_DESCRIPTIONS = dict(sorted(load_from_json(Path(TRAIT_PATH, "trait_descriptions")).items(), key=lambda item: item[0]))
+TRAIT_DESCRIPTIONS = dict(
+    sorted(load_from_json(Path(TRAIT_PATH, "trait_descriptions")).items(), key=lambda item: item[0]))

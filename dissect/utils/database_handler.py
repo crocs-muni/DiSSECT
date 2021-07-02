@@ -8,8 +8,10 @@ from pymongo.database import Database
 from pymongo.errors import DuplicateKeyError
 from sage.all import Integer
 
-from dissect.definitions import CURVE_PATH, CURVE_PATH_SIM, TRAIT_NAMES, TRAIT_PATH
+from dissect.definitions import CURVE_PATH_SIM, TRAIT_NAMES, TRAIT_PATH
 from dissect.utils.custom_curve import CustomCurve
+
+CURVE_PATH = "."
 
 
 def connect(database: Optional[str] = None) -> Database:
