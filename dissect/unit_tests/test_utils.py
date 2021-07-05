@@ -40,7 +40,8 @@ class TestTraitUtils(unittest.TestCase):
         self.assertEqual(s.factorization(),[u,v,v,p,q])
         s = Factorization(n)+Factorization(p)
         self.assertEqual(s.factorization(),[p,p,q,q,r,r,r])
-
+        s = Factorization(N, timeout_duration=timeout, use_ecm=False)+Factorization(p*q)
+        self.assertTrue(s.timeout())
 
 if __name__ == "__main__":
     unittest.main()

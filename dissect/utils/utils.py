@@ -28,6 +28,8 @@ class Factorization:
         return self._timeout_duration
 
     def timeout_message(self):
+        if not self._timeout:
+            return "No timeout!"
         return self._factorization
 
     def factorization(self, unpack=True):
@@ -40,8 +42,9 @@ class Factorization:
     def set_factorization(self, factorization):
         if factorization is not None:
             self._factorization = factorization
-            return
-        if self._use_ecm:
+            if isinstance(factorization, str):
+                self._timeout = True
+        elif self._use_ecm:
             factors = timeout(ecm.factor, [self._value], timeout_duration=self._timeout_duration)
             if isinstance(factors, str):
                 self._timeout = True
