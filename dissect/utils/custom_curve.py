@@ -1,4 +1,4 @@
-from sage.all import EllipticCurve, ZZ, GF, Integers, PolynomialRing  # import sage library
+from sage.all import EllipticCurve, ZZ, GF, Integers, PolynomialRing, sqrt  # import sage library
 from dissect.utils.curve_form import dict_to_poly, CurveForm
 from dissect.utils.utils import Factorization
 
@@ -115,8 +115,8 @@ class CustomCurve:
         if self._cm_factorization is None:
             frob_disc = self.trace() ** 2 - 4 * self._q
             if self._cm_discriminant is not None:
-                self._cm_factorization = Factorization(self._cm_discriminant) + Factorization(
-                    frob_disc // self._cm_discriminant)
+                conductor = Factorization(ZZ(sqrt(frob_disc // self._cm_discriminant)))
+                self._cm_factorization = Factorization(self._cm_discriminant) + conductor + conductor
             else:
                 self._cm_factorization = Factorization(frob_disc)
         return self._cm_factorization
@@ -170,13 +170,27 @@ class CustomCurve:
     def set_properties(self, db_curve):
         try:
             properties = db_curve['properties']
-            self._cm_discriminant = ZZ(properties['cm_discriminant'])
-            self._embedding_degree = ZZ(properties['embedding_degree'])
-            self._j_invariant = ZZ(properties['j_invariant'])
-            self._trace = ZZ(properties['trace'])
         except KeyError:
             self._j_invariant = self._ec.j_invariant()
             self._trace = self._q + 1 - self._cardinality
+            return
+        try:
+            self._cm_discriminant = ZZ(properties['cm_discriminant'])
+        except KeyError:
+            pass
+        try:
+            self._embedding_degree = ZZ(properties['embedding_degree'])
+        except KeyError:
+            pass
+        try:
+            self._j_invariant = ZZ(properties['j_invariant'])
+        except KeyError:
+            self._j_invariant = self._ec.j_invariant()
+        try:
+            self._trace = ZZ(properties['trace'])
+        except KeyError:
+            self._trace = self._q + 1 - self._cardinality
+
 
     def extended_ec(self, deg):
         ext_q = self._q ** deg

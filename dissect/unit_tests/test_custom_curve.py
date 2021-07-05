@@ -33,6 +33,7 @@ BINARY = CustomCurve(
         "order": "0x04000000000000000000020108a2e0cc0d99f8a5ef",
         "cofactor": "0x2",
         "aliases": ["nist/K-163"],
+        "properties": {"cm_discriminant": "-0x07"},
         "characteristics": {
             "discriminant": "1",
             "j_invariant": "1",
@@ -191,7 +192,10 @@ class TestCustomCurve(unittest.TestCase):
         self.assertFalse(BINARY.is_over_extension())
         self.assertFalse(BINARY.is_over_prime())
         self.assertTrue(BINARY.is_over_binary())
-        self.assertEqual(BINARY.embedding_degree(),17932535427373041941149514581590332356837787037)
+        self.assertEqual(BINARY.embedding_degree(), 17932535427373041941149514581590332356837787037)
+        self.assertEqual(BINARY.cm_discriminant(), -7)
+        self.assertEqual(BINARY.frobenius_disc_factorization().factorization(False),
+                         [(7, 1), (45641, 2), (82153, 2), (8610311, 2), (56498081, 2)])
 
     def test_MONTGOMERY(self):
         self.assertEqual(MONTGOMERY.cofactor(), 8)
@@ -200,7 +204,7 @@ class TestCustomCurve(unittest.TestCase):
         self.assertEqual(MONTGOMERY.trace(), -3509210517603025598879416729141978)
         self.assertEqual(MONTGOMERY.cm_discriminant(), -0x2c43ddd54943526ae6d55085b3a85fd81970f09e26691124ae6f794)
         self.assertEqual(MONTGOMERY.nbits(), 219)
-        self.assertEqual(MONTGOMERY.embedding_degree(),0x2000000000000000000000000000ad0476b9874517bbf802821302d)
+        self.assertEqual(MONTGOMERY.embedding_degree(), 0x2000000000000000000000000000ad0476b9874517bbf802821302d)
 
     def test_WEIERSTRASS(self):
         self.assertEqual(WEIERSTRASS.name(), "x962_sim_256_seed_diff_302361")
@@ -231,6 +235,9 @@ class TestCustomCurve(unittest.TestCase):
                          13703759755872812151735812950849952450951590630043982456996394172744381584014)
         self.assertEqual(WEIERSTRASS.embedding_degree(),
                          11579208921035624876269744694940757353024374191402089628730954619224875652279)
+        self.assertEqual(WEIERSTRASS.frobenius_disc_factorization().factorization(False),
+                         [(3, 1), (5, 1), (163, 1), (121067, 1), (2093557, 1),
+                          (707314924143675433661785621848269656561988756318358008737698841, 1)])
 
     def test_EXTENSION(self):
         self.assertEqual(EXTENSION.cofactor(), 0x2370fb049d410fbe4e761a9886e50241dc42cf101e0000017e80600000000001)
@@ -252,7 +259,7 @@ class TestCustomCurve(unittest.TestCase):
     def test_extensions(self):
         p = 101
         ec = EllipticCurve_from_j(GF(p)(1))
-        bin_size = 2**10
+        bin_size = 2 ** 10
         bin_ec = EllipticCurve(GF(bin_size), [1, 1, 0, 0, 1])
         deg = 3
         custom_ec = CustomCurve(customize_curve(ec))
@@ -265,7 +272,7 @@ class TestCustomCurve(unittest.TestCase):
         self.assertEqual(-3978320, custom_ec.extended_frobenius_disc(deg))
         ext = custom_bin_ec.extended_ec(deg)
         self.assertEqual([ZZ(i) for i in bin_ec.a_invariants()], [ZZ(i) for i in ext.a_invariants()])
-        self.assertEqual(bin_size**deg, ext.base_field().order())
+        self.assertEqual(bin_size ** deg, ext.base_field().order())
         ext = custom_ec.extended_ec(deg)
         self.assertEqual(101 ** deg, ext.base_field().order())
         self.assertEqual(ec.change_ring(ext.base_field()), ext)
