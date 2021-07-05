@@ -34,6 +34,13 @@ class TestTraitUtils(unittest.TestCase):
         self.assertEqual((q * r), Factorization(n,use_ecm=False).square_root())
         self.assertEqual("NO DATA (timed out)",Factorization(N, timeout_duration=timeout, use_ecm=False).square_root())
 
+    def test_addition(self):
+        u,v = 11,13
+        s = Factorization(p*q)+Factorization(u*v*v)
+        self.assertEqual(s.factorization(),[u,v,v,p,q])
+        s = Factorization(n)+Factorization(p)
+        self.assertEqual(s.factorization(),[p,p,q,q,r,r,r])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -3,7 +3,7 @@ from sage.all import ZZ, ecm, factor, sqrt
 
 
 class Factorization:
-    def __init__(self, x, use_ecm=False, timeout_duration=20):
+    def __init__(self, x, use_ecm=False, timeout_duration=20, factorization=None):
         self._value = x
         self._square = None
         self._squarefree = None
@@ -13,7 +13,7 @@ class Factorization:
         self._use_ecm = use_ecm
         self._timeout_duration = timeout_duration
         self._unit = 1 if x >= 0 else -1
-        self.set_factorization()
+        self.set_factorization(factorization)
 
     def value(self):
         return self._value
@@ -37,7 +37,10 @@ class Factorization:
             return [i for (i, e) in self._factorization for _ in range(e)]
         return self._factorization
 
-    def set_factorization(self):
+    def set_factorization(self, factorization):
+        if factorization is not None:
+            self._factorization = factorization
+            return
         if self._use_ecm:
             factors = timeout(ecm.factor, [self._value], timeout_duration=self._timeout_duration)
             if isinstance(factors, str):
@@ -91,6 +94,16 @@ class Factorization:
         if self._timeout:
             return self._factorization
         return ZZ(sqrt(self._value // self.cm_squarefree()))
+
+    def __add__(self, other):
+        value = self.value() * other.value()
+        if self.timeout() or other.timeout():
+            return Factorization(value, factorization=self.timeout_message())
+        other_factors = dict(other.factorization(False))
+        factors = [(p, e + other_factors.get(p, 0)) for p, e in self.factorization(False)]
+        self_primes = set(self.factorization())
+        factors += [i for i in other.factorization(False) if not i[0] in self_primes]
+        return Factorization(value, factorization=sorted(factors, key=lambda x: x[0]))
 
 
 def customize_curve(curve):

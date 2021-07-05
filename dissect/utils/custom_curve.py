@@ -113,9 +113,13 @@ class CustomCurve:
 
     def frobenius_disc_factorization(self):
         if self._cm_factorization is None:
-            self._cm_factorization = Factorization(self.trace() ** 2 - 4 * self._q)
+            frob_disc = self.trace() ** 2 - 4 * self._q
+            if self._cm_discriminant is not None:
+                self._cm_factorization = Factorization(self._cm_discriminant) + Factorization(
+                    frob_disc // self._cm_discriminant)
+            else:
+                self._cm_factorization = Factorization(frob_disc)
         return self._cm_factorization
-
 
     def is_over_extension(self):
         return not (self.field().is_prime_field() or self.is_over_binary())
@@ -138,7 +142,7 @@ class CustomCurve:
 
     def set_form(self, form_desc):
         if form_desc in ["Edwards", "TwistedEdwards"]:
-            a = {"raw":"0x1"} if form_desc == "Edwards" else self._params["a"]
+            a = {"raw": "0x1"} if form_desc == "Edwards" else self._params["a"]
             d = self._params["d"]
             self._form = CurveForm(self._field, {"form": form_desc, "a": a, "d": d})
         else:
