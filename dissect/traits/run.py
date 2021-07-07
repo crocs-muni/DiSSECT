@@ -8,6 +8,7 @@ import sys
 from multiprocessing import Process, Queue, Lock
 
 from sage.all import sage_eval
+from pymongo.errors import ServerSelectionTimeoutError
 
 from dissect.definitions import TRAIT_NAMES, TRAIT_PATH, TRAIT_MODULE_PATH
 from dissect.utils.database_handler import (
