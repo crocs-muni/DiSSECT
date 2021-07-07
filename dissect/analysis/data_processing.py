@@ -147,8 +147,6 @@ def get_all(df, choices):
 
 def find_outliers(df, features):
     df = df.copy(deep=True)
-    mms = MinMaxScaler()
-    df[features] = mms.fit_transform(df[features].values)
     lof = LocalOutlierFactor()
     data = df[features]
     lof.fit(data)
@@ -169,7 +167,7 @@ def flatten_trait(trait_name, trait_df):
             param_df = trait_df
 
         param_df = param_df.drop(nonnumeric_outputs(trait_name), axis=1)
-        param_df.columns = map(lambda x: "curve" if x == "curve" else f"{x}_{params}", param_df.columns)
+        param_df.columns = map(lambda x: "curve" if x == "curve" else f"{trait_name}_{x}_{params}", param_df.columns)
         result_df = result_df.merge(param_df, "left", on="curve")
 
     return result_df

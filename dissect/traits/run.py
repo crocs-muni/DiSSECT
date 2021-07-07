@@ -69,7 +69,14 @@ def consumer(identifier, database, trait, queue, lock):
         if is_solved(db, curve, trait, params):
             continue
         trait_result = trait_function(curve, **params)
-        store_trait_result(db, curve, trait, params, trait_result)
+        for i in range(3):
+            try:
+                store_trait_result(db, curve, trait, params, trait_result)
+                break
+            except ServerSelectionTimeoutError:
+                print(f"Server timeout: Reconnection attempt {i}")
+                db = connect(database)
+
 
 
 def main():
