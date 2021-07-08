@@ -62,6 +62,7 @@ def load_curves(source: str) -> pd.DataFrame:
     def project(record: Dict[str, Any]):
         projection = {}
         projection["curve"] = record["name"]
+        projection["category"] = record["category"]
         projection["standard"] = record["standard"]
         projection["bitlength"] = int(record["field"]["bits"])
         projection["field"] = record["field"]["type"]
@@ -109,15 +110,11 @@ def get_params(choices):
 
 def filter_df(df, choices):
     # TODO this way of checking is expensive - add curve categories to DB
-    allowed_curves = []
-    for source in choices["source"]:
-        allowed_curves += STD_CURVE_DICT.get(source, [])
-
     if "sim" not in choices["source"]:
         df = df[df.standard == True]
 
     if "std" not in choices["source"]:
-        df = df[df.curve.isin(allowed_curves) | (df.standard == False)]
+        df = df[df.category.isin(choices["source"]) | (df.standard == False)]
 
     df = df[df.field.isin(choices["field"])]
     filtered = filter_choices(choices, ["source", "field", "Feature:", "Modifier:"])
