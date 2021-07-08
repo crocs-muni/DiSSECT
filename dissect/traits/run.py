@@ -8,6 +8,7 @@ import sys
 from multiprocessing import Process, Queue, Lock
 
 from sage.all import sage_eval
+from pymongo.errors import ServerSelectionTimeoutError
 
 from dissect.definitions import TRAIT_NAMES, TRAIT_PATH, TRAIT_MODULE_PATH
 from dissect.utils.database_handler import (
@@ -66,9 +67,20 @@ def consumer(identifier, database, trait, queue, lock):
             with lock:
                 print(f"Consumer {identifier:2d} stopped")
             return
-        if is_solved(db, curve, trait, params):
+
+        for i in range(3): # TODO move to db_handler?
+            try:
+                solved = is_solved(db, curve, trait, params)
+                break
+            except ServerSelectionTimeoutError:
+                print(f"Server timeout: Reconnection attempt {i}")
+                db = connect(database)
+
+        if solved:
             continue
+
         trait_result = trait_function(curve, **params)
+
         for i in range(3):
             try:
                 store_trait_result(db, curve, trait, params, trait_result)

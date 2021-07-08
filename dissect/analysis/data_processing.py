@@ -44,13 +44,13 @@ def load_trait(source: str, trait: str, params: Dict[str, Any] = None, curve: st
                skip_timeouts: bool = False) -> pd.DataFrame:
     if source.startswith("mongodb"):
         trait_results = database.get_trait_results(database.connect(source), trait)
-    else:  # if source.startswith("http"):
+    elif source.startswith("http"):
         with urllib.request.urlopen(source + f"dissect.trait_{trait}.json.bz2") as f:
             trait_results = json.loads(bz2.decompress(f.read()).decode("utf-8"))
             trait_results = map(database._decode_ints, map(database._flatten_trait_result, trait_results))
-    # else:
-    #     with open(file, "r") as f:
-    #         trait_results = json.load(f)
+    else:
+        with open(source, "r") as f:
+            trait_results = json.load(f)
 
     if skip_timeouts:
         trait_results = filter(lambda x: "NO DATA (timed out)" not in x.values(), trait_results)
@@ -64,6 +64,7 @@ def load_curves(source: str) -> pd.DataFrame:
         projection["curve"] = record["name"]
         projection["category"] = record["category"]
         projection["standard"] = record["standard"]
+        projection["category"] = record["category"]
         projection["bitlength"] = int(record["field"]["bits"])
         projection["field"] = record["field"]["type"]
         projection["cofactor"] = (
@@ -75,12 +76,12 @@ def load_curves(source: str) -> pd.DataFrame:
 
     if source.startswith("mongodb"):
         curve_records = database.get_curves(database.connect(source), dict(), raw=True)
-    else:  # source.startswith("http"):
+    elif source.startswith("http"):
         with urllib.request.urlopen(source + "dissect.curves.json.bz2") as f:
             curve_records = json.loads(bz2.decompress(f.read()).decode("utf-8"))
-    # else:
-    #     with open(file, "r") as f:
-    #         curve_records = json.load(f)
+    else:
+        with open(source, "r") as f:
+            curve_records = json.load(f)
 
     df = pd.DataFrame(map(project, curve_records)).convert_dtypes()
     return df
