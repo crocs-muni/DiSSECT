@@ -33,7 +33,7 @@ TRAIT_INFO["a02"] = {
 }
 
 TRAIT_INFO["a03"] = {
-    "description": "Factorization of the quadratic twist cardinality in an extension, i.e. $#E(\\mathbb{F}_{p^d})$",
+    "description": "Factorization of the quadratic twist cardinality in an extension, i.e. $\\#E(\\mathbb{F}_{p^d})$",
     "motivation": "Smooth cardinality of a quadratic twist might allow attacks on some implementations",
     "input": {
         "deg": (int, "Degree of extension")
