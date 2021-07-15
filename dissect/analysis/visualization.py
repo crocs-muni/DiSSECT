@@ -3,24 +3,17 @@ from dissect.analysis.data_processing import get_all, filter_df
 from dissect.analysis.widgets import get_choices
 from ipywidgets import widgets, interact, fixed
 from IPython.display import display
+import pandas
+
 
 def violin(df, feature):
-    plt.figure(figsize=(12,8), dpi=100, facecolor='w', edgecolor='k')
+    plt.figure(figsize=(12, 8), dpi=100, facecolor='w', edgecolor='k')
     plt.violinplot([df[feature].tolist()])
     plt.show()
 
-def normalized_barplot(
-        ax,
-        df,
-        param,
-        feature,
-        modifier=lambda x: x,
-        title=None,
-        tick_spacing=0,
-        xlab="Values",
-        ylab="Normalized count",
-        drop_timeouts=True,
-):
+
+def multibarplot(ax, df, param, feature, modifier=lambda x: x, title=None, tick_spacing=0, xlab="Values",
+                 ylab="Normalized count", drop_timeouts=True):
     # make a copy of the dataframe, drop timeouts if eligible and apply the modifier function to the feature row
     df2 = df.copy(deep=False)
     if drop_timeouts:
@@ -79,8 +72,11 @@ def normalized_barplot(
     ax.set_ylabel(ylab)
 
 
-def multiplot(height, width, columns, trait_df, filtering_widgets, modifier=None, tick_spacing=None):
-    custom_modifier = True if modifier != None else False
+# def normalized_parameters_bubbleplot()
+
+
+def multiplot_mess(height, width, columns, trait_df, filtering_widgets, modifier=None, tick_spacing=None):
+    custom_modifier = True if modifier is not None else False
     results = get_all(trait_df, get_choices(filtering_widgets))
     nrows = len(results) // columns + 1
     fig, axes = plt.subplots(figsize=(width, height), nrows=nrows, ncols=columns)
@@ -94,8 +90,8 @@ def multiplot(height, width, columns, trait_df, filtering_widgets, modifier=None
     for result, ax in zip(results, axes):
         df, param, feature, picked_modifier, modifier_name = result
         picked_modifier = modifier if custom_modifier else picked_modifier
-        picked_tick_spacing = tick_spacing if tick_spacing != None else 0
-        normalized_barplot(ax, df, param, feature, picked_modifier, tick_spacing=picked_tick_spacing)
+        picked_tick_spacing = tick_spacing if tick_spacing is not None else 0
+        multibarplot(ax, df, param, feature, picked_modifier, tick_spacing=picked_tick_spacing)
     modifier_title = "custom" if custom_modifier else modifier_name
     title = f"Normalized barplot of {feature} with modifier: {modifier_title}"
     fig.suptitle(title)
@@ -110,8 +106,8 @@ def change_size(figure, width, height):
 
 def interact_multiplot(trait_df, filtering_widgets, modifier=None, tick_spacing=0, columns=1):
     def_height, def_width = 10, 7
-    fig = multiplot(def_height, def_width, columns, trait_df, filtering_widgets, modifier=modifier,
-                    tick_spacing=tick_spacing)
+    fig = multiplot_mess(def_height, def_width, columns, trait_df, filtering_widgets, modifier=modifier,
+                         tick_spacing=tick_spacing)
     plt.close()
     heightSlider = widgets.IntSlider(description='height', min=1, max=30, step=1, value=10)
     widthSlider = widgets.IntSlider(description='width', min=1, max=30, step=1, value=7)
@@ -119,3 +115,56 @@ def interact_multiplot(trait_df, filtering_widgets, modifier=None, tick_spacing=
     out = widgets.interactive_output(change_size, {'width': widthSlider, 'height': heightSlider, 'figure': fixed(fig)})
     display(ui, out)
     return filter_df(trait_df, get_choices(filtering_widgets))
+
+
+def multiplot(nrows, ncols, height=5, width=7):
+    fig, axes = plt.subplots(figsize=(width, height), nrows=nrows, ncols=ncols)
+    return axes
+
+
+def normalized_barplot(v1, v2, ax=None, v1_title="Standard curves", v2_title="Simulated curves", title=None):
+    both = pandas.concat([v1, v2])
+
+    both_counts = both.value_counts() / len(both)
+    v1_counts = v1.value_counts() / len(v1)
+    v2_counts = v2.value_counts() / len(v2)
+
+    ticks = sorted(list(both_counts.index))
+
+    if not ax:
+        fig, ax = plt.subplots(figsize=(6, 6), nrows=1, ncols=1)
+    ax.bar(v1_counts.index.map(ticks.index) - 0.2, v1_counts.values, width=0.4,
+           label=f"{v1_title} n={len(v1)}")
+    ax.bar(v2_counts.index.map(ticks.index) + 0.2, v2_counts.values, width=0.4,
+           label=f"{v2_title} n={len(v2)}")
+    ax.set_xticks(range(len(ticks)))
+    ax.legend()
+    if title:
+        ax.title(title)
+    ax.set_xlabel("values")
+    ax.set_ylabel("Normalized count")
+
+
+def normalized_bubbleplot(v1, v2, ax=None, v1_title="Standard curves", v2_title="Simulated curves", title=None):
+    v1_counts = v1.value_counts()
+    v2_counts = v2.value_counts()
+    v1_positions = zip(*v1_counts.index)
+    v2_positions = zip(*v2_counts.index)
+
+    v1_area = 30 ** 2 * v1_counts.values / sum(v1_counts.values)
+    v2_area = 30 ** 2 * v2_counts.values / sum(v2_counts.values)
+
+    if not ax:
+        fig, ax = plt.subplots(figsize=(6, 6), nrows=1, ncols=1)
+    ax.scatter(*v1_positions, s=v1_area, alpha=0.5, label=f"{v1_title} n={len(v1)}")
+    ax.scatter(*v2_positions, s=v2_area, alpha=0.5, label=f"{v2_title} n={len(v2)}")
+    ax.legend()
+    labels = list(v1.keys())
+    if title:
+        ax.title(title)
+    if v1_title:
+        ax.set_xlabel(labels[0])
+    if v2_title:
+        ax.set_ylabel(labels[1])
+    if not ax:
+        ax.plot()

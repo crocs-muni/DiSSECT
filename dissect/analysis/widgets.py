@@ -5,7 +5,6 @@ import ipywidgets as widgets
 from IPython.core.display import display
 from sage.all import sage_eval, RR, ZZ
 
-
 from dissect.definitions import (
     STD_SOURCES,
     STD_BITLENGTHS,
@@ -112,7 +111,7 @@ def common_filtering_widgets():
         "cofactor", preselected=[1], others=ALL_COFACTORS
     )
     field_choice = multi_checkbox_widget(
-        "field", preselected=["Prime", "Binary", "Extension"], others = ["Prime", "Binary", "Extension"]
+        "field", preselected=["Prime", "Binary", "Extension"], others=["Prime", "Binary", "Extension"]
     )
     return [source_choice, bitlength_choice, cofactor_choice, field_choice]
 
@@ -175,9 +174,7 @@ def get_filtering_widgets(trait_name, trait_df):
     tab.set_title(1, "Trait parameters")
     tab.set_title(2, "Features & modifiers")
     display(tab)
-    return curves_widgets,params_widgets, features_widgets
-
-
+    return curves_widgets, params_widgets, features_widgets
 
 
 def get_trait_params_dict(trait_name):
@@ -196,7 +193,7 @@ def get_trait_features(trait_name, trait_df):
         feature
         for feature in trait_df.columns
         if feature
-           not in ["curve", "standard", "bitlength", "cofactor","field","category"]
+           not in ["curve", "standard", "bitlength", "cofactor", "field", "category"]
            + list(get_trait_params_dict(trait_name).keys())
     ]
 

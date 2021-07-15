@@ -26,6 +26,7 @@ def create_curves_index(db: Database) -> None:
 def create_trait_index(db: Database, trait: str) -> None:
     db[f"trait_{trait}"].create_index([("curve", 1), ("params", 1)], unique=True)
 
+
 def _format_curve(curve):
     c = dict()
     c["name"] = curve["name"]
@@ -40,19 +41,20 @@ def _format_curve(curve):
     c["field"] = curve["field"]
     c["params"] = curve["params"]
     try:
-        if (curve["generator"]["x"]["raw"] or curve["generator"]["x"]["poly"]) and (curve["generator"]["y"]["raw"] or curve["generator"]["y"]["poly"]):
+        if (curve["generator"]["x"]["raw"] or curve["generator"]["x"]["poly"]) and (
+                curve["generator"]["y"]["raw"] or curve["generator"]["y"]["poly"]):
             c["generator"] = curve["generator"]
     except:
         pass
 
     if isinstance(curve["order"], int):
         c["order"] = hex(curve["order"])
-    elif isinstance(curve["order"], str): # Workaround for std database
+    elif isinstance(curve["order"], str):  # Workaround for std database
         c["order"] = hex(int(curve["order"], base=16))
 
     if isinstance(curve["cofactor"], int):
         c["cofactor"] = hex(curve["cofactor"])
-    elif isinstance(curve["cofactor"], str): # Workaround for std database
+    elif isinstance(curve["cofactor"], str):  # Workaround for std database
         c["cofactor"] = hex(int(curve["cofactor"], base=16))
 
     c["standard"] = False if "sim" in curve["category"] else True
@@ -69,7 +71,6 @@ def _format_curve(curve):
     if sim:
         c["simulation"] = sim
 
-
     if curve.get("properties"):
         properties = curve["properties"]
     else:
@@ -81,14 +82,13 @@ def _format_curve(curve):
     return c
 
 
-
 def upload_curves(db: Database, path: str) -> Tuple[int, int]:
     try:
         with open(path, "r") as f:
             curves = json.load(f)
 
         if not isinstance(
-            curves, list
+                curves, list
         ):  # inconsistency between simulated and standard format
             curves = curves["curves"]
     except Exception:  # invalid format
@@ -132,7 +132,7 @@ def upload_results(db: Database, trait_name: str, path: str) -> Tuple[int, int]:
 
 
 def get_curves(
-    db: Database, filters: Any = {}, raw: bool = False
+        db: Database, filters: Any = {}, raw: bool = False
 ) -> Iterable[CustomCurve]:
     curve_filter: Dict[str, Any] = {}
 
@@ -189,11 +189,11 @@ def _encode_ints(result: Any) -> Any:
 
 
 def store_trait_result(
-    db: Database,
-    curve: CustomCurve,
-    trait: str,
-    params: Dict[str, Any],
-    result: Dict[str, Any],
+        db: Database,
+        curve: CustomCurve,
+        trait: str,
+        params: Dict[str, Any],
+        result: Dict[str, Any],
 ) -> bool:
     trait_result = {"curve": curve.name()}
     trait_result["params"] = _cast_sage_types(params)
@@ -205,7 +205,7 @@ def store_trait_result(
 
 
 def is_solved(
-    db: Database, curve: CustomCurve, trait: str, params: Dict[str, Any]
+        db: Database, curve: CustomCurve, trait: str, params: Dict[str, Any]
 ) -> bool:
     trait_result = {"curve": curve.name()}
     trait_result["params"] = _cast_sage_types(params)
@@ -213,11 +213,11 @@ def is_solved(
 
 
 def get_trait_results(
-    db: Database,
-    trait: str,
-    params: Dict[str, Any] = None,
-    curve: str = None,
-    limit: int = None,
+        db: Database,
+        trait: str,
+        params: Dict[str, Any] = None,
+        curve: str = None,
+        limit: int = None,
 ):
     result_filter = {}
     if params:
@@ -245,7 +245,7 @@ def _flatten_trait_result(record: Dict[str, Any]):
 
 
 def _flatten_trait_result_rec(
-    record: Dict[str, Any], prefix: str, output: Dict[str, Any]
+        record: Dict[str, Any], prefix: str, output: Dict[str, Any]
 ):
     for key in record:
         if isinstance(record[key], dict):
@@ -301,6 +301,7 @@ if __name__ == "__main__":
     print(f"Connecting to database {database_uri}")
     db = connect(database_uri)
 
+
     def upload_curves_from_files(curve_files_list):
         for curves_file in curve_files_list:
             print(f"Loading curves from file {curves_file}")
@@ -308,11 +309,13 @@ if __name__ == "__main__":
             uploaded, total = upload_curves(db, curves_file)
             print(f"Successfully uploaded {uploaded} out of {total}")
 
+
     def upload_results_from_file(trait_name, results_file):
         print(f"Loading trait {trait_name} results from file {results_file}")
         create_trait_index(db, trait_name)
         uploaded, total = upload_results(db, trait_name, results_file)
         print(f"Successfully uploaded {uploaded} out of {total}")
+
 
     if sys.argv[1] == "curves":
         if args == ["all"]:

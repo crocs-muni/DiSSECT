@@ -152,19 +152,21 @@ def find_outliers(df, features):
     return df[predictions == -1]
 
 
-def flatten_trait(trait_name, trait_df):
+def flatten_trait(trait_name, trait_df, param_values = None):
     result_df = trait_df[["curve"]].drop_duplicates(subset=["curve"])
 
     for params in params_iter(trait_name):
+        if param_values and not list(params.values())[0] in param_values:
+            continue
         if params:
             for param in params:
                 param_df = trait_df[trait_df[param] == params[param]]
 
-            param_df = param_df.drop(params.keys(), axis=1)
+            param_df = param_df.drop(params.keys(), axis=1,errors="ignore")
         else:
             param_df = trait_df
 
-        param_df = param_df.drop(nonnumeric_outputs(trait_name), axis=1)
+        param_df = param_df.drop(nonnumeric_outputs(trait_name), axis=1,errors="ignore")
         param_df.columns = map(lambda x: "curve" if x == "curve" else f"{trait_name}_{x}_{params}", param_df.columns)
         result_df = result_df.merge(param_df, "left", on="curve")
 
