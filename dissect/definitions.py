@@ -10,6 +10,7 @@ ROOT_DIR: Union[Path, Any] = Path(__file__).parent  # This is the project root
 CURVE_PATH_SIM = Path(ROOT_DIR, "curves_json_sim")
 TRAIT_PATH = Path(ROOT_DIR, "traits")
 PARALLEL_RESULTS_PATH = Path(ROOT_DIR, "utils", "parallel", "results")
+KOHEL_PATH = Path(ROOT_DIR, "utils", "kohel")
 ZVP_PATH = Path(ROOT_DIR, "utils", "zvp")
 EFD_PATH = Path(ROOT_DIR, "utils", "efd")
 EFD_SHORTW_PROJECTIVE_ADDITION_PATH = Path(EFD_PATH, "shortw", "projective", "addition")
