@@ -24,7 +24,7 @@ Thanks to Ján Jančár for help with the curve database and CRoCS members for f
 
 **Using virtual environment**:
 
-- Clone with  ```git clone --recurse-submodules https://gitlab.fi.muni.cz/x408178/DiSSECT.git```
+- Clone with  ```git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT.git```
 - Create virtual environment for python in sage: `sage --python3 -m venv --system-site-packages environment`
 - Activate the environment: `source environment/bin/activate`
 - Run `pip install --editable .` in DiSSECT folder
