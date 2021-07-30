@@ -14,5 +14,5 @@ matplotlib
 autopep8
 console-menu
 python-dateutil>=2.7.3
-numpy>=1.16.5
+numpy==1.19.5
 sklearn
