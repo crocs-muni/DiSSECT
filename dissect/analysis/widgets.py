@@ -34,7 +34,7 @@ def multi_checkbox_widget(name, preselected, others):
     # Get rid of overlapping elements and convert everything to strings, but sort numerically when possible
     others_strings = list(map(str, set(others) - set(preselected)))
     try:
-        others = sorted(others_strings, key=int)
+        others = sorted(others_strings, key=lambda x: 999 if x == "all" else int(x))
     except ValueError:
         others = sorted(others_strings)
     preselected = list(map(str, preselected))
@@ -105,10 +105,10 @@ def common_filtering_widgets():
         "source", preselected=["std", "sim"], others=STD_SOURCES
     )
     bitlength_choice = multi_checkbox_widget(
-        "bitlength", preselected=[128, 160, 192, 224, 256], others=STD_BITLENGTHS
+        "bitlength", preselected=[128, 160, 192, 224, 256], others=STD_BITLENGTHS+["all"]
     )
     cofactor_choice = multi_checkbox_widget(
-        "cofactor", preselected=[1], others=ALL_COFACTORS
+        "cofactor", preselected=[1], others=ALL_COFACTORS+["all"]
     )
     field_choice = multi_checkbox_widget(
         "field", preselected=["Prime", "Binary", "Extension"], others=["Prime", "Binary", "Extension"]

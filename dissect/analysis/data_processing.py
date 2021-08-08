@@ -9,7 +9,7 @@ from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import MinMaxScaler
 
 import dissect.utils.database_handler as database
-from dissect.definitions import STD_CURVE_DICT, ALL_CURVE_COUNT
+from dissect.definitions import STD_CURVE_DICT, ALL_CURVE_COUNT, ALL_COFACTORS
 from dissect.traits.trait_info import TRAIT_INFO, params_iter, nonnumeric_outputs
 
 
@@ -121,8 +121,10 @@ def filter_df(df, choices):
     filtered = filter_choices(choices, ["source", "field", "Feature:", "Modifier:"])
 
     for key, value in filtered.items():
-        options = list(map(int, value))
-        df = df[df[key].isin(options)]
+        if "all" not in value:
+            options = list(map(int, value))
+            df = df[df[key].isin(options)]
+
 
     return df
 
