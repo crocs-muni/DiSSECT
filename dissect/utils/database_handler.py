@@ -10,6 +10,7 @@ from sage.all import Integer
 
 from dissect.definitions import CURVE_PATH_SIM, TRAIT_NAMES, TRAIT_PATH
 from dissect.utils.custom_curve import CustomCurve
+from dissect.traits.trait_info import TRAIT_INFO
 
 CURVE_PATH = "."
 
@@ -114,22 +115,30 @@ def upload_results(db: Database, trait_name: str, path: str) -> Tuple[int, int]:
 
     success = 0
     total = 0
-    for curve, result in results.items():
-        for params, values in result.items():
-            params = params.replace("'", '"')
-            total += 1
-            record = {
-                "curve": curve,
-                "params": json.loads(params),
-                "result": _encode_ints(values),
-            }
-            try:
-                if db[f"trait_{trait_name}"].insert_one(record):
-                    success += 1
-            except Exception:
-                pass
-    return success, total
+    for result in results:
+        total += 1
 
+        record = {}
+        try:
+            if isinstance(result["curve"], str):
+                curve = db["curves"].find_one({"name": result["curve"]})
+                record["curve"] = {}
+                record["curve"]["name"] = curve["name"]
+                record["curve"]["standard"] = curve["standard"]
+                record["curve"]["category"] = curve["category"]
+                record["curve"]["bits"] = curve["field"]["bits"]
+                record["curve"]["cofactor"] = curve["cofactor"]
+            else:
+                record["curve"] = result["curve"]
+            record["params"] = result["params"]
+            record["result"] = result["result"]
+
+            if db[f"trait_{trait_name}"].insert_one(record):
+                success += 1
+        except Exception:
+            pass
+
+    return success, total
 
 def get_curves(
         db: Database, filters: Any = {}, raw: bool = False
@@ -195,7 +204,14 @@ def store_trait_result(
         params: Dict[str, Any],
         result: Dict[str, Any],
 ) -> bool:
-    trait_result = {"curve": curve.name()}
+    trait_result = {}
+    trait_result["curve"] = {}
+    trait_result["curve"]["name"] = curve.name()
+    trait_result["curve"]["standard"] = "sim" not in curve.name()
+    trait_result["curve"]["category"] = curve.category()
+    trait_result["curve"]["bits"] = curve.q().nbits()
+    trait_result["curve"]["cofactor"] = curve.cofactor()
+    trait_result["curve"] = _cast_sage_types(trait_result["curve"])
     trait_result["params"] = _cast_sage_types(params)
     trait_result["result"] = _encode_ints(result)
     try:
@@ -215,23 +231,51 @@ def is_solved(
 def get_trait_results(
         db: Database,
         trait: str,
-        params: Dict[str, Any] = None,
-        curve: str = None,
-        limit: int = None,
+        query: Dict[str, Any] = None,
+        limit: int = None
 ):
-    result_filter = {}
-    if params:
-        result_filter["params"] = params
-    if curve:
-        result_filter["curve"] = {"$regex": curve}
-
     aggregate_pipeline = []
-    aggregate_pipeline.append({"$match": result_filter})
+    aggregate_pipeline.append({"$match": format_query(trait, query) if query else dict()})
+    aggregate_pipeline.append({"$unset": "_id"})
     if limit:
         aggregate_pipeline.append({"$limit": limit})
 
     aggregated = list(db[f"trait_{trait}"].aggregate(aggregate_pipeline))
     return map(_decode_ints, map(_flatten_trait_result, aggregated))
+
+def format_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]:
+    result = {}
+
+    def helper(key, cast, db_key = None):
+        if key not in query:
+            return
+
+        db_key = db_key if db_key else key
+
+        if isinstance(query[key], list):
+            if len(query[key]) == 0:
+                return
+            if len(query[key]) == 1:
+                result[db_key] = cast(query[key][0])
+            else:
+                result[db_key] = { "$in": list(map(cast, query[key])) }
+        else:
+            result[db_key] = cast(query[key])
+
+    helper("curve", str)
+    helper("standard", bool)
+    helper("category", str)
+    helper("bits", int)
+    helper("cofactor", int)
+
+    for key in TRAIT_INFO[trait_name]["input"]:
+        helper(key, TRAIT_INFO[trait_name]["input"][key][0], f"params.{key}")
+
+    for key in TRAIT_INFO[trait_name]["output"]:
+        helper(key, lambda x: _encode_ints(TRAIT_INFO[trait_name]["output"][key][0](x)), f"result.{key}")
+
+    return result
+
 
 
 def _flatten_trait_result(record: Dict[str, Any]):
@@ -275,18 +319,8 @@ if __name__ == "__main__":
             file=sys.stderr,
         )
         print(
-            f"   OR: python3 {sys.argv[0]} curves [database_uri] all", file=sys.stderr
-        )
-        print(
             f"   OR: python3 {sys.argv[0]} results [database_uri] <trait_name> <results_file>",
             file=sys.stderr,
-        )
-        print(
-            f"   OR: python3 {sys.argv[0]} results [database_uri] <trait_name> auto",
-            file=sys.stderr,
-        )
-        print(
-            f"   OR: python3 {sys.argv[0]} results [database_uri] all", file=sys.stderr
         )
         sys.exit(1)
 
@@ -318,22 +352,6 @@ if __name__ == "__main__":
 
 
     if sys.argv[1] == "curves":
-        if args == ["all"]:
-            import glob
-
-            upload_curves_from_files(glob.glob(str(CURVE_PATH) + "/*/*.json"))
-            upload_curves_from_files(glob.glob(str(CURVE_PATH_SIM) + "/*/*/*.json"))
-        else:
-            upload_curves_from_files(args)
+        upload_curves_from_files(args)
     elif sys.argv[1] == "results":
-        if args == ["all"]:
-            for trait_name in TRAIT_NAMES:
-                results_file = Path(TRAIT_PATH, trait_name, str(trait_name) + ".json")
-                upload_results_from_file(trait_name, results_file)
-        else:
-            trait_name = args[0]
-            if args[1] == "auto":
-                results_file = Path(TRAIT_PATH, trait_name, str(trait_name) + ".json")
-            else:
-                results_file = args[1]
-            upload_results_from_file(trait_name, results_file)
+        upload_results_from_file(args[0], args[1])
