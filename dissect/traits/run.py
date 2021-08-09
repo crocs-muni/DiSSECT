@@ -80,6 +80,8 @@ def consumer(identifier, database, trait, queue, lock):
             continue
 
         trait_result = trait_function(curve, **params)
+        if not trait_result:
+            continue
 
         for i in range(3):
             try:
