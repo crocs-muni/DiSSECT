@@ -17,6 +17,7 @@ class CustomCurve:
         self._field = None
         self._field_type = None
         self._q = None
+        self._field_bits = None
         self._form = None
         self._ec = None
         self.set_field(db_curve["field"])
@@ -60,6 +61,9 @@ class CustomCurve:
 
     def field_type(self):
         return self._field_type
+
+    def field_bits(self):
+        return self._field_bits
 
     def q(self):
         return self._q
@@ -133,12 +137,14 @@ class CustomCurve:
             p = ZZ(field_dict["p"])
             self._field = GF(p, proof=False)
             self._q = p
+            self._field_bits = self._q.nbits()
         else:
             base = ZZ(2) if field_dict["type"] == "Binary" else ZZ(field_dict["base"])
             degree = ZZ(field_dict["degree"])
             modulus = dict_to_poly(field_dict["poly"], GF(base)["w"])
             self._field = GF(base ** degree, "w", modulus, proof=False)
             self._q = base ** degree
+            self._field_bits = self._q.nbits()
 
     def set_form(self, form_desc):
         if form_desc in ["Edwards", "TwistedEdwards"]:
@@ -190,7 +196,6 @@ class CustomCurve:
             self._trace = ZZ(properties['trace'])
         except KeyError:
             self._trace = self._q + 1 - self._cardinality
-
 
     def extended_ec(self, deg):
         ext_q = self._q ** deg
