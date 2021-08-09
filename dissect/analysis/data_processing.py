@@ -87,6 +87,31 @@ def load_curves(source: str) -> pd.DataFrame:
     return df
 
 
+def get_trait(source: str, trait_name: str, query: Dict[str, Any]):
+    trait_results = []
+    if source.startswith("mongodb"):
+        trait_results = database.get_trait_results(database.connect(source), trait_name, query)
+    elif source.startswith("http"):
+        args = []
+        for key in query:
+            if isinstance(query[key], list):
+                for item in query[key]:
+                    args.append(f"{key}={item}")
+            else:
+                args.append(f"{key}={item}")
+        args = "&".join(args)
+
+        req = urllib.request.Request(f"{source}db/trait/{trait_name}?{args}", method="GET")
+
+        with urllib.request.urlopen(req) as f:
+            trait_results = json.loads(f.read())["data"]
+
+
+    trait_results = filter(lambda x: "NO DATA (timed out)" not in x.values(), trait_results)
+
+    return pd.DataFrame(trait_results).convert_dtypes()
+
+
 def get_trait_df(source: str, curves, trait_name):
     # load all results for the given trait
     df_trait = load_trait(source, trait_name)
