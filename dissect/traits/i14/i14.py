@@ -9,11 +9,14 @@ def i14_curve_function(curve: CustomCurve):
     """
 
     cut = curve.field_bits() - 160 - 1
-    if cut<=0:
+    if cut <= 0:
         return None
-    acut = curve.a() & ((1 << cut) - 1)
-    bcut = curve.b() >> (curve.field_bits() - cut - 1)
-    return {"o": ZZ(acut)-ZZ(bcut)}
+    try:
+        acut = ZZ(curve.a()) & ((1 << cut) - 1)
+        bcut = ZZ(curve.b()) >> (curve.field_bits() - cut - 1)
+    except (ValueError, TypeError):
+        return None
+    return {"o": ZZ(acut) - ZZ(bcut)}
 
 
 def compute_i14_results(curve_list, desc="", verbose=False):
