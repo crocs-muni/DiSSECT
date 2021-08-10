@@ -8,11 +8,8 @@ from pymongo.database import Database
 from pymongo.errors import DuplicateKeyError
 from sage.all import Integer
 
-from dissect.definitions import CURVE_PATH_SIM, TRAIT_NAMES, TRAIT_PATH
 from dissect.utils.custom_curve import CustomCurve
 from dissect.traits.trait_info import TRAIT_INFO
-
-CURVE_PATH = "."
 
 
 def connect(database: Optional[str] = None) -> Database:
@@ -140,7 +137,8 @@ def upload_results(db: Database, trait_name: str, path: str) -> Tuple[int, int]:
 
     return success, total
 
-def get_curves(
+
+def get_curves_old(
         db: Database, filters: Any = {}, raw: bool = False
 ) -> Iterable[CustomCurve]:
     curve_filter: Dict[str, Any] = {}
@@ -168,6 +166,41 @@ def get_curves(
         return map(_decode_ints, cursor)
     # Cursor tends to timeout -> collect the results first (memory heavy), alternatively disable cursor timeout
     return map(CustomCurve, list(cursor))
+
+def get_curves(db: Database, query: Any = None) -> Iterable[CustomCurve]:
+    aggregate_pipeline = []
+    aggregate_pipeline.append({"$match": format_curve_query(query) if query else dict()})
+    aggregate_pipeline.append({"$unset": "_id"})
+    curves = list(db["curves"].aggregate(aggregate_pipeline))
+
+    return map(_decode_ints, curves)
+
+def format_curve_query(query: Dict[str, Any]) -> Dict[str, Any]:
+    result = {}
+
+    def helper(key, cast, db_key = None):
+        if key not in query:
+            return
+
+        db_key = db_key if db_key else key
+
+        if isinstance(query[key], list):
+            if len(query[key]) == 0:
+                return
+            if len(query[key]) == 1:
+                result[db_key] = cast(query[key][0])
+            else:
+                result[db_key] = { "$in": list(map(cast, query[key])) }
+        else:
+            result[db_key] = cast(query[key])
+
+    helper("name", str)
+    helper("standard", bool)
+    helper("category", str)
+    helper("bits", int, "field.bits")
+    helper("cofactor", int)
+
+    return result
 
 
 def _cast_sage_types(result: Any) -> Any:
@@ -235,7 +268,7 @@ def get_trait_results(
         limit: int = None
 ):
     aggregate_pipeline = []
-    aggregate_pipeline.append({"$match": format_query(trait, query) if query else dict()})
+    aggregate_pipeline.append({"$match": format_trait_query(trait, query) if query else dict()})
     aggregate_pipeline.append({"$unset": "_id"})
     if limit:
         aggregate_pipeline.append({"$limit": limit})
@@ -243,7 +276,7 @@ def get_trait_results(
     aggregated = list(db[f"trait_{trait}"].aggregate(aggregate_pipeline))
     return map(_decode_ints, map(_flatten_trait_result, aggregated))
 
-def format_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]:
+def format_trait_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]:
     result = {}
 
     def helper(key, cast, db_key = None):
@@ -262,11 +295,11 @@ def format_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]:
         else:
             result[db_key] = cast(query[key])
 
-    helper("curve", str)
-    helper("standard", bool)
-    helper("category", str)
-    helper("bits", int)
-    helper("cofactor", int)
+    helper("name", str, "curve.name")
+    helper("standard", bool, "curve.standard")
+    helper("category", str, "curve.category")
+    helper("bits", int, "curve.bits")
+    helper("cofactor", lambda x: hex(int(x)), "curve.cofactor")
 
     for key in TRAIT_INFO[trait_name]["input"]:
         helper(key, TRAIT_INFO[trait_name]["input"][key][0], f"params.{key}")
@@ -278,12 +311,15 @@ def format_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]:
 
 
 
+# TODO move to data_processing?
 def _flatten_trait_result(record: Dict[str, Any]):
     output = dict()
 
-    output["curve"] = record["curve"]
+    _flatten_trait_result_rec(record["curve"], "", output)
     _flatten_trait_result_rec(record["params"], "", output)
     _flatten_trait_result_rec(record["result"], "", output)
+    output["curve"] = output["name"]
+    del output["name"]
 
     return output
 

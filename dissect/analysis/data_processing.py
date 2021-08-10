@@ -40,25 +40,7 @@ class Modifier:
         return lambda x: len(x)
 
 
-def load_trait(source: str, trait: str, params: Dict[str, Any] = None, curve: str = None,
-               skip_timeouts: bool = False) -> pd.DataFrame:
-    if source.startswith("mongodb"):
-        trait_results = database.get_trait_results(database.connect(source), trait)
-    elif source.startswith("http"):
-        with urllib.request.urlopen(source + f"dissect.trait_{trait}.json.bz2") as f:
-            trait_results = json.loads(bz2.decompress(f.read()).decode("utf-8"))
-            trait_results = map(database._decode_ints, map(database._flatten_trait_result, trait_results))
-    else:
-        with open(source, "r") as f:
-            trait_results = json.load(f)
-
-    if skip_timeouts:
-        trait_results = filter(lambda x: "NO DATA (timed out)" not in x.values(), trait_results)
-
-    return pd.DataFrame(trait_results).convert_dtypes()
-
-
-def load_curves(source: str) -> pd.DataFrame:
+def get_curves(source: str, query: Dict[str, Any]):
     def project(record: Dict[str, Any]):
         projection = {}
         projection["curve"] = record["name"]
@@ -74,16 +56,25 @@ def load_curves(source: str) -> pd.DataFrame:
         )
         return projection
 
+    curves = []
     if source.startswith("mongodb"):
-        curve_records = database.get_curves(database.connect(source), dict(), raw=True)
+        curves = database.get_curves(database.connect(source), query)
     elif source.startswith("http"):
-        with urllib.request.urlopen(source + "dissect.curves.json.bz2") as f:
-            curve_records = json.loads(bz2.decompress(f.read()).decode("utf-8"))
-    else:
-        with open(source, "r") as f:
-            curve_records = json.load(f)
+        args = []
+        for key in query:
+            if isinstance(query[key], list):
+                for item in query[key]:
+                    args.append(f"{key}={item}")
+            else:
+                args.append(f"{key}={item}")
+        args = "&".join(args)
 
-    df = pd.DataFrame(map(project, curve_records)).convert_dtypes()
+        req = urllib.request.Request(f"{source}db/curves?{args}", method="GET")
+
+        with urllib.request.urlopen(req) as f:
+            curves = json.loads(f.read())["data"]
+
+    df = pd.DataFrame(map(project, curves)).convert_dtypes()
     return df
 
 
@@ -98,7 +89,7 @@ def get_trait(source: str, trait_name: str, query: Dict[str, Any]):
                 for item in query[key]:
                     args.append(f"{key}={item}")
             else:
-                args.append(f"{key}={item}")
+                args.append(f"{key}={query[key]}")
         args = "&".join(args)
 
         req = urllib.request.Request(f"{source}db/trait/{trait_name}?{args}", method="GET")
@@ -110,14 +101,6 @@ def get_trait(source: str, trait_name: str, query: Dict[str, Any]):
     trait_results = filter(lambda x: "NO DATA (timed out)" not in x.values(), trait_results)
 
     return pd.DataFrame(trait_results).convert_dtypes()
-
-
-def get_trait_df(source: str, curves, trait_name):
-    # load all results for the given trait
-    df_trait = load_trait(source, trait_name)
-    # join curve metadata to trait results
-    df_trait = curves.merge(df_trait, "right", "curve")
-    return df_trait
 
 
 def filter_choices(choices, ignored):

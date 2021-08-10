@@ -15,7 +15,7 @@ from dissect.utils.database_handler import (
     connect,
     store_trait_result,
     is_solved,
-    get_curves,
+    get_curves_old,
     create_trait_index,
 )
 from dissect.traits.trait_info import params_iter
@@ -37,7 +37,7 @@ def producer(database, trait, args, queue, lock):
     with lock:
         print("Producer starting ...")
 
-    curves = get_curves(db, filters=args)
+    curves = get_curves_old(db, filters=args)
     for curve in curves:
         for params in params_iter(trait):
             # TODO check if curve is not mutated ~ if it can be safely passed into the queue
