@@ -281,6 +281,15 @@ TRAIT_INFO["a29"] = {
     }
 }
 
+TRAIT_INFO["i14"] = {
+    "description": "Bit overlaps in curve coefficients",
+    "motivation": "Brainpool construction causes significant overlap",
+    "input": {},
+    "output": {
+        "o": (int, "overlap")
+    }
+}
+
 def params_iter(trait_name):
     with open(pathlib.Path(TRAIT_PATH, trait_name, trait_name + ".params"), "r") as params_file:
         params = json.load(params_file)

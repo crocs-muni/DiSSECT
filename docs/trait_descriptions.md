@@ -251,3 +251,17 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 **Distribution:** Uniform
 
 **Time complexity:** Division in $t$-bit prime field
+
+
+
+### i14
+
+**Input:** elliptic curve $E/\mathbb{F}_{p}:y^2=x^3+ax+b$ where $p$ has bit-length $t$
+
+**Output:** $a_{160}-b_{-160}$ where $a_{160}$ is the $t-160$ rightmost bits of $a$ and $b_{-160}$ is the $t-160$ leftmost bits of $b$.
+
+**Motivation:** The Brainpool construction causes the result to be 0 half of the time.
+
+**Distribution:** Uniform
+
+**Time complexity:** Subtraction in $t$-bit prime field 
