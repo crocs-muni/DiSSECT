@@ -40,7 +40,7 @@ class Modifier:
         return lambda x: len(x)
 
 
-def get_curves(source: str, query: Dict[str, Any]):
+def get_curves(source: str, query: Dict[str, Any] = {}):
     def project(record: Dict[str, Any]):
         projection = {}
         projection["curve"] = record["name"]
@@ -78,7 +78,7 @@ def get_curves(source: str, query: Dict[str, Any]):
     return df
 
 
-def get_trait(source: str, trait_name: str, query: Dict[str, Any]):
+def get_trait(source: str, trait_name: str, query: Dict[str, Any] = {}):
     trait_results = []
     if source.startswith("mongodb"):
         trait_results = database.get_trait_results(database.connect(source), trait_name, query)
