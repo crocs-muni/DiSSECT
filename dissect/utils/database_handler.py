@@ -124,6 +124,7 @@ def upload_results(db: Database, trait_name: str, path: str) -> Tuple[int, int]:
                 record["curve"]["standard"] = curve["standard"]
                 record["curve"]["category"] = curve["category"]
                 record["curve"]["bits"] = curve["field"]["bits"]
+                record["curve"]["field_type"] = curve["field"]["type"]
                 record["curve"]["cofactor"] = curve["cofactor"]
             else:
                 record["curve"] = result["curve"]
@@ -199,6 +200,7 @@ def format_curve_query(query: Dict[str, Any]) -> Dict[str, Any]:
     helper("category", str)
     helper("bits", int, "field.bits")
     helper("cofactor", int)
+    helper("field_type", str, "field.type")
 
     return result
 
@@ -300,6 +302,7 @@ def format_trait_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]
     helper("category", str, "curve.category")
     helper("bits", int, "curve.bits")
     helper("cofactor", lambda x: hex(int(x)), "curve.cofactor")
+    helper("field_type", lambda x: hex(int(x)), "curve.field_type")
 
     for key in TRAIT_INFO[trait_name]["input"]:
         helper(key, TRAIT_INFO[trait_name]["input"][key][0], f"params.{key}")

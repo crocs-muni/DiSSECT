@@ -104,16 +104,16 @@ def common_filtering_widgets():
     source_choice = multi_checkbox_widget(
         "source", preselected=["std", "sim"], others=STD_SOURCES
     )
-    bitlength_choice = multi_checkbox_widget(
-        "bitlength", preselected=[128, 160, 192, 224, 256], others=STD_BITLENGTHS+["all"]
+    bits_choice = multi_checkbox_widget(
+        "bits", preselected=[128, 160, 192, 224, 256], others=STD_BITLENGTHS+["all"]
     )
     cofactor_choice = multi_checkbox_widget(
         "cofactor", preselected=[1], others=ALL_COFACTORS+["all"]
     )
     field_choice = multi_checkbox_widget(
-        "field", preselected=["Prime", "Binary", "Extension"], others=["Prime", "Binary", "Extension"]
+        "field_type", preselected=["Prime", "Binary", "Extension"], others=["Prime", "Binary", "Extension"]
     )
-    return [source_choice, bitlength_choice, cofactor_choice, field_choice]
+    return [source_choice, bits_choice, cofactor_choice, field_choice]
 
 
 def trait_filtering_widgets(trait_name):
@@ -193,7 +193,7 @@ def get_trait_features(trait_name, trait_df):
         feature
         for feature in trait_df.columns
         if feature
-           not in ["curve", "standard", "bitlength", "cofactor", "field", "category"]
+           not in ["curve", "standard", "bits", "cofactor", "field_type", "category"]
            + list(get_trait_params_dict(trait_name).keys())
     ]
 

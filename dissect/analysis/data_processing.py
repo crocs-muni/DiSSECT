@@ -113,7 +113,7 @@ def filter_choices(choices, ignored):
 
 def get_params(choices):
     return filter_choices(
-        choices, ["source", "bitlength", "field", "cofactor", "Feature:", "Modifier:"]
+        choices, ["source", "bits", "field_type", "cofactor", "Feature:", "Modifier:"]
     )
 
 
@@ -125,8 +125,8 @@ def filter_df(df, choices):
     if "std" not in choices["source"]:
         df = df[df.category.isin(choices["source"]) | (df.standard == False)]
 
-    df = df[df.field.isin(choices["field"])]
-    filtered = filter_choices(choices, ["source", "field", "Feature:", "Modifier:"])
+    df = df[df.field_type.isin(choices["field_type"])]
+    filtered = filter_choices(choices, ["source", "field_type", "Feature:", "Modifier:"])
 
     for key, value in filtered.items():
         if "all" not in value:
