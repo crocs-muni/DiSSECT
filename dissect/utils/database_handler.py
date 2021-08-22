@@ -176,6 +176,9 @@ def get_curves(db: Database, query: Any = None) -> Iterable[CustomCurve]:
 
     return map(_decode_ints, curves)
 
+def get_curve_categories(db: Database) -> Iterable[str]:
+    return db["curves"].distinct("category")
+
 def format_curve_query(query: Dict[str, Any]) -> Dict[str, Any]:
     result = {}
 
@@ -186,13 +189,13 @@ def format_curve_query(query: Dict[str, Any]) -> Dict[str, Any]:
         db_key = db_key if db_key else key
 
         if isinstance(query[key], list):
-            if len(query[key]) == 0:
+            if len(query[key]) == 0 or "all" in query[key]:
                 return
             if len(query[key]) == 1:
                 result[db_key] = cast(query[key][0])
             else:
                 result[db_key] = { "$in": list(map(cast, query[key])) }
-        else:
+        elif query[key] != "all":
             result[db_key] = cast(query[key])
 
     helper("name", str)
@@ -288,13 +291,13 @@ def format_trait_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]
         db_key = db_key if db_key else key
 
         if isinstance(query[key], list):
-            if len(query[key]) == 0:
+            if len(query[key]) == 0 or "all" in query[key]:
                 return
             if len(query[key]) == 1:
                 result[db_key] = cast(query[key][0])
             else:
                 result[db_key] = { "$in": list(map(cast, query[key])) }
-        else:
+        elif query[key] != "all":
             result[db_key] = cast(query[key])
 
     helper("name", str, "curve.name")
@@ -302,7 +305,7 @@ def format_trait_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]
     helper("category", str, "curve.category")
     helper("bits", int, "curve.bits")
     helper("cofactor", lambda x: hex(int(x)), "curve.cofactor")
-    helper("field_type", lambda x: hex(int(x)), "curve.field_type")
+    helper("field_type", str, "curve.field_type")
 
     for key in TRAIT_INFO[trait_name]["input"]:
         helper(key, TRAIT_INFO[trait_name]["input"][key][0], f"params.{key}")

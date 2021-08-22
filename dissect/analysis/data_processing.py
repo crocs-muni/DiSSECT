@@ -103,6 +103,16 @@ def get_trait(source: str, trait_name: str, query: Dict[str, Any] = {}):
     return pd.DataFrame(trait_results).convert_dtypes()
 
 
+def get_curve_categories(source: str):
+    if source.startswith("mongodb"):
+        return list(database.get_curve_categories(database.connect(source)))
+    if source.startswith("http"):
+        req = urllib.request.Request(f"{source}db/curve_categories", method="GET")
+
+        with urllib.request.urlopen(req) as f:
+            return json.loads(f.read())["data"]
+
+
 def filter_choices(choices, ignored):
     filtered = {}
     for key in choices:
@@ -113,20 +123,14 @@ def filter_choices(choices, ignored):
 
 def get_params(choices):
     return filter_choices(
-        choices, ["source", "bits", "field_type", "cofactor", "Feature:", "Modifier:"]
+        choices, ["category", "bits", "field_type", "cofactor", "Feature:", "Modifier:"]
     )
 
 
 def filter_df(df, choices):
     # TODO this way of checking is expensive - add curve categories to DB
-    if "sim" not in choices["source"]:
-        df = df[df.standard == True]
-
-    if "std" not in choices["source"]:
-        df = df[df.category.isin(choices["source"]) | (df.standard == False)]
-
     df = df[df.field_type.isin(choices["field_type"])]
-    filtered = filter_choices(choices, ["source", "field_type", "Feature:", "Modifier:"])
+    filtered = filter_choices(choices, ["category", "field_type", "Feature:", "Modifier:"])
 
     for key, value in filtered.items():
         if "all" not in value:
@@ -142,14 +146,14 @@ def get_all(df, choices):
     feature = choices["Feature:"]
     params = get_params(choices)
     if len(params) == 0:
-        return [(filter_df(df, choices), params, feature, modifier, choices["Modifier:"])]
+        return [[df, params, feature, modifier, choices["Modifier:"]]]
     param, values = params.popitem()
     choices.pop(param)
     results = []
     for v in values:
         param_choice = choices.copy()
         param_choice[param] = [v]
-        results.append((filter_df(df, param_choice), param_choice, feature, modifier, choices["Modifier:"]))
+        results.append((df, param_choice, feature, modifier, choices["Modifier:"]))
     return results
 
 
