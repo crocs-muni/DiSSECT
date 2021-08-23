@@ -20,6 +20,8 @@ class CustomCurve:
         self._field_bits = None
         self._form = None
         self._ec = None
+        self._standard = db_curve.get("standard", False) or "sim" not in db_curve["name"]
+        self._example = db_curve.get("example", False)
         self.set_field(db_curve["field"])
         self.set_form(db_curve["form"])
         self.set_ec()
@@ -43,6 +45,12 @@ class CustomCurve:
 
     def category(self):
         return self._category
+
+    def standard(self):
+        return self._standard
+
+    def example(self):
+        return self._example
 
     def params(self):
         return self._params

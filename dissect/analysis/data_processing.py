@@ -43,6 +43,7 @@ def get_curves(source: str, query: Dict[str, Any] = {}):
         projection["curve"] = record["name"]
         projection["category"] = record["category"]
         projection["standard"] = record["standard"]
+        projection["example"] = record["example"]
         projection["category"] = record["category"]
         projection["bitlength"] = int(record["field"]["bits"])
         projection["field"] = record["field"]["type"]
@@ -71,8 +72,7 @@ def get_curves(source: str, query: Dict[str, Any] = {}):
         with urllib.request.urlopen(req) as f:
             curves = json.loads(f.read())["data"]
 
-    df = pd.DataFrame(map(project, curves)).convert_dtypes()
-    return df
+    return pd.DataFrame(map(project, curves)).convert_dtypes()
 
 
 def get_trait(source: str, trait_name: str, query: Dict[str, Any] = {}, skip_failed=True):
@@ -180,7 +180,7 @@ def flatten_trait(trait_name, trait_df, param_values = None, ignore_curve_data =
 
         param_df = param_df.drop(nonnumeric_outputs(trait_name), axis=1, errors="ignore")
         if ignore_curve_data:
-            param_df = param_df.drop(filter(lambda x: x in ("bits", "category", "cofactor", "field_type", "standard"), param_df.columns), axis=1, errors="ignore")
+            param_df = param_df.drop(filter(lambda x: x in ("bits", "category", "cofactor", "field_type", "standard", "example"), param_df.columns), axis=1, errors="ignore")
         param_df.columns = map(lambda x: "curve" if x == "curve" else f"{trait_name}_{x}_{params}", param_df.columns)
 
         result_df = result_df.merge(param_df, "left", on="curve")

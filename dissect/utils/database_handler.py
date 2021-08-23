@@ -56,6 +56,7 @@ def _format_curve(curve):
         c["cofactor"] = hex(int(curve["cofactor"], base=16))
 
     c["standard"] = False if "sim" in curve["category"] else True
+    c["example"] = curve.get("example", False)
 
     if curve.get("simulation"):
         sim = curve["simulation"]
@@ -122,6 +123,7 @@ def upload_results(db: Database, trait_name: str, path: str) -> Tuple[int, int]:
                 record["curve"] = {}
                 record["curve"]["name"] = curve["name"]
                 record["curve"]["standard"] = curve["standard"]
+                record["curve"]["example"] = curve["example"]
                 record["curve"]["category"] = curve["category"]
                 record["curve"]["bits"] = curve["field"]["bits"]
                 record["curve"]["field_type"] = curve["field"]["type"]
@@ -200,6 +202,7 @@ def format_curve_query(query: Dict[str, Any]) -> Dict[str, Any]:
 
     helper("name", str)
     helper("standard", bool)
+    helper("example", bool)
     helper("category", str)
     helper("bits", int, "field.bits")
     helper("cofactor", int)
@@ -245,7 +248,8 @@ def store_trait_result(
     trait_result = {}
     trait_result["curve"] = {}
     trait_result["curve"]["name"] = curve.name()
-    trait_result["curve"]["standard"] = "sim" not in curve.name()
+    trait_result["curve"]["standard"] = curve.standard()
+    trait_result["curve"]["example"] = curve.example()
     trait_result["curve"]["category"] = curve.category()
     trait_result["curve"]["bits"] = curve.q().nbits()
     trait_result["curve"]["cofactor"] = curve.cofactor()
@@ -302,6 +306,7 @@ def format_trait_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]
 
     helper("name", str, "curve.name")
     helper("standard", bool, "curve.standard")
+    helper("example", bool, "curve.example")
     helper("category", str, "curve.category")
     helper("bits", int, "curve.bits")
     helper("cofactor", lambda x: hex(int(x)), "curve.cofactor")
