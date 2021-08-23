@@ -109,7 +109,7 @@ if __name__ == "__main__":
 
     for i in range(3):
         try:
-            trait_df = dp.get_trait(source, trait, args)
+            trait_df = dp.get_trait(source, trait, args, False)
             break
         except:
             print(f"Reconnecting attempt {i} ...")
@@ -119,13 +119,14 @@ if __name__ == "__main__":
         clean_feature(trait_df, feature)
 
     flat_df = dp.flatten_trait(trait, trait_df)
+    features = list(filter(lambda x: x != "curve", flat_df.columns))
 
-    for feature in filter(lambda x: x != "curve", flat_df.columns):
+    for feature in features:
         scale_feature(flat_df, feature)
 
     curves = curves.merge(flat_df, "left", on="curve")
 
-    for feature in filter(lambda x: x != "curve", curves.columns):
-        impute_feature(curves, feature, "mean")
+    for feature in features:
+        impute_feature(curves, feature, -1.0)
 
     curves.to_csv(output, sep=';', index=False)

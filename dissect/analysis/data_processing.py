@@ -75,7 +75,7 @@ def get_curves(source: str, query: Dict[str, Any] = {}):
     return df
 
 
-def get_trait(source: str, trait_name: str, query: Dict[str, Any] = {}):
+def get_trait(source: str, trait_name: str, query: Dict[str, Any] = {}, skip_failed=True):
     trait_results = []
     if source.startswith("mongodb"):
         trait_results = database.get_trait_results(database.connect(source), trait_name, query)
@@ -95,7 +95,8 @@ def get_trait(source: str, trait_name: str, query: Dict[str, Any] = {}):
             trait_results = json.loads(f.read())["data"]
 
 
-    trait_results = filter(lambda x: "NO DATA (timed out)" not in x.values(), trait_results)
+    if skip_failed:
+        trait_results = filter(lambda x: "NO DATA (timed out)" not in x.values(), trait_results)
 
     return pd.DataFrame(trait_results).convert_dtypes()
 
