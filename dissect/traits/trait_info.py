@@ -214,43 +214,7 @@ TRAIT_INFO["i08"] = {
     }
 }
 
-TRAIT_INFO["i10"] = {
-    "description": "Points satisfying ZVP conditions.",
-    "motivation": "Might allow nontrivial ZVP attacks.",
-    "input": {
-        "multiple": (int, "Integer"),
-        "formula_file": (str, "Path to formula file"),
-    },
-    "output": {
-        "points": (List[List[int]], "Points"),
-        "len": (int, "Length")
-    }
-}
 
-TRAIT_INFO["i11"] = {
-    "description": "Points satisfying ZVP independently of the multiple.",
-    "motivation": "Might allow trivial ZVP/RPA attacks.",
-    "input": {
-        "formula_file": (str, "Path to formula file")
-    },
-    "output": {
-        "points": (List[List[int]], "Points"),
-        "len": (int, "Length")
-    }
-}
-
-TRAIT_INFO["i12"] = {
-    "description": "Exceptional points with respect to given formulas.",
-    "motivation": "Might allow exceptional point attacks.",
-    "input": {
-        "formula_file": (str, "Path to formula file")
-    },
-    "output": {
-        "ideal": (str, "Ideal"),
-        "dimension": (int, "Dimension"),
-        "variety": (None, "Variety")
-    }
-}
 
 TRAIT_INFO["i13"] = {
     "description": "Computation of $a^3/b^2$.",

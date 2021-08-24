@@ -75,7 +75,7 @@ def create_trait():
         unittest.main(trait_name=name, u=True, s=False)
     desc = input("Please write a short description for your trait: ")
     update_descriptions(name, desc)
-    input("Awesome! Trait " + name + " is ready to go!")
+    input("Awesome! Trait " + name + " is ready to go! Don't forget to update trait_info.py")
 
 
 def modify_description(name):
@@ -143,7 +143,7 @@ def delete_trait():
         return
     update_default_params(name, delete=True)
     update_descriptions(name, delete=True)
-    input('You can remove the trait folder and the unittest.')
+    input('You can remove the trait folder and the unittest. Dont forget to update trait_info.py')
 
 
 def main():
