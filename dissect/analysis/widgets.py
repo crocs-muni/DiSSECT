@@ -6,14 +6,14 @@ from IPython.core.display import display
 from sage.all import sage_eval, RR, ZZ
 
 from dissect.definitions import (
-    STD_SOURCES,
-    STD_BITLENGTHS,
+    ALL_BITLENGTHS,
     ALL_COFACTORS,
     TRAIT_DESCRIPTIONS,
 )
 from dissect.definitions import TRAIT_PATH, TRAIT_NAMES
 from dissect.utils.json_handler import load_from_json
-from dissect.analysis.data_processing import Modifier
+from dissect.analysis.data_processing import Modifier, get_curve_categories
+import dissect.traits.trait_info as trait_info
 
 
 def trait_selection_widget():
@@ -47,12 +47,6 @@ def multi_checkbox_widget(name, preselected, others):
         value=f"{name}:", layout=widgets.Layout(position="top")
     )
     search_widget = widgets.Text(layout=widgets.Layout(width="auto"))
-    select_all_widget = widgets.Checkbox(
-        description="(un)select all",
-        value=False,
-        style=style,
-        layout=widgets.Layout(width="110px"),
-    )
     select_preselected_widget = widgets.Checkbox(value=True)
     options_dict = {
         **{
@@ -71,13 +65,8 @@ def multi_checkbox_widget(name, preselected, others):
     all_options = preselected + others
     options = [options_dict[option] for option in all_options]
     options_widget = widgets.VBox(options, layout=widgets.Layout(width="auto"))
-    # link all options to the select_all_widget, but also make sure this doesn't unselect preselected ones:
-    for option in options:
-        widgets.jsdlink((select_all_widget, "value"), (option, "value"))
-        if option.value:
-            widgets.jsdlink((select_preselected_widget, "value"), (option, "value"))
     multi_select = widgets.VBox(
-        [description_widget, search_widget, select_all_widget, options_widget],
+        [description_widget, search_widget, options_widget],
         layout=widgets.Layout(width=widget_outer_width),
     )
     multi_select.name = name
@@ -100,20 +89,21 @@ def multi_checkbox_widget(name, preselected, others):
     return multi_select
 
 
-def common_filtering_widgets():
+def curve_widgets(source):
+    categories = get_curve_categories(source)
     source_choice = multi_checkbox_widget(
-        "source", preselected=["std", "sim"], others=STD_SOURCES
+        "category", preselected=["all"], others=categories
     )
-    bitlength_choice = multi_checkbox_widget(
-        "bitlength", preselected=[128, 160, 192, 224, 256], others=STD_BITLENGTHS+["all"]
+    bits_choice = multi_checkbox_widget(
+        "bits", preselected=["all"], others=ALL_BITLENGTHS
     )
     cofactor_choice = multi_checkbox_widget(
-        "cofactor", preselected=[1], others=ALL_COFACTORS+["all"]
+        "cofactor", preselected=["all"], others=ALL_COFACTORS
     )
     field_choice = multi_checkbox_widget(
-        "field", preselected=["Prime", "Binary", "Extension"], others=["Prime", "Binary", "Extension"]
+        "field_type", preselected=["all"], others=["Prime", "Binary", "Extension"]
     )
-    return [source_choice, bitlength_choice, cofactor_choice, field_choice]
+    return [source_choice, bits_choice, cofactor_choice, field_choice]
 
 
 def trait_filtering_widgets(trait_name):
@@ -129,8 +119,8 @@ def trait_filtering_widgets(trait_name):
     return param_choice
 
 
-def features_filtering_widgets(trait_name, trait_df):
-    features = get_trait_features(trait_name, trait_df)
+def features_filtering_widgets(trait_name):
+    features = trait_info.outputs(trait_name)
     features_widgets = widgets.RadioButtons(
         options=features,
         value=features[0],
@@ -146,8 +136,8 @@ def features_filtering_widgets(trait_name, trait_df):
     return [features_widgets, modifiers_widgets]
 
 
-def get_filtering_widgets(trait_name, trait_df):
-    curves_widgets = [*common_filtering_widgets()]
+def get_filtering_widgets(source, trait_name):
+    curves_widgets = [*curve_widgets(source)]
     curves_hbox = widgets.HBox(
         curves_widgets,
         layout=widgets.Layout(
@@ -161,7 +151,7 @@ def get_filtering_widgets(trait_name, trait_df):
             justify_content="space-around", flex_flow="row wrap", height="250px"
         ),
     )
-    features_widgets = features_filtering_widgets(trait_name, trait_df)
+    features_widgets = features_filtering_widgets(trait_name)
     features_hbox = widgets.HBox(
         features_widgets,
         layout=widgets.Layout(
@@ -186,16 +176,6 @@ def get_trait_params_dict(trait_name):
         params_dict[param_name] = param_values
     params_dict_sorted = {key: params_dict[key] for key in sorted(params_dict)}
     return params_dict_sorted
-
-
-def get_trait_features(trait_name, trait_df):
-    return [
-        feature
-        for feature in trait_df.columns
-        if feature
-           not in ["curve", "standard", "bitlength", "cofactor", "field", "category"]
-           + list(get_trait_params_dict(trait_name).keys())
-    ]
 
 
 def get_choices(filtering_widgets_tabs):

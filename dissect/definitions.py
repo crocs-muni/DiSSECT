@@ -63,39 +63,8 @@ STD_BITLENGTHS = sorted(STD_BITLENGTHS)
 ALL_CURVE_COUNT = 217396
 SIM_CURVE_COUNT = ALL_CURVE_COUNT - STD_CURVE_COUNT
 SIM_BITLENGTHS = [128, 160, 192, 224, 256]
-SIM_COFACTORS = [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    20,
-    21,
-    22,
-    23,
-    24,
-    25,
-    26,
-    27,
-    28,
-    29,
-    30,
-    31,
-]
+ALL_BITLENGTHS = sorted(set(STD_BITLENGTHS + SIM_BITLENGTHS))
+SIM_COFACTORS = list(range(1, 9))
 ALL_COFACTORS = sorted(set(STD_COFACTORS + SIM_COFACTORS))
 
 TRAIT_DESCRIPTIONS = dict(

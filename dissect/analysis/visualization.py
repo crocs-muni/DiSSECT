@@ -75,9 +75,9 @@ def multibarplot(ax, df, param, feature, modifier=lambda x: x, title=None, tick_
 # def normalized_parameters_bubbleplot()
 
 
-def multiplot_mess(height, width, columns, trait_df, filtering_widgets, modifier=None, tick_spacing=None):
+def multiplot_mess(height, width, columns, trait_df, choices, modifier=None, tick_spacing=None):
     custom_modifier = True if modifier is not None else False
-    results = get_all(trait_df, get_choices(filtering_widgets))
+    results = get_all(trait_df, choices)
     nrows = len(results) // columns + 1
     fig, axes = plt.subplots(figsize=(width, height), nrows=nrows, ncols=columns)
     if nrows == 1 and columns == 1:
@@ -104,9 +104,9 @@ def change_size(figure, width, height):
     display(figure)
 
 
-def interact_multiplot(trait_df, filtering_widgets, modifier=None, tick_spacing=0, columns=1):
+def interact_multiplot(trait_df, choices, modifier=None, tick_spacing=0, columns=1):
     def_height, def_width = 10, 7
-    fig = multiplot_mess(def_height, def_width, columns, trait_df, filtering_widgets, modifier=modifier,
+    fig = multiplot_mess(def_height, def_width, columns, trait_df, choices, modifier=modifier,
                          tick_spacing=tick_spacing)
     plt.close()
     heightSlider = widgets.IntSlider(description='height', min=1, max=30, step=1, value=10)
@@ -114,7 +114,6 @@ def interact_multiplot(trait_df, filtering_widgets, modifier=None, tick_spacing=
     ui = widgets.HBox([heightSlider, widthSlider])
     out = widgets.interactive_output(change_size, {'width': widthSlider, 'height': heightSlider, 'figure': fixed(fig)})
     display(ui, out)
-    return filter_df(trait_df, get_choices(filtering_widgets))
 
 
 def multiplot(nrows, ncols, height=5, width=7):

@@ -60,20 +60,20 @@ if __name__ == "__main__":
         "--category",
         nargs="+",
         type=str,
-        default=None,
+        default="all",
         help="category of applicable curves"
     )
     parser.add_argument(
-        "--bitlength",
+        "--bits",
         type=str,
-        default="",
+        default="all",
         help="bitlength of applicable curves (or a range X-Y)",
     )
     parser.add_argument(
         "--cofactors",
         nargs="+",
-        type=int,
-        default=None,
+        type=str,
+        default="all",
         help="the list of cofactors the curve can have (default: all)",
     )
     parser.add_argument(
@@ -91,51 +91,42 @@ if __name__ == "__main__":
     parser.add_argument(
         "--source",
         type=str,
-        default="https://dissect.crocs.fi.muni.cz/static/data/",
+        default="https://dissect.crocs.fi.muni.cz/",
         help="data source"
     )
 
 
-    args = parser.parse_args()
+    args = vars(parser.parse_args())
+    input = args["input"]; del args["input"]
+    source = args["source"]; del args["source"]
+    output = args["output"]; del args["output"]
+    trait = args["trait"]; del args["trait"]
 
     try:
-        curves = pd.read_csv(args.input, sep=';', index_col=False, low_memory=False)
+        curves = pd.read_csv(input, sep=';', index_col=False, low_memory=False)
     except FileNotFoundError:
-        curves = dp.load_curves(args.source)
+        curves = dp.get_curves(source, args)[["curve"]]
 
-        if hasattr(args, "category") and args.category:
-            curves = curves[curves["category"].isin(args.category)]
-        if hasattr(args, "bitlength") and args.bitlength:
-            bitlength_range = list(map(int, args.bitlength.split("-")))
-            if len(bitlength_range) == 2:
-                curves = curves[(curves["bitlength"] >= bitlength_range[0]) & (curves["bitlength"] <= bitlength_range[1])]
-            else:
-                curves = curves[curves["bitlength"] == bitlength_range[0]]
-        if hasattr(args, "cofactors") and args.cofactors:
-            curves = curves[curves["cofactor"].isin(args.cofactors)]
-
-        curves = curves[["curve"]]
-
-    TRAIT_NAME = args.trait
     for i in range(3):
         try:
-            trait_df = dp.load_trait(args.source, TRAIT_NAME)
+            trait_df = dp.get_trait(source, trait, args, False)
             break
         except:
             print(f"Reconnecting attempt {i} ...")
             sleep(10)
 
-    for feature in numeric_outputs(TRAIT_NAME):
+    for feature in numeric_outputs(trait):
         clean_feature(trait_df, feature)
 
-    flat_df = dp.flatten_trait(TRAIT_NAME, trait_df)
+    flat_df = dp.flatten_trait(trait, trait_df)
     features = list(filter(lambda x: x != "curve", flat_df.columns))
+
     for feature in features:
         scale_feature(flat_df, feature)
 
     curves = curves.merge(flat_df, "left", on="curve")
 
     for feature in features:
-        impute_feature(curves, feature, "mean")
+        impute_feature(curves, feature, -1.0)
 
-    curves.to_csv(args.output, sep=';', index=False)
+    curves.to_csv(output, sep=';', index=False)

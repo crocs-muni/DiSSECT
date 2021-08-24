@@ -16,9 +16,6 @@ from dissect.traits.trait_info import TRAIT_INFO, params_iter, nonnumeric_output
 class Modifier:
     """a class of lambda functions for easier modifications if visualised values"""
 
-    def __init__(self):
-        pass
-
     @staticmethod
     def identity():
         return lambda x: x
@@ -40,30 +37,13 @@ class Modifier:
         return lambda x: len(x)
 
 
-def load_trait(source: str, trait: str, params: Dict[str, Any] = None, curve: str = None,
-               skip_timeouts: bool = False) -> pd.DataFrame:
-    if source.startswith("mongodb"):
-        trait_results = database.get_trait_results(database.connect(source), trait)
-    elif source.startswith("http"):
-        with urllib.request.urlopen(source + f"dissect.trait_{trait}.json.bz2") as f:
-            trait_results = json.loads(bz2.decompress(f.read()).decode("utf-8"))
-            trait_results = map(database._decode_ints, map(database._flatten_trait_result, trait_results))
-    else:
-        with open(source, "r") as f:
-            trait_results = json.load(f)
-
-    if skip_timeouts:
-        trait_results = filter(lambda x: "NO DATA (timed out)" not in x.values(), trait_results)
-
-    return pd.DataFrame(trait_results).convert_dtypes()
-
-
-def load_curves(source: str) -> pd.DataFrame:
+def get_curves(source: str, query: Dict[str, Any] = {}):
     def project(record: Dict[str, Any]):
         projection = {}
         projection["curve"] = record["name"]
         projection["category"] = record["category"]
         projection["standard"] = record["standard"]
+        projection["example"] = record["example"]
         projection["category"] = record["category"]
         projection["bitlength"] = int(record["field"]["bits"])
         projection["field"] = record["field"]["type"]
@@ -74,25 +54,61 @@ def load_curves(source: str) -> pd.DataFrame:
         )
         return projection
 
+    curves = []
     if source.startswith("mongodb"):
-        curve_records = database.get_curves(database.connect(source), dict(), raw=True)
+        curves = database.get_curves(database.connect(source), query)
     elif source.startswith("http"):
-        with urllib.request.urlopen(source + "dissect.curves.json.bz2") as f:
-            curve_records = json.loads(bz2.decompress(f.read()).decode("utf-8"))
-    else:
-        with open(source, "r") as f:
-            curve_records = json.load(f)
+        args = []
+        for key in query:
+            if isinstance(query[key], list):
+                for item in query[key]:
+                    args.append(f"{key}={item}")
+            else:
+                args.append(f"{key}={query[key]}")
+        args = "&".join(args)
 
-    df = pd.DataFrame(map(project, curve_records)).convert_dtypes()
-    return df
+        req = urllib.request.Request(f"{source}db/curves?{args}", method="GET")
+
+        with urllib.request.urlopen(req) as f:
+            curves = json.loads(f.read())["data"]
+
+    return pd.DataFrame(map(project, curves)).convert_dtypes()
 
 
-def get_trait_df(source: str, curves, trait_name):
-    # load all results for the given trait
-    df_trait = load_trait(source, trait_name)
-    # join curve metadata to trait results
-    df_trait = curves.merge(df_trait, "right", "curve")
-    return df_trait
+def get_trait(source: str, trait_name: str, query: Dict[str, Any] = {}, skip_failed=True):
+    trait_results = []
+    if source.startswith("mongodb"):
+        trait_results = database.get_trait_results(database.connect(source), trait_name, query)
+    elif source.startswith("http"):
+        args = []
+        for key in query:
+            if isinstance(query[key], list):
+                for item in query[key]:
+                    args.append(f"{key}={item}")
+            else:
+                args.append(f"{key}={query[key]}")
+        args = "&".join(args)
+
+        req = urllib.request.Request(f"{source}db/trait/{trait_name}?{args}", method="GET")
+
+        with urllib.request.urlopen(req) as f:
+            trait_results = json.loads(f.read())["data"]
+
+
+    if skip_failed:
+        trait_results = filter(lambda x: "NO DATA (timed out)" not in x.values(), trait_results)
+
+    return pd.DataFrame(trait_results).convert_dtypes()
+
+
+def get_curve_categories(source: str):
+    if source.startswith("mongodb"):
+        return list(database.get_curve_categories(database.connect(source)))
+    if source.startswith("http"):
+        req = urllib.request.Request(f"{source}db/curve_categories", method="GET")
+
+        with urllib.request.urlopen(req) as f:
+            return json.loads(f.read())["data"]
 
 
 def filter_choices(choices, ignored):
@@ -105,20 +121,14 @@ def filter_choices(choices, ignored):
 
 def get_params(choices):
     return filter_choices(
-        choices, ["source", "bitlength", "field", "cofactor", "Feature:", "Modifier:"]
+        choices, ["category", "bits", "field_type", "cofactor", "Feature:", "Modifier:"]
     )
 
 
 def filter_df(df, choices):
     # TODO this way of checking is expensive - add curve categories to DB
-    if "sim" not in choices["source"]:
-        df = df[df.standard == True]
-
-    if "std" not in choices["source"]:
-        df = df[df.category.isin(choices["source"]) | (df.standard == False)]
-
-    df = df[df.field.isin(choices["field"])]
-    filtered = filter_choices(choices, ["source", "field", "Feature:", "Modifier:"])
+    df = df[df.field_type.isin(choices["field_type"])]
+    filtered = filter_choices(choices, ["category", "field_type", "Feature:", "Modifier:"])
 
     for key, value in filtered.items():
         if "all" not in value:
@@ -134,14 +144,14 @@ def get_all(df, choices):
     feature = choices["Feature:"]
     params = get_params(choices)
     if len(params) == 0:
-        return [(filter_df(df, choices), params, feature, modifier, choices["Modifier:"])]
+        return [[df, params, feature, modifier, choices["Modifier:"]]]
     param, values = params.popitem()
     choices.pop(param)
     results = []
     for v in values:
         param_choice = choices.copy()
         param_choice[param] = [v]
-        results.append((filter_df(df, param_choice), param_choice, feature, modifier, choices["Modifier:"]))
+        results.append((df, param_choice, feature, modifier, choices["Modifier:"]))
     return results
 
 
@@ -154,7 +164,7 @@ def find_outliers(df, features):
     return df[predictions == -1]
 
 
-def flatten_trait(trait_name, trait_df, param_values = None):
+def flatten_trait(trait_name, trait_df, param_values = None, ignore_curve_data = True):
     result_df = trait_df[["curve"]].drop_duplicates(subset=["curve"])
 
     for params in params_iter(trait_name):
@@ -164,12 +174,15 @@ def flatten_trait(trait_name, trait_df, param_values = None):
             for param in params:
                 param_df = trait_df[trait_df[param] == params[param]]
 
-            param_df = param_df.drop(params.keys(), axis=1,errors="ignore")
+            param_df = param_df.drop(params.keys(), axis=1, errors="ignore")
         else:
             param_df = trait_df
 
-        param_df = param_df.drop(nonnumeric_outputs(trait_name), axis=1,errors="ignore")
+        param_df = param_df.drop(nonnumeric_outputs(trait_name), axis=1, errors="ignore")
+        if ignore_curve_data:
+            param_df = param_df.drop(filter(lambda x: x in ("bits", "category", "cofactor", "field_type", "standard", "example"), param_df.columns), axis=1, errors="ignore")
         param_df.columns = map(lambda x: "curve" if x == "curve" else f"{trait_name}_{x}_{params}", param_df.columns)
+
         result_df = result_df.merge(param_df, "left", on="curve")
 
     return result_df
