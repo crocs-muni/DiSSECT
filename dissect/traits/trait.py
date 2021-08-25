@@ -9,11 +9,15 @@ from consolemenu.items import *
 
 def create_directory(name):
     path = os.path.join(TRAIT_PATH, name)
-    os.mkdir(path)
+    try:
+        os.mkdir(path)
+    except FileExistsError:
+        input(f"Trait {name} already exists.")
+        return False
     with open(os.path.join(path, "__init__.py"), "w"):
         pass
     print("Directory", name, "created")
-
+    return True
 
 def check_files(name):
     path = os.path.join(TRAIT_PATH, name)
@@ -62,7 +66,8 @@ def update_descriptions(name, desc=None, delete=False):
 
 def create_trait():
     name = input("Oh yeah, new trait! Type the name: ")
-    create_directory(name)
+    if not create_directory(name):
+        return
     check_files(name)
     update_default_params(name)
 

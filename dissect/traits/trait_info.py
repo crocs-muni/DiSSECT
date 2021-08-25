@@ -254,6 +254,16 @@ TRAIT_INFO["i14"] = {
     }
 }
 
+TRAIT_INFO["i15"] = {
+    "description": "Coefficients of the curve in Weierstrass form",
+    "motivation": "Many standards pick the coefficents in unique way",
+    "input": {},
+    "output": {
+        "a": (int, "a"),
+        "b": (int, "b")
+    }
+}
+
 def params_iter(trait_name):
     with open(pathlib.Path(TRAIT_PATH, trait_name, trait_name + ".params"), "r") as params_file:
         params = json.load(params_file)

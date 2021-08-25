@@ -19,5 +19,6 @@
   "a08": "Upper and lower bound for the class number of the endomorphism algebra",
   "a29": "Torsion order of the lift of E to Q",
   "i13": "Computation of a^3/b^2 which is used for generation of curves in x962, secg, fips etc.",
-  "i14": "Computes overlap in coeffs a,b as in Brainpool"
+  "i14": "Computes overlap in coeffs a,b as in Brainpool",
+  "i15": "Returns coefficients of the curve."
 }
