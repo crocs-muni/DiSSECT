@@ -8,7 +8,7 @@ if __name__ == "__main__":
         print(f"USAGE: {sys.argv[0]} <FILE> <CURVE>", file=sys.stderr)
         sys.exit(1)
 
-    df = pd.read_csv(sys.argv[1], sep=";").iloc[:,1:]
+    df = pd.read_csv(sys.argv[1], sep=";")
     curve = df[df["curve"] == sys.argv[2]]
     details = []
 

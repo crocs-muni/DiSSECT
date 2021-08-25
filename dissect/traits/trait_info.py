@@ -295,3 +295,6 @@ def nonnumeric_outputs(trait_name):
             outputs.append(output)
 
     return outputs
+
+def outputs(trait_name):
+    return list(TRAIT_INFO[trait_name]["output"].keys())
