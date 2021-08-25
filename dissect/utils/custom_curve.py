@@ -213,7 +213,10 @@ class CustomCurve:
             return self._ec.base_extend(ext_field)
         # perhaps unnecessarily complicated coercion (str.replace :P)
         h = ext_field.gen() ** ((ext_q - 1) // (self._q - 1))
-        hf = GF(self._q, name="h", modulus=h.minpoly())
+        try:
+            hf = GF(self._q, name="h", modulus=h.minpoly())
+        except ValueError:
+            return None
         i = hf.hom([h])
         new_coeffs = list(map(lambda x: i(hf(str(x).replace(str(self._field.gen()), "h"))), self._ec.a_invariants()))
         ext_ec = EllipticCurve(ext_field, new_coeffs)
@@ -244,6 +247,8 @@ class CustomCurve:
         card = self.extended_cardinality(deg)
         m = ZZ(card / prime)
         ext_ec = self.extended_ec(deg)
+        if ext_ec is None:
+            return None
         for _ in range(iterations):
             point = ext_ec.random_element()
             if not (m * point == ext_ec(0)):

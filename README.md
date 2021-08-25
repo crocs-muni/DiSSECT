@@ -73,11 +73,9 @@ jobs, run `./run_traits.py -n a05 -c std -v -b 192 -a 1 2 -t 3 -j 100`.
 |i06      | square parts of $`4q-1`$ and $`4n-1`$                                             | :white_check_mark: | :white_check_mark: | low          | low
 |i07      | distance of $`n`$ from the nearest power of two and multiple of 32/64             | :white_check_mark: | :white_check_mark: | low          | low
 |i08      | bit length of small inverted generator multiples                                  | :white_check_mark: | :white_check_mark: | low          | low
-|i10      | points satisfying ZVP conditions                                                  | :white_check_mark: | :white_check_mark: | medium       | extreme
-|i11      | points satisfying ZVP independently of the multiple                               | :white_check_mark: | :white_check_mark: | medium       | low
-|i12      | exceptional points w.r.t. given formulas                                          | :white_check_mark: | :white_check_mark: | medium       | medium
-|i13      | a^3/b^2, i.e. value used in x962, fips,secg                                       | :white_check_mark: | :white_check_mark:                | low          | low
+|i13      |$` a^3/b^2`$, i.e. value used in x962, fips,secg                                       | :white_check_mark: | :white_check_mark:                | low          | low
 |i14      | overlap in curve coefficients                                       | :white_check_mark: | :white_check_mark:                | low          | low
+|i15      | curve coefficients in Weierstrass form                                       | :white_check_mark: | :white_check_mark:                | low          | low
 
 
 

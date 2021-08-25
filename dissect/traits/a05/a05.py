@@ -32,7 +32,10 @@ def torsion_finder(curve: CustomCurve, l):
     k1 = a_ord
     k2 = k1
     card = curve.extended_cardinality(k1)
-    if card % l ** 2 != 0 or curve.is_torsion_cyclic(l, k1):
+    torsion_cyclic = curve.is_torsion_cyclic(l, k1)
+    if torsion_cyclic is None:
+        return None, None
+    if card % l ** 2 != 0 or torsion_cyclic:
         k2 = l
     return k2, k1
 
@@ -42,6 +45,8 @@ def a05_curve_function(curve: CustomCurve, l):
     if curve.q() % l == 0:
         return {"least": None, "full": None, "relative": None}
     k2, k1 = torsion_finder(curve, l)
+    if k2 is None:
+        return {"least": None, "full": None, "relative": None}
     return {"least": k1, "full": k2, "relative": k2 // k1}
 
 
