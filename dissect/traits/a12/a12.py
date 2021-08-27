@@ -1,8 +1,9 @@
 from sage.all import Integers, ZZ, euler_phi
-
+from dissect.traits.trait_interface import timeout
 from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 
+TIMEOUT_DURATION = 30
 
 def a12_curve_function(curve: CustomCurve, l):
     """
@@ -11,9 +12,10 @@ def a12_curve_function(curve: CustomCurve, l):
     """
     card = curve.cardinality()
     try:
-        mul_ord = (Integers(card)(l)).multiplicative_order()
+        assert card.gcd(l)==1
+        mul_ord = timeout(lambda x: x.multiplicative_order(), [Integers(card)(l)], timeout_duration=TIMEOUT_DURATION)
         complement_bit_length = ZZ(euler_phi(card) / mul_ord).nbits()
-    except ArithmeticError:
+    except (TypeError, AssertionError):
         mul_ord = None
         complement_bit_length = None
     curve_results = {"order": mul_ord, "complement_bit_length": complement_bit_length}

@@ -7,6 +7,8 @@ from dissect.utils.custom_curve import CustomCurve
 def a07_curve_function(curve: CustomCurve):
     """Computes the embedding degree (with respect to the generator order) and its complement"""
     q = curve.q()
+    if q.nbits()>300:
+        return {"embedding_degree_complement":None,"complement_bit_length":None}
     l = curve.order()
     embedding_degree = curve.embedding_degree()
     embedding_degree_complement = ZZ(euler_phi(l) / embedding_degree)
