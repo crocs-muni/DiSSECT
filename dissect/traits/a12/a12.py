@@ -14,7 +14,10 @@ def a12_curve_function(curve: CustomCurve, l):
     try:
         assert card.gcd(l)==1
         mul_ord = timeout(lambda x: x.multiplicative_order(), [Integers(card)(l)], timeout_duration=TIMEOUT_DURATION)
-        complement_bit_length = ZZ(euler_phi(card) / mul_ord).nbits()
+        print("mul_ord finished")
+        euler_phi_card = timeout(lambda x: euler_phi(x[0])*euler_phi(x[1]), [(curve.order(),curve.cofactor())], timeout_duration=TIMEOUT_DURATION*0.5)
+        complement_bit_length = ZZ(euler_phi_card / mul_ord).nbits()
+        print("comlement finished")
     except (TypeError, AssertionError):
         mul_ord = None
         complement_bit_length = None
