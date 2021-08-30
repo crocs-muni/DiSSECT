@@ -15,7 +15,10 @@ def i08_curve_function(curve: CustomCurve, k):
     F = GF(curve.order())
     multiple = F(1) / k
     H = ZZ(multiple) * G
-    Hx = ZZ(H[0])
+    try:
+        Hx = ZZ(H[0])
+    except TypeError:
+        return {"Hx": None, "bits": None, "difference": None, "ratio": None}
     bits = Hx.nbits()
     difference = ZZ(curve.cardinality()).nbits() - bits
     ratio = bits / curve.nbits()
