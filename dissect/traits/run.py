@@ -5,6 +5,7 @@ import itertools
 import json
 import pathlib
 import sys
+import datetime
 from multiprocessing import Process, Queue, Lock
 
 from sage.all import sage_eval
@@ -15,10 +16,11 @@ from dissect.utils.database_handler import (
     connect,
     store_trait_result,
     is_solved,
-    get_curves_old,
+    get_curves,
     create_trait_index,
 )
 from dissect.traits.trait_info import params_iter
+from dissect.utils.custom_curve import CustomCurve
 
 
 def get_trait_function(trait):
@@ -35,19 +37,26 @@ def producer(database, trait, args, queue, lock):
     create_trait_index(db, trait)
 
     with lock:
-        print("Producer starting ...")
+        print(f"[{datetime.datetime.now()}] Producer start")
 
-    curves = get_curves_old(db, filters=args)
-    for curve in curves:
-        for params in params_iter(trait):
-            # TODO check if curve is not mutated ~ if it can be safely passed into the queue
-            queue.put((curve, params), block=True)
+    curves = map(CustomCurve, get_curves(db, query=vars(args)))
+    counter = 0
+    iterator = itertools.product(curves, params_iter(trait))
+    while counter <= args.skip:
+        next(iterator)
+        counter += 1
 
-    with lock:
-        print("Done - producer shutting down ...")
+    for curve, params in iterator:
+        queue.put((curve, params), block=True)
+        if args.verbose:
+            print(f"{counter:>9} {curve.name()}:{params}")
+        counter += 1
 
     for _ in range(args.jobs):
         queue.put((None, None))
+
+    with lock:
+        print(f"[{datetime.datetime.now()}] Producer finish")
 
 
 def consumer(identifier, database, trait, queue, lock):
@@ -95,64 +104,67 @@ def consumer(identifier, database, trait, queue, lock):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Welcome to DiSSECT! It allows you to run traits on a selected subset of standard or "
-        "simulated curves."
+        description="Welcome to DiSSECT! It allows you to run traits on a selected subset of standard or simulated curves."
     )
     requiredNamed = parser.add_argument_group("required named arguments")
     requiredNamed.add_argument(
         "-n",
         "--trait_name",
         metavar="trait_name",
-        type=str,
-        action="store",
-        help="the trait identifier; available traits: " + ", ".join(TRAIT_NAMES),
-        required=True,
+        help="Trait identifier",
+        required=True
     )
     requiredNamed.add_argument(
         "-c",
-        "--curve_type",
-        metavar="curve_type",
-        type=str,
-        help="curve category: either category name, or \"std\" (all standard curves), \"sim\" (all simulated curves), \"all\" (all curves in the database)",
-        required=True,
+        "--category",
+        nargs="+",
+        help="Curve category",
+        default=["all"]
     )
     parser.add_argument(
         "-b",
-        "--order_bound",
-        action="store",
-        type=int,
-        metavar="order_bound",
-        default=0,
-        help="upper bound for curve order bitsize (default: unlimited)",
+        "--bits",
+        nargs="+",
+        default=["all"],
+        help="Curve bitlength",
     )
     parser.add_argument(
-        "-a",
-        "--allowed_cofactors",
+        "--cofactor",
         nargs="+",
-        metavar="allowed_cofactors",
-        default=None,
-        help="the list of cofactors the curve can have (default: all)",
+        default=["all"],
+        help="Curve cofactor",
     )
     parser.add_argument(
         "-j",
         "--jobs",
-        metavar="jobs",
         type=int,
         default=1,
         help="Number of jobs to run in parallel (default: 1)",
     )
     parser.add_argument(
         "--database",
-        metavar="database",
-        type=str,
         default="mongodb://localhost:27017/",
         help="Database URI (default: mongodb://localhost:27017/)",
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        default=False
+    )
+    parser.add_argument(
+        "--skip",
+        type=int,
+        default=0,
+        help="Skip given number of curve-parameter combinations"
     )
 
     args = parser.parse_args()
 
     queue = Queue(1000)
     lock = Lock()
+
+    with lock:
+        print(f"[{datetime.datetime.now()}] Script start")
 
     consumers = [
         Process(target=consumer, args=(i, args.database, args.trait_name, queue, lock))
@@ -166,6 +178,9 @@ def main():
 
     for proc in consumers:
         proc.join()
+
+    with lock:
+        print(f"[{datetime.datetime.now()}] Script finish")
 
 
 if __name__ == "__main__":
