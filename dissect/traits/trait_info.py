@@ -264,6 +264,21 @@ TRAIT_INFO["i15"] = {
     }
 }
 
+def params(trait_name):
+    if trait_name not in TRAIT_INFO:
+        return {}
+
+    with open(pathlib.Path(TRAIT_PATH, trait_name, trait_name + ".params"), "r") as params_file:
+        params = json.load(params_file)
+
+    params_names = params["params_local_names"]
+    params_ranges = {}
+    for key in params["params_global"].keys():
+        params_ranges[key] = sage_eval(params["params_global"][key])
+
+    return dict(zip(params_names, map(list, params_ranges.values())))
+
+
 def params_iter(trait_name):
     with open(pathlib.Path(TRAIT_PATH, trait_name, trait_name + ".params"), "r") as params_file:
         params = json.load(params_file)

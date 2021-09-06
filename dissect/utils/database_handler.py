@@ -149,6 +149,11 @@ def get_curves(db: Database, query: Any = None) -> Iterable[CustomCurve]:
 
     return map(_decode_ints, curves)
 
+
+def get_curves_count(db: Database, query: Any = None) -> int:
+    return db["curves"].count_documents(format_curve_query(query) if query else dict())
+
+
 def get_curve_categories(db: Database) -> Iterable[str]:
     return db["curves"].distinct("category")
 
@@ -255,6 +260,9 @@ def get_trait_results(
 
     aggregated = list(db[f"trait_{trait}"].aggregate(aggregate_pipeline))
     return map(_decode_ints, map(_flatten_trait_result, aggregated))
+
+def get_trait_results_count(db: Database, trait: str, query: Dict[str, Any] = None):
+    return db[f"trait_{trait}"].count_documents(format_trait_query(trait, query) if query else dict())
 
 def format_trait_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]:
     result = {}

@@ -6,6 +6,7 @@ import json
 import pathlib
 import sys
 import datetime
+from math import prod
 from multiprocessing import Process, Queue, Lock
 
 from sage.all import sage_eval
@@ -17,9 +18,11 @@ from dissect.utils.database_handler import (
     store_trait_result,
     is_solved,
     get_curves,
+    get_curves_count,
+    get_trait_results_count,
     create_trait_index,
 )
-from dissect.traits.trait_info import params_iter
+import dissect.traits.trait_info as trait_info
 from dissect.utils.custom_curve import CustomCurve
 
 
@@ -32,16 +35,27 @@ def get_trait_function(trait):
     return getattr(sys.modules[module_name], trait + "_curve_function")
 
 
+def tprint(string):
+    print(f"[{datetime.datetime.now()}] {string}")
+
+
 def producer(database, trait, args, queue, lock):
     db = connect(database)
     create_trait_index(db, trait)
 
     with lock:
-        print(f"[{datetime.datetime.now()}] Producer start")
+        tprint("Preliminary check")
+
+    total = get_curves_count(db, query=vars(args)) * prod(map(len, trait_info.params(trait).values()))
+    computed = get_trait_results_count(db, trait, query=vars(args))
+
+    with lock:
+        print(f"Computed {computed}/{total}")
+        tprint("Producer start")
 
     curves = map(CustomCurve, get_curves(db, query=vars(args)))
     counter = 0
-    iterator = itertools.product(curves, params_iter(trait))
+    iterator = itertools.product(curves, trait_info.params_iter(trait))
     while counter <= args.skip:
         next(iterator)
         counter += 1
@@ -56,7 +70,7 @@ def producer(database, trait, args, queue, lock):
         queue.put((None, None))
 
     with lock:
-        print(f"[{datetime.datetime.now()}] Producer finish")
+        tprint("Producer finish")
 
 
 def consumer(identifier, database, trait, queue, lock):
@@ -64,17 +78,17 @@ def consumer(identifier, database, trait, queue, lock):
     trait_function = get_trait_function(trait)
     if not trait_function:
         with lock:
-            print(f"Consumer {identifier:2d} could not be initialized")
+            tprint(f"Consumer {identifier:2d} could not be initialized")
         return
 
     with lock:
-        print(f"Consumer {identifier:2d} started")
+        tprint(f"Consumer {identifier:2d} started")
 
     while True:
         curve, params = queue.get()
         if curve is params is None:
             with lock:
-                print(f"Consumer {identifier:2d} stopped")
+                tprint(f"Consumer {identifier:2d} stopped")
             return
 
         for i in range(3): # TODO move to db_handler?
@@ -82,7 +96,7 @@ def consumer(identifier, database, trait, queue, lock):
                 solved = is_solved(db, curve, trait, params)
                 break
             except ServerSelectionTimeoutError:
-                print(f"Server timeout: Reconnection attempt {i}")
+                tprint(f"Server timeout: Reconnection attempt {i}")
                 db = connect(database)
 
         if solved:
@@ -97,7 +111,7 @@ def consumer(identifier, database, trait, queue, lock):
                 store_trait_result(db, curve, trait, params, trait_result)
                 break
             except ServerSelectionTimeoutError:
-                print(f"Server timeout: Reconnection attempt {i}")
+                tprint(f"Server timeout: Reconnection attempt {i}")
                 db = connect(database)
 
 
@@ -106,15 +120,14 @@ def main():
     parser = argparse.ArgumentParser(
         description="Welcome to DiSSECT! It allows you to run traits on a selected subset of standard or simulated curves."
     )
-    requiredNamed = parser.add_argument_group("required named arguments")
-    requiredNamed.add_argument(
+    parser.add_argument(
         "-n",
         "--trait_name",
         metavar="trait_name",
         help="Trait identifier",
         required=True
     )
-    requiredNamed.add_argument(
+    parser.add_argument(
         "-c",
         "--category",
         nargs="+",
@@ -164,7 +177,7 @@ def main():
     lock = Lock()
 
     with lock:
-        print(f"[{datetime.datetime.now()}] Script start")
+        tprint("Script start")
 
     consumers = [
         Process(target=consumer, args=(i, args.database, args.trait_name, queue, lock))
@@ -180,7 +193,7 @@ def main():
         proc.join()
 
     with lock:
-        print(f"[{datetime.datetime.now()}] Script finish")
+        tprint("Script finish")
 
 
 if __name__ == "__main__":
