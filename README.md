@@ -1,14 +1,10 @@
 # DiSSECT: Distinguisher of Standard & Simulated Elliptic Curves via Traits
 
-[![pipeline status](https://gitlab.fi.muni.cz/x408178/curve_analyzer/badges/master/pipeline.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/commits/master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/blob/master/LICENSE)
 [![language](https://badgen.net/badge/language/python,sage/purple?list=/)](https://www.sagemath.org/)
-[![traits](https://badgen.net/badge/traits/23/blue)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/tree/master/curve_analyzer/traits)
-[![curves](https://badgen.net/badge/curves/160%20std,%20217188%20sim?list=|)](https://github.com/J08nY/std-curves)
+[![traits](https://badgen.net/badge/traits/23/blue)](https://github.com/crocs-muni/DiSSECT/tree/master/dissect/traits)
 
-
-
-DiSSECT is, to the best of our knowledge, the largest publicly available database of standardized elliptic curves (taken from our [sister project](https://neuromancer.sk/std/)) and offers generation of simulated curves according to the mentioned standards. The tool contains over 20 tests (which we call traits), each computing curve properties, ranging from classical algebraic ones to unconventional ones and those connected to implementations. After obtaining their empirical distributions, the traits allow us to compare the simulated curves to the standard ones. Finally, DiSSECT provides an easy-to-use interface for implementations of custom traits and their interactive visualization via Jupyter notebook. 
+DiSSECT is, to the best of our knowledge, the largest publicly available database of standardized elliptic curves (taken from our [sister project](https://neuromancer.sk/std/)) and offers generation of simulated curves according to the mentioned standards. The tool contains over 20 tests (which we call traits), each computing curve properties, ranging from classical algebraic ones to unconventional ones and those connected to implementations. After obtaining their empirical distributions, the traits allow us to compare the simulated curves to the standard ones. Finally, DiSSECT provides an easy-to-use interface for implementations of custom traits and their interactive visualization via Jupyter notebook.
 
 DiSSECT is written in Python 3 and imports the SageMath library. The database of the standardized elliptic curves as well as the simulated ones with the results of the traits, including the visualization, can be found at https://dissect.crocs.fi.muni.cz/. DiSSECT is open-source and we welcome any collaborators who have an idea for a new trait, new simulation method, or just want to contribute in another way.
 
@@ -24,31 +20,25 @@ Thanks to Ján Jančár for help with the curve database and CRoCS members for f
 
 **Using virtual environment**:
 
-- Clone with  ```git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT.git```
+- Clone with  `git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT.git`
 - Create virtual environment for python in sage: `sage --python3 -m venv --system-site-packages environment`
 - Activate the environment: `source environment/bin/activate`
 - Run `pip install --editable .` in DiSSECT folder
 
-**Alternatively without virtual environment (not recommended)**:  
+**Alternatively without virtual environment (not recommended)**:
 From the root directory, run `sage --python3 setup.py develop --user` to initialize the project.
 
+## Running visual analysis
+
+The visual analysis can be started directly from local dissect installation by running `jupyter notebook dissect/analysis/analysis.ipynb`.
+
+Alternatively, Binder service can be used to run the analysis directly in web browser [![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/HEAD?filepath=dissect%2Fanalysis%2Fanalysis.ipynb).
+
 ## Running the curve traits
-To feed the trait results directly to a local MongoDB database, run `./run.py -n <trait_name> -c <curve_type> [-b <max_bit_length>] [-v] [-a <allowed cofactors>]`.
 
-Alternatively, to get results as JSON files, run `./run_traits.py` in directory `traits`. Use the `-h` flag to get the help menu. To merge the results of a trait (
-a05 in this case) into single file, run `./merge_trait_results.py -n a05`.
+To feed the trait results directly to a local MongoDB database, run `./run.py -n <trait_name> [-c <curve_category>] [-b <bitlength>] [--cofactor <cofactor>]`.
 
-### Example usage
-
-To run trait a05 on all standard curves of bitsizes up to 192 with cofactor 1 or 2 in verbose mode using 3 cores and 100
-jobs, run `./run_traits.py -n a05 -c std -v -b 192 -a 1 2 -t 3 -j 100`.
-
-### Supported curve sets
-
-- std: all standard curves
-- sim: all simulated curves
-- sample: curves secp112r1, secp192r1, secp256r1
-- all: all curves in the database
+Alternatively, to get results as JSON files, run `./compute.py` in directory `traits`. Use the `-h` flag to get the help menu.
 
 ## Overview of available traits
 
@@ -78,7 +68,6 @@ jobs, run `./run_traits.py -n a05 -c std -v -b 192 -a 1 2 -t 3 -j 100`.
 |i15      | curve coefficients in Weierstrass form                                       | :white_check_mark: | :white_check_mark:                | low          | low
 
 
-
 Notation: $`n`$ is the curve order, $`q`$ is the order of the base field  
 \* on sim and std curves with at most 256 bits and cofactor 1    
 \*\* this is very rough and subjective  
@@ -86,7 +75,7 @@ Notation: $`n`$ is the curve order, $`q`$ is the order of the base field
 
 ## Overview of planned traits
 
-| name    | description                                                                       | fully specified        
+| name    | description                                                                       | fully specified
 |:-------:| ----------------------------------------------------------------------------------|:------------------:
 a09       | existence of pairing-friendly cycles                                              | :x:
 a10       | existence of factorization bases                                                  | :x:
@@ -117,16 +106,12 @@ s08       | properties of the function shifting a point by the generator        
 
 ## Unit tests
 
-Run `sage --python3 -m unittest discover` in directory `traits/unit_tests/`. Only unit tests starting with `test` will
-be run; those starting with `local` have to be run manually (as they require resources not available on the server).
+Run `sage --python3 -m unittest discover` in directory `traits/unit_tests/`. Only unit tests starting with `test` will be run; those starting with `local` have to be run manually (as they require resources not available on the server).
 
 ## Parameters and structure
 
-From directory `traits`, parameter files can be (re)generated by `sage --python3 params.py` and structure files can be (
-re)generated by `sage --python3 traits/traits_structures.py -t all` (both of these are already done during the setup).
+From directory `traits`, parameter files can be (re)generated by `sage --python3 params.py` and structure files can be (re)generated by `sage --python3 traits/traits_structures.py -t all` (both of these are already done during the setup).
 
 ## Importing curves or results to a local database
 
-After setting up a local database with MongoDB, you can run `python3 utils/database_handler.py curves [database_uri] <curve_files...>` to import curves from individual JSON files, or `python3 utils/database_handler.py curves [database_uri] all` to import all curves from their presumed directories.
-
-Similarly, you can run `python3 utils/database_handler.py results [database_uri] <trait_name> <results_file>` to import trait results from a JSON file, or `python3 utils/database_handler.py results [database_uri] <trait_name>  auto` to auto-import from the presumed location, or even `python3 utils/database_handler.py results [database_uri] all` to do this for all traits.
+After setting up a local database with MongoDB, you can run `python3 utils/database_handler.py curves [database_uri] <curve_files...>` to import curves from individual JSON files. Similarly, you can run `python3 utils/database_handler.py results [database_uri] <trait_name> <results_file>` to import trait results from a JSON file.
