@@ -3,6 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/blob/master/LICENSE)
 [![language](https://badgen.net/badge/language/python,sage/purple?list=/)](https://www.sagemath.org/)
 [![traits](https://badgen.net/badge/traits/23/blue)](https://github.com/crocs-muni/DiSSECT/tree/master/dissect/traits)
+[![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/HEAD?filepath=dissect%2Fanalysis%2Fanalysis.ipynb).
 
 DiSSECT is, to the best of our knowledge, the largest publicly available database of standardized elliptic curves (taken from our [sister project](https://neuromancer.sk/std/)) and offers generation of simulated curves according to the mentioned standards. The tool contains over 20 tests (which we call traits), each computing curve properties, ranging from classical algebraic ones to unconventional ones and those connected to implementations. After obtaining their empirical distributions, the traits allow us to compare the simulated curves to the standard ones. Finally, DiSSECT provides an easy-to-use interface for implementations of custom traits and their interactive visualization via Jupyter notebook.
 
@@ -28,17 +29,28 @@ Thanks to Ján Jančár for help with the curve database and CRoCS members for f
 **Alternatively without virtual environment (not recommended)**:
 From the root directory, run `sage --python3 setup.py develop --user` to initialize the project.
 
-## Running visual analysis
-
-The visual analysis can be started directly from local dissect installation by running `jupyter notebook dissect/analysis/analysis.ipynb`.
-
-Alternatively, Binder service can be used to run the analysis directly in web browser [![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/HEAD?filepath=dissect%2Fanalysis%2Fanalysis.ipynb).
-
-## Running the curve traits
+## Computing traits
 
 To feed the trait results directly to a local MongoDB database, run `./run.py -n <trait_name> [-c <curve_category>] [-b <bitlength>] [--cofactor <cofactor>]`.
 
 Alternatively, to get results as JSON files, run `./compute.py` in directory `traits`. Use the `-h` flag to get the help menu.
+
+## Performing the analysis
+
+The visual analysis can be started directly from local dissect installation by running `jupyter notebook dissect/analysis/analysis.ipynb`. Alternatively, the analysis framework can be started directly in the browser with the Binder service.
+
+In order to run outlier detection, feature vectors need to be constructed. They can be built from results of individual traits using repeated invocations of `feature_builder.py` script. For example, the following sequence of commands builds set of feature vectors of `a05` and `a12` traits for 256-bit curves from the standard and simulated X9.62 categories.
+
+```
+python feature_builder.py --trait a05 --category x962 x962_sim --bits 256
+python feature_builder.py --trait a12 --category x962 x962_sim --bits 256
+```
+
+The sequence of `feature_builder.py` runs produces file `out.csv`, which contains the resulting feature vectors. The feature vectors can processed by the outlier detection script `find_outliers.py`.
+
+```
+python find_outliers out.csv outliers.csv
+```
 
 ## Overview of available traits
 
