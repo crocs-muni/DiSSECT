@@ -1,7 +1,6 @@
-FROM sagemath/sagemath-dev:9.0
+FROM sagemath/sagemath:develop-py3
 
 # Setup sage and jupyter
-RUN sage -i database_kohel
 RUN sage --pip3 install --no-cache-dir notebook
 
 # Conform to mybinder
