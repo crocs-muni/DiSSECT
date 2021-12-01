@@ -71,7 +71,7 @@ def quadratic_mean(num):
 
 
 def geometric_mean(num):
-    return RR(num).n().nth_root(2 ** 10)
+    return float(RR(num).n().nth_root(2 ** 10))
 
 
 def harmonic_mean(num):
