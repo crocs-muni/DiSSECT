@@ -78,7 +78,7 @@ def harmonic_mean(num):
     return float((2 ** 10) / num)
 
 
-def s01_curve_function(curve: CustomCurve, current_combination, weight):
+def s01_curve_function(curve: CustomCurve,comb , weight):
     P, n = random_point(curve)
     n = P.order()
     final_arithmetic_mean = 0
@@ -98,16 +98,16 @@ def s01_curve_function(curve: CustomCurve, current_combination, weight):
         harmonic_num = 0
         for _ in range(2 ** 10 - 1):
             if ZZ(starting_point[0]) < n / 4:
-                starting_point, P, Q, a, b, n = functions[permutations[current_combination][0]](starting_point, P, Q, a,
+                starting_point, P, Q, a, b, n = functions[permutations[comb][0]](starting_point, P, Q, a,
                                                                                                 b, n)
             elif n / 4 <= ZZ(starting_point[0]) < n / 2:
-                starting_point, P, Q, a, b, n = functions[permutations[current_combination][1]](starting_point, P, Q, a,
+                starting_point, P, Q, a, b, n = functions[permutations[comb][1]](starting_point, P, Q, a,
                                                                                                 b, n)
             elif n / 2 <= ZZ(starting_point[0]) < 3 * (n / 4):
-                starting_point, P, Q, a, b, n = functions[permutations[current_combination][2]](starting_point, P, Q, a,
+                starting_point, P, Q, a, b, n = functions[permutations[comb][2]](starting_point, P, Q, a,
                                                                                                 b, n)
             else:
-                starting_point, P, Q, a, b, n = functions[permutations[current_combination][3]](starting_point, P, Q, a,
+                starting_point, P, Q, a, b, n = functions[permutations[comb][3]](starting_point, P, Q, a,
                                                                                                 b, n)
             final_sum = final_sum + (ZZ(starting_point[0])).nbits()
             geometric_num = geometric_num * (ZZ(starting_point[0])).nbits()
