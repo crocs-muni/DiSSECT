@@ -19,6 +19,7 @@ def create_directory(name):
     print("Directory", name, "created")
     return True
 
+
 def check_files(name):
     path = os.path.join(TRAIT_PATH, name)
     message = (
@@ -72,7 +73,8 @@ def create_trait():
     update_default_params(name)
 
     if not 'm' == input(
-            "We need to create structure file. Do you wish to create one automatically (you trust your implementation) or manually (slower)? [A/m]").lower():
+            "We need to create structure file. Do you wish to create one automatically (you trust your "
+            "implementation) or manually (slower)? [A/m]").lower():
         structures.compute_results(name)
     else:
         unittest.main(name, False, True)

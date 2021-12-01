@@ -138,5 +138,15 @@
   "i15": {
     "params_global": {},
     "params_local_names": []
+  },
+  "s01": {
+    "params_global": {
+      "comb_range": "range(24)",
+      "weight_range": "[1,2,3]"
+    },
+    "params_local_names": [
+      "comb",
+      "weight"
+    ]
   }
 }

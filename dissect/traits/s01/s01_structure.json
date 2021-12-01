@@ -1,0 +1,26 @@
+{
+  "secp112r2": {
+    "{'comb': 0, 'weight': 1}": {
+      "Arithmetic mean": 27.681997299194336,
+      "Geometric mean": "3.24087091054171",
+      "Quadratic mean": 7.432583121288211,
+      "Harmonic mean": 447.7043965681441
+    }
+  },
+  "bn158": {
+    "{'comb': 0, 'weight': 1}": {
+      "Arithmetic mean": 39.018813133239746,
+      "Geometric mean": "0.000000000000000",
+      "Quadratic mean": 8.827074592687442,
+      "Harmonic mean": 629.0967719795538
+    }
+  },
+  "brainpoolP160r1": {
+    "{'comb': 0, 'weight': 1}": {
+      "Arithmetic mean": 39.68703365325928,
+      "Geometric mean": "0.000000000000000",
+      "Quadratic mean": 8.902850067617507,
+      "Harmonic mean": 639.7992191816217
+    }
+  }
+}

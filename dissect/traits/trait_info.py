@@ -264,6 +264,18 @@ TRAIT_INFO["i15"] = {
     }
 }
 
+TRAIT_INFO["s01"] = {
+    "description": "Vojta Rozehnal's Pollard rho study",
+    "motivation": "Bachelor degree",
+    "input": {},
+    "output": {
+        "Arithmetic mean": (float, "Arithmetic mean"),
+        "Geometric mean": (float, "Geometric mean"),
+        "Quadratic mean": (float, "Quadratic mean"),
+        "Harmonic mean": (float, "Harmonic mean")
+    }
+}
+
 def params(trait_name):
     if trait_name not in TRAIT_INFO:
         return {}
