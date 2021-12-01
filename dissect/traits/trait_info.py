@@ -267,7 +267,10 @@ TRAIT_INFO["i15"] = {
 TRAIT_INFO["s01"] = {
     "description": "Vojta Rozehnal's Pollard rho study",
     "motivation": "Bachelor degree",
-    "input": {},
+    "input": {
+        "comb": (int, "permutation"),
+        "weight": (int, "Hamming weight")
+    },
     "output": {
         "Arithmetic mean": (float, "Arithmetic mean"),
         "Geometric mean": (float, "Geometric mean"),
