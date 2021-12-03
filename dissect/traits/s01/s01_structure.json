@@ -1,26 +1,32 @@
 {
   "secp112r2": {
-    "{'comb': 0, 'weight': 1}": {
-      "Arithmetic mean": 27.681997299194336,
-      "Geometric mean": "3.24087091054171",
-      "Quadratic mean": 7.432583121288211,
-      "Harmonic mean": 447.7043965681441
+    "{'weight': 1}": {
+      "Arithmetic mean": 109.09747314453125,
+      "Geometric mean": 102.96004692393184,
+      "Quadratic mean": 14.755179837306288,
+      "Harmonic mean": 112.56836321037302,
+      "Variance": 0.5377222174567595,
+      "Standard deviation": 0.23726737695493916
     }
   },
   "bn158": {
-    "{'comb': 0, 'weight': 1}": {
-      "Arithmetic mean": 39.018813133239746,
-      "Geometric mean": "0.000000000000000",
-      "Quadratic mean": 8.827074592687442,
-      "Harmonic mean": 629.0967719795538
+    "{'weight': 1}": {
+      "Arithmetic mean": 153.79168701171875,
+      "Geometric mean": 144.36935564760688,
+      "Quadratic mean": 17.524595578652093,
+      "Harmonic mean": 158.69808749158298,
+      "Variance": 0.47066929516102507,
+      "Standard deviation": 0.228768593629154
     }
   },
   "brainpoolP160r1": {
-    "{'comb': 0, 'weight': 1}": {
-      "Arithmetic mean": 39.68703365325928,
-      "Geometric mean": "0.000000000000000",
-      "Quadratic mean": 8.902850067617507,
-      "Harmonic mean": 639.7992191816217
+    "{'weight': 1}": {
+      "Arithmetic mean": 156.42266845703125,
+      "Geometric mean": 146.80082636460662,
+      "Quadratic mean": 17.674810487845406,
+      "Harmonic mean": 161.41433871942706,
+      "Variance": 0.5409391623069237,
+      "Standard deviation": 0.24507160018161747
     }
   }
 }

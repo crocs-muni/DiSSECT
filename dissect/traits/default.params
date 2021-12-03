@@ -141,11 +141,9 @@
   },
   "s01": {
     "params_global": {
-      "comb_range": "range(24)",
-      "weight_range": "[1,2,3]"
+      "weight_range": "[1,2]"
     },
     "params_local_names": [
-      "comb",
       "weight"
     ]
   }

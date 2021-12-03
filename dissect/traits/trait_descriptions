@@ -21,5 +21,5 @@
   "i13": "Computation of a^3/b^2 which is used for generation of curves in x962, secg, fips etc.",
   "i14": "Computes overlap in coeffs a,b as in Brainpool",
   "i15": "Returns coefficients of the curve.",
-  "s01": "Vojta Rozehnal trait"
+  "s01": "Vojta Rozehnal's pollard rho study"
 }
