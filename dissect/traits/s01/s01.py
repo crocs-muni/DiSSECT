@@ -1,7 +1,6 @@
 from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 from sage.all import ZZ, RR, sqrt, variance,std
-from hashlib import sha1
 
 def hamm(weight, bit_length):
     val = 2 ** weight - 1
@@ -17,13 +16,19 @@ def hamm(weight, bit_length):
 COMB_L = 6
 HAMM = {i: hamm(i, 256) for i in [1, 2]}
 
-
-def random_point(curve, seed=0):
-    gen = curve.generator()
-    i = seed
-    dgst = sha1(i.to_bytes(3, byteorder='big')).digest()
-    scalar = int.from_bytes(dgst, byteorder='big') % curve.q()
-    return scalar * gen, curve.order() // scalar.gcd(curve.order())
+def generator(curve):
+    i = 0
+    while True:
+        try:
+            P = curve.ec().lift_x(curve.field()(i))
+        except ValueError:
+            i+=1
+            continue
+        P = (curve.cardinality()//curve.order())*P
+        if P==curve.ec()(0):
+            i+=1
+            continue
+        return P
 
 
 def statistics(mean1, mean2, mean3, mean4, stat1, stat2, Hamm_length):
@@ -55,9 +60,10 @@ def harmonic_mean(num, constant):
 
 def s01_curve_function(curve: CustomCurve, weight):
     if curve.generator() is None:
-        P, n = random_point(curve)
+        P = generator(curve)
     else:
-        P, n = curve.generator(), curve.order()
+        P = curve.generator()
+    n = curve.order()
     final_arithmetic_mean = 0
     final_geometric_mean = 1
     final_quadratic_mean = 0
@@ -110,3 +116,4 @@ def s01_curve_function(curve: CustomCurve, weight):
 
 def compute_s01_results(curve_list, desc="", verbose=False):
     compute_results(curve_list, "s01", s01_curve_function, desc=desc, verbose=verbose)
+
