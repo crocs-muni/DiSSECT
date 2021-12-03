@@ -181,7 +181,7 @@ def format_curve_query(query: Dict[str, Any]) -> Dict[str, Any]:
     helper("example", bool)
     helper("category", str)
     helper("bits", int, "field.bits")
-    helper("cofactor", int)
+    helper("cofactor", lambda x: hex(int(x)))
     helper("field_type", str, "field.type")
 
     return result
