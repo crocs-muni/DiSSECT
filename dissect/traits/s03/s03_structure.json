@@ -1,0 +1,32 @@
+{
+  "secp112r2": {
+    "{'weight': 1}": {
+      "Arithmetic mean": 110.84197998046875,
+      "Geometric mean": 110.83241195110318,
+      "Quadratic mean": 110.85138630703455,
+      "Harmonic mean": 110.82267762075033,
+      "Variance": 0.4300206600492227,
+      "Standard deviation": 0.2182928591839576
+    }
+  },
+  "bn158": {
+    "{'weight': 1}": {
+      "Arithmetic mean": 156.234619140625,
+      "Geometric mean": 156.22746505021271,
+      "Quadratic mean": 156.2416814191889,
+      "Harmonic mean": 156.22021677284124,
+      "Variance": 0.5971950011942893,
+      "Standard deviation": 0.24693692858980024
+    }
+  },
+  "brainpoolP160r1": {
+    "{'weight': 1}": {
+      "Arithmetic mean": 158.90948486328125,
+      "Geometric mean": 158.90153562008356,
+      "Quadratic mean": 158.91786173928077,
+      "Harmonic mean": 158.89385786509308,
+      "Variance": 87.35668783041672,
+      "Standard deviation": 0.7198139393300795
+    }
+  }
+}

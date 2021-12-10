@@ -1,6 +1,7 @@
 from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
-from sage.all import ZZ, RR, sqrt, variance,std
+from sage.all import ZZ, RR, sqrt, variance, std
+
 
 def hamm(weight, bit_length):
     val = 2 ** weight - 1
@@ -16,24 +17,25 @@ def hamm(weight, bit_length):
 COMB_L = 6
 HAMM = {i: hamm(i, 256) for i in [1, 2]}
 
+
 def generator(curve):
     i = 0
     while True:
         try:
             P = curve.ec().lift_x(curve.field()(i))
         except ValueError:
-            i+=1
+            i += 1
             continue
-        P = (curve.cardinality()//curve.order())*P
-        if P==curve.ec()(0):
-            i+=1
+        P = (curve.cardinality() // curve.order()) * P
+        if P == curve.ec()(0):
+            i += 1
             continue
         return P
 
 
 def statistics(mean1, mean2, mean3, mean4, stat1, stat2, Hamm_length):
     values = {'Arithmetic mean': arithmetic_mean(mean1, Hamm_length),
-              'Geometric mean': geometric_mean(mean2, Hamm_length,True),
+              'Geometric mean': geometric_mean(mean2, Hamm_length, True),
               'Quadratic mean': quadratic_mean(mean3, Hamm_length), 'Harmonic mean': harmonic_mean(mean4, Hamm_length),
               'Variance': float(variance(stat1)), 'Standard deviation': float(std(stat2, False))}
 
@@ -48,7 +50,7 @@ def quadratic_mean(num, constant):
     return float((sqrt(num / constant)))
 
 
-def geometric_mean(num, constant,convert = False):
+def geometric_mean(num, constant, convert=False):
     gm = RR(num).nth_root(constant)
     gm = float(gm) if convert else gm
     return gm
@@ -116,4 +118,3 @@ def s01_curve_function(curve: CustomCurve, weight):
 
 def compute_s01_results(curve_list, desc="", verbose=False):
     compute_results(curve_list, "s01", s01_curve_function, desc=desc, verbose=verbose)
-

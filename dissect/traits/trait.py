@@ -12,7 +12,9 @@ def create_directory(name):
     try:
         os.mkdir(path)
     except FileExistsError:
-        input(f"Trait {name} already exists.")
+        s = input(f"Folder {name} already exists. Continue? [y/N]")
+        if s == 'y':
+            return True
         return False
     with open(os.path.join(path, "__init__.py"), "w"):
         pass

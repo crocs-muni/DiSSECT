@@ -146,5 +146,53 @@
     "params_local_names": [
       "weight"
     ]
+  },
+  "s02": {
+    "params_global": {
+      "weight_range": "[1,2]"
+    },
+    "params_local_names": [
+      "weight"
+    ]
+  },
+  "s03": {
+    "params_global": {
+      "weight_range": "[1,2]"
+    },
+    "params_local_names": [
+      "weight"
+    ]
+  },
+  "s04": {
+    "params_global": {
+      "weight_range": "[1,2]"
+    },
+    "params_local_names": [
+      "weight"
+    ]
+  },
+  "s05": {
+    "params_global": {
+      "weight_range": "[1,2]"
+    },
+    "params_local_names": [
+      "weight"
+    ]
+  },
+  "s06": {
+    "params_global": {
+      "weight_range": "[1,2]"
+    },
+    "params_local_names": [
+      "weight"
+    ]
+  },
+  "s07": {
+    "params_global": {
+      "weight_range": "[1,2]"
+    },
+    "params_local_names": [
+      "weight"
+    ]
   }
 }
