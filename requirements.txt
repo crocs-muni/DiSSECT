@@ -15,3 +15,4 @@ console-menu
 python-dateutil>=2.7.3
 numpy==1.19.5
 sklearn
+pillow==8.3.2
