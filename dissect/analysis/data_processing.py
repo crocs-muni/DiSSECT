@@ -151,7 +151,7 @@ def get_all(df, choices):
     for v in values:
         param_choice = choices.copy()
         param_choice[param] = [v]
-        results.append((df, param_choice, feature, modifier, choices["Modifier:"]))
+        results.append((df[df[param]==int(v)], param_choice, feature, modifier, choices["Modifier:"]))
     return results
 
 
