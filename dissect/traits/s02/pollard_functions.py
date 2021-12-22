@@ -1,6 +1,7 @@
 from sage.all import ZZ, sqrt, std, variance, RR
 import random
 
+
 def hams(weight, bit_length):
     val = 2 ** weight - 1
     hams_list = []
@@ -19,6 +20,7 @@ def random_hams(n, weight, bit_length, seed):
         random.seed(seed)
         rand = random.choice(l)
         final_lst.append(rand)
+        seed += 1
     return final_lst
 
 
@@ -250,4 +252,3 @@ def geometric_mean(num, constant):
 
 def harmonic_mean(num, constant):
     return float(constant / num)
-
