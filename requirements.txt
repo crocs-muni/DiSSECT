@@ -13,5 +13,6 @@ autopep8
 console-menu
 python-dateutil>=2.7.3
 numpy==1.19.5
-sklearn
+scipy==1.1.0
+scikit-learn==1.0
 pillow==8.3.2
