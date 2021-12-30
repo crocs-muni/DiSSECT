@@ -1,6 +1,5 @@
 pathlib
 pytz
-sarge
 psutil
 pid>=2.0.1
 coloredlogs
