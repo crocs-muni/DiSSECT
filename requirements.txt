@@ -1,6 +1,5 @@
 pathlib
 pytz
-coloredlogs
 ipywidgets
 IPython
 console-menu

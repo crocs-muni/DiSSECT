@@ -1,4 +1,4 @@
-from dissect.definitions import TRAIT_DESCRIPTIONS, TRAIT_PATH, ROOT_DIR
+from dissect.definitions import TRAIT_DESCRIPTIONS, TRAIT_PATH
 import dissect.traits.gen_unittest as unittest
 import dissect.traits.gen_trait_structures as structures
 import os

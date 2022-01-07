@@ -3,7 +3,7 @@ from pathlib import Path
 
 import ipywidgets as widgets
 from IPython.core.display import display
-from sage.all import sage_eval, RR, ZZ
+from sage.all import sage_eval
 
 from dissect.definitions import (
     ALL_BITLENGTHS,

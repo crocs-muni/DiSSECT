@@ -6,8 +6,7 @@ import pandas as pd
 from decimal import Decimal
 import argparse
 
-from dissect.definitions import TRAIT_PATH
-from dissect.traits.trait_info import TRAIT_INFO, numeric_outputs, nonnumeric_outputs
+from dissect.traits.trait_info import numeric_outputs
 import dissect.analysis.data_processing as dp
 
 def clean_feature(df, feature):

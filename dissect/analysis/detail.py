@@ -1,6 +1,5 @@
 import sys
 import pandas as pd
-import dissect.analysis.data_processing as dp
 from sklearn.neighbors import NearestNeighbors
 
 if __name__ == "__main__":

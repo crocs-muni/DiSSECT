@@ -4,8 +4,6 @@ import json
 import sys
 from pathlib import Path
 
-import autopep8
-
 from dissect.definitions import TRAIT_PATH, TRAIT_MODULE_PATH, TRAIT_NAMES
 from dissect.traits.example_curves import curves
 from dissect.utils.json_handler import save_into_json, load_from_json
@@ -104,7 +102,6 @@ def create_unittest(name):
     to_write += "\nif __name__ == '__main__':\n"
     to_write += "   unittest.main()\n"
     to_write += '   print("Everything passed")\n'
-    to_write = autopep8.fix_code(to_write, options={"aggressive": 3})
     f.write(to_write)
     f.close()
 

@@ -1,9 +1,8 @@
 import matplotlib.pyplot as plt
-from dissect.analysis.data_processing import get_all, filter_df
-from dissect.analysis.widgets import get_choices
-from ipywidgets import widgets, interact, fixed
+from dissect.analysis.data_processing import get_all
+from ipywidgets import widgets, fixed
 from IPython.display import display
-import pandas
+import pandas as pd
 
 
 def violin(df, feature):
@@ -122,7 +121,7 @@ def multiplot(nrows, ncols, height=5, width=7):
 
 
 def normalized_barplot(v1, v2, ax=None, v1_title="Standard curves", v2_title="Simulated curves", title=None):
-    both = pandas.concat([v1, v2])
+    both = pd.concat([v1, v2])
 
     both_counts = both.value_counts() / len(both)
     v1_counts = v1.value_counts() / len(v1)
@@ -142,6 +141,7 @@ def normalized_barplot(v1, v2, ax=None, v1_title="Standard curves", v2_title="Si
         ax.title(title)
     ax.set_xlabel("values")
     ax.set_ylabel("Normalized count")
+    plt.show()
 
 
 def normalized_bubbleplot(v1, v2, ax=None, v1_title="Standard curves", v2_title="Simulated curves", title=None):
@@ -167,3 +167,4 @@ def normalized_bubbleplot(v1, v2, ax=None, v1_title="Standard curves", v2_title=
         ax.set_ylabel(labels[1])
     if not ax:
         ax.plot()
+    plt.show()
