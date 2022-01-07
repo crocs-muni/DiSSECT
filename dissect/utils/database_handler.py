@@ -228,6 +228,7 @@ def store_trait_result(
     trait_result["curve"]["example"] = curve.example()
     trait_result["curve"]["category"] = curve.category()
     trait_result["curve"]["bits"] = curve.q().nbits()
+    trait_result["curve"]["field_type"] = curve.field_type()
     trait_result["curve"]["cofactor"] = hex(curve.cofactor())
     trait_result["curve"] = _cast_sage_types(trait_result["curve"])
     trait_result["params"] = _cast_sage_types(params)
