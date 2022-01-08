@@ -45,13 +45,10 @@ def get_curves(source: str, query: Dict[str, Any] = {}):
         projection["standard"] = record["standard"]
         projection["example"] = record["example"]
         projection["category"] = record["category"]
-        projection["bitlength"] = int(record["field"]["bits"])
+        projection["bitlength"] = record["field"]["bits"]
         projection["field"] = record["field"]["type"]
-        projection["cofactor"] = (
-            int(record["cofactor"], base=16)
-            if isinstance(record["cofactor"], str)
-            else int(record["cofactor"])
-        )
+        projection["cofactor"] = record["cofactor"]
+        projection["order"] = record["order"]
         return projection
 
     curves = []
