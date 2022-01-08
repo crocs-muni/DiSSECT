@@ -22,7 +22,7 @@ def create_curves_index(db: Database) -> None:
 
 
 def create_trait_index(db: Database, trait: str) -> None:
-    db[f"trait_{trait}"].create_index([("curve", 1), ("params", 1)], unique=True)
+    db[f"trait_{trait}"].create_index([("curve.name", 1), ("params", 1)], unique=True)
 
 
 def _format_curve(curve):
