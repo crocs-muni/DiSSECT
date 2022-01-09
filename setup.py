@@ -31,11 +31,6 @@ setup(name='DiSSECT',
       }
 )
 
-spec = importlib.util.spec_from_file_location("gen_params", Path(TRAIT_PATH, "gen_params.py"))
-gen_params = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(gen_params)
-gen_params.main()
-
 spec2 = importlib.util.spec_from_file_location("gen_test", Path(TRAIT_PATH, "gen_trait_structures.py"))
 gen_trait = importlib.util.module_from_spec(spec2)
 spec2.loader.exec_module(gen_trait)
