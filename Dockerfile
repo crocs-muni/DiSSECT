@@ -19,7 +19,6 @@ RUN chown -R ${NB_UID} ${TARGET}
 # Install DiSSECT
 USER ${NB_USER}
 WORKDIR ${TARGET}
-RUN sage --pip3 install --upgrade -r requirements.txt
 RUN sage --pip3 install --editable .
 ENV PATH "${HOME}/sage/local/bin:${PATH}"
 ENTRYPOINT []
