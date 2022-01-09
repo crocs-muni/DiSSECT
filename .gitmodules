@@ -1,5 +1,0 @@
-[submodule "dissect/utils/efd"]
-	path = dissect/utils/efd
-	url = https://github.com/VladaSedlacek/efd.git
-	branch = master
-	update = merge

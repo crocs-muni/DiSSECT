@@ -1,4 +1,4 @@
-from dissect.definitions import TRAIT_DESCRIPTIONS, TRAIT_PATH
+from dissect.definitions import TRAIT_PATH
 import dissect.traits.gen_unittest as unittest
 import dissect.traits.gen_trait_structures as structures
 import os
@@ -55,18 +55,6 @@ def update_default_params(name, delete=False):
     json_handler.save_into_json(dp, dp_path, mode="w")
 
 
-def update_descriptions(name, desc=None, delete=False):
-    descs_path = os.path.join(TRAIT_PATH, "trait_descriptions")
-    descs = json_handler.load_from_json(descs_path)
-    if delete:
-        del descs[name]
-        del TRAIT_DESCRIPTIONS[name]
-    else:
-        descs[name] = desc
-        TRAIT_DESCRIPTIONS[name] = desc
-    json_handler.save_into_json(descs, descs_path, mode="w")
-
-
 def create_trait():
     name = input("Oh yeah, new trait! Type the name: ")
     if not create_directory(name):
@@ -82,14 +70,7 @@ def create_trait():
         unittest.main(name, False, True)
     if input("Do you  wish to auto-generate unittest?[Y/n]").lower() != "n":
         unittest.main(trait_name=name, u=True, s=False)
-    desc = input("Please write a short description for your trait: ")
-    update_descriptions(name, desc)
     input("Awesome! Trait " + name + " is ready to go! Don't forget to update trait_info.py")
-
-
-def modify_description(name):
-    desc = input("Write a short description for your trait: ")
-    update_descriptions(name, desc)
 
 
 def change_feature(name, feature, new_feature, file):
@@ -134,13 +115,12 @@ def modify_features_name(name):
 
 def modify_trait(menu):
     name = input("Type the name of the trait: ")
-    modify_menu = consolemenu.ConsoleMenu("Trait " + name, TRAIT_DESCRIPTIONS[name])
+    modify_menu = consolemenu.ConsoleMenu("Trait " + name)
     modify_menu.parent = menu
 
     modify_menu.append_item(FunctionItem("Generate a trait structure", structures.compute_results, [name]))
     modify_menu.append_item(FunctionItem("Manually create new trait structure", unittest.main, [name, False, True]))
     modify_menu.append_item(FunctionItem("Generate a unittest", unittest.main, [name, True, False]))
-    modify_menu.append_item(FunctionItem("Modify the description", modify_description, [name]))
     modify_menu.append_item(FunctionItem("Modify the features' names", modify_features_name, [name]))
 
     modify_menu.show()
@@ -151,7 +131,6 @@ def delete_trait():
     if not input("Are you sure you want to delete trait " + name + "?[Y/n]: ").lower() == 'y':
         return
     update_default_params(name, delete=True)
-    update_descriptions(name, delete=True)
     input('You can remove the trait folder and the unittest. Dont forget to update trait_info.py')
 
 
