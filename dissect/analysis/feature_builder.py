@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from time import sleep
+import sys
 
 import pandas as pd
 from decimal import Decimal
@@ -78,14 +79,14 @@ def main():
     parser.add_argument(
         "--output",
         type=str,
-        default="out.csv",
-        help="output file name"
+        default=None,
+        help="output file (default stdout)"
     )
     parser.add_argument(
         "--input",
         type=str,
-        default="out.csv",
-        help="input file name"
+        default=None,
+        help="input file (default stdin)"
     )
     parser.add_argument(
         "--source",
@@ -102,7 +103,7 @@ def main():
     trait = args["trait"]; del args["trait"]
 
     try:
-        curves = pd.read_csv(input, sep=';', index_col=False, low_memory=False)
+        curves = pd.read_csv(input if input else sys.stdin, sep=';', index_col=False, low_memory=False)
     except FileNotFoundError:
         curves = dp.get_curves(source, args)[["curve"]]
 
@@ -128,7 +129,7 @@ def main():
     for feature in features:
         impute_feature(curves, feature, -1.0)
 
-    curves.to_csv(output, sep=';', index=False)
+    curves.to_csv(output if output else sys.stdout, sep=';', index=False)
 
 
 if __name__ == "__main__":
