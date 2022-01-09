@@ -20,7 +20,7 @@ def get_trait_function(trait):
     return getattr(sys.modules[module_name], trait + "_curve_function")
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
         description="DiSSECT trait computation script."
     )
@@ -68,3 +68,7 @@ if __name__ == "__main__":
             results["data"].append(result)
 
     json.dump(_cast_sage_types(results), sys.stdout if not args.output else open(args.output, "w"))
+
+
+if __name__ == "__main__":
+    main()

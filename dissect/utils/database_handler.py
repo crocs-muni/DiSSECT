@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import json
-from pathlib import Path
 from typing import Optional, Tuple, Iterable, Dict, Any
 
 from pymongo import MongoClient
@@ -337,7 +336,7 @@ def _decode_ints(source: Any) -> Any:
     return source
 
 
-if __name__ == "__main__":
+def main():
     import sys
 
     if len(sys.argv) < 3 or not sys.argv[1] in ("curves", "results"):
@@ -382,3 +381,7 @@ if __name__ == "__main__":
         upload_curves_from_files(args)
     elif sys.argv[1] == "results":
         upload_results_from_file(args[0], args[1])
+
+
+if __name__ == "__main__":
+    main()

@@ -46,7 +46,7 @@ def impute_feature(df, feature, method="mean"):
     df[feature] = df[feature].fillna(float(value))
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(description="Welcome to DiSSECT feature vector builder! It allows you to join trait results into vectors suitable for further analysis.")
     parser.add_argument(
         "-n",
@@ -129,3 +129,7 @@ if __name__ == "__main__":
         impute_feature(curves, feature, -1.0)
 
     curves.to_csv(output, sep=';', index=False)
+
+
+if __name__ == "__main__":
+    main()
