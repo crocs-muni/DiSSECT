@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/blob/master/LICENSE)
 [![language](https://badgen.net/badge/language/python,sage/purple?list=/)](https://www.sagemath.org/)
 [![traits](https://badgen.net/badge/traits/23/blue)](https://github.com/crocs-muni/DiSSECT/tree/master/dissect/traits)
-[![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/HEAD?filepath=dissect%2Fanalysis%2Fanalysis.ipynb).
+[![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/master)
 
 DiSSECT is, to the best of our knowledge, the largest publicly available database of standardized elliptic curves (taken from our [sister project](https://neuromancer.sk/std/)) and offers generation of simulated curves according to the mentioned standards. The tool contains over 20 tests (which we call traits), each computing curve properties, ranging from classical algebraic ones to unconventional ones and those connected to implementations. After obtaining their empirical distributions, the traits allow us to compare the simulated curves to the standard ones. Finally, DiSSECT provides an easy-to-use interface for implementations of custom traits and their interactive visualization via Jupyter notebook.
 
@@ -17,7 +17,31 @@ DiSSECT is written in Python 3 and imports the SageMath library. The database of
 
 Thanks to Ján Jančár for help with the curve database and CRoCS members for fruitful discussions. Computational resources were supplied by the project "e-Infrastruktura CZ" (e-INFRA LM2018140) provided within the program Projects of Large Research, Development and Innovations Infrastructures.
 
-# Setup
+# Running DiSSECT
+
+We highly recommend using DiSSECT in Docker, as it avoids potential issues on the boundary of Sage and Python environments. If you still want to run DiSSECT locally, see the Local setup section.
+
+## Docker
+
+Clone this repository and build docker image.
+
+```shell
+$ git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT
+$ cd DiSSECT
+$ docker build -t dissect .
+```
+
+When the image is successfully built, you can start using DiSSECT.
+
+To run Jupyter Notebook, use the following command and access the provided link in your web browser.
+
+```
+docker run -it -p 8888:8888 dissect jupyter notebook dissect/analysis --ip='0.0.0.0' --port=8888
+```
+
+To run other DiSSECT commands in the Docker container, prefix them with `docker run -i dissect`. For example, `docker run -i dissect dissect-compute-file`. Alternatively, you can access DiSSECT directly in the container by opening interactive shell `docker run -it dissect bash`.
+
+## Local setup
 
 **Using virtual environment**:
 
@@ -29,27 +53,27 @@ Thanks to Ján Jančár for help with the curve database and CRoCS members for f
 **Alternatively without virtual environment (not recommended)**:
 From the root directory, run `sage --python3 setup.py develop --user` to initialize the project.
 
+# Commands
+
 ## Computing traits
 
-To feed the trait results directly to a local MongoDB database, run `./run.py -n <trait_name> [-c <curve_category>] [-b <bitlength>] [--cofactor <cofactor>]`.
-
-Alternatively, to get results as JSON files, run `./compute.py` in directory `traits`. Use the `-h` flag to get the help menu.
+To feed the trait results directly to a local MongoDB database, run `dissect-compute-database`. Alternatively, to get results as a JSON files, run `dissect-compute-file`. Use the `-h` flag to get the help menu.
 
 ## Performing the analysis
 
-The visual analysis can be started directly from local dissect installation by running `jupyter notebook dissect/analysis/analysis.ipynb`. Alternatively, the analysis framework can be started directly in the browser with the Binder service.
+The visual analysis can be started directly from local dissect installation by running `jupyter notebook` in DiSSECT root directory. Alternatively, the analysis framework can be started directly in the browser with Binder service.
 
-In order to run outlier detection, feature vectors need to be constructed. They can be built from results of individual traits using repeated invocations of `feature_builder.py` script. For example, the following sequence of commands builds set of feature vectors of `a05` and `a12` traits for 256-bit curves from the standard and simulated X9.62 categories.
-
-```
-python feature_builder.py --trait a05 --category x962 x962_sim --bits 256
-python feature_builder.py --trait a12 --category x962 x962_sim --bits 256
-```
-
-The sequence of `feature_builder.py` runs produces file `out.csv`, which contains the resulting feature vectors. The feature vectors can processed by the outlier detection script `find_outliers.py`.
+In order to run outlier detection, feature vectors need to be constructed. They can be built from results of individual traits using repeated invocations of `dissect-feature_builder`. For example, the following sequence of commands builds set of feature vectors of `a05` and `a12` traits for 256-bit curves from the standard and simulated X9.62 categories.
 
 ```
-python find_outliers out.csv outliers.csv
+dissect-feature_builder --trait a05 --category x962 x962_sim --bits 256 --input out.csv --output out.csv
+dissect-feature_builder --trait a12 --category x962 x962_sim --bits 256 --input out.csv --output out.csv
+```
+
+The sequence of `dissect-feature_builder` runs produces file `out.csv`, which contains the resulting feature vectors. The feature vectors can processed by the outlier detection script `dissect-find_outliers`.
+
+```
+dissect-find_outliers out.csv outliers.csv
 ```
 
 ## Overview of available traits
@@ -120,10 +144,6 @@ s08       | properties of the function shifting a point by the generator        
 
 Run `sage --python3 -m unittest discover` in directory `traits/unit_tests/`. Only unit tests starting with `test` will be run; those starting with `local` have to be run manually (as they require resources not available on the server).
 
-## Parameters and structure
+## Importing curves or results to a database
 
-From directory `traits`, parameter files can be (re)generated by `sage --python3 params.py` and structure files can be (re)generated by `sage --python3 traits/traits_structures.py -t all` (both of these are already done during the setup).
-
-## Importing curves or results to a local database
-
-After setting up a local database with MongoDB, you can run `python3 utils/database_handler.py curves [database_uri] <curve_files...>` to import curves from individual JSON files. Similarly, you can run `python3 utils/database_handler.py results [database_uri] <trait_name> <results_file>` to import trait results from a JSON file.
+After setting up a local database with MongoDB, you can run `dissect-database curves [database_uri] <curve_files...>` to import curves from individual JSON files. Similarly, you can run `dissect-database results [database_uri] <trait_name> <results_file>` to import trait results from a JSON file.
