@@ -36,8 +36,8 @@ def main():
         "-i",
         "--input",
         type=str,
-        help="Input file (JSON of curves)",
-        required=True
+        help="Input curves file (stdin by default)",
+        default=None
     )
     parser.add_argument(
         "-o",
@@ -54,10 +54,14 @@ def main():
         sys.exit(1)
 
     results = { "data": [] }
-    with open(args.input, "r") as f:
-        curves = json.load(f)
-        if not isinstance(curves, list):
-            curves = curves["curves"]
+    if args.input:
+        with open(args.input, "r") as f:
+            curves = json.load(f)
+    else:
+        curves = json.load(sys.stdin)
+
+    if not isinstance(curves, list):
+        curves = curves["curves"]
 
     for curve in curves:
         curve = CustomCurve(curve)
