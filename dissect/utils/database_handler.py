@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import sys
 from typing import Optional, Tuple, Iterable, Dict, Any
 
 from pymongo import MongoClient
@@ -80,14 +81,15 @@ def _format_curve(curve):
     return c
 
 
-def upload_curves(db: Database, path: str) -> Tuple[int, int]:
+def upload_curves(db: Database, path: str = None) -> Tuple[int, int]:
     try:
-        with open(path, "r") as f:
-            curves = json.load(f)
+        if path:
+            with open(path, "r") as f:
+                curves = json.load(f)
+        else:
+            curves = json.load(sys.stdin)
 
-        if not isinstance(
-                curves, list
-        ):  # inconsistency between simulated and standard format
+        if not isinstance(curves, list):  # inconsistency between simulated and standard format
             curves = curves["curves"]
     except Exception:  # invalid format
         return 0, 0
@@ -103,10 +105,13 @@ def upload_curves(db: Database, path: str) -> Tuple[int, int]:
     return success, len(curves)
 
 
-def upload_results(db: Database, trait_name: str, path: str) -> Tuple[int, int]:
+def upload_results(db: Database, trait_name: str, path: str = None) -> Tuple[int, int]:
     try:
-        with open(path, "r") as f:
-            results = json.load(f)
+        if path:
+            with open(path, "r") as f:
+                results = json.load(f)
+        else:
+            results = json.load(sys.stdin)
     except Exception:  # invalid format
         return 0, 0
 
@@ -361,7 +366,6 @@ def main():
     print(f"Connecting to database {database_uri}")
     db = connect(database_uri)
 
-
     def upload_curves_from_files(curve_files_list):
         for curves_file in curve_files_list:
             print(f"Loading curves from file {curves_file}")
@@ -369,18 +373,16 @@ def main():
             uploaded, total = upload_curves(db, curves_file)
             print(f"Successfully uploaded {uploaded} out of {total}")
 
-
     def upload_results_from_file(trait_name, results_file):
         print(f"Loading trait {trait_name} results from file {results_file}")
         create_trait_index(db, trait_name)
         uploaded, total = upload_results(db, trait_name, results_file)
         print(f"Successfully uploaded {uploaded} out of {total}")
 
-
     if sys.argv[1] == "curves":
-        upload_curves_from_files(args)
+        upload_curves_from_files(args if args else [None])
     elif sys.argv[1] == "results":
-        upload_results_from_file(args[0], args[1])
+        upload_results_from_file(args[0], args[1] if len(args) > 1 else None)
 
 
 if __name__ == "__main__":
