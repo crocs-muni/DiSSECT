@@ -30,8 +30,3 @@ setup(name='DiSSECT',
           ]
       }
 )
-
-spec2 = importlib.util.spec_from_file_location("gen_test", Path(TRAIT_PATH, "gen_trait_structures.py"))
-gen_trait = importlib.util.module_from_spec(spec2)
-spec2.loader.exec_module(gen_trait)
-gen_trait.main(True)
