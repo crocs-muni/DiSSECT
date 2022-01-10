@@ -2,39 +2,13 @@ from typing import Dict, Any
 import urllib.request
 import json
 import bz2
-from sage.all import RR, ZZ
 
 import pandas as pd
 from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import MinMaxScaler
 
 import dissect.utils.database_handler as database
-from dissect.definitions import STD_CURVE_DICT, ALL_CURVE_COUNT, ALL_COFACTORS
 from dissect.traits.trait_info import TRAIT_INFO, params_iter, nonnumeric_outputs
-
-
-class Modifier:
-    """a class of lambda functions for easier modifications if visualised values"""
-
-    @staticmethod
-    def identity():
-        return lambda x: x
-
-    @staticmethod
-    def ratio(ratio_precision=3):
-        return lambda x: RR(x).numerical_approx(digits=ratio_precision)
-
-    @staticmethod
-    def bits():
-        return lambda x: ZZ(x).nbits()
-
-    @staticmethod
-    def factorization_bits(factor_index=-1):
-        return lambda x: ZZ(x[factor_index]).nbits()
-
-    @staticmethod
-    def length():
-        return lambda x: len(x)
 
 
 def get_curves(source: str, query: Dict[str, Any] = {}):
@@ -91,7 +65,6 @@ def get_trait(source: str, trait_name: str, query: Dict[str, Any] = {}, skip_fai
         with urllib.request.urlopen(req) as f:
             trait_results = json.loads(f.read())["data"]
 
-
     if skip_failed:
         trait_results = filter(lambda x: "NO DATA (timed out)" not in x.values(), trait_results)
 
@@ -106,50 +79,6 @@ def get_curve_categories(source: str):
 
         with urllib.request.urlopen(req) as f:
             return json.loads(f.read())["data"]
-
-
-def filter_choices(choices, ignored):
-    filtered = {}
-    for key in choices:
-        if key not in ignored:
-            filtered[key] = choices[key]
-    return filtered
-
-
-def get_params(choices):
-    return filter_choices(
-        choices, ["category", "bits", "field_type", "cofactor", "Feature:", "Modifier:"]
-    )
-
-
-def filter_df(df, choices):
-    # TODO this way of checking is expensive - add curve categories to DB
-    df = df[df.field_type.isin(choices["field_type"])]
-    filtered = filter_choices(choices, ["category", "field_type", "Feature:", "Modifier:"])
-
-    for key, value in filtered.items():
-        if "all" not in value:
-            options = list(map(int, value))
-            df = df[df[key].isin(options)]
-
-
-    return df
-
-
-def get_all(df, choices):
-    modifier = getattr(Modifier, choices["Modifier:"])()
-    feature = choices["Feature:"]
-    params = get_params(choices)
-    if len(params) == 0:
-        return [[df, params, feature, modifier, choices["Modifier:"]]]
-    param, values = params.popitem()
-    choices.pop(param)
-    results = []
-    for v in values:
-        param_choice = choices.copy()
-        param_choice[param] = [v]
-        results.append((df[df[param]==int(v)], param_choice, feature, modifier, choices["Modifier:"]))
-    return results
 
 
 def find_outliers(df, features):
