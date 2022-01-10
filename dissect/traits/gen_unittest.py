@@ -23,38 +23,6 @@ def load_params_local(local_params):
     return params
 
 
-def create_structure_file(name):
-    with open(Path(TRAIT_PATH, name, name + ".params"), "r") as f:
-        params = json.loads(f.read())
-    params_names = params["params_local_names"]
-    params = load_params_local(params_names)
-
-    module_name = TRAIT_MODULE_PATH + "." + name + "." + name
-    __import__(module_name)
-    curve_function = getattr(sys.modules[module_name], name + "_curve_function")
-
-    result = {}
-    for curve in curves:
-        print("Curve " + curve.name + ": ")
-        result[curve.name] = {}
-        computed_result = curve_function(curve, *params)
-        for key in computed_result.keys():
-            try:
-                key_result = json.loads(input("Result for " + key + ": "))
-            except json.decoder.JSONDecodeError:
-                print("Invalid format")
-                return False
-            if (
-                computed_result[key] != key_result
-                and str(computed_result[key]) != key_result
-            ):
-                print("Wrong result, should be: " + str(computed_result[key]))
-                return False
-        result[curve.name][str(dict(zip(params_names, params)))] = computed_result
-    json_file = Path(TRAIT_PATH, name, name + "_structure.json")
-    save_into_json(result, json_file, mode="w")
-    return True
-
 
 def create_unittest(name):
     results = load_from_json(Path(TRAIT_PATH, name, name + "_structure.json"))
@@ -110,14 +78,9 @@ def create_unittest(name):
 def main(trait_name=None, u=False, s=False):
     if trait_name == None:
         parser = argparse.ArgumentParser(
-            description="Create unit traits or structure files or both(default)."
+            description="Create unit tests"
         )
-        parser.add_argument(
-            "-u", action="store_true", help="only unittest flag (default: False)"
-        )
-        parser.add_argument(
-            "-s", action="store_true", help="only structure file flag (default: False)"
-        )
+        
         requiredNamed = parser.add_argument_group("required named arguments")
         requiredNamed.add_argument(
             "-n",
@@ -132,22 +95,13 @@ def main(trait_name=None, u=False, s=False):
 
         args = parser.parse_args()
         trait_name = args.trait_name
-        u = args.u
-        s = args.s
 
     if trait_name == "all":
         trait_name = TRAIT_NAMES
     else:
         trait_name = [n.strip() for n in trait_name.split(",")]
     for name in trait_name:
-        if u:
-            create_unittest(name)
-            continue
-        if s:
-            create_structure_file(name)
-            continue
-        if create_structure_file(name):
-            create_unittest(name)
+        create_unittest(name)
 
 
 if __name__ == "__main__":
