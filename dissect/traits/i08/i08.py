@@ -2,7 +2,6 @@
 
 from sage.all import ZZ, GF
 
-from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 from dissect.utils.json_handler import FLOAT_PRECISION
 
@@ -29,7 +28,3 @@ def i08_curve_function(curve: CustomCurve, k):
         "ratio": round(ratio, FLOAT_PRECISION),
     }
     return curve_results
-
-
-def compute_i08_results(curve_list, desc="", verbose=False):
-    compute_results(curve_list, "i08", i08_curve_function, desc=desc, verbose=verbose)

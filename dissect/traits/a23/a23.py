@@ -1,8 +1,6 @@
 from sage.all import kronecker, ZZ
 
-from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
-
 
 def a23_curve_function(curve: CustomCurve, l):
     """
@@ -28,7 +26,3 @@ def a23_curve_function(curve: CustomCurve, l):
             curve_results["crater_degree"] = 1
             curve_results["depth"] = e // 2 - 1
     return curve_results
-
-
-def compute_a23_results(curve_list, desc="", verbose=False):
-    compute_results(curve_list, "a23", a23_curve_function, desc=desc, verbose=verbose)

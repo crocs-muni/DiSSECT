@@ -1,6 +1,5 @@
 from sage.all import Integers, ZZ, euler_phi
-from dissect.traits.trait_interface import timeout
-from dissect.traits.trait_interface import compute_results
+from dissect.utils.utils import timeout
 from dissect.utils.custom_curve import CustomCurve
 
 TIMEOUT_DURATION = 30
@@ -21,7 +20,3 @@ def a12_curve_function(curve: CustomCurve, l):
         complement_bit_length = None
     curve_results = {"order": mul_ord, "complement_bit_length": complement_bit_length}
     return curve_results
-
-
-def compute_a12_results(curve_list, desc="", verbose=False):
-    compute_results(curve_list, "a12", a12_curve_function, desc=desc, verbose=verbose)

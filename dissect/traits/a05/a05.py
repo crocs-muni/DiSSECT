@@ -1,6 +1,4 @@
 from sage.all import lcm
-
-from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 
 
@@ -48,7 +46,3 @@ def a05_curve_function(curve: CustomCurve, l):
     if k2 is None:
         return {"least": None, "full": None, "relative": None}
     return {"least": k1, "full": k2, "relative": k2 // k1}
-
-
-def compute_a05_results(curve_list, desc="", verbose=False):
-    compute_results(curve_list, "a05", a05_curve_function, desc=desc, verbose=verbose)

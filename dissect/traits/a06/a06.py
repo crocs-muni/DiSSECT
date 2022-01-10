@@ -1,7 +1,6 @@
 from sage.all import ZZ, sqrt
 
 from dissect.utils.utils import Factorization
-from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 
 TRAIT_TIMEOUT = 60
@@ -17,7 +16,3 @@ def a06_curve_function(curve: CustomCurve, deg):
     curve_results["ratio_sqrt"] = ratio_sqrt
     curve_results["factorization"] = Factorization(ratio_sqrt, timeout_duration=TRAIT_TIMEOUT).factorization()
     return curve_results
-
-
-def compute_a06_results(curve_list, desc="", verbose=False):
-    compute_results(curve_list, "a06", a06_curve_function, desc=desc, verbose=verbose)

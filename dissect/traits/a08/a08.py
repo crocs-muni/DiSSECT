@@ -1,6 +1,5 @@
 from sage.all import ceil, log, sqrt, pi, floor, ln, gcd
 
-from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 
 
@@ -39,7 +38,3 @@ def a08_curve_function(curve: CustomCurve):
     lower_bound = floor(lower_bound)
     curve_results = {"upper": upper_bound, "lower": lower_bound}
     return curve_results
-
-
-def compute_a08_results(curve_list, desc="", verbose=False):
-    compute_results(curve_list, "a08", a08_curve_function, desc=desc, verbose=verbose)

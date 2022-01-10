@@ -1,4 +1,3 @@
-from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 from dissect.utils.json_handler import FLOAT_PRECISION
 
@@ -24,7 +23,3 @@ def i07_curve_function(curve: CustomCurve):
         DISTANCE_64: dist64,
     }
     return curve_results
-
-
-def compute_i07_results(curve_list, desc="", verbose=False):
-    compute_results(curve_list, "i07", i07_curve_function, desc=desc, verbose=verbose)

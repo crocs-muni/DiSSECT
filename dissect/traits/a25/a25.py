@@ -1,5 +1,4 @@
 from dissect.utils.utils import Factorization
-from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 
 TRAIT_TIMEOUT = 20
@@ -16,7 +15,3 @@ def a25_curve_function(curve: CustomCurve, deg):
         "number_of_factors": num_of_factors,
     }
     return curve_results
-
-
-def compute_a25_results(curve_list, desc="", verbose=False):
-    compute_results(curve_list, "a25", a25_curve_function, desc=desc, verbose=verbose)

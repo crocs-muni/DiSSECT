@@ -2,7 +2,6 @@
 
 from sage.all import ZZ, binomial
 
-from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 from dissect.utils.json_handler import FLOAT_PRECISION
 
@@ -31,7 +30,3 @@ def i04_curve_function(curve: CustomCurve, weight):
         "ratio": round(ratio, FLOAT_PRECISION),
     }
     return curve_results
-
-
-def compute_i04_results(curve_list, desc="", verbose=False):
-    compute_results(curve_list, "i04", i04_curve_function, desc=desc, verbose=verbose)

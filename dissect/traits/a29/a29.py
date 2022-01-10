@@ -1,6 +1,5 @@
 from sage.all import ZZ, QQ, EllipticCurve
 
-from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 
 
@@ -17,7 +16,3 @@ def a29_curve_function(curve: CustomCurve):
         return {'Q_torsion':None}
     ec = EllipticCurve(QQ, [a, b])
     return {'Q_torsion': ec.torsion_order()}
-
-
-def compute_a29_results(curve_list, desc="", verbose=False):
-    compute_results(curve_list, "a29", a29_curve_function, desc=desc, verbose=verbose)

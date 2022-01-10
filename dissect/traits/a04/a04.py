@@ -1,5 +1,4 @@
 from dissect.utils.utils import Factorization
-from dissect.traits.trait_interface import compute_results
 from dissect.utils.custom_curve import CustomCurve
 
 TRAIT_TIMEOUT = 30
@@ -40,7 +39,3 @@ def a04_curve_function(curve: CustomCurve, k):
         curve_results["(-)factorization"]
     )
     return curve_results
-
-
-def compute_a04_results(curve_list, desc="", verbose=False):
-    compute_results(curve_list, "a04", a04_curve_function, desc=desc, verbose=verbose)

@@ -1,6 +1,5 @@
 from sage.all import factor
-from dissect.traits.trait_interface import timeout
-from dissect.traits.trait_interface import compute_results
+from dissect.utils.utils import timeout
 from dissect.utils.custom_curve import CustomCurve
 
 TIMEOUT_DURATION = 30
@@ -23,7 +22,3 @@ def a22_curve_function(curve: CustomCurve, l):
     # Converts tuples to lists for json
     result = [list(i) for i in result.items()]
     return {"factorization": result, "len": len(result)}
-
-
-def compute_a22_results(curve_list, desc="", verbose=False):
-    compute_results(curve_list, "a22", a22_curve_function, desc=desc, verbose=verbose)
