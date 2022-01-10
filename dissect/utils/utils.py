@@ -1,4 +1,3 @@
-from dissect.traits.trait_interface import timeout
 from sage.all import ZZ, ecm, factor, sqrt
 from sage.parallel.decorate import fork
 
