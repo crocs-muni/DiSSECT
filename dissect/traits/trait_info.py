@@ -10,14 +10,12 @@ from sage.all import sage_eval
 TRAIT_INFO = {}
 
 TRAIT_INFO["a01"] = {
-    "description": "The Smith normal form of the group in an extension field, i.e. $(n_1,n_2)$ where $n_1$ divides $n_2$.",
-    "motivation": "The group structure is not an isogeny invariant.",
-    "input": {
-        "r": (int, "Integer $r$")
-    },
+    "description": "The order of the prime order subgroup and its cofactor",
+    "motivation": "The size of the order determines the complexity of Pollard-rho",
+    "input": {},
     "output": {
-        "ord1": (int, "Order 1"),
-        "ord2": (int, "Order 2")
+        "order": (int, "order"),
+        "cofactor": (int, "cofactor")
     }
 }
 
