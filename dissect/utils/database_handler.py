@@ -181,8 +181,8 @@ def format_curve_query(query: Dict[str, Any]) -> Dict[str, Any]:
             result[db_key] = cast(query[key])
 
     helper("name", str)
-    helper("standard", bool)
-    helper("example", bool)
+    helper("standard", lambda x: str(x).lower() == "true")
+    helper("example", lambda x: str(x).lower() == "true")
     helper("category", str)
     helper("bits", int, "field.bits")
     helper("cofactor", lambda x: hex(int(x)))
@@ -289,8 +289,8 @@ def format_trait_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]
             result[db_key] = cast(query[key])
 
     helper("name", str, "curve.name")
-    helper("standard", bool, "curve.standard")
-    helper("example", bool, "curve.example")
+    helper("standard", lambda x: str(x).lower() == "true", "curve.standard")
+    helper("example", lambda x: str(x).lower() == "true", "curve.example")
     helper("category", str, "curve.category")
     helper("bits", int, "curve.bits")
     helper("cofactor", lambda x: hex(int(x)), "curve.cofactor")

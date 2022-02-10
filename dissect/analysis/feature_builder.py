@@ -12,9 +12,10 @@ import dissect.analysis.data_processing as dp
 
 def clean_feature(df, feature):
     def cleaner(value):
-        if value in ("NO DATA (timed out)", "INVALID DATA Ran out of input", "-", None):
+        try:
+            return Decimal(value)
+        except:
             return pd.NA
-        return Decimal(value)
 
     df[feature] = df[feature].map(cleaner, na_action="ignore")
 
@@ -65,9 +66,10 @@ def main():
     )
     parser.add_argument(
         "--bits",
+        nargs="+",
         type=str,
         default="all",
-        help="bitlength of applicable curves (or a range X-Y)",
+        help="bitlength of applicable curves",
     )
     parser.add_argument(
         "--cofactors",
@@ -93,6 +95,12 @@ def main():
         type=str,
         default="https://dissect.crocs.fi.muni.cz/",
         help="data source"
+    )
+    parser.add_argument(
+        "--example",
+        type=str,
+        default=None,
+        help="example curves (default: all)"
     )
 
 
