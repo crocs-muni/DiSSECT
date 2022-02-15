@@ -4,8 +4,6 @@ import json
 import itertools
 from dissect.definitions import TRAIT_PATH
 
-from sage.all import sage_eval
-
 
 TRAIT_INFO = {}
 
@@ -275,7 +273,7 @@ def params(trait_name):
     params_names = params["params_local_names"]
     params_ranges = {}
     for key in params["params_global"].keys():
-        params_ranges[key] = sage_eval(params["params_global"][key])
+        params_ranges[key] = eval(params["params_global"][key])
 
     return dict(zip(params_names, map(list, params_ranges.values())))
 
@@ -287,7 +285,7 @@ def params_iter(trait_name):
     params_names = params["params_local_names"]
     params_ranges = {}
     for key in params["params_global"].keys():
-        params_ranges[key] = sage_eval(params["params_global"][key])
+        params_ranges[key] = eval(params["params_global"][key])
 
     for params_values in itertools.product(*params_ranges.values()):
         yield dict(zip(params_names, params_values))

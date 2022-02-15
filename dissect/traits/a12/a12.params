@@ -1,1 +1,1 @@
-{"params_global": {"l_range": "prime_range(15)"}, "params_local_names": ["l"]}
+{"params_global": {"l_range": "[2,3,5,7,11,13]"}, "params_local_names": ["l"]}
