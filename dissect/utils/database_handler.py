@@ -9,7 +9,7 @@ from pymongo.errors import DuplicateKeyError
 from sage.all import Integer
 
 from dissect.utils.custom_curve import CustomCurve
-from dissect.traits.trait_info import TRAIT_INFO
+from dissect.traits import TRAITS
 
 
 def connect(database: Optional[str] = None) -> Database:
@@ -296,11 +296,11 @@ def format_trait_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]
     helper("cofactor", lambda x: hex(int(x)), "curve.cofactor")
     helper("field_type", str, "curve.field_type")
 
-    for key in TRAIT_INFO[trait_name]["input"]:
-        helper(key, TRAIT_INFO[trait_name]["input"][key][0], f"params.{key}")
+    for key in TRAITS[trait_name].INPUT:
+        helper(key, TRAITS[trait_name].INPUT[key][0], f"params.{key}")
 
-    for key in TRAIT_INFO[trait_name]["output"]:
-        helper(key, lambda x: _encode_ints(TRAIT_INFO[trait_name]["output"][key][0](x)), f"result.{key}")
+    for key in TRAITS[trait_name].OUTPUT:
+        helper(key, lambda x: _encode_ints(TRAITS[trait_name].OUTPUT[key][0](x)), f"result.{key}")
 
     return result
 

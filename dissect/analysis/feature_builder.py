@@ -7,7 +7,7 @@ import pandas as pd
 from decimal import Decimal
 import argparse
 
-from dissect.traits.trait_info import numeric_outputs
+from dissect.traits import TRAITS
 import dissect.analysis.data_processing as dp
 
 def clean_feature(df, feature):
@@ -123,7 +123,7 @@ def main():
             print(f"Reconnecting attempt {i} ...")
             sleep(10)
 
-    for feature in numeric_outputs(trait):
+    for feature in TRAITS[trait].numeric_outputs():
         clean_feature(trait_df, feature)
 
     flat_df = dp.flatten_trait(trait, trait_df)

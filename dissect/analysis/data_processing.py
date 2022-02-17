@@ -8,7 +8,7 @@ from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import MinMaxScaler
 
 import dissect.utils.database_handler as database
-from dissect.traits.trait_info import TRAIT_INFO, params_iter, nonnumeric_outputs
+from dissect.traits import TRAITS
 
 
 def get_curves(source: str, query: Dict[str, Any] = {}):
@@ -93,7 +93,7 @@ def find_outliers(df, features):
 def flatten_trait(trait_name, trait_df, param_values = None, ignore_curve_data = True):
     result_df = trait_df[["curve"]].drop_duplicates(subset=["curve"])
 
-    for params in params_iter(trait_name):
+    for params in TRAITS[trait_name].params_iter():
         if param_values and not list(params.values())[0] in param_values:
             continue
         if params:
@@ -104,7 +104,7 @@ def flatten_trait(trait_name, trait_df, param_values = None, ignore_curve_data =
         else:
             param_df = trait_df
 
-        param_df = param_df.drop(nonnumeric_outputs(trait_name), axis=1, errors="ignore")
+        param_df = param_df.drop(TRAITS[trait_name].nonnumeric_outputs(), axis=1, errors="ignore")
         if ignore_curve_data:
             param_df = param_df.drop(filter(lambda x: x in ("bits", "category", "cofactor", "field_type", "standard", "example"), param_df.columns), axis=1, errors="ignore")
         param_df.columns = map(lambda x: "curve" if x == "curve" else f"{trait_name}_{x}_{params}", param_df.columns)
