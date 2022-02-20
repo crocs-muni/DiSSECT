@@ -42,7 +42,6 @@ def torsion_finder(curve, l):
 class A05(Trait):
     NAME = "a05"
     DESCRIPTION = "Degrees of field extensions containing the least nontrivial $l$-torsion, the full $l$-torsion and their relative degree of extension."
-    MOTIVATION = "Low $k_1, k_2$ might lead to computable pairings."
     INPUT = {
         "l": (int, "$l$-torsion")
     }

@@ -28,7 +28,6 @@ def largest_factor_bitlen(factorization):
 class A04(Trait):
     NAME = "a04"
     DESCRIPTION = "Factorization of $kn \\pm 1$ where $n$ is the cardinality of the curve."
-    MOTIVATION = "Scalar multiplication by $kn \\pm 1$ is the identity or negation, respectively; it can be seen as a generalization of [https://link.springer.com/content/pdf/10.1007%2F11761679_1.pdf](https://link.springer.com/content/pdf/10.1007%2F11761679_1.pdf)."
     INPUT = {
         "k": (int, "Integer")
     }

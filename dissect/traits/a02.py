@@ -4,7 +4,6 @@ from dissect.traits import Trait
 class A02(Trait):
     NAME = "a02"
     DESCRIPTION = "Factorization of the discriminant of the Frobenius polynomial, i.e. factorization of  $t^2-4p=v^2d_K$, where $t$ is the trace of Frobenius, $v$ is the maximal conductor and $d_K$ is the CM discriminant."
-    MOTIVATION = "A large conductor has interesting implications."
     INPUT = {}
     OUTPUT = {
         "cm_disc": (int, "CM discriminant"),

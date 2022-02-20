@@ -6,7 +6,6 @@ TIMEOUT_DURATION = 30
 class A12(Trait):
     NAME = "a12"
     DESCRIPTION = "Multiplicative orders of small primes modulo the prime-subgroup order."
-    MOTIVATION = "Small orders might have implications for scalar multiplication."
     INPUT = {
         "l": (int, "Small prime")
     }

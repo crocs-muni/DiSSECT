@@ -7,7 +7,6 @@ TRAIT_TIMEOUT = 30
 class A03(Trait):
     NAME = "a03"
     DESCRIPTION = "Factorization of the quadratic twist cardinality in an extension, i.e. $\\#E(\\mathbb{F}_{p^d})$."
-    MOTIVATION = "Smooth cardinality of a quadratic twist might allow attacks on some implementations."
     INPUT = {
         "deg": (int, "Degree of extension")
     }

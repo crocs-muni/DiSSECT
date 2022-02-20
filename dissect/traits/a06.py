@@ -7,7 +7,6 @@ TRAIT_TIMEOUT = 60
 class A06(Trait):
     NAME = "a06"
     DESCRIPTION = "Factorization of ratio of the maximal conductors of CM-field over an extension and over a basefield."
-    MOTIVATION = "The prime factors of the ratio determine for which $l$ does the $l$-crater of the curve grows in the given extension."
     INPUT = {
         "deg": (int, "Integer")
     }
