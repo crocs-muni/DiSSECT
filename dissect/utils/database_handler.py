@@ -8,7 +8,6 @@ from pymongo.database import Database
 from pymongo.errors import DuplicateKeyError
 from sage.all import Integer
 
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import TRAITS
 
 
@@ -145,7 +144,7 @@ def upload_results(db: Database, trait_name: str, path: str = None) -> Tuple[int
     return success, total
 
 
-def get_curves(db: Database, query: Any = None) -> Iterable[CustomCurve]:
+def get_curves(db: Database, query: Any = None) -> Iterable[Any]:
     aggregate_pipeline = []
     aggregate_pipeline.append({"$match": format_curve_query(query) if query else dict()})
     aggregate_pipeline.append({"$unset": "_id"})
@@ -220,7 +219,7 @@ def _encode_ints(result: Any) -> Any:
 
 def store_trait_result(
         db: Database,
-        curve: CustomCurve,
+        curve: Any,
         trait: str,
         params: Dict[str, Any],
         result: Dict[str, Any],
@@ -244,7 +243,7 @@ def store_trait_result(
 
 
 def is_solved(
-        db: Database, curve: CustomCurve, trait: str, params: Dict[str, Any]
+        db: Database, curve: Any, trait: str, params: Dict[str, Any]
 ) -> bool:
     trait_result = { "curve.name": curve.name() }
     trait_result["params"] = _cast_sage_types(params)

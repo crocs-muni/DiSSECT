@@ -11,7 +11,7 @@ class A08(Trait):
     }
     DEFAULT_PARAMS = {}
 
-    def compute(curve: CustomCurve, params):
+    def compute(curve, params):
         """
         Computes the lower and upper bound of class number of the maximal order of the endomorphism algebra
 

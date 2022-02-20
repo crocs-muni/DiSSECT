@@ -1,8 +1,4 @@
-from sage.all import euler_phi, ZZ
-
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import Trait
-
 
 class A07(Trait):
     NAME = "a07"
@@ -14,8 +10,10 @@ class A07(Trait):
     }
     DEFAULT_PARAMS = {}
 
-    def compute(curve: CustomCurve, params):
+    def compute(curve, params):
         """Computes the embedding degree (with respect to the generator order) and its complement"""
+        from sage.all import euler_phi, ZZ
+
         q = curve.q()
         if q.nbits() > 300:
             return {"embedding_degree_complement":None,"complement_bit_length":None}
@@ -28,3 +26,7 @@ class A07(Trait):
             "complement_bit_length": complement_bit_length,
         }
         return curve_results
+
+
+def test_a07():
+    assert True
