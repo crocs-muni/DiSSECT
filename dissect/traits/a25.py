@@ -1,3 +1,4 @@
+from typing import List
 from dissect.traits import Trait
 
 TRAIT_TIMEOUT = 20
@@ -5,17 +6,17 @@ TRAIT_TIMEOUT = 20
 
 class A25(Trait):
     NAME = "a25"
-    DESCRIPTION = "The least field extensions containing a nontrivial number and full number of $l$-isogenies and their relative ratio.",
+    DESCRIPTION = "Factorization of trace in field extensions."
     INPUT = {
-        "l": (int, "Prime")
+        "deg": (int, "Integer")
     }
     OUTPUT = {
-        "least": (int, "Least"),
-        "full": (int, "Full"),
-        "relative": (int, "Relative")
+        "trace": (int, "Trace"),
+        "trace_factorization": (List[int], "Factorization of trace"),
+        "number_of_factors": (int, "Number of factors")
     }
     DEFAULT_PARAMS = {
-        "l": [1, 2]
+        "deg": [1, 2]
     }
 
 
