@@ -1,5 +1,3 @@
-from sage.all import ZZ
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import Trait
 
 class I13(Trait):
@@ -11,9 +9,15 @@ class I13(Trait):
     }
     DEFAULT_PARAMS = {}
 
-    def compute(curve: CustomCurve, params):
+    def compute(curve, params):
         """
         Computation of r=a^3/b^2 which is used during the generation in x962, secg, fips and others
         """
+        from sage.all import ZZ
+
         a, b = curve.a(), curve.b()
         return {"r": ZZ(curve.field()((a ** 3) / (b ** 2)))}
+
+
+def test_i13():
+    assert True

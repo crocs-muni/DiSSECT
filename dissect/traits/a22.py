@@ -1,7 +1,4 @@
 from typing import List
-from sage.all import factor
-from dissect.utils.utils import timeout
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import Trait
 
 TIMEOUT_DURATION = 30
@@ -20,12 +17,15 @@ class A22(Trait):
         "l": [2, 3, 5]
     }
 
-    def compute(curve: CustomCurve, params):
+    def compute(curve, params):
         """
         Computation factorization of l-th division polynomial
         More precisely, computes a list of tuple [a,b]
         where b is the number of irreducible polynomials of degree a in the factorization (with multiplicity)
         """
+        from sage.all import factor
+        from dissect.utils.utils import timeout
+
         factors = timeout(factor, [curve.ec().division_polynomial(params["l"])], timeout_duration=TIMEOUT_DURATION)
         if isinstance(factors, str):
             return {"factorization":None, "len": None}
@@ -38,3 +38,7 @@ class A22(Trait):
         # Converts tuples to lists for json
         result = [list(i) for i in result.items()]
         return {"factorization": result, "len": len(result)}
+
+
+def test_a22():
+    assert True

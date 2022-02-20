@@ -1,6 +1,3 @@
-from sage.all import kronecker, ZZ
-
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import Trait
 
 class A23(Trait):
@@ -18,11 +15,13 @@ class A23(Trait):
     }
 
 
-    def compute(curve: CustomCurve, params):
+    def compute(curve, params):
         """
         Computes the depth of volcano and the degree of the crater subgraph containing E
         Returns a dictionary (keys: 'crater_degree', 'depth')
         """
+        from sage.all import kronecker, ZZ
+
         D = curve.extended_frobenius_disc()
         curve_results = {}
         if params["l"] != 2:
@@ -42,3 +41,7 @@ class A23(Trait):
                 curve_results["crater_degree"] = 1
                 curve_results["depth"] = e // 2 - 1
         return curve_results
+
+
+def test_a23():
+    assert True

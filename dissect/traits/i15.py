@@ -1,5 +1,3 @@
-from sage.all import ZZ
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import Trait
 
 class I15(Trait):
@@ -12,8 +10,14 @@ class I15(Trait):
     }
     DEFAULT_PARAMS = {}
 
-    def compute(curve: CustomCurve, params):
+    def compute(curve, params):
+        from sage.all import ZZ
+
         try:
             return {"a": ZZ(curve.a()), "b": ZZ(curve.b())}
         except (TypeError, ValueError):
             return {"a":None, "b":None}
+
+
+def test_i15():
+    assert True

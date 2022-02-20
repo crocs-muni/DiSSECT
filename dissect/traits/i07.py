@@ -1,5 +1,3 @@
-from dissect.utils.custom_curve import CustomCurve
-from dissect.utils.json_handler import FLOAT_PRECISION
 from dissect.traits import Trait
 
 
@@ -14,7 +12,7 @@ class I07(Trait):
         "distance 64": (int, "Distance 64")
     }
 
-    def compute(curve: CustomCurve, params):
+    def compute(curve, params):
         """Computes the distance of curve cardinality to the nearest power of 2 and to the nearest multiple of 32 and 64"""
         card = curve.cardinality()
         l = card.nbits() - 1
@@ -27,8 +25,12 @@ class I07(Trait):
         ratio = card / distance
         curve_results = {
             "distance": distance,
-            "ratio": round(float(ratio), FLOAT_PRECISION),
+            "ratio": round(float(ratio), 5),
             "distance 32": dist32,
             "distance 64": dist64
         }
         return curve_results
+
+
+def test_i07():
+    assert True

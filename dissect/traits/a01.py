@@ -1,7 +1,3 @@
-from sage.all import gcd, lcm
-
-from dissect.utils.utils import timeout
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import Trait
 
 # global time for one group computation
@@ -9,6 +5,8 @@ TIME = 150
 
 def smith_normal_form(ext_ec):
     """Compute the smith normal form, (n1, n2) where n1 divides n2."""
+    from sage.all import gcd, lcm
+
     gens = ext_ec.abelian_group().gens()
     if len(gens) == 1:
         return 1, gens[0].order()
@@ -33,6 +31,8 @@ class A01(Trait):
 
     def compute(self, curve, params):
         """Computes the orders of the two generators of the curve over the deg-th relative extension."""
+        from dissect.utils.utils import timeout
+
         curve_results = {}
         ext_ec = curve.extended_ec(params["deg"])
         result = timeout(smith_normal_form, [ext_ec], timeout_duration=TIME)
@@ -40,3 +40,7 @@ class A01(Trait):
             result = result, result
         curve_results["ord1"], curve_results["ord2"] = result
         return curve_results
+
+
+def test_a01():
+    assert True

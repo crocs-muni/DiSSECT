@@ -1,8 +1,4 @@
-#!/usr/bin/env python3
 from typing import List
-
-from dissect.utils.utils import Factorization
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import Trait
 
 TRAIT_TIMEOUT = 30
@@ -24,8 +20,10 @@ class A03(Trait):
     }
 
 
-    def compute(curve: CustomCurve, params):
+    def compute(curve, params):
         """Returns the factorization of the cardinality of the quadratic twist of the curve"""
+        from dissect.utils.utils import Factorization
+
         tr = curve.extended_trace(params["deg"])
         card = curve.extended_cardinality(params["deg"])
         twist_card = card + 2 * tr
@@ -33,3 +31,7 @@ class A03(Trait):
 
         curve_results = {"twist_cardinality": twist_card, "factorization": f.factorization()}
         return curve_results
+
+
+def test_a03():
+    assert True

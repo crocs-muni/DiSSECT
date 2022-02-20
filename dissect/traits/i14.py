@@ -1,5 +1,3 @@
-from sage.all import ZZ
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import Trait
 
 
@@ -12,10 +10,12 @@ class I14(Trait):
     }
     DEFAULT_PARAMS = {}
 
-    def compute(curve: CustomCurve, params):
+    def compute(curve, params):
         """
         Computation of brainpool overlap
         """
+        from sage.all import ZZ
+
         cut = curve.field_bits() - 160 - 1
         if cut <= 0:
             return None
@@ -25,3 +25,7 @@ class I14(Trait):
         except (ValueError, TypeError):
             return None
         return {"o": ZZ(acut) - ZZ(bcut)}
+
+
+def test_i14():
+    assert True

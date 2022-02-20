@@ -1,14 +1,14 @@
-from sage.all import lcm
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import Trait
 
 
-def torsion_finder(curve: CustomCurve, l):
+def torsion_finder(curve, l):
     """
     Finds the minimal degrees k_2,k_1 of extension of curve E/F_q where
     E/F_q**(k_2) contains E[l] and E/F_q**(k_1) has nontrivial intersection with E[l]
     Returns k2, k1
     """
+    from sage.all import lcm
+
     eig = curve.eigenvalues(l)
     # Case with no eigenvalues
     if not eig:
@@ -55,7 +55,7 @@ class A05(Trait):
         "l": [2, 3, 5, 7, 11, 13, 17]
     }
 
-    def compute(curve: CustomCurve, params):
+    def compute(curve, params):
         """Computes find_torsions for given l and returns a dictionary"""
         if curve.q() % params["l"] == 0:
             return {"least": None, "full": None, "relative": None}
@@ -63,3 +63,7 @@ class A05(Trait):
         if k2 is None:
             return {"least": None, "full": None, "relative": None}
         return {"least": k1, "full": k2, "relative": k2 // k1}
+
+
+def test_a05():
+    assert True

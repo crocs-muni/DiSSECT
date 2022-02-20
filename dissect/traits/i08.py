@@ -1,7 +1,3 @@
-from sage.all import ZZ, GF
-
-from dissect.utils.custom_curve import CustomCurve
-from dissect.utils.json_handler import FLOAT_PRECISION
 from dissect.traits import Trait
 
 
@@ -22,8 +18,10 @@ class I08(Trait):
     }
 
 
-    def compute(curve: CustomCurve, params):
+    def compute(curve, params):
         """Computes the bit length of the x-coordinate of the generator multiplied by 1/k"""
+        from sage.all import ZZ, GF
+
         G = curve.generator()
         if G is None:
             return {"Hx": None, "bits": None, "difference": None, "ratio": None}
@@ -41,6 +39,10 @@ class I08(Trait):
             "Hx": Hx,
             "bits": bits,
             "difference": difference,
-            "ratio": round(ratio, FLOAT_PRECISION),
+            "ratio": round(ratio, 5),
         }
         return curve_results
+
+
+def test_i08():
+    assert True

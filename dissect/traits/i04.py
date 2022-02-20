@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-
-from sage.all import ZZ, binomial
-
-from dissect.utils.custom_curve import CustomCurve
-from dissect.utils.json_handler import FLOAT_PRECISION
 from dissect.traits import Trait
 
 def next_hamming(val):
@@ -27,8 +21,10 @@ class I04(Trait):
     }
 
 
-    def compute(curve: CustomCurve, params):
+    def compute(curve, params):
         """Computes the number of curve points whose x-coord has the given Hamming weight"""
+        from sage.all import ZZ, binomial
+
         bit_length = ZZ(curve.cardinality()).nbits()
         E = curve.ec()
         x_coord_count = 0
@@ -44,6 +40,10 @@ class I04(Trait):
         curve_results = {
             "x_coord_count": x_coord_count,
             "expected": expected,
-            "ratio": round(ratio, FLOAT_PRECISION),
+            "ratio": round(ratio, 5),
         }
         return curve_results
+
+
+def test_i04():
+    assert True

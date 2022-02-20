@@ -1,13 +1,13 @@
 from typing import List
-
-from dissect.utils.utils import Factorization
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import Trait
+
 
 TRAIT_TIMEOUT = 30
 
 def near_order_factorizations(n, sign="+", k=10, t=10):
     """Computer factorization of k*n+1 (k*n-1) if 'sign' is "+" ("-") in time 't' """
+    from dissect.utils.utils import Factorization
+
     assert sign in ["+", "-"]
 
     if sign == "+":
@@ -42,11 +42,12 @@ class A04(Trait):
         "k": [1, 2, 3, 4, 5, 6, 7, 8]
     }
 
-    def compute(curve: CustomCurve, params):
+    def compute(curve, params):
         """
         Computes factorization of ord*k+1 and ord*k-1 and bit lengths of their largest factors
         Returns a dictionary
         """
+
         card = curve.cardinality()
         t = TRAIT_TIMEOUT
         curve_results = {"(+)factorization": near_order_factorizations(card, "+", params["k"], t)}
@@ -58,3 +59,7 @@ class A04(Trait):
             curve_results["(-)factorization"]
         )
         return curve_results
+
+
+def test_a04():
+    assert True

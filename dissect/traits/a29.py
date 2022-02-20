@@ -1,6 +1,3 @@
-from sage.all import ZZ, QQ, EllipticCurve
-
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import Trait
 
 
@@ -13,11 +10,13 @@ class A29(Trait):
     }
     DEFAULT_PARAMS = {}
 
-    def compute(curve: CustomCurve, params):
+    def compute(curve, params):
         """
         Computation of the torsion order of E' where E' is the lift of the given
         curve to Q. By lift, we mean lift of coefficients to ZZ
         """
+        from sage.all import ZZ, QQ, EllipticCurve
+
         try:
             a, b = ZZ(curve.a()), ZZ(curve.b())
         except TypeError:
@@ -26,3 +25,7 @@ class A29(Trait):
             return {'Q_torsion': None}
         ec = EllipticCurve(QQ, [a, b])
         return {'Q_torsion': ec.torsion_order()}
+
+
+def test_a29():
+    assert True

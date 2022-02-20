@@ -1,8 +1,5 @@
 from typing import List
-from sage.all import ZZ, sqrt
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import Trait
-
 
 class A02(Trait):
     NAME = "a02"
@@ -16,7 +13,7 @@ class A02(Trait):
     }
     DEFAULT_PARAMS = {}
 
-    def compute(curve: CustomCurve):
+    def compute(curve):
         """
         Computation of d_K (cm_disc), v (max_conductor) and factorization of D where D=t^2-4q = v^2*d_K
         Returns a dictionary (keys: 'cm_disc', 'factorization', 'max_conductor')
@@ -27,3 +24,7 @@ class A02(Trait):
             return curve_result
         return {"cm_disc": curve.cm_discriminant(), "factorization": frob_disc_factor.factorization(unpack=True),
                 "max_conductor": frob_disc_factor.cm_conductor()}
+
+
+def test_a02():
+    assert True

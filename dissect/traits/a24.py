@@ -1,8 +1,7 @@
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import Trait
 
 
-def isogeny_finder(curve: CustomCurve, l):
+def isogeny_finder(curve, l):
     """
     Finds the minimal degrees i_2,i_1 of extension of curve E/F_q where
     E/F_q**(i_2) - all l+1 isogenies are rational, E/F_q**(i_1) - at least 1 isogeny is rational
@@ -61,3 +60,7 @@ class A24(Trait):
             return {"least": None, "full": None, "relative": None}
         i2, i1 = isogeny_finder(curve, params["l"])
         return {"least": i1, "full": i2, "relative": i2 // i1}
+
+
+def test_a24():
+    assert True

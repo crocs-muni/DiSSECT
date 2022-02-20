@@ -1,6 +1,3 @@
-from sage.all import ceil, log, sqrt, pi, floor, ln, gcd
-
-from dissect.utils.custom_curve import CustomCurve
 from dissect.traits import Trait
 
 
@@ -25,8 +22,9 @@ class A08(Trait):
 
         Lower bound:
         https://mathworld.wolfram.com/ClassNumber.html
-
         """
+        from sage.all import ceil, log, sqrt, pi, floor, ln, gcd
+
         cm_disc = curve.cm_discriminant()
         frob_disc_factor = curve.frobenius_disc_factorization()
         if frob_disc_factor.timeout():
@@ -49,3 +47,6 @@ class A08(Trait):
         lower_bound = floor(lower_bound)
         curve_results = {"upper": upper_bound, "lower": lower_bound}
         return curve_results
+
+def test_a08():
+    assert True
