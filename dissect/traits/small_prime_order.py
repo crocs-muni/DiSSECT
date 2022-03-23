@@ -3,8 +3,8 @@ from dissect.traits import Trait
 TIMEOUT_DURATION = 30
 
 
-class A12(Trait):
-    NAME = "a12"
+class SmallPrimeOrderTrait(Trait):
+    NAME = "small_prime_order"
     DESCRIPTION = "Multiplicative orders of small primes modulo the prime-subgroup order."
     INPUT = {
         "l": (int, "Small prime")
@@ -39,5 +39,5 @@ class A12(Trait):
         return curve_results
 
 
-def test_a12():
+def test_small_prime_order():
     assert True

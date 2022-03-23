@@ -4,8 +4,8 @@ from dissect.traits import Trait
 
 TRAIT_TIMEOUT = 60
 
-class A06(Trait):
-    NAME = "a06"
+class ConductorTrait(Trait):
+    NAME = "conductor"
     DESCRIPTION = "Factorization of ratio of the maximal conductors of CM-field over an extension and over a basefield."
     INPUT = {
         "deg": (int, "Integer")
@@ -33,5 +33,5 @@ class A06(Trait):
         return curve_results
 
 
-def test_a06():
+def test_conductor():
     assert True

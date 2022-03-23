@@ -4,8 +4,8 @@ from dissect.traits import Trait
 TRAIT_TIMEOUT = 30
 
 
-class A03(Trait):
-    NAME = "a03"
+class TwistOrderTrait(Trait):
+    NAME = "twist_order"
     DESCRIPTION = "Factorization of the quadratic twist cardinality in an extension, i.e. $\\#E(\\mathbb{F}_{p^d})$."
     INPUT = {
         "deg": (int, "Degree of extension")
@@ -32,5 +32,5 @@ class A03(Trait):
         return curve_results
 
 
-def test_a03():
+def test_twist_order():
     assert True

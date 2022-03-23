@@ -4,8 +4,8 @@ from dissect.traits import Trait
 TRAIT_TIMEOUT = 20
 
 
-class A25(Trait):
-    NAME = "a25"
+class TraceFactorizationTrait(Trait):
+    NAME = "trace_factorization"
     DESCRIPTION = "Factorization of trace in field extensions."
     INPUT = {
         "deg": (int, "Integer")
@@ -35,5 +35,5 @@ class A25(Trait):
         return curve_results
 
 
-def test_a25():
+def test_trace_factorization():
     assert True

@@ -1,7 +1,7 @@
 from dissect.traits import Trait
 
-class A23(Trait):
-    NAME = "a23"
+class VolcanoTrait(Trait):
+    NAME = "volcano"
     DESCRIPTION = "Volcano depth and crater degree of the $l$-isogeny graph."
     INPUT = {
         "l": (int, "Prime")
@@ -43,5 +43,5 @@ class A23(Trait):
         return curve_results
 
 
-def test_a23():
+def test_volcano():
     assert True

@@ -39,8 +39,8 @@ def torsion_finder(curve, l):
     return k2, k1
 
 
-class A05(Trait):
-    NAME = "a05"
+class TorsionExtensionTrait(Trait):
+    NAME = "torsion_extension"
     DESCRIPTION = "Degrees of field extensions containing the least nontrivial $l$-torsion, the full $l$-torsion and their relative degree of extension."
     INPUT = {
         "l": (int, "$l$-torsion")
@@ -64,5 +64,5 @@ class A05(Trait):
         return {"least": k1, "full": k2, "relative": k2 // k1}
 
 
-def test_a05():
+def test_torsion_extension():
     assert True

@@ -1,8 +1,8 @@
 from dissect.traits import Trait
 
 
-class I08(Trait):
-    NAME = "i08"
+class MultiplesXTrait(Trait):
+    NAME = "multiples_x"
     DESCRIPTION = "Bitlength of the $x$-coordinate of small inverted generator scalar multiples, i.e. $x$-coordinate of $P$ where $kP=G$. The difference and ratio to the bitlength of the whole group is also considered."
     INPUT = {
         "k": (int, "Integer")
@@ -44,5 +44,5 @@ class I08(Trait):
         return curve_results
 
 
-def test_i08():
+def test_multiples_x():
     assert True

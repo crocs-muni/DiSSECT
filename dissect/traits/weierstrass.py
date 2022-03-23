@@ -1,7 +1,7 @@
 from dissect.traits import Trait
 
-class I15(Trait):
-    NAME = "i15"
+class WeierstrassTrait(Trait):
+    NAME = "weierstrass"
     DESCRIPTION = "Coefficients of the curve in Weierstrass form"
     INPUT = {}
     OUTPUT = {
@@ -19,5 +19,5 @@ class I15(Trait):
             return {"a":None, "b":None}
 
 
-def test_i15():
+def test_weierstrass():
     assert True

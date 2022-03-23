@@ -1,8 +1,8 @@
 from dissect.traits import Trait
 
 
-class A29(Trait):
-    NAME = "a29"
+class QTorsionTrait(Trait):
+    NAME = "q_torsion"
     DESCRIPTION = "Torsion order of the lift of $E$ to $Q$."
     INPUT = {}
     OUTPUT = {
@@ -27,5 +27,5 @@ class A29(Trait):
         return {'Q_torsion': ec.torsion_order()}
 
 
-def test_a29():
+def test_q_torsion():
     assert True
