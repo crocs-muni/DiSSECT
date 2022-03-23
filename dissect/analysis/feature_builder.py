@@ -102,6 +102,12 @@ def main():
         default=None,
         help="example curves (default: all)"
     )
+    parser.add_argument(
+        '--keep-category',
+        action="store_true",
+        default=False,
+        help="keep category in the resulting csv"
+    )
 
 
     args = vars(parser.parse_args())
@@ -109,11 +115,12 @@ def main():
     source = args["source"]; del args["source"]
     output = args["output"]; del args["output"]
     trait = args["trait"]; del args["trait"]
+    keep_columns = ["curve", "category"] if args["keep_category"] else ["curve"]; del args["keep_category"]
 
     try:
         curves = pd.read_csv(input if input else sys.stdin, sep=';', index_col=False, low_memory=False)
     except FileNotFoundError:
-        curves = dp.get_curves(source, args)[["curve"]]
+        curves = dp.get_curves(source, args)[keep_columns]
 
     for i in range(3):
         try:
@@ -127,7 +134,7 @@ def main():
         clean_feature(trait_df, feature)
 
     flat_df = dp.flatten_trait(trait, trait_df)
-    features = list(filter(lambda x: x != "curve", flat_df.columns))
+    features = list(filter(lambda x: x not in keep_columns, flat_df.columns))
 
     for feature in features:
         scale_feature(flat_df, feature)

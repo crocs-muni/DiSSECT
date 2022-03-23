@@ -6,6 +6,7 @@ import bz2
 import pandas as pd
 from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.cluster import KMeans
 
 import dissect.utils.database_handler as database
 from dissect.traits import TRAITS
@@ -88,6 +89,17 @@ def find_outliers(df, features):
     lof.fit(data)
     predictions = lof.fit_predict(data)
     return df[predictions == -1]
+
+
+def find_clusters(df, features, n_clusters=2):
+    df = df.copy(deep=True)
+    data = df[features]
+    kmeans = KMeans(n_clusters=n_clusters, random_state=0).fit(data)
+    return pd.DataFrame({
+        "curve": df["curve"],
+        "cluster": kmeans.labels_,
+        "category": df["category"]
+    })
 
 
 def flatten_trait(trait_name, trait_df, param_values = None, ignore_curve_data = True):
