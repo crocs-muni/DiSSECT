@@ -4,48 +4,10 @@ from time import sleep
 import sys
 
 import pandas as pd
-from decimal import Decimal
 import argparse
 
 from dissect.traits import TRAITS
 import dissect.analysis.data_processing as dp
-
-def clean_feature(df, feature):
-    def cleaner(value):
-        try:
-            return Decimal(value)
-        except:
-            return pd.NA
-
-    df[feature] = df[feature].map(cleaner, na_action="ignore")
-
-
-def scale_feature(df, feature):
-    df[feature] = df[feature].map(Decimal, na_action="ignore")
-    feature_max = df[feature].max(skipna=True)
-    feature_min = df[feature].min(skipna=True)
-    feature_range = feature_max - feature_min
-
-    def scaler(x): # minmax
-        if feature_range == Decimal(0):
-            result = x / (Decimal(1) if feature_max == Decimal(0) else feature_max)
-        else:
-            result = (x - feature_min) / feature_range
-        return result
-
-    df[feature] = df[feature].map(scaler, na_action="ignore")
-    df[feature] = df[feature].map(float, na_action="ignore")
-
-
-def impute_feature(df, feature, method="mean"):
-    if method == "mean":
-        value = df[feature].mean(skipna=True)
-    elif method == "median":
-        value = df[feature].median(skipna=True)
-    else:
-        value = method
-
-    df[feature] = df[feature].fillna(float(value))
 
 
 def main():
@@ -131,18 +93,18 @@ def main():
             sleep(10)
 
     for feature in TRAITS[trait].numeric_outputs():
-        clean_feature(trait_df, feature)
+        dp.clean_feature(trait_df, feature)
 
     flat_df = dp.flatten_trait(trait, trait_df)
     features = list(filter(lambda x: x not in keep_columns, flat_df.columns))
 
     for feature in features:
-        scale_feature(flat_df, feature)
+        dp.scale_feature(flat_df, feature)
 
     curves = curves.merge(flat_df, "left", on="curve")
 
     for feature in features:
-        impute_feature(curves, feature, -1.0)
+        dp.impute_feature(curves, feature, -1.0)
 
     curves.to_csv(output if output else sys.stdout, sep=';', index=False)
 

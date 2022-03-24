@@ -1,4 +1,5 @@
 from typing import Dict, Any
+from decimal import Decimal
 import urllib.request
 import json
 import bz2
@@ -124,3 +125,41 @@ def flatten_trait(trait_name, trait_df, param_values = None, ignore_curve_data =
         result_df = result_df.merge(param_df, "left", on="curve")
 
     return result_df
+
+
+def clean_feature(df, feature):
+    def cleaner(value):
+        try:
+            return Decimal(value)
+        except:
+            return pd.NA
+
+    df[feature] = df[feature].map(cleaner, na_action="ignore")
+
+
+def scale_feature(df, feature):
+    df[feature] = df[feature].map(Decimal, na_action="ignore")
+    feature_max = df[feature].max(skipna=True)
+    feature_min = df[feature].min(skipna=True)
+    feature_range = feature_max - feature_min
+
+    def scaler(x): # minmax
+        if feature_range == Decimal(0):
+            result = x / (Decimal(1) if feature_max == Decimal(0) else feature_max)
+        else:
+            result = (x - feature_min) / feature_range
+        return result
+
+    df[feature] = df[feature].map(scaler, na_action="ignore")
+    df[feature] = df[feature].map(float, na_action="ignore")
+
+
+def impute_feature(df, feature, method="mean"):
+    if method == "mean":
+        value = df[feature].mean(skipna=True)
+    elif method == "median":
+        value = df[feature].median(skipna=True)
+    else:
+        value = method
+
+    df[feature] = df[feature].fillna(float(value))
