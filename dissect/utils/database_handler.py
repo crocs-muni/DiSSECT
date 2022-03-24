@@ -6,7 +6,6 @@ from typing import Optional, Tuple, Iterable, Dict, Any
 from pymongo import MongoClient
 from pymongo.database import Database
 from pymongo.errors import DuplicateKeyError
-from sage.all import Integer
 
 from dissect.traits import TRAITS
 
@@ -191,6 +190,7 @@ def format_curve_query(query: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _cast_sage_types(result: Any) -> Any:
+    from sage.all import Integer
     if isinstance(result, Integer):
         return int(result)
 
@@ -205,6 +205,7 @@ def _cast_sage_types(result: Any) -> Any:
 
 
 def _encode_ints(result: Any) -> Any:
+    from sage.all import Integer
     if isinstance(result, Integer) or isinstance(result, int):
         return hex(result)
     if isinstance(result, dict):
