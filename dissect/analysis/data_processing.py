@@ -68,7 +68,9 @@ def get_trait(source: str, trait_name: str, query: Dict[str, Any] = {}, skip_fai
             trait_results = json.loads(f.read())["data"]
 
     if skip_failed:
+        trait_results = filter(lambda x: "NO DATA" not in x.values(), trait_results)
         trait_results = filter(lambda x: "NO DATA (timed out)" not in x.values(), trait_results)
+        trait_results = filter(lambda x: "INVALID DATA Ran out of input" not in x.values(), trait_results)
 
     return pd.DataFrame(trait_results).convert_dtypes()
 
