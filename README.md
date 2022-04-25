@@ -43,15 +43,17 @@ To run other DiSSECT commands in the Docker container, prefix them with `docker 
 
 ## Local setup
 
-**Using virtual environment**:
-
+**Full DiSSECT installation**:
 - Clone with  `git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT.git`
-- Create virtual environment for python in sage: `sage --python3 -m venv --system-site-packages environment`
+- Create virtual environment for Python in Sage: `sage --python3 -m venv --system-site-packages environment`
 - Activate the environment: `source environment/bin/activate`
 - Run `pip install --editable .` in DiSSECT folder
 
-**Alternatively without virtual environment (not recommended)**:
-From the root directory, run `sage --python3 setup.py develop --user` to initialize the project.
+**DiSSECT without Sage (only analysis)**:
+- Clone with  `git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT.git`
+- Create virtual environment for Python: `python -m venv environment`
+- Activate the environment: `source environment/bin/activate`
+- Run `pip install --editable .` in DiSSECT folder
 
 # Commands
 
