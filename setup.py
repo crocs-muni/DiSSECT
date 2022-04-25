@@ -20,18 +20,13 @@ setup(name='DiSSECT',
       packages=find_packages(),
       install_requires=install_requires,
       entry_points={
-          'console_scripts': ['merge_trait_results=dissect.traits.merge_trait_results:main']
-      },
-      scripts=['dissect/traits/gen_trait_structures.py', 'dissect/traits/gen_params.py',
-               'dissect/traits/merge_trait_results.py', 'dissect/traits/gen_unittest.py']
-      )
-
-spec = importlib.util.spec_from_file_location("gen_params", Path(TRAIT_PATH, "gen_params.py"))
-gen_params = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(gen_params)
-gen_params.main()
-
-spec2 = importlib.util.spec_from_file_location("gen_test", Path(TRAIT_PATH, "gen_trait_structures.py"))
-gen_trait = importlib.util.module_from_spec(spec2)
-spec2.loader.exec_module(gen_trait)
-gen_trait.main(True)
+          'console_scripts': [
+              'dissect-database=dissect.utils.database_handler:main',
+              'dissect-compute-database=dissect.traits.run:main',
+              'dissect-compute-file=dissect.traits.compute:main',
+              'dissect-feature_builder=dissect.analysis.feature_builder:main',
+              'dissect-find_outliers=dissect.analysis.find_outliers:main',
+              'dissect-detail=dissect.analysis.detail:main'
+          ]
+      }
+)

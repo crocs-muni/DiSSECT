@@ -2,6 +2,7 @@
 
 import argparse
 import itertools
+import importlib
 import sys
 import datetime
 from math import prod
@@ -19,17 +20,15 @@ from dissect.utils.database_handler import (
     get_trait_results_count,
     create_trait_index,
 )
-import dissect.traits.trait_info as trait_info
+from dissect.traits import TRAITS
 from dissect.utils.custom_curve import CustomCurve
 
 
 def get_trait_function(trait):
-    module_name = TRAIT_MODULE_PATH + "." + trait + "." + trait
     try:
-        __import__(module_name)
+        return getattr(importlib.import_module(f"dissect.traits.{trait}"), "trait_function")
     except ModuleNotFoundError:
         return None
-    return getattr(sys.modules[module_name], trait + "_curve_function")
 
 
 def tprint(string):
@@ -43,7 +42,7 @@ def producer(database, trait, args, queue, lock):
     with lock:
         tprint("Preliminary check")
 
-    total = get_curves_count(db, query=vars(args)) * prod(map(len, trait_info.params(trait).values()))
+    total = get_curves_count(db, query=vars(args)) * prod(map(len, TRAITS[trait].params().values()))
     computed = get_trait_results_count(db, trait, query=vars(args))
 
     with lock:
@@ -52,7 +51,7 @@ def producer(database, trait, args, queue, lock):
 
     curves = map(CustomCurve, get_curves(db, query=vars(args)))
     counter = 0
-    iterator = itertools.product(curves, trait_info.params_iter(trait))
+    iterator = itertools.product(curves, TRAITS[trait].params_iter())
     while counter <= args.skip:
         next(iterator)
         counter += 1

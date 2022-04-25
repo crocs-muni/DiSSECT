@@ -1,40 +1,16 @@
 from typing import Dict, Any
+from decimal import Decimal
 import urllib.request
 import json
 import bz2
-from sage.all import RR, ZZ
 
 import pandas as pd
 from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.cluster import KMeans
 
 import dissect.utils.database_handler as database
-from dissect.definitions import STD_CURVE_DICT, ALL_CURVE_COUNT, ALL_COFACTORS
-from dissect.traits.trait_info import TRAIT_INFO, params_iter, nonnumeric_outputs
-
-
-class Modifier:
-    """a class of lambda functions for easier modifications if visualised values"""
-
-    @staticmethod
-    def identity():
-        return lambda x: x
-
-    @staticmethod
-    def ratio(ratio_precision=3):
-        return lambda x: RR(x).numerical_approx(digits=ratio_precision)
-
-    @staticmethod
-    def bits():
-        return lambda x: ZZ(x).nbits()
-
-    @staticmethod
-    def factorization_bits(factor_index=-1):
-        return lambda x: ZZ(x[factor_index]).nbits()
-
-    @staticmethod
-    def length():
-        return lambda x: len(x)
+from dissect.traits import TRAITS
 
 
 def get_curves(source: str, query: Dict[str, Any] = {}):
@@ -91,9 +67,10 @@ def get_trait(source: str, trait_name: str, query: Dict[str, Any] = {}, skip_fai
         with urllib.request.urlopen(req) as f:
             trait_results = json.loads(f.read())["data"]
 
-
     if skip_failed:
+        trait_results = filter(lambda x: "NO DATA" not in x.values(), trait_results)
         trait_results = filter(lambda x: "NO DATA (timed out)" not in x.values(), trait_results)
+        trait_results = filter(lambda x: "INVALID DATA Ran out of input" not in x.values(), trait_results)
 
     return pd.DataFrame(trait_results).convert_dtypes()
 
@@ -108,50 +85,6 @@ def get_curve_categories(source: str):
             return json.loads(f.read())["data"]
 
 
-def filter_choices(choices, ignored):
-    filtered = {}
-    for key in choices:
-        if key not in ignored:
-            filtered[key] = choices[key]
-    return filtered
-
-
-def get_params(choices):
-    return filter_choices(
-        choices, ["category", "bits", "field_type", "cofactor", "Feature:", "Modifier:"]
-    )
-
-
-def filter_df(df, choices):
-    # TODO this way of checking is expensive - add curve categories to DB
-    df = df[df.field_type.isin(choices["field_type"])]
-    filtered = filter_choices(choices, ["category", "field_type", "Feature:", "Modifier:"])
-
-    for key, value in filtered.items():
-        if "all" not in value:
-            options = list(map(int, value))
-            df = df[df[key].isin(options)]
-
-
-    return df
-
-
-def get_all(df, choices):
-    modifier = getattr(Modifier, choices["Modifier:"])()
-    feature = choices["Feature:"]
-    params = get_params(choices)
-    if len(params) == 0:
-        return [[df, params, feature, modifier, choices["Modifier:"]]]
-    param, values = params.popitem()
-    choices.pop(param)
-    results = []
-    for v in values:
-        param_choice = choices.copy()
-        param_choice[param] = [v]
-        results.append((df[df[param]==int(v)], param_choice, feature, modifier, choices["Modifier:"]))
-    return results
-
-
 def find_outliers(df, features):
     df = df.copy(deep=True)
     lof = LocalOutlierFactor()
@@ -161,10 +94,21 @@ def find_outliers(df, features):
     return df[predictions == -1]
 
 
+def find_clusters(df, features, n_clusters=2):
+    df = df.copy(deep=True)
+    data = df[features]
+    kmeans = KMeans(n_clusters=n_clusters, random_state=0).fit(data)
+    return pd.DataFrame({
+        "curve": df["curve"],
+        "cluster": kmeans.labels_,
+        "category": df["category"]
+    })
+
+
 def flatten_trait(trait_name, trait_df, param_values = None, ignore_curve_data = True):
     result_df = trait_df[["curve"]].drop_duplicates(subset=["curve"])
 
-    for params in params_iter(trait_name):
+    for params in TRAITS[trait_name].params_iter():
         if param_values and not list(params.values())[0] in param_values:
             continue
         if params:
@@ -175,7 +119,7 @@ def flatten_trait(trait_name, trait_df, param_values = None, ignore_curve_data =
         else:
             param_df = trait_df
 
-        param_df = param_df.drop(nonnumeric_outputs(trait_name), axis=1, errors="ignore")
+        param_df = param_df.drop(TRAITS[trait_name].nonnumeric_outputs(), axis=1, errors="ignore")
         if ignore_curve_data:
             param_df = param_df.drop(filter(lambda x: x in ("bits", "category", "cofactor", "field_type", "standard", "example"), param_df.columns), axis=1, errors="ignore")
         param_df.columns = map(lambda x: "curve" if x == "curve" else f"{trait_name}_{x}_{params}", param_df.columns)
@@ -183,3 +127,41 @@ def flatten_trait(trait_name, trait_df, param_values = None, ignore_curve_data =
         result_df = result_df.merge(param_df, "left", on="curve")
 
     return result_df
+
+
+def clean_feature(df, feature):
+    def cleaner(value):
+        try:
+            return Decimal(value)
+        except:
+            return pd.NA
+
+    df[feature] = df[feature].map(cleaner, na_action="ignore")
+
+
+def scale_feature(df, feature):
+    df[feature] = df[feature].map(Decimal, na_action="ignore")
+    feature_max = df[feature].max(skipna=True)
+    feature_min = df[feature].min(skipna=True)
+    feature_range = feature_max - feature_min
+
+    def scaler(x): # minmax
+        if feature_range == Decimal(0):
+            result = x / (Decimal(1) if feature_max == Decimal(0) else feature_max)
+        else:
+            result = (x - feature_min) / feature_range
+        return result
+
+    df[feature] = df[feature].map(scaler, na_action="ignore")
+    df[feature] = df[feature].map(float, na_action="ignore")
+
+
+def impute_feature(df, feature, method="mean"):
+    if method == "mean":
+        value = df[feature].mean(skipna=True)
+    elif method == "median":
+        value = df[feature].median(skipna=True)
+    else:
+        value = method
+
+    df[feature] = df[feature].fillna(float(value))

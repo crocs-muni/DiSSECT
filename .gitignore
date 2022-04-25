@@ -8,15 +8,10 @@ local/
 *.ipynb
 !dissect/visual/*.ipynb
 dissect/**/__pycache__
-dissect/traits/test_launcher.py
 dissect/traits/.*
 dissect/traits/sample_curves.py
 dissect/traits/**/*.json
 !dissect/traits/**/*_structure.json
-dissect/traits/**/*.params
-!dissect/traits/default.params
 dissect/traits/**/*.txt
-dissect/utils/parallel/results/*
-dissect/curves_json_sim/*
 DiSSECT.egg-info
 /dissect/results/

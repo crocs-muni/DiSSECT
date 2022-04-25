@@ -7,20 +7,10 @@ import sys
 from dissect.utils.custom_curve import CustomCurve
 
 from dissect.utils.database_handler import _cast_sage_types
-from dissect.definitions import TRAIT_NAMES, TRAIT_MODULE_PATH
-from dissect.traits.trait_info import params_iter
+from dissect.traits import TRAITS
 
 
-def get_trait_function(trait):
-    module_name = TRAIT_MODULE_PATH + "." + trait + "." + trait
-    try:
-        __import__(module_name)
-    except ModuleNotFoundError:
-        return None
-    return getattr(sys.modules[module_name], trait + "_curve_function")
-
-
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(
         description="DiSSECT trait computation script."
     )
@@ -36,8 +26,8 @@ if __name__ == "__main__":
         "-i",
         "--input",
         type=str,
-        help="Input file (JSON of curves)",
-        required=True
+        help="Input curves file (stdin by default)",
+        default=None
     )
     parser.add_argument(
         "-o",
@@ -54,17 +44,25 @@ if __name__ == "__main__":
         sys.exit(1)
 
     results = { "data": [] }
-    with open(args.input, "r") as f:
-        curves = json.load(f)
-        if not isinstance(curves, list):
-            curves = curves["curves"]
+    if args.input:
+        with open(args.input, "r") as f:
+            curves = json.load(f)
+    else:
+        curves = json.load(sys.stdin)
+
+    if not isinstance(curves, list):
+        curves = curves["curves"]
 
     for curve in curves:
         curve = CustomCurve(curve)
-        for params in params_iter(args.trait):
+        for params in TRAITS[args.trait].params_iter():
             result = { "curve": curve.name() }
             result["params"] = params
-            result["result"] = trait_function(curve, **params)
+            result["result"] = TRAITS[args.trait](curve, **params)
             results["data"].append(result)
 
     json.dump(_cast_sage_types(results), sys.stdout if not args.output else open(args.output, "w"))
+
+
+if __name__ == "__main__":
+    main()

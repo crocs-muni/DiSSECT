@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 import json
-from pathlib import Path
+import sys
 from typing import Optional, Tuple, Iterable, Dict, Any
 
 from pymongo import MongoClient
 from pymongo.database import Database
 from pymongo.errors import DuplicateKeyError
-from sage.all import Integer
 
-from dissect.utils.custom_curve import CustomCurve
-from dissect.traits.trait_info import TRAIT_INFO
+from dissect.traits import TRAITS
 
 
 def connect(database: Optional[str] = None) -> Database:
@@ -81,14 +79,15 @@ def _format_curve(curve):
     return c
 
 
-def upload_curves(db: Database, path: str) -> Tuple[int, int]:
+def upload_curves(db: Database, path: str = None) -> Tuple[int, int]:
     try:
-        with open(path, "r") as f:
-            curves = json.load(f)
+        if path:
+            with open(path, "r") as f:
+                curves = json.load(f)
+        else:
+            curves = json.load(sys.stdin)
 
-        if not isinstance(
-                curves, list
-        ):  # inconsistency between simulated and standard format
+        if not isinstance(curves, list):  # inconsistency between simulated and standard format
             curves = curves["curves"]
     except Exception:  # invalid format
         return 0, 0
@@ -104,10 +103,13 @@ def upload_curves(db: Database, path: str) -> Tuple[int, int]:
     return success, len(curves)
 
 
-def upload_results(db: Database, trait_name: str, path: str) -> Tuple[int, int]:
+def upload_results(db: Database, trait_name: str, path: str = None) -> Tuple[int, int]:
     try:
-        with open(path, "r") as f:
-            results = json.load(f)
+        if path:
+            with open(path, "r") as f:
+                results = json.load(f)
+        else:
+            results = json.load(sys.stdin)
     except Exception:  # invalid format
         return 0, 0
 
@@ -141,7 +143,7 @@ def upload_results(db: Database, trait_name: str, path: str) -> Tuple[int, int]:
     return success, total
 
 
-def get_curves(db: Database, query: Any = None) -> Iterable[CustomCurve]:
+def get_curves(db: Database, query: Any = None) -> Iterable[Any]:
     aggregate_pipeline = []
     aggregate_pipeline.append({"$match": format_curve_query(query) if query else dict()})
     aggregate_pipeline.append({"$unset": "_id"})
@@ -177,8 +179,8 @@ def format_curve_query(query: Dict[str, Any]) -> Dict[str, Any]:
             result[db_key] = cast(query[key])
 
     helper("name", str)
-    helper("standard", bool)
-    helper("example", bool)
+    helper("standard", lambda x: str(x).lower() == "true")
+    helper("example", lambda x: str(x).lower() == "true")
     helper("category", str)
     helper("bits", int, "field.bits")
     helper("cofactor", lambda x: hex(int(x)))
@@ -188,6 +190,7 @@ def format_curve_query(query: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _cast_sage_types(result: Any) -> Any:
+    from sage.all import Integer
     if isinstance(result, Integer):
         return int(result)
 
@@ -202,6 +205,7 @@ def _cast_sage_types(result: Any) -> Any:
 
 
 def _encode_ints(result: Any) -> Any:
+    from sage.all import Integer
     if isinstance(result, Integer) or isinstance(result, int):
         return hex(result)
     if isinstance(result, dict):
@@ -216,7 +220,7 @@ def _encode_ints(result: Any) -> Any:
 
 def store_trait_result(
         db: Database,
-        curve: CustomCurve,
+        curve: Any,
         trait: str,
         params: Dict[str, Any],
         result: Dict[str, Any],
@@ -240,7 +244,7 @@ def store_trait_result(
 
 
 def is_solved(
-        db: Database, curve: CustomCurve, trait: str, params: Dict[str, Any]
+        db: Database, curve: Any, trait: str, params: Dict[str, Any]
 ) -> bool:
     trait_result = { "curve.name": curve.name() }
     trait_result["params"] = _cast_sage_types(params)
@@ -285,18 +289,18 @@ def format_trait_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]
             result[db_key] = cast(query[key])
 
     helper("name", str, "curve.name")
-    helper("standard", bool, "curve.standard")
-    helper("example", bool, "curve.example")
+    helper("standard", lambda x: str(x).lower() == "true", "curve.standard")
+    helper("example", lambda x: str(x).lower() == "true", "curve.example")
     helper("category", str, "curve.category")
     helper("bits", int, "curve.bits")
     helper("cofactor", lambda x: hex(int(x)), "curve.cofactor")
     helper("field_type", str, "curve.field_type")
 
-    for key in TRAIT_INFO[trait_name]["input"]:
-        helper(key, TRAIT_INFO[trait_name]["input"][key][0], f"params.{key}")
+    for key in TRAITS[trait_name].INPUT:
+        helper(key, TRAITS[trait_name].INPUT[key][0], f"params.{key}")
 
-    for key in TRAIT_INFO[trait_name]["output"]:
-        helper(key, lambda x: _encode_ints(TRAIT_INFO[trait_name]["output"][key][0](x)), f"result.{key}")
+    for key in TRAITS[trait_name].OUTPUT:
+        helper(key, lambda x: _encode_ints(TRAITS[trait_name].OUTPUT[key][0](x)), f"result.{key}")
 
     return result
 
@@ -337,7 +341,7 @@ def _decode_ints(source: Any) -> Any:
     return source
 
 
-if __name__ == "__main__":
+def main():
     import sys
 
     if len(sys.argv) < 3 or not sys.argv[1] in ("curves", "results"):
@@ -362,7 +366,6 @@ if __name__ == "__main__":
     print(f"Connecting to database {database_uri}")
     db = connect(database_uri)
 
-
     def upload_curves_from_files(curve_files_list):
         for curves_file in curve_files_list:
             print(f"Loading curves from file {curves_file}")
@@ -370,15 +373,17 @@ if __name__ == "__main__":
             uploaded, total = upload_curves(db, curves_file)
             print(f"Successfully uploaded {uploaded} out of {total}")
 
-
     def upload_results_from_file(trait_name, results_file):
         print(f"Loading trait {trait_name} results from file {results_file}")
         create_trait_index(db, trait_name)
         uploaded, total = upload_results(db, trait_name, results_file)
         print(f"Successfully uploaded {uploaded} out of {total}")
 
-
     if sys.argv[1] == "curves":
-        upload_curves_from_files(args)
+        upload_curves_from_files(args if args else [None])
     elif sys.argv[1] == "results":
-        upload_results_from_file(args[0], args[1])
+        upload_results_from_file(args[0], args[1] if len(args) > 1 else None)
+
+
+if __name__ == "__main__":
+    main()

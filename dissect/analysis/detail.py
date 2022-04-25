@@ -2,7 +2,7 @@ import sys
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 
-if __name__ == "__main__":
+def main():
     if len(sys.argv) != 3:
         print(f"USAGE: {sys.argv[0]} <FILE> <CURVE>", file=sys.stderr)
         sys.exit(1)
@@ -40,3 +40,7 @@ if __name__ == "__main__":
     nbrs["distance"] = distances[0]
     for _, nbr in nbrs.iterrows():
         print(f"{nbr['curve']}: {nbr['distance']}")
+
+
+if __name__ == "__main__":
+    main()

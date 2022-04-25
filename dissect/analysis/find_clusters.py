@@ -9,8 +9,8 @@ def main():
         sys.exit(1)
 
     df = pd.read_csv(sys.argv[1], sep=";")
-    outliers = dp.find_outliers(df, df.columns[1:])
-    outliers.to_csv(sys.argv[2], sep=";")
+    clusters = dp.find_clusters(df, df.columns[2:])
+    clusters.value_counts(["cluster", "category"]).to_csv(sys.argv[2], sep=";")
 
 
 if __name__ == "__main__":

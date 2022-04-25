@@ -1,5 +1,5 @@
-from dissect.traits.trait_interface import timeout
 from sage.all import ZZ, ecm, factor, sqrt
+from sage.parallel.decorate import fork
 
 
 class Factorization:
@@ -143,3 +143,16 @@ def customize_curve(curve):
     db_curve["cofactor"] = curve.order() // order
     db_curve["generator"] = None
     return db_curve
+
+
+def timeout(func, args=(), kwargs=None, timeout_duration=10):
+    """Stops the function func after 'timeout_duration' seconds, taken from
+    https://ask.sagemath.org/question/10112/kill-the-thread-in-a-long-computation/."""
+    if kwargs is None:
+        kwargs = {}
+
+    @fork(timeout=timeout_duration, verbose=False)
+    def my_new_func():
+        return func(*args, **kwargs)
+
+    return my_new_func()
