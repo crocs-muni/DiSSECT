@@ -63,7 +63,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Motivation:** the prime factors of $D_r/D_1$ determine for which $l$ does the $l$-crater of E grow in the $r$-th extension
 
-**Distribution:** unknown, probably reducible to the distribution of a02
+**Distribution:** unknown, probably reducible to the distribution of discriminant
 
 **Time complexity:** Factorization of $t/2$-bit number
 
@@ -106,7 +106,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Output:** the factorization of the $l$-th division polynomial
 
-**Motivation:** this is partially relevant to a05
+**Motivation:** this is partially relevant to torsion_extension
 
 **Distribution:** [Factorisation_patterns_of_division_polynomials](https://www.researchgate.net/publication/38339355_Factorisation_patterns_of_division_polynomials)
 
@@ -128,7 +128,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Output:** $i_1,i_2,i_2/i_1$ where $i_1,i_2$ are the smallest integers such that from  $E/\mathbb{F}_{p^{i_1}}$ there exists a ($\mathbb{F}_{p^{i_1}}$ rational) $l$-isogeny and from $E/\mathbb{F}_{p^{i_2}}$ there exist all $l+1$ ($\mathbb{F}_{p^{i_2}}$ rational) $l$-isogenies
 
-**Motivation:** this is loosely related to a05 and a06
+**Motivation:** this is loosely related to torsion_extension and conductor
 
 **Distribution:** unknown (but see page 50 in [Vojtěch Suchánek's diploma thesis](https://github.com/vojtechsu/isogenies/blob/master/master_thesis.pdf))
 

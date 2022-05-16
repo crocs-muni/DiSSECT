@@ -45,4 +45,4 @@ TRAITS = dict(map(lambda x: (x.NAME, x()), [
     X962InvariantTrait,
     BrainpoolOverlapTrait,
     WeierstrassTrait
-])
+]))
