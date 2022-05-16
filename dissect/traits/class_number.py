@@ -1,8 +1,8 @@
 from dissect.traits import Trait
 
 
-class A08(Trait):
-    NAME = "a08"
+class ClassNumberTrait(Trait):
+    NAME = "class_number"
     DESCRIPTION = "Upper and lower bound for the class number of the CM-field."
     INPUT = {}
     OUTPUT = {
@@ -48,5 +48,5 @@ class A08(Trait):
         curve_results = {"upper": upper_bound, "lower": lower_bound}
         return curve_results
 
-def test_a08():
+def test_class_number():
     assert True

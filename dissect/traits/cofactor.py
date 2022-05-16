@@ -1,9 +1,9 @@
 from dissect.traits import Trait
 
 
-class A01(Trait):
-    NAME = "a01"
-    DESCRIPTION = "The order of the prime order subgroup and its cofactor",
+class CofactorTrait(Trait):
+    NAME = "cofactor"
+    DESCRIPTION = "The order of the prime order subgroup and its cofactor"
     INPUT = {}
     OUTPUT = {
         "order": (int, "Order"),
@@ -16,5 +16,5 @@ class A01(Trait):
         return { "order": curve.order(), "cofactor": curve.cofactor() }
 
 
-def test_a01():
+def test_cofactor():
     assert True

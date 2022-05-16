@@ -3,8 +3,8 @@ from dissect.traits import Trait
 
 TIMEOUT_DURATION = 30
 
-class A22(Trait):
-    NAME = "a22"
+class DivisionPolynomialsTrait(Trait):
+    NAME = "division_polynomials"
     DESCRIPTION = "Factorizations of small division polynomials."
     INPUT = {
         "l": (int, "Prime")
@@ -40,5 +40,5 @@ class A22(Trait):
         return {"factorization": result, "len": len(result)}
 
 
-def test_a22():
+def test_division_polynomials():
     assert True

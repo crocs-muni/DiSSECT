@@ -1,48 +1,48 @@
 from .trait import Trait
-from .a01 import A01
-from .a02 import A02
-from .a03 import A03
-from .a04 import A04
-from .a05 import A05
-from .a06 import A06
-from .a07 import A07
-from .a08 import A08
-from .a12 import A12
-from .a22 import A22
-from .a23 import A23
-from .a24 import A24
-from .a25 import A25
-from .a28 import A28
-from .a29 import A29
-from .i04 import I04
-from .i06 import I06
-from .i07 import I07
-from .i08 import I08
-from .i13 import I13
-from .i14 import I14
-from .i15 import I15
+from .cofactor import CofactorTrait
+from .discriminant import DiscriminantTrait
+from .twist_order import TwistOrderTrait
+from .kn_factorization import KNFactorizationTrait
+from .torsion_extension import TorsionExtensionTrait
+from .conductor import ConductorTrait
+from .embedding import EmbeddingTrait
+from .class_number import ClassNumberTrait
+from .small_prime_order import SmallPrimeOrderTrait
+from .division_polynomials import DivisionPolynomialsTrait
+from .volcano import VolcanoTrait
+from .isogeny_extension import IsogenyExtensionTrait
+from .trace_factorization import TraceFactorizationTrait
+from .isogeny_neighbors import IsogenyNeighborsTrait
+from .q_torsion import QTorsionTrait
+from .hamming_x import HammingXTrait
+from .square_4p1 import Square4P1Trait
+from .pow_distance import PowDistanceTrait
+from .multiples_x import MultiplesXTrait
+from .x962_invariant import X962InvariantTrait
+from .brainpool_overlap import BrainpoolOverlapTrait
+from .weierstrass import WeierstrassTrait
 
-TRAITS = {
-    "a01": A01(),
-    "a02": A02(),
-    "a03": A03(),
-    "a04": A04(),
-    "a05": A05(),
-    "a06": A06(),
-    "a07": A07(),
-    "a08": A08(),
-    "a12": A12(),
-    "a22": A22(),
-    "a23": A23(),
-    "a24": A24(),
-    "a25": A25(),
-    "a28": A28(),
-    "a29": A29(),
-    "i04": I04(),
-    "i06": I06(),
-    "i07": I07(),
-    "i08": I08(),
-    "i13": I13(),
-    "i14": I14(),
-    "i15": I15()
-}
+TRAITS = dict(map(lambda x: (x.NAME, x()), [
+    CofactorTrait,
+    DiscriminantTrait,
+    TwistOrderTrait,
+    KNFactorizationTrait,
+    TorsionExtensionTrait,
+    ConductorTrait,
+    EmbeddingTrait,
+    ClassNumberTrait,
+    SmallPrimeOrderTrait,
+    DivisionPolynomialsTrait,
+    VolcanoTrait,
+    IsogenyExtensionTrait,
+    TraceFactorizationTrait,
+    IsogenyNeighborsTrait,
+    QTorsionTrait,
+    HammingXTrait,
+    Square4P1Trait,
+    PowDistanceTrait,
+    MultiplesXTrait,
+    X962InvariantTrait,
+    BrainpoolOverlapTrait,
+    WeierstrassTrait
+])

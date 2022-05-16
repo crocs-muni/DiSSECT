@@ -1,8 +1,8 @@
 from dissect.traits import Trait
 
 
-class I14(Trait):
-    NAME = "i14"
+class BrainpoolOverlapTrait(Trait):
+    NAME = "brainpool_overlap"
     DESCRIPTION = "Bit overlaps in curve coefficients"
     INPUT = {}
     OUTPUT = {
@@ -27,5 +27,5 @@ class I14(Trait):
         return {"o": ZZ(acut) - ZZ(bcut)}
 
 
-def test_i14():
+def test_brainpool_overlap():
     assert True

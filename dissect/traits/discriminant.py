@@ -1,8 +1,8 @@
 from typing import List
 from dissect.traits import Trait
 
-class A02(Trait):
-    NAME = "a02"
+class DiscriminantTrait(Trait):
+    NAME = "discriminant"
     DESCRIPTION = "Factorization of the discriminant of the Frobenius polynomial, i.e. factorization of  $t^2-4p=v^2d_K$, where $t$ is the trace of Frobenius, $v$ is the maximal conductor and $d_K$ is the CM discriminant."
     INPUT = {}
     OUTPUT = {
@@ -25,5 +25,5 @@ class A02(Trait):
                 "max_conductor": frob_disc_factor.cm_conductor()}
 
 
-def test_a02():
+def test_discriminant():
     assert True
