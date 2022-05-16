@@ -1,7 +1,7 @@
 ### Distributions
 Most distributions are considered over all the set of all (isogeny/isomorphism classes of) elliptic curves over $\mathbb{F}_{p}$ for fixed $p$. In some cases, we only consider (isogeny/isomorpism classes of) ordinary curves. Also denote $N$ as the cardinality of $E$ and $t=\log(N)$.
 
-### a01
+### smith
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, integer $r$
 
 **Output:** tuple $(m, n)$ such that the group $E(\mathbb{F}_{p^r})$ is isomorphic to $\mathbb{Z}_m\times \mathbb{Z}_n$ and $m∣n$ (in particular, $m=1$ for cyclic groups)
@@ -12,7 +12,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Baby-step giant-step algorithm: O(\sqrt{N})
 
-### a02
+### discriminant
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}$
 
 **Output:** the factorization of $D = t^2-4p = v^2d_K$, where $t$ is the trace of Frobenius of E and $d_K$ is the discriminant of the endomorphism algebra of $E$
@@ -23,7 +23,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Factorization of $t$-bit number
 
-### a03
+### twist_order
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}, integer $r$
 
 **Output:** the factorization of the cardinality of the quadratic twist of $E(\mathbb{F}_{p^r})$
@@ -34,7 +34,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Factorization of $t$-bit number
 
-### a04
+### kn_factorization
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, integer $k$
 
 **Output:** the factorizations of $kn+1$ , $kn-1$, where $n=\#E(\mathbb{F}_p)$
@@ -45,7 +45,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Factorization of $t$-bit number
 
-### a05
+### torsion_extension
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, prime $l$
 
 **Output:** $k_1,k_2,k_2/k_1$, where $k_1,k_2$ are the smallest integers satisfying $E[l]\cap E(\mathbb{F}_{p^{k_1}})\neq \empty$ and $E[l]\subseteq E(\mathbb{F}_{p^{k_2}})$
@@ -56,7 +56,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:**Up to 20 scalar multiplications on $t$-bit curve
 
-### a06
+### conductor
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}$, integer $r$
 
 **Output:** the factorization of $D_r/D_1$ (which is a square), where $D_r = t_r^2-4p^{r}$ and $t_r$ is the trace of Frobenius of $E/\mathbb{F}_{p^r}$
@@ -67,7 +67,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Factorization of $t/2$-bit number
 
-### a07
+### embedding
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}$
 
 **Output:** the embedding degree complement, i.e., $\phi(l)/e$, where $l$ is the generator order (presumed prime) and $e$ is the multiplicative order of $q$ modulo $l$.
@@ -78,7 +78,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Computation of multiplicative order in $t$-bit prime field. (precomputed)
 
-### a08
+### class_number
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}$
 
 **Output:** the class number of the maximal order of the endomorphism algebra of $E$
@@ -90,7 +90,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 **Time complexity:** Factorization of $t$-bit number (precomputed).
 
 
-### a12
+### small_prime_order
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, prime $l$
 
 **Output:** $\phi(n)/m$ where $n=\#E(\mathbb{F}_p)$  and $m$ is the order of $l$ in the multiplicative group $\mathbb{Z}_{n}^\times$
@@ -101,7 +101,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Computation of multiplicative order in $t$-bit prime field. 
 
-### a22
+### division_polynomials
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, prime $l$
 
 **Output:** the factorization of the $l$-th division polynomial
@@ -112,7 +112,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Factorization of $(l^2-1)$-degree polynomial over $t$-bit prime field
 
-### a23
+### volcano
 **Input:** ordinary elliptic curve $E/\mathbb{F}_{p}$, prime $l$
 
 **Output:** the depth of the $l$-volcano and the degree of the crater subgraph(i.e., 2 is the degree of a circle crater, 1 for a segment and 0 for a point; more precisely: the degree is $1+\genfrac(){}{0}{d_K}{l}$) 
@@ -123,7 +123,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Legendre symbol of $t$-bit number modulo small prime
 
-### a24
+### isogeny_extension
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, prime $l$
 
 **Output:** $i_1,i_2,i_2/i_1$ where $i_1,i_2$ are the smallest integers such that from  $E/\mathbb{F}_{p^{i_1}}$ there exists a ($\mathbb{F}_{p^{i_1}}$ rational) $l$-isogeny and from $E/\mathbb{F}_{p^{i_2}}$ there exist all $l+1$ ($\mathbb{F}_{p^{i_2}}$ rational) $l$-isogenies
@@ -134,7 +134,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Up to 20 scalar multiplications on $t$-bit curve
 
-### a25
+### trace_factorization
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, integer $r$
 
 **Output:** factorization of $t_r$ (the trace of Frobenius of $E/\mathbb{F}_{p^r}$)
@@ -145,7 +145,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Factorization of $(deg\cdot t)$-bit number
 
-### a28
+### isogeny_neighbors
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, small prime $l$
 
 **Output:** Number of roots of $\Phi_l(j(E),x)$ where $\Phi_l$ is the $l$-th modular polynomial.
@@ -156,7 +156,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Factorization of $(l+1)$-degree polynomial over $t$-bit prime field
 
-### a29
+### q_torsion
 
 **Input:** elliptic curve $E/\mathbb{F}_{p}:y^2=x^3+ax+b$
 
@@ -169,7 +169,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 **Time complexity:** Doud's algorithm: $O(t^3)$
 
 
-### i04
+### hamming_x
 **Input:** elliptic curve $E/\mathbb{F}_{p}$, integer $k$
 
 **Output:** number of points on $E$ with the Hamming weight of the $x$-coordinate equal to $k$
@@ -180,7 +180,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Binomial($\log(n)$,$k$)-many Legendre symbols in $t$-bit prime field
 
-### i06
+### square_4p1
 **Input:** elliptic curve $E/\mathbb{F}_{p}$
 
 **Output:** factorization of square-free parts of $4p-1$ and $4n-1$ where $n$ is the order of the generator point of $E$
@@ -191,7 +191,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Factorization of $t$-bit number
 
-### i07
+### pow_distance
 **Input:** elliptic curve $E/\mathbb{F}_{p}$
 
 **Output:** distance of $n$ to the nearest power of $2$ and the nearest multiple of 32 and 64, where $n=\#E(\mathbb{F}_p)$
@@ -200,7 +200,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Division in $t$-bit prime field
 
-### i08
+### multiples_x
 **Input:** elliptic curve $E/\mathbb{F}_{p}$ with generator $G$, integer $k$
 
 **Output:** the $x$-coordinate of $\frac{1}{k}G$
@@ -211,36 +211,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** One scalar multiplication on $t$-bit curve
 
-### i10
-**Input:** elliptic curve $E/\mathbb{F}_{p}$, integer $k$, addition formula
-
-**Output:** points $P$ such that $P+kP$ trigger intermediate zero in the formula computation
-
-**Motivation:** might allow nontrivial ZVP attacks
-
-**Distribution:** unknown
-
-### i11
-**Input:** elliptic curve $E/\mathbb{F}_{p}$, addition formula
-
-**Output:** points $P$ such that $P+Q$ trigger intermediate zero in the formula computation independently of $Q$
-
-**Motivation:** might allow trivial ZVP/RPA attacks
-
-**Distribution:** unknown
-
-### i12
-**Input:** elliptic curve $E/\mathbb{F}_{p}$, addition formula
-
-**Output:** the dimension of the variety corresponding to the ideal generated by the curve equations and output formular polynomial
-
-**Motivation:** might allow exceptional point attacks
-
-**Distribution:** unknown
-
-
-
-### i13
+### x962_invariant
 
 **Input:** elliptic curve $E/\mathbb{F}_{p}:y^2=x^3+ax+b$
 
@@ -252,9 +223,7 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 
 **Time complexity:** Division in $t$-bit prime field
 
-
-
-### i14
+### brainpool_overlap
 
 **Input:** elliptic curve $E/\mathbb{F}_{p}:y^2=x^3+ax+b$ where $p$ has bit-length $t$
 
@@ -265,3 +234,5 @@ Most distributions are considered over all the set of all (isogeny/isomorphism c
 **Distribution:** Uniform
 
 **Time complexity:** Subtraction in $t$-bit prime field 
+
+### weierstrass
