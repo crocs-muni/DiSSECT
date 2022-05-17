@@ -1,8 +1,8 @@
 from dissect.traits import Trait
 
 
-class I07(Trait):
-    NAME = "i07"
+class PowDistanceTrait(Trait):
+    NAME = "pow_distance"
     DESCRIPTION = "Distance of $n$ from the nearest power of two and multiple of 32/64."
     INPUT = {},
     OUTPUT = {
@@ -32,5 +32,5 @@ class I07(Trait):
         return curve_results
 
 
-def test_i07():
+def test_pow_distance():
     assert True

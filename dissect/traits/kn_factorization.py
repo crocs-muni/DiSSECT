@@ -25,8 +25,8 @@ def largest_factor_bitlen(factorization):
         return factorization[-1].nbits()
 
 
-class A04(Trait):
-    NAME = "a04"
+class KNFactorizationTrait(Trait):
+    NAME = "kn_factorization"
     DESCRIPTION = "Factorization of $kn \\pm 1$ where $n$ is the cardinality of the curve."
     INPUT = {
         "k": (int, "Integer")
@@ -60,5 +60,5 @@ class A04(Trait):
         return curve_results
 
 
-def test_a04():
+def test_kn_factorization():
     assert True

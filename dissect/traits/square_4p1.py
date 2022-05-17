@@ -2,8 +2,8 @@ from dissect.traits import Trait
 
 TRAIT_TIMEOUT = 30
 
-class I06(Trait):
-    NAME = "i06"
+class Square4P1Trait(Trait):
+    NAME = "square_4p1"
     DESCRIPTION = "Square parts of $4q \\pm 1$ and $4n \\pm 1$."
     INPUT = {}
     OUTPUT = {
@@ -23,5 +23,5 @@ class I06(Trait):
         return curve_results
 
 
-def test_i06():
+def test_square_4p1():
     assert True

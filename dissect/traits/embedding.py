@@ -1,7 +1,7 @@
 from dissect.traits import Trait
 
-class A07(Trait):
-    NAME = "a07"
+class EmbeddingTrait(Trait):
+    NAME = "embedding"
     DESCRIPTION = "The complement of the embedding degree, i.e. $(n-1)/e$ where $n$ is the prime-subgroup order and $e$ is the embedding degree."
     INPUT = {}
     OUTPUT = {
@@ -28,5 +28,5 @@ class A07(Trait):
         return curve_results
 
 
-def test_a07():
+def test_embedding():
     assert True

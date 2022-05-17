@@ -1,8 +1,8 @@
 from dissect.traits import Trait
 
 
-class A28(Trait):
-    NAME = "a28"
+class IsogenyNeighborsTrait(Trait):
+    NAME = "isogeny_neighbors"
     DESCRIPTION = "Number of $j$-invariants adjacent to the curve by $l$-isogeny. This is the degree of the point in the $l$-isogeny graph."
     INPUT = {
         "l": (int, "Small prime")
@@ -29,5 +29,5 @@ class A28(Trait):
         return {"len": sum([i[1] for i in f.roots()])}
 
 
-def test_a28():
+def test_isogeny_neighbors():
     assert True

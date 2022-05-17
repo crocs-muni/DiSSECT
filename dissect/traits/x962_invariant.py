@@ -1,7 +1,7 @@
 from dissect.traits import Trait
 
-class I13(Trait):
-    NAME = "i13"
+class X962InvariantTrait(Trait):
+    NAME = "x962_invariant"
     DESCRIPTION = "Computation of $a^3/b^2$."
     INPUT = {}
     OUTPUT = {
@@ -19,5 +19,5 @@ class I13(Trait):
         return {"r": ZZ(curve.field()((a ** 3) / (b ** 2)))}
 
 
-def test_i13():
+def test_x962_invariant():
     assert True

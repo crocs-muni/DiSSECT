@@ -5,8 +5,8 @@ def next_hamming(val):
     r = val + c
     return ZZ((((r ^ val) >> 2) // c) | r)
 
-class I04(Trait):
-    NAME = "i04"
+class HammingXTrait(Trait):
+    NAME = "hamming_x"
     DESCRIPTION = "Number of points with low Hamming weight of the $x$-coordinate and the expected weight."
     INPUT = {
         "weight": (int, "Integer")
@@ -45,5 +45,5 @@ class I04(Trait):
         return curve_results
 
 
-def test_i04():
+def test_hamming_x():
     assert True

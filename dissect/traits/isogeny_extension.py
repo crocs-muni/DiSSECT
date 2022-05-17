@@ -35,8 +35,8 @@ def isogeny_finder(curve, l):
     return i2, i1
 
 
-class A24(Trait):
-    NAME = "a24"
+class IsogenyExtensionTrait(Trait):
+    NAME = "isogeny_extension"
     DESCRIPTION = "The least field extensions containing a nontrivial number and full number of $l$-isogenies and their relative ratio."
     INPUT = {
         "l": (int, "Prime")
@@ -62,5 +62,5 @@ class A24(Trait):
         return {"least": i1, "full": i2, "relative": i2 // i1}
 
 
-def test_a24():
+def test_isogeny_extension():
     assert True
