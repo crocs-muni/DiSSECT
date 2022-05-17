@@ -4,7 +4,7 @@ from dissect.traits import Trait
 class PowDistanceTrait(Trait):
     NAME = "pow_distance"
     DESCRIPTION = "Distance of $n$ from the nearest power of two and multiple of 32/64."
-    INPUT = {},
+    INPUT = {}
     OUTPUT = {
         "distance": (int, "Distance"),
         "ratio": (float, "Order"),
