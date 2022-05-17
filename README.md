@@ -78,43 +78,6 @@ The sequence of `dissect-feature_builder` runs produces file `out.csv`, which co
 dissect-find_outliers out.csv outliers.csv
 ```
 
-## Overview of available traits
-
-| name    | description                                                                       | implemented        |  computed\*        |time req.\*\* |memory req.\*\*\*
-|:-------:| ----------------------------------------------------------------------------------|:------------------:|:------------------:|:------------:|:---------:   
-|smith      | group stucture of the curve in field extensions                                   | :white_check_mark: | :x:                | high         | low
-|discriminant      | factorization of the CM discriminant                                              | :white_check_mark: | :white_check_mark: | high         | medium
-|twist_order      | factorization of the quadratic twist cardinality                                  | :white_check_mark: | :white_check_mark: | high         | medium
-|kn_factorization      | factorizations of $`kn\pm 1`$                                                     | :white_check_mark: | :white_check_mark: | high         | high
-|torsion_extension      | field extensions containing nontrivial/full $`l`$-torsion                         | :white_check_mark: | :white_check_mark: | medium       | low
-|conductor      | factorizations of ratios of CM discriminants in extension fields and base fields  | :white_check_mark: | :white_check_mark: | high         | medium
-|embedding      | embedding degree                                                                  | :white_check_mark: | :white_check_mark: | medium       | low
-|class_number      | class number of the maximal order of the endomorphism ring                        | :white_check_mark: | :white_check_mark:               | high         | low
-|small_prime_order      | multiplicative orders of small primes modulo curve order                          | :white_check_mark: | :white_check_mark: | medium       | medium
-|division_polynomials      | factorizations of small division polynomials                                      | :white_check_mark: | :white_check_mark: | high         | high
-|volcano      | volcano depth and crater degree in the $`l`$-isogeny graph                        | :white_check_mark: | :white_check_mark: | low          | low
-|isogeny_extension      | field extensions containing nontrivial/full number of $`l`$-isogenies             | :white_check_mark: | :white_check_mark: | medium       | low
-|trace_factorisation      | trace in field extensions and its factorization                                   | :white_check_mark: | :white_check_mark: | low          | low
-|isogeny_neighbors      | Number of j-invariants adjacent to the curve by l-isogeny                         |:white_check_mark:|:white_check_mark:| medium | low
-|q_torsion      |Torsion order of the lift of E to curve over Q                                     |:white_check_mark:|:white_check_mark:|low | low
-|hamming_x      | number of points with low Hamming weight                                          | :white_check_mark: | :white_check_mark: | medium       | low
-|square_4p1      | square parts of $`4q-1`$ and $`4n-1`$                                             | :white_check_mark: | :white_check_mark: | low          | low
-|pow_distance      | distance of $`n`$ from the nearest power of two and multiple of 32/64             | :white_check_mark: | :white_check_mark: | low          | low
-|multiples_x      | bit length of small inverted generator multiples                                  | :white_check_mark: | :white_check_mark: | low          | low
-|x962_invariant      |$` a^3/b^2`$, i.e. value used in x962, fips,secg                                       | :white_check_mark: | :white_check_mark:                | low          | low
-|brainpool_overlap      | overlap in curve coefficients                                       | :white_check_mark: | :white_check_mark:                | low          | low
-|weierstrass      | curve coefficients in Weierstrass form                                       | :white_check_mark: | :white_check_mark:                | low          | low
-
-
-Notation: $`n`$ is the curve order, $`q`$ is the order of the base field
-\* on sim and std curves with at most 256 bits and cofactor 1
-\*\* this is very rough and subjective
-\*\*\* on the above dataset: low is  <100 MB, medium is 100-500 MB, high is >500 MB (measuring JSONs)
-
-## Unit tests
-
-Run `sage --python3 -m unittest discover` in directory `traits/unit_tests/`. Only unit tests starting with `test` will be run; those starting with `local` have to be run manually (as they require resources not available on the server).
-
 ## Importing curves or results to a database
 
 After setting up a local database with MongoDB, you can run `dissect-database curves [database_uri] <curve_files...>` to import curves from individual JSON files. Similarly, you can run `dissect-database results [database_uri] <trait_name> <results_file>` to import trait results from a JSON file.
