@@ -271,6 +271,7 @@ def get_trait_results_count(db: Database, trait: str, query: Dict[str, Any] = No
 
 def format_trait_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]:
     result = {}
+    query = query.copy()
 
     def helper(key, cast, db_key = None):
         if key not in query:
@@ -287,6 +288,8 @@ def format_trait_query(trait_name: str, query: Dict[str, Any]) -> Dict[str, Any]
                 result[db_key] = { "$in": list(map(cast, query[key])) }
         elif query[key] != "all":
             result[db_key] = cast(query[key])
+
+        del query[key]
 
     helper("name", str, "curve.name")
     helper("standard", lambda x: str(x).lower() == "true", "curve.standard")
