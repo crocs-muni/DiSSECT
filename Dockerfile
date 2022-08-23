@@ -12,6 +12,7 @@ ENV TARGET "${HOME}/dissect"
 COPY . ${TARGET}
 
 USER root
+RUN sed -i -re 's/([a-z]{2}.)?archive.ubuntu.com|security.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list
 RUN apt-get update && apt-get install ca-certificates
 RUN usermod -l ${NB_USER} sage
 RUN chown -R ${NB_UID} ${TARGET}
