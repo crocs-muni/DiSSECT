@@ -48,12 +48,16 @@ To run other DiSSECT commands in the Docker container, prefix them with `docker 
 - Create virtual environment for Python in Sage: `sage --python3 -m venv --system-site-packages environment`
 - Activate the environment: `source environment/bin/activate`
 - Run `pip install --editable .` in DiSSECT folder
+- Install virtual environment kernel `python -m ipykernel install --user --name=environment`
+- Run `jupyter notebook`, open `.ipynb` file, and select `environment` kernel
 
 **DiSSECT without Sage (only analysis)**:
 - Clone with  `git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT.git`
 - Create virtual environment for Python: `python -m venv environment`
 - Activate the environment: `source environment/bin/activate`
 - Run `pip install --editable .` in DiSSECT folder
+- Install virtual environment kernel `python -m ipykernel install --user --name=environment`
+- Run `jupyter notebook`, open `.ipynb` file, and select `environment` kernel
 
 # Commands
 

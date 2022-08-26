@@ -10,3 +10,4 @@ scipy==1.7.3
 scikit-learn==1.0.2
 plotly==5.5.0
 matplotlib
+nbformat>=4.2.0
