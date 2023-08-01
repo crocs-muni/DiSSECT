@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dissect"
+version = "0.3.0"
+description = "Distinguisher of Standard & Simulated Elliptic Curves through Traits."
+authors = [
+    {name = "Vladimír Sedláček", email = "vlada.sedlacek@mail.muni.cz"},
+    {name = "Vojtěch Suchánek"},
+    {name = "Antonín Dufka"},
+]
+readme = "README.md"
+license = {text = "MIT License"}
+requires-python = ">=3.8"
+dependencies = [
+    "pathlib==1.0.1",
+    "pymongo==4.4.1",
+    "pandas==2.0.3",
+    "scikit-learn==1.3.0",
+    "plotly==5.15.0",
+]
+
+[project.urls]
+Homepage = "https://dissect.crocs.fi.muni.cz/"
+Repository = "https://github.com/crocs-muni/DiSSECT.git"
+
+[project.scripts]
+dissect-database = "dissect.utils.database_handler:main"
+dissect-compute-database = "dissect.traits.run:main"
+dissect-compute-file = "dissect.traits.compute:main"
+dissect-feature_builder = "dissect.analysis.feature_builder:main"
+dissect-find_outliers = "dissect.analysis.find_outliers:main"
+dissect-detail = "dissect.analysis.detail:main"

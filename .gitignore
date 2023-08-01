@@ -1,5 +1,6 @@
 data/
 local/
+build/
 *venv/
 .idea/
 *.log
@@ -13,5 +14,5 @@ dissect/traits/sample_curves.py
 dissect/traits/**/*.json
 !dissect/traits/**/*_structure.json
 dissect/traits/**/*.txt
-DiSSECT.egg-info
+*.egg-info
 /dissect/results/
