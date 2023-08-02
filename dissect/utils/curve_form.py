@@ -29,7 +29,7 @@ class CurveForm:
         if self._field.is_prime_field():
             return ZZ(m["raw"]), ZZ(n["raw"])
         if self._field.characteristic() == 2:
-            return self._field.fetch_int(ZZ(m["raw"])), self._field.fetch_int(ZZ(n["raw"]))
+            return self._field.from_integer(ZZ(m["raw"])), self._field.from_integer(ZZ(n["raw"]))
         return dict_to_poly(m["poly"], self.field()), dict_to_poly(n["poly"], self.field())
 
     def a(self):

@@ -12,7 +12,7 @@ class Trait:
 
 
     def __call__(self, curve, **params):
-        self.compute(curve, params)
+        return self.compute(curve, params)
 
 
     def compute(self, curve, params):

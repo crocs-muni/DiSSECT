@@ -1,13 +1,10 @@
-#!/usr/bin/env python3
-
 import argparse
 import json
 import sys
 
-from dissect.utils.custom_curve import CustomCurve
-
-from dissect.utils.database_handler import _cast_sage_types
 from dissect.traits import TRAITS
+from dissect.utils.custom_curve import CustomCurve
+from dissect.utils.database_handler import _cast_sage_types
 
 
 def main():
@@ -18,7 +15,7 @@ def main():
         "-t",
         "--trait",
         type=str,
-        choices=TRAIT_NAMES,
+        choices=list(TRAITS.keys()),
         help="Trait identifier",
         required=True
     )
@@ -38,9 +35,8 @@ def main():
     )
 
     args = parser.parse_args()
-    trait_function = get_trait_function(args.trait)
-    if not trait_function:
-        print(f"Trait could not be loaded", file=sys.stderr)
+    if args.trait not in TRAITS:
+        print(f"Trait {args.trait} is not implemented", file=sys.stderr)
         sys.exit(1)
 
     results = { "data": [] }
