@@ -9,7 +9,7 @@ class PowDistanceTrait(Trait):
         "distance": (int, "Distance"),
         "ratio": (float, "Order"),
         "distance 32": (int, "Distance 32"),
-        "distance 64": (int, "Distance 64")
+        "distance 64": (int, "Distance 64"),
     }
 
     def compute(curve, params):
@@ -17,8 +17,8 @@ class PowDistanceTrait(Trait):
         card = curve.cardinality()
         l = card.nbits() - 1
         u = l + 1
-        L = 2 ** l
-        U = 2 ** u
+        L = 2**l
+        U = 2**u
         distance = min(card - L, U - card)
         dist32 = min(abs(card % 32), 32 - abs(card % 32))
         dist64 = min(abs(card % 64), 64 - abs(card % 64))
@@ -27,7 +27,7 @@ class PowDistanceTrait(Trait):
             "distance": distance,
             "ratio": round(float(ratio), 5),
             "distance 32": dist32,
-            "distance 64": dist64
+            "distance 64": dist64,
         }
         return curve_results
 

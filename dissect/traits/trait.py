@@ -1,5 +1,6 @@
 import itertools
 
+
 class Trait:
     NAME = "trait"
     DESCRIPTION = "Trait description."
@@ -10,23 +11,18 @@ class Trait:
     def __init__(self):
         pass
 
-
     def __call__(self, curve, **params):
         return self.compute(curve, params)
-
 
     def compute(self, curve, params):
         raise NotImplementedError("Compute method for trait not implemented")
 
-
     def params(self):
         return dict(self.DEFAULT_PARAMS)
-
 
     def params_iter(self):
         for params_values in itertools.product(*self.DEFAULT_PARAMS.values()):
             yield dict(zip(self.DEFAULT_PARAMS.keys(), params_values))
-
 
     def numeric_outputs(self):
         outputs = []
@@ -37,7 +33,6 @@ class Trait:
 
         return outputs
 
-
     def nonnumeric_outputs(self):
         outputs = []
 
@@ -46,7 +41,6 @@ class Trait:
                 outputs.append(output)
 
         return outputs
-
 
     def outputs(self):
         return list(self.OUTPUT.keys())

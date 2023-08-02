@@ -13,7 +13,7 @@ class CofactorTrait(Trait):
 
     def compute(self, curve, params):
         """Returns the order of the prime order subgroup and its cofactor"""
-        return { "order": curve.order(), "cofactor": curve.cofactor() }
+        return {"order": curve.order(), "cofactor": curve.cofactor()}
 
 
 def test_cofactor():

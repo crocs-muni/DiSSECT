@@ -30,7 +30,7 @@ def isogeny_finder(curve, l):
     # deg = k1
     card = curve.extended_cardinality(deg)
     # now check whether k1=k2:
-    if card % l ** 2 != 0 or curve.is_torsion_cyclic(l, deg):
+    if card % l**2 != 0 or curve.is_torsion_cyclic(l, deg):
         i2 *= l
     return i2, i1
 
@@ -38,18 +38,13 @@ def isogeny_finder(curve, l):
 class IsogenyExtensionTrait(Trait):
     NAME = "isogeny_extension"
     DESCRIPTION = "The least field extensions containing a nontrivial number and full number of $l$-isogenies and their relative ratio."
-    INPUT = {
-        "l": (int, "Prime")
-    }
+    INPUT = {"l": (int, "Prime")}
     OUTPUT = {
         "least": (int, "Least"),
         "full": (int, "Full"),
-        "relative": (int, "Relative")
+        "relative": (int, "Relative"),
     }
-    DEFAULT_PARAMS = {
-        "l": [2, 3, 5, 7, 11, 13, 17, 19]
-    }
-
+    DEFAULT_PARAMS = {"l": [2, 3, 5, 7, 11, 13, 17, 19]}
 
     def compute(curve, params):
         """

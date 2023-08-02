@@ -4,16 +4,9 @@ from dissect.traits import Trait
 class IsogenyNeighborsTrait(Trait):
     NAME = "isogeny_neighbors"
     DESCRIPTION = "Number of $j$-invariants adjacent to the curve by $l$-isogeny. This is the degree of the point in the $l$-isogeny graph."
-    INPUT = {
-        "l": (int, "Small prime")
-    }
-    OUTPUT = {
-        "len": (int, "Number of adjacent curves")
-    }
-    DEFAULT_PARAMS = {
-        "l": [2, 3, 5]
-    }
-
+    INPUT = {"l": (int, "Small prime")}
+    OUTPUT = {"len": (int, "Number of adjacent curves")}
+    DEFAULT_PARAMS = {"l": [2, 3, 5]}
 
     def compute(curve, params):
         """

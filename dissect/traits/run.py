@@ -30,7 +30,9 @@ def producer(database, trait, args, queue, lock):
     with lock:
         tprint("Preliminary check")
 
-    total = get_curves_count(db, query=vars(args)) * prod(map(len, TRAITS[trait].params().values()))
+    total = get_curves_count(db, query=vars(args)) * prod(
+        map(len, TRAITS[trait].params().values())
+    )
     computed = get_trait_results_count(db, trait, query=vars(args))
 
     with lock:
@@ -74,7 +76,7 @@ def consumer(identifier, database, trait, queue, lock):
                 tprint(f"Consumer {identifier:2d} stopped")
             return
 
-        for i in range(3): # TODO move to db_handler?
+        for i in range(3):  # TODO move to db_handler?
             try:
                 solved = is_solved(db, curve, trait, params)
                 break
@@ -98,7 +100,6 @@ def consumer(identifier, database, trait, queue, lock):
                 db = connect(database)
 
 
-
 def main():
     parser = argparse.ArgumentParser(
         description="Welcome to DiSSECT! It allows you to run traits on a selected subset of standard or simulated curves."
@@ -108,14 +109,10 @@ def main():
         "--trait_name",
         metavar="trait_name",
         help="Trait identifier",
-        required=True
+        required=True,
     )
     parser.add_argument(
-        "-c",
-        "--category",
-        nargs="+",
-        help="Curve category",
-        default=["all"]
+        "-c", "--category", nargs="+", help="Curve category", default=["all"]
     )
     parser.add_argument(
         "-b",
@@ -142,16 +139,12 @@ def main():
         default="mongodb://localhost:27017/",
         help="Database URI (default: mongodb://localhost:27017/)",
     )
-    parser.add_argument(
-        "--verbose",
-        action="store_true",
-        default=False
-    )
+    parser.add_argument("--verbose", action="store_true", default=False)
     parser.add_argument(
         "--skip",
         type=int,
         default=0,
-        help="Skip given number of curve-parameter combinations"
+        help="Skip given number of curve-parameter combinations",
     )
 
     args = parser.parse_args()

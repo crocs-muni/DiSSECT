@@ -3,19 +3,19 @@ from dissect.traits import Trait
 
 TIMEOUT_DURATION = 30
 
+
 class DivisionPolynomialsTrait(Trait):
     NAME = "division_polynomials"
     DESCRIPTION = "Factorizations of small division polynomials."
-    INPUT = {
-        "l": (int, "Prime")
-    }
+    INPUT = {"l": (int, "Prime")}
     OUTPUT = {
-        "factorization": (List[List[int]], "Factorization of $l$-th division polynomial"),
-        "len": (int, "Length")
+        "factorization": (
+            List[List[int]],
+            "Factorization of $l$-th division polynomial",
+        ),
+        "len": (int, "Length"),
     }
-    DEFAULT_PARAMS = {
-        "l": [2, 3, 5]
-    }
+    DEFAULT_PARAMS = {"l": [2, 3, 5]}
 
     def compute(curve, params):
         """
@@ -26,9 +26,13 @@ class DivisionPolynomialsTrait(Trait):
         from sage.all import factor
         from dissect.utils.utils import timeout
 
-        factors = timeout(factor, [curve.ec().division_polynomial(params["l"])], timeout_duration=TIMEOUT_DURATION)
+        factors = timeout(
+            factor,
+            [curve.ec().division_polynomial(params["l"])],
+            timeout_duration=TIMEOUT_DURATION,
+        )
         if isinstance(factors, str):
-            return {"factorization":None, "len": None}
+            return {"factorization": None, "len": None}
         fact = map(lambda x: (x[0].degree(), x[1]), factors)
         result = {}
         for deg, ex in fact:

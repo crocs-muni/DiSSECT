@@ -34,7 +34,7 @@ def torsion_finder(curve, l):
     torsion_cyclic = curve.is_torsion_cyclic(l, k1)
     if torsion_cyclic is None:
         return None, None
-    if card % l ** 2 != 0 or torsion_cyclic:
+    if card % l**2 != 0 or torsion_cyclic:
         k2 = l
     return k2, k1
 
@@ -42,17 +42,13 @@ def torsion_finder(curve, l):
 class TorsionExtensionTrait(Trait):
     NAME = "torsion_extension"
     DESCRIPTION = "Degrees of field extensions containing the least nontrivial $l$-torsion, the full $l$-torsion and their relative degree of extension."
-    INPUT = {
-        "l": (int, "$l$-torsion")
-    }
+    INPUT = {"l": (int, "$l$-torsion")}
     OUTPUT = {
         "least": (int, "Least"),
         "full": (int, "Full"),
-        "relative": (int, "Relative")
+        "relative": (int, "Relative"),
     }
-    DEFAULT_PARAMS = {
-        "l": [2, 3, 5, 7, 11, 13, 17]
-    }
+    DEFAULT_PARAMS = {"l": [2, 3, 5, 7, 11, 13, 17]}
 
     def compute(curve, params):
         """Computes find_torsions for given l and returns a dictionary"""

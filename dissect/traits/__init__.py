@@ -22,27 +22,32 @@ from .x962_invariant import X962InvariantTrait
 from .brainpool_overlap import BrainpoolOverlapTrait
 from .weierstrass import WeierstrassTrait
 
-TRAITS = dict(map(lambda x: (x.NAME, x()), [
-    CofactorTrait,
-    DiscriminantTrait,
-    TwistOrderTrait,
-    KNFactorizationTrait,
-    TorsionExtensionTrait,
-    ConductorTrait,
-    EmbeddingTrait,
-    ClassNumberTrait,
-    SmallPrimeOrderTrait,
-    DivisionPolynomialsTrait,
-    VolcanoTrait,
-    IsogenyExtensionTrait,
-    TraceFactorizationTrait,
-    IsogenyNeighborsTrait,
-    QTorsionTrait,
-    HammingXTrait,
-    Square4P1Trait,
-    PowDistanceTrait,
-    MultiplesXTrait,
-    X962InvariantTrait,
-    BrainpoolOverlapTrait,
-    WeierstrassTrait
-]))
+TRAITS = dict(
+    map(
+        lambda x: (x.NAME, x()),
+        [
+            CofactorTrait,
+            DiscriminantTrait,
+            TwistOrderTrait,
+            KNFactorizationTrait,
+            TorsionExtensionTrait,
+            ConductorTrait,
+            EmbeddingTrait,
+            ClassNumberTrait,
+            SmallPrimeOrderTrait,
+            DivisionPolynomialsTrait,
+            VolcanoTrait,
+            IsogenyExtensionTrait,
+            TraceFactorizationTrait,
+            IsogenyNeighborsTrait,
+            QTorsionTrait,
+            HammingXTrait,
+            Square4P1Trait,
+            PowDistanceTrait,
+            MultiplesXTrait,
+            X962InvariantTrait,
+            BrainpoolOverlapTrait,
+            WeierstrassTrait,
+        ],
+    )
+)

@@ -5,10 +5,7 @@ class ClassNumberTrait(Trait):
     NAME = "class_number"
     DESCRIPTION = "Upper and lower bound for the class number of the CM-field."
     INPUT = {}
-    OUTPUT = {
-        "upper": (int, "Upper"),
-        "lower": (int, "Lower")
-    }
+    OUTPUT = {"upper": (int, "Upper"), "lower": (int, "Lower")}
     DEFAULT_PARAMS = {}
 
     def compute(curve, params):
@@ -28,8 +25,13 @@ class ClassNumberTrait(Trait):
         cm_disc = curve.cm_discriminant()
         frob_disc_factor = curve.frobenius_disc_factorization()
         if frob_disc_factor.timeout():
-            return {"upper": frob_disc_factor.timeout_message(), "lower": frob_disc_factor.timeout_message()}
-        fact_d = [f for f, e in frob_disc_factor.factorization(unpack=False) if e % 2 == 1]
+            return {
+                "upper": frob_disc_factor.timeout_message(),
+                "lower": frob_disc_factor.timeout_message(),
+            }
+        fact_d = [
+            f for f, e in frob_disc_factor.factorization(unpack=False) if e % 2 == 1
+        ]
         if cm_disc % 4 == 0:
             fact_d.append(2)
 
@@ -41,12 +43,13 @@ class ClassNumberTrait(Trait):
         for f in fact_d:
             lower_bound *= (1 - floor(2 * sqrt(f)) / (f + 1)) * ln(-cm_disc)
         if gcd(cm_disc, 5077) == 1:
-            lower_bound *= (1 / 55)
+            lower_bound *= 1 / 55
         else:
-            lower_bound *= (1 / 7000)
+            lower_bound *= 1 / 7000
         lower_bound = floor(lower_bound)
         curve_results = {"upper": upper_bound, "lower": lower_bound}
         return curve_results
+
 
 def test_class_number():
     assert True

@@ -4,19 +4,14 @@ from dissect.traits import Trait
 class MultiplesXTrait(Trait):
     NAME = "multiples_x"
     DESCRIPTION = "Bitlength of the $x$-coordinate of small inverted generator scalar multiples, i.e. $x$-coordinate of $P$ where $kP=G$. The difference and ratio to the bitlength of the whole group is also considered."
-    INPUT = {
-        "k": (int, "Integer")
-    }
+    INPUT = {"k": (int, "Integer")}
     OUTPUT = {
         "Hx": (int, "x-coordinate"),
         "bits": (int, "Bitlength of x"),
         "difference": (int, "Difference"),
-        "ratio": (float, "Ratio")
+        "ratio": (float, "Ratio"),
     }
-    DEFAULT_PARAMS = {
-        "k": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    }
-
+    DEFAULT_PARAMS = {"k": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
 
     def compute(curve, params):
         """Computes the bit length of the x-coordinate of the generator multiplied by 1/k"""

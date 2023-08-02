@@ -5,9 +5,7 @@ class BrainpoolOverlapTrait(Trait):
     NAME = "brainpool_overlap"
     DESCRIPTION = "Bit overlaps in curve coefficients"
     INPUT = {}
-    OUTPUT = {
-        "o": (int, "overlap")
-    }
+    OUTPUT = {"o": (int, "overlap")}
     DEFAULT_PARAMS = {}
 
     def compute(curve, params):

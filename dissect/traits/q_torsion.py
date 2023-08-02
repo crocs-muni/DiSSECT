@@ -5,9 +5,7 @@ class QTorsionTrait(Trait):
     NAME = "q_torsion"
     DESCRIPTION = "Torsion order of the lift of $E$ to $Q$."
     INPUT = {}
-    OUTPUT = {
-        "Q_torsion": (int, "Q torsion")
-    }
+    OUTPUT = {"Q_torsion": (int, "Q torsion")}
     DEFAULT_PARAMS = {}
 
     def compute(curve, params):
@@ -20,11 +18,11 @@ class QTorsionTrait(Trait):
         try:
             a, b = ZZ(curve.a()), ZZ(curve.b())
         except TypeError:
-            a, b = ZZ(curve.params()['a']['raw']), ZZ(curve.params()['b']['raw'])
+            a, b = ZZ(curve.params()["a"]["raw"]), ZZ(curve.params()["b"]["raw"])
         except ValueError:
-            return {'Q_torsion': None}
+            return {"Q_torsion": None}
         ec = EllipticCurve(QQ, [a, b])
-        return {'Q_torsion': ec.torsion_order()}
+        return {"Q_torsion": ec.torsion_order()}
 
 
 def test_q_torsion():
