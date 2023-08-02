@@ -347,27 +347,27 @@ def _decode_ints(source: Any) -> Any:
 def main():
     import sys
 
-    if len(sys.argv) < 3 or not sys.argv[1] in ("curves", "results"):
+    if len(sys.argv) < 3 or not sys.argv[1] in ("curves", "traits"):
         print(
-            f"USAGE: python3 {sys.argv[0]} curves [database_uri] <curve_files...>",
+            f"USAGE: {sys.argv[0]} curves [database_url] <curve_files...>",
             file=sys.stderr,
         )
         print(
-            f"   OR: python3 {sys.argv[0]} results [database_uri] <trait_name> <results_file>",
+            f"   OR: {sys.argv[0]} traits [database_url] <trait_name> <trait_results_file>",
             file=sys.stderr,
         )
         sys.exit(1)
 
-    database_uri = "mongodb://localhost:27017/"
+    database_url = "mongodb://localhost:27017/"
     args = sys.argv[2:]
     for idx, arg in enumerate(args):
         if "mongodb://" in arg:
-            database_uri = arg
+            database_url = arg
             del args[idx]
             break
 
-    print(f"Connecting to database {database_uri}")
-    db = connect(database_uri)
+    print(f"Connecting to database {database_url}")
+    db = connect(database_url)
 
     def upload_curves_from_files(curve_files_list):
         for curves_file in curve_files_list:
@@ -384,7 +384,7 @@ def main():
 
     if sys.argv[1] == "curves":
         upload_curves_from_files(args if args else [None])
-    elif sys.argv[1] == "results":
+    elif sys.argv[1] == "traits":
         upload_results_from_file(args[0], args[1] if len(args) > 1 else None)
 
 
