@@ -1,16 +1,11 @@
-#!/usr/bin/env python3
-
 import argparse
 import itertools
-import importlib
-import sys
 import datetime
 from math import prod
 from multiprocessing import Process, Queue, Lock
 
 from pymongo.errors import ServerSelectionTimeoutError
 
-from dissect.definitions import TRAIT_MODULE_PATH
 from dissect.utils.database_handler import (
     connect,
     store_trait_result,
@@ -22,13 +17,6 @@ from dissect.utils.database_handler import (
 )
 from dissect.traits import TRAITS
 from dissect.utils.custom_curve import CustomCurve
-
-
-def get_trait_function(trait):
-    try:
-        return getattr(importlib.import_module(f"dissect.traits.{trait}"), "trait_function")
-    except ModuleNotFoundError:
-        return None
 
 
 def tprint(string):
@@ -71,8 +59,7 @@ def producer(database, trait, args, queue, lock):
 
 def consumer(identifier, database, trait, queue, lock):
     db = connect(database)
-    trait_function = get_trait_function(trait)
-    if not trait_function:
+    if trait not in TRAITS:
         with lock:
             tprint(f"Consumer {identifier:2d} could not be initialized")
         return
@@ -98,7 +85,7 @@ def consumer(identifier, database, trait, queue, lock):
         if solved:
             continue
 
-        trait_result = trait_function(curve, **params)
+        trait_result = TRAITS[trait](curve, **params)
         if not trait_result:
             continue
 
