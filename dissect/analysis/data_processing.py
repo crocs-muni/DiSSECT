@@ -6,7 +6,6 @@ import bz2
 
 import pandas as pd
 from sklearn.neighbors import LocalOutlierFactor
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.cluster import KMeans
 
 import dissect.utils.database_handler as database
@@ -45,7 +44,7 @@ def get_curves(source: str, query: Dict[str, Any] = {}):
         with urllib.request.urlopen(req) as f:
             curves = json.loads(f.read())["data"]
 
-    return pd.DataFrame(map(project, curves)).convert_dtypes()
+    return pd.DataFrame(map(project, curves))
 
 
 def get_trait(source: str, trait_name: str, query: Dict[str, Any] = {}, skip_failed=True):
