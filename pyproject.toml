@@ -31,8 +31,8 @@ dissect-database = "dissect.utils.database_handler:main"
 dissect-compute-db = "dissect.utils.compute_db:main"
 dissect-compute-json = "dissect.utils.compute_json:main"
 dissect-feature_builder = "dissect.analysis.feature_builder:main"
-dissect-find_outliers = "dissect.analysis.find_outliers:main"
-dissect-detail = "dissect.analysis.detail:main"
+dissect-feature_outliers = "dissect.analysis.find_outliers:main"
+dissect-feature_detail = "dissect.analysis.detail:main"
 
 [tool.setuptools.package-data]
 "dissect.utils.kohel.mod" = ["*.dbz"]

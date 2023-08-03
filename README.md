@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/blob/master/LICENSE)
 [![language](https://badgen.net/badge/language/python,sage/purple?list=/)](https://www.sagemath.org/)
 [![traits](https://badgen.net/badge/traits/23/blue)](https://github.com/crocs-muni/DiSSECT/tree/master/dissect/traits)
-[![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/master)
+[![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/HEAD)
 
 DiSSECT is, to the best of our knowledge, the largest publicly available database of standardized elliptic curves (taken from our [sister project](https://neuromancer.sk/std/)) and offers generation of simulated curves according to the mentioned standards. The tool contains over 20 tests (which we call traits), each computing curve properties, ranging from classical algebraic ones to unconventional ones and those connected to implementations. After obtaining their empirical distributions, the traits allow us to compare the simulated curves to the standard ones. Finally, DiSSECT provides an easy-to-use interface for implementations of custom traits and their interactive visualization via Jupyter notebook.
 
@@ -17,11 +17,11 @@ DiSSECT is written in Python 3 and imports the SageMath library. The database of
 
 Thanks to Ján Jančár for help with the curve database and CRoCS members for fruitful discussions. Computational resources were supplied by the project "e-Infrastruktura CZ" (e-INFRA LM2018140) provided within the program Projects of Large Research, Development and Innovations Infrastructures.
 
-# Running DiSSECT
+# Installation
 
-We highly recommend using DiSSECT in Docker, as it avoids potential issues on the boundary of Sage and Python environments. If you still want to run DiSSECT locally, see the Local setup section.
+We recommend to use DiSSECT in Docker, as it avoids potential issues on the boundary of Sage and Python environments. If you still want to run DiSSECT locally, see the [Local setup](#local-setup) section.
 
-## Docker
+## Docker container
 
 Clone this repository and build docker image.
 
@@ -39,49 +39,94 @@ To run Jupyter Notebook, use the following command and access the provided link 
 docker run -it -p 8888:8888 dissect jupyter notebook dissect/analysis --ip='0.0.0.0' --port=8888
 ```
 
-To run other DiSSECT commands in the Docker container, prefix them with `docker run -i dissect`. For example, `docker run -i dissect dissect-compute-file`. Alternatively, you can access DiSSECT directly in the container by opening interactive shell `docker run -it dissect bash`.
+To use advanced components of DiSSECT, access the container directly.
 
 ## Local setup
 
-**Full DiSSECT installation**:
-- Clone with  `git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT.git`
-- Create virtual environment for Python in Sage: `sage --python3 -m venv --system-site-packages environment`
-- Activate the environment: `source environment/bin/activate`
-- Run `pip install --editable .` in DiSSECT folder
-- Install virtual environment kernel `python -m ipykernel install --user --name=environment`
-- Run `jupyter notebook`, open `.ipynb` file, and select `environment` kernel
+### Full (requires `sage`)
 
-**DiSSECT without Sage (only analysis)**:
-- Clone with  `git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT.git`
-- Create virtual environment for Python: `python -m venv environment`
-- Activate the environment: `source environment/bin/activate`
-- Run `pip install --editable .` in DiSSECT folder
-- Install virtual environment kernel `python -m ipykernel install --user --name=environment`
-- Run `jupyter notebook`, open `.ipynb` file, and select `environment` kernel
+If you plan on computing traits, you need to perform full instalation of DiSSECT using Sage.
+
+```
+git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT.git
+cd DiSSECT
+sage --python3 -m venv --system-site-packages venv
+source venv/bin/activate
+pip install .
+python -m ipykernel install --user --name=venv
+jupyter notebook dissect/analysis/playground.ipynb
+```
+
+### Analysis-only
+
+If you only need to access DiSSECT database, inspect the data, and perform analyses, Python-based installation will suffice.
+
+```
+git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT.git
+cd DiSSECT
+python -m venv venv
+source venv/bin/activate
+pip install .
+python -m ipykernel install --user --name=venv
+jupyter notebook dissect/analysis/playground.ipynb
+```
 
 # Commands
 
+To run these commands, you need a working installation of DiSSECT – either in an interactive container or a local one. If you plan to share files between host and the docker container, you may want to use a [bind mount](https://docs.docker.com/storage/bind-mounts/) (e.g., `--mount type=bind,src=/tmp/dissect,dst=/data`).
+
 ## Computing traits
 
-To feed the trait results directly to a local MongoDB database, run `dissect-compute-database`. Alternatively, to get results as a JSON files, run `dissect-compute-file`. Use the `-h` flag to get the help menu.
+DiSSECT provides two ways of computing traits: a simple one suitable for working with just JSON files, and more complex one that supports parallelization but requires database, intended mainly for large-scale trait computation.
+
+To compute traits on a JSON of curves, use:
+```
+dissect-compute-json -t TRAIT_NAME -i CURVES_JSON [-o OUTPUT_JSON]
+```
+
+To compute traits with database, use:
+```
+dissect-compute-db -t TRAIT_NAME --database DATABASE_URL
+```
+By default, the command uses all available curves. You can filter them using optional arguments, see the help menu (`-h`).
 
 ## Performing the analysis
 
-The visual analysis can be started directly from local dissect installation by running `jupyter notebook` in DiSSECT root directory. Alternatively, the analysis framework can be started directly in the browser with Binder service.
+To run analysis notebook, use the following command and select the `venv` kernel.
+```
+jupyter notebook dissect/analysis/playground.ipynb
+```
+Alternatively, you may try using the notebook directly in your browser using [Binder](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/HEAD).
+
+### Outlier detection
 
 In order to run outlier detection, feature vectors need to be constructed. They can be built from results of individual traits using repeated invocations of `dissect-feature_builder`. For example, the following sequence of commands builds set of feature vectors of `torsion_extension` and `small_prime_order` traits for 256-bit curves from the standard and simulated X9.62 categories.
-
 ```
-dissect-feature_builder --trait torsion_extension --category x962 x962_sim --bits 256 --input out.csv --output out.csv
-dissect-feature_builder --trait small_prime_order --category x962 x962_sim --bits 256 --input out.csv --output out.csv
+dissect-feature_builder --trait torsion_extension --category x962 x962_sim --bits 256 --input features.csv --output features.csv
+dissect-feature_builder --trait small_prime_order --category x962 x962_sim --bits 256 --input features.csv --output features.csv
+```
+By default, this command uses a dataset available from our database, but you may supply a different source using the `--source` option (url to a database).
+
+The feature vectors output by the previous commands can be processed by the outlier detection script:
+```
+dissect-feature_outliers features.csv outliers.csv
 ```
 
-The sequence of `dissect-feature_builder` runs produces file `out.csv`, which contains the resulting feature vectors. The feature vectors can processed by the outlier detection script `dissect-find_outliers`.
-
+If the outlier detection gave an interesting output, you may inspect features of a particular curve with:
 ```
-dissect-find_outliers out.csv outliers.csv
+dissect-feature_detail features.csv CURVE_NAME
 ```
 
-## Importing curves or results to a database
+## Database
 
-After setting up a local database with MongoDB, you can run `dissect-database curves [database_uri] <curve_files...>` to import curves from individual JSON files. Similarly, you can run `dissect-database results [database_uri] <trait_name> <results_file>` to import trait results from a JSON file.
+Command `dissect-database` provides a simple interface for uploading DiSSECT data from JSON files to a database for further analysis. To use this command you have to provide database URL which should be a string in format `"mongodb://USERNAME:PASSWORD@HOST/"` (e.g., `"mongodb://root:password@mongo:27017/`).
+
+To upload curves from a JSON file, use:
+```
+dissect-database curves [DATABASE_URL] <CURVE_FILES...>
+```
+
+To upload trait results from a JSON file, use:
+```
+dissect-database traits [DATABASE_URL] <TRAIT_NAME> <TRAIT_RESULTS_FILE>
+```

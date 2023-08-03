@@ -2,6 +2,7 @@ import sys
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 
+
 def main():
     if len(sys.argv) != 3:
         print(f"USAGE: {sys.argv[0]} <FILE> <CURVE>", file=sys.stderr)
@@ -11,6 +12,10 @@ def main():
     curve = df[df["curve"] == sys.argv[2]]
     details = []
 
+    if curve.empty:
+        print(f"Curve {sys.argv[2]} not found.", file=sys.stderr)
+        sys.exit(2)
+
     for col in df.columns[1:]:
         detail = {
             "col": col,
@@ -18,7 +23,7 @@ def main():
             "median": df[col].median(),
             "value": (val := curve[col].iloc[0]),
             "mean_diff": abs(df[col].mean() - val),
-            "median_diff": abs(df[col].median() - val)
+            "median_diff": abs(df[col].median() - val),
         }
         details.append(detail)
 

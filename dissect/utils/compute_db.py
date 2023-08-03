@@ -105,7 +105,7 @@ def main():
         description="Welcome to DiSSECT! It allows you to run traits on a selected subset of standard or simulated curves."
     )
     parser.add_argument(
-        "-n",
+        "-t",
         "--trait_name",
         metavar="trait_name",
         help="Trait identifier",
