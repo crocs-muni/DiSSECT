@@ -50,7 +50,7 @@ class TorsionExtensionTrait(Trait):
     }
     DEFAULT_PARAMS = {"l": [2, 3, 5, 7, 11, 13, 17]}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """Computes find_torsions for given l and returns a dictionary"""
         if curve.q() % params["l"] == 0:
             return {"least": None, "full": None, "relative": None}

@@ -14,7 +14,7 @@ class TwistOrderTrait(Trait):
     }
     DEFAULT_PARAMS = {"deg": [1, 2]}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """Returns the factorization of the cardinality of the quadratic twist of the curve"""
         from dissect.utils.utils import Factorization
 

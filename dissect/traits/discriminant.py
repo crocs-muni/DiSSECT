@@ -13,7 +13,7 @@ class DiscriminantTrait(Trait):
     }
     DEFAULT_PARAMS = {}
 
-    def compute(curve):
+    def compute(self, curve, params):
         """
         Computation of d_K (cm_disc), v (max_conductor) and factorization of D where D=t^2-4q = v^2*d_K
         Returns a dictionary (keys: 'cm_disc', 'factorization', 'max_conductor')

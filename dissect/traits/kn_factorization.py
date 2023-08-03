@@ -40,7 +40,7 @@ class KNFactorizationTrait(Trait):
     }
     DEFAULT_PARAMS = {"k": [1, 2, 3, 4, 5, 6, 7, 8]}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """
         Computes factorization of ord*k+1 and ord*k-1 and bit lengths of their largest factors
         Returns a dictionary

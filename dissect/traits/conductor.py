@@ -15,7 +15,7 @@ class ConductorTrait(Trait):
     }
     DEFAULT_PARAMS = {"deg": [2, 3, 4]}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """returns the factorization of the D_deg/D_1, where D_deg is the discriminant over the deg-th relative
         extension"""
         from sage.all import ZZ, sqrt

@@ -8,7 +8,7 @@ class IsogenyNeighborsTrait(Trait):
     OUTPUT = {"len": (int, "Number of adjacent curves")}
     DEFAULT_PARAMS = {"l": [2, 3, 5]}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """
         Computes number of j-invariants j2 such that Phi_l(j,j2) where Phi_l is the l-modular polynomial.
         """

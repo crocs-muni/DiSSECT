@@ -15,7 +15,7 @@ class TraceFactorizationTrait(Trait):
     }
     DEFAULT_PARAMS = {"deg": [1, 2]}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """Computation of the trace in an extension together with its factorization"""
         from dissect.utils.utils import Factorization
 

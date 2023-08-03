@@ -8,7 +8,7 @@ class ClassNumberTrait(Trait):
     OUTPUT = {"upper": (int, "Upper"), "lower": (int, "Lower")}
     DEFAULT_PARAMS = {}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """
         Computes the lower and upper bound of class number of the maximal order of the endomorphism algebra
 

@@ -12,7 +12,7 @@ class HammingXTrait(Trait):
     }
     DEFAULT_PARAMS = {"weight": [1, 2, 3]}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """Computes the number of curve points whose x-coord has the given Hamming weight"""
         from sage.all import ZZ, binomial
 

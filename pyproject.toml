@@ -28,8 +28,11 @@ Repository = "https://github.com/crocs-muni/DiSSECT.git"
 
 [project.scripts]
 dissect-database = "dissect.utils.database_handler:main"
-dissect-compute-database = "dissect.traits.run:main"
-dissect-compute-file = "dissect.traits.compute:main"
+dissect-compute-db = "dissect.utils.compute_db:main"
+dissect-compute-json = "dissect.utils.compute_json:main"
 dissect-feature_builder = "dissect.analysis.feature_builder:main"
 dissect-find_outliers = "dissect.analysis.find_outliers:main"
 dissect-detail = "dissect.analysis.detail:main"
+
+[tool.setuptools.package-data]
+"dissect.utils.kohel.mod" = ["*.dbz"]

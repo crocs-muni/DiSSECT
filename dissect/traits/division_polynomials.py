@@ -17,7 +17,7 @@ class DivisionPolynomialsTrait(Trait):
     }
     DEFAULT_PARAMS = {"l": [2, 3, 5]}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """
         Computation factorization of l-th division polynomial
         More precisely, computes a list of tuple [a,b]

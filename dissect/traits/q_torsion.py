@@ -8,7 +8,7 @@ class QTorsionTrait(Trait):
     OUTPUT = {"Q_torsion": (int, "Q torsion")}
     DEFAULT_PARAMS = {}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """
         Computation of the torsion order of E' where E' is the lift of the given
         curve to Q. By lift, we mean lift of coefficients to ZZ

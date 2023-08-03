@@ -13,7 +13,7 @@ class MultiplesXTrait(Trait):
     }
     DEFAULT_PARAMS = {"k": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """Computes the bit length of the x-coordinate of the generator multiplied by 1/k"""
         from sage.all import ZZ, GF
 

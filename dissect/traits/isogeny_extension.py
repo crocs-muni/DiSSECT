@@ -46,7 +46,7 @@ class IsogenyExtensionTrait(Trait):
     }
     DEFAULT_PARAMS = {"l": [2, 3, 5, 7, 11, 13, 17, 19]}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """
         Computes i2,i1 (see i_finder) for all primes l<l_max
         Returns a dictionary (keys: 'least' (i1), 'full' (i2), 'relative' (i2/i1))

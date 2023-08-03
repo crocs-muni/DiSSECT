@@ -10,7 +10,7 @@ class Square4P1Trait(Trait):
     OUTPUT = {"p": (int, "p"), "order": (int, "Order")}
     DEFAULT_PARAMS = {}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """ "Computes the square root of the square part of 4*p-1 and 4*generator_order-1"""
         from dissect.utils.utils import Factorization
 

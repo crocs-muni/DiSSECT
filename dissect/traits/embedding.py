@@ -11,7 +11,7 @@ class EmbeddingTrait(Trait):
     }
     DEFAULT_PARAMS = {}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """Computes the embedding degree (with respect to the generator order) and its complement"""
         from sage.all import euler_phi, ZZ
 

@@ -54,6 +54,7 @@ def main():
     json.dump(
         _cast_sage_types(results),
         sys.stdout if not args.output else open(args.output, "w"),
+        indent=2,
     )
 
 

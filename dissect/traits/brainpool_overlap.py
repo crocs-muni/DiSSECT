@@ -8,7 +8,7 @@ class BrainpoolOverlapTrait(Trait):
     OUTPUT = {"o": (int, "overlap")}
     DEFAULT_PARAMS = {}
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """
         Computation of brainpool overlap
         """

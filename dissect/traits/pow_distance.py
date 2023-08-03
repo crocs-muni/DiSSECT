@@ -12,7 +12,7 @@ class PowDistanceTrait(Trait):
         "distance 64": (int, "Distance 64"),
     }
 
-    def compute(curve, params):
+    def compute(self, curve, params):
         """Computes the distance of curve cardinality to the nearest power of 2 and to the nearest multiple of 32 and 64"""
         card = curve.cardinality()
         l = card.nbits() - 1
