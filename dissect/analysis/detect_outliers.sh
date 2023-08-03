@@ -41,7 +41,7 @@ run_outliers() {
             python feature_builder.py --trait $TRAIT --bits $BITLEN --category ${CATEGORY} --source 'https://dissect.crocs.fi.muni.cz/'
         fi
     done
-    python find_outliers.py out.csv outliers.csv
+    python feature_outliers.py out.csv outliers.csv
     mv out.csv results/${FNAME}.csv
     mv outliers.csv results/${FNAME}_out.csv
 }

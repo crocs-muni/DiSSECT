@@ -26,16 +26,16 @@ We recommend to use DiSSECT in Docker, as it avoids potential issues on the boun
 Clone this repository and build docker image.
 
 ```shell
-$ git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT
-$ cd DiSSECT
-$ docker build -t dissect .
+git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT
+cd DiSSECT
+docker build -t dissect .
 ```
 
 When the image is successfully built, you can start using DiSSECT.
 
 To run Jupyter Notebook, use the following command and access the provided link in your web browser.
 
-```
+```shell
 docker run -it -p 8888:8888 dissect jupyter notebook dissect/analysis --ip='0.0.0.0' --port=8888
 ```
 
@@ -47,7 +47,7 @@ To use advanced components of DiSSECT, access the container directly.
 
 If you plan on computing traits, you need to perform full instalation of DiSSECT using Sage.
 
-```
+```shell
 git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT.git
 cd DiSSECT
 sage --python3 -m venv --system-site-packages venv
@@ -61,7 +61,7 @@ jupyter notebook dissect/analysis/playground.ipynb
 
 If you only need to access DiSSECT database, inspect the data, and perform analyses, Python-based installation will suffice.
 
-```
+```shell
 git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT.git
 cd DiSSECT
 python -m venv venv
@@ -80,12 +80,12 @@ To run these commands, you need a working installation of DiSSECT – either in 
 DiSSECT provides two ways of computing traits: a simple one suitable for working with just JSON files, and more complex one that supports parallelization but requires database, intended mainly for large-scale trait computation.
 
 To compute traits on a JSON of curves, use:
-```
+```shell
 dissect-compute-json -t TRAIT_NAME -i CURVES_JSON [-o OUTPUT_JSON]
 ```
 
 To compute traits with database, use:
-```
+```shell
 dissect-compute-db -t TRAIT_NAME --database DATABASE_URL
 ```
 By default, the command uses all available curves. You can filter them using optional arguments, see the help menu (`-h`).
@@ -98,23 +98,28 @@ jupyter notebook dissect/analysis/playground.ipynb
 ```
 Alternatively, you may try using the notebook directly in your browser using [Binder](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/HEAD).
 
-### Outlier detection
+### Automated analysis
 
-In order to run outlier detection, feature vectors need to be constructed. They can be built from results of individual traits using repeated invocations of `dissect-feature_builder`. For example, the following sequence of commands builds set of feature vectors of `torsion_extension` and `small_prime_order` traits for 256-bit curves from the standard and simulated X9.62 categories.
-```
+In order to run automated analysis of trait results, feature vectors need to be constructed. They can be built from results of individual traits using repeated invocations of `dissect-feature_builder`. For example, the following sequence of commands builds set of feature vectors of `torsion_extension` and `small_prime_order` traits for 256-bit curves from the standard and simulated X9.62 categories.
+```shell
 dissect-feature_builder --trait torsion_extension --category x962 x962_sim --bits 256 --input features.csv --output features.csv
 dissect-feature_builder --trait small_prime_order --category x962 x962_sim --bits 256 --input features.csv --output features.csv
 ```
 By default, this command uses a dataset available from our database, but you may supply a different source using the `--source` option (url to a database).
 
 The feature vectors output by the previous commands can be processed by the outlier detection script:
-```
+```shell
 dissect-feature_outliers features.csv outliers.csv
 ```
 
 If the outlier detection gave an interesting output, you may inspect features of a particular curve with:
-```
+```shell
 dissect-feature_detail features.csv CURVE_NAME
+```
+
+Another approach to automated analysis implemented in DiSSECT is clustering. Clustering requires feature vectors curves of two distinct categories and running `feature_builder` with `--keep-category` option. Then, it can be run as:
+```shell
+dissect-feature_clusters features.csv outliers.csv
 ```
 
 ## Database
@@ -122,11 +127,11 @@ dissect-feature_detail features.csv CURVE_NAME
 Command `dissect-database` provides a simple interface for uploading DiSSECT data from JSON files to a database for further analysis. To use this command you have to provide database URL which should be a string in format `"mongodb://USERNAME:PASSWORD@HOST/"` (e.g., `"mongodb://root:password@mongo:27017/`).
 
 To upload curves from a JSON file, use:
-```
+```shell
 dissect-database curves [DATABASE_URL] <CURVE_FILES...>
 ```
 
 To upload trait results from a JSON file, use:
-```
+```shell
 dissect-database traits [DATABASE_URL] <TRAIT_NAME> <TRAIT_RESULTS_FILE>
 ```

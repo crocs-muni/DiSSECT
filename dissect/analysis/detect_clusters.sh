@@ -39,7 +39,7 @@ run_outliers() {
             sage --python feature_builder.py --trait $TRAIT --bits $BITLEN --category ${CATEGORY} --source 'https://dissect.crocs.fi.muni.cz/' --output out.csv --input out.csv --keep-category
         fi
     done
-    sage --python find_clusters.py out.csv clusters.csv
+    sage --python feature_clusters.py out.csv clusters.csv
     mv out.csv cluster_results/${FNAME}.csv
     mv clusters.csv cluster_results/${FNAME}_clusters.csv
 }
