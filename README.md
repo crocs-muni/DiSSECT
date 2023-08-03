@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/blob/master/LICENSE)
 [![language](https://badgen.net/badge/language/python,sage/purple?list=/)](https://www.sagemath.org/)
 [![traits](https://badgen.net/badge/traits/23/blue)](https://github.com/crocs-muni/DiSSECT/tree/master/dissect/traits)
-[![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/HEAD?labpath=dissect%2Fanalysis%2Fplayground.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/crocs-muni/DiSSECT/blob/master/dissect/analysis/playground.ipynb#offline=1)
 
 DiSSECT is, to the best of our knowledge, the largest publicly available database of standardized elliptic curves (taken from our [sister project](https://neuromancer.sk/std/)) and offers generation of simulated curves according to the mentioned standards. The tool contains over 20 tests (which we call traits), each computing curve properties, ranging from classical algebraic ones to unconventional ones and those connected to implementations. After obtaining their empirical distributions, the traits allow us to compare the simulated curves to the standard ones. Finally, DiSSECT provides an easy-to-use interface for implementations of custom traits and their interactive visualization via Jupyter notebook.
 
@@ -36,7 +36,7 @@ When the image is successfully built, you can start using DiSSECT.
 To run Jupyter Notebook, use the following command and access the provided link in your web browser.
 
 ```shell
-docker run -it -p 8888:8888 dissect jupyter notebook dissect/analysis --ip='0.0.0.0' --port=8888
+docker run -it -p 8888:8888 dissect
 ```
 
 To use advanced components of DiSSECT, access the container directly.
@@ -96,7 +96,7 @@ To run analysis notebook, use the following command and select the `venv` kernel
 ```
 jupyter notebook dissect/analysis/playground.ipynb
 ```
-Alternatively, you may try using the notebook directly in your browser using [Binder](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/HEAD?labpath=dissect%2Fanalysis%2Fplayground.ipynb).
+Alternatively, you may try using the notebook directly in your browser using [Colab](https://colab.research.google.com/github/crocs-muni/DiSSECT/blob/master/dissect/analysis/playground.ipynb#offline=1).
 
 ### Automated analysis
 
