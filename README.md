@@ -23,23 +23,17 @@ We recommend to use DiSSECT in Docker, as it avoids potential issues on the boun
 
 ## Docker container
 
-Clone this repository and build docker image.
+To run the analysis notebook in a container, use the following command and access the provided link in your web browser.
 
 ```shell
-git clone --recurse-submodules https://github.com/crocs-muni/DiSSECT
-cd DiSSECT
-docker build -t dissect .
+docker run -it -p 8888:8888 crocsmuni/dissect
 ```
 
-When the image is successfully built, you can start using DiSSECT.
-
-To run Jupyter Notebook, use the following command and access the provided link in your web browser.
+To use advanced components of DiSSECT, access the container directly:
 
 ```shell
-docker run -it -p 8888:8888 dissect
+docker run -it crocsmuni/dissect bash
 ```
-
-To use advanced components of DiSSECT, access the container directly.
 
 ## Local setup
 
