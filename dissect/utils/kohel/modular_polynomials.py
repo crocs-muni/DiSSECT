@@ -16,19 +16,21 @@ import bz2
 import os
 from sage.cpython.string import bytes_to_str
 from sage.all import Integer, IntegerRing, PolynomialRing
-from dissect.definitions import KOHEL_PATH
+import importlib.resources
 
 
 def modular_polynomials(level):
-    filename = os.path.join(KOHEL_PATH, "mod/pol.%03d.dbz" % level)
     try:
-        with open(filename, 'rb') as f:
+        with importlib.resources.files("dissect.utils.kohel").joinpath(
+            "mod", f"pol.{level:03d}.dbz"
+        ).open("rb") as f:
             data = bz2.decompress(f.read())
     except IOError:
-        raise ValueError('file not found in the Kohel database')
+        raise ValueError("file not found in the Kohel database")
     data = bytes_to_str(data)
-    coeff_list = [[Integer(v) for v in row.strip().split(" ")]
-                  for row in data.split("\n")[:-1]]
+    coeff_list = [
+        [Integer(v) for v in row.strip().split(" ")] for row in data.split("\n")[:-1]
+    ]
     P = PolynomialRing(IntegerRing(), 2, "j")
     poly = {}
     if level == 1:
