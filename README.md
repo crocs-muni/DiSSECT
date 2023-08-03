@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://gitlab.fi.muni.cz/x408178/curve_analyzer/-/blob/master/LICENSE)
 [![language](https://badgen.net/badge/language/python,sage/purple?list=/)](https://www.sagemath.org/)
 [![traits](https://badgen.net/badge/traits/23/blue)](https://github.com/crocs-muni/DiSSECT/tree/master/dissect/traits)
-[![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/HEAD)
+[![Binder](https://static.mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/HEAD?labpath=dissect%2Fanalysis%2Fplayground.ipynb)
 
 DiSSECT is, to the best of our knowledge, the largest publicly available database of standardized elliptic curves (taken from our [sister project](https://neuromancer.sk/std/)) and offers generation of simulated curves according to the mentioned standards. The tool contains over 20 tests (which we call traits), each computing curve properties, ranging from classical algebraic ones to unconventional ones and those connected to implementations. After obtaining their empirical distributions, the traits allow us to compare the simulated curves to the standard ones. Finally, DiSSECT provides an easy-to-use interface for implementations of custom traits and their interactive visualization via Jupyter notebook.
 
@@ -96,7 +96,7 @@ To run analysis notebook, use the following command and select the `venv` kernel
 ```
 jupyter notebook dissect/analysis/playground.ipynb
 ```
-Alternatively, you may try using the notebook directly in your browser using [Binder](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/HEAD).
+Alternatively, you may try using the notebook directly in your browser using [Binder](https://mybinder.org/v2/gh/crocs-muni/DiSSECT/HEAD?labpath=dissect%2Fanalysis%2Fplayground.ipynb).
 
 ### Automated analysis
 
