@@ -118,14 +118,30 @@ dissect-feature_clusters features.csv outliers.csv
 
 ## Database
 
-Command `dissect-database` provides a simple interface for uploading DiSSECT data from JSON files to a database for further analysis. To use this command you have to provide database URL which should be a string in format `"mongodb://USERNAME:PASSWORD@HOST/"` (e.g., `"mongodb://root:password@mongo:27017/`).
+Command `dissect-database` provides a simple interface for import/export of database data. To use this command you have to provide database URL which should be a string in format `"mongodb://USERNAME:PASSWORD@HOST/"` (e.g., `"mongodb://root:password@mongo:27017/`) and select whether you want to `import` or `export` data.
 
-To upload curves from a JSON file, use:
+Curves can be imported from a JSON file with the following command:
 ```shell
-dissect-database curves [DATABASE_URL] <CURVE_FILES...>
+dissect-database [DATABASE_URL] import -i <CURVE_JSON>
 ```
 
-To upload trait results from a JSON file, use:
+Trait results can be imported using the same command, but the file name has to start with `trait_` prefix, for example, `trait_cofactor.json`:
 ```shell
-dissect-database traits [DATABASE_URL] <TRAIT_NAME> <TRAIT_RESULTS_FILE>
+dissect-database [DATABASE_URL] import -i <TRAIT_RESULTS_JSON>
+```
+
+To export curves, use:
+```shell
+dissect-database [DATABASE_URL] export --no-traits -o <CURVE_JSON>
+```
+
+To export a selected trait results, use:
+```shell
+dissect-database [DATABASE_URL] export --no-curves --trait <TRAIT_NAME> -o <TRAIT_RESULTS_JSON>
+```
+
+All records in the database can be exported and imported using the following commands.
+```shell
+dissect-database [DATABASE_URL] export [-o <DATABASE_TAR>]
+dissect-database [DATABASE_URL] import [-i <DATABASE_TAR>]
 ```
