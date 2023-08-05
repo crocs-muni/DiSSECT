@@ -480,7 +480,15 @@ def main():
                     with tarfile.open(args.input, "r") as tar:
                         tar.extractall(tmpdir)
 
-                    for file in os.listdir(tmpdir):
+                    files = set(os.listdir(tmpdir))
+                    trait_files = set(
+                        filter(
+                            lambda x: os.path.basename(x).startswith("trait_"),
+                            files,
+                        )
+                    )
+                    curve_files = files - trait_files
+                    for file in list(curve_files) + list(trait_files):
                         import_file(db, os.path.join(tmpdir, file))
             elif args.input.endswith(".json") or args.input.endswith(".json.bz2"):
                 import_file(db, args.input)
