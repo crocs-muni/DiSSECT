@@ -55,7 +55,7 @@ def _format_curve(curve):
     elif isinstance(curve["cofactor"], str):  # Workaround for std database
         c["cofactor"] = hex(int(curve["cofactor"], base=16))
 
-    c["standard"] = False if "sim" in curve["category"] else True
+    c["standard"] = curve.get("standard", False if "sim" in curve["category"] else True)
     c["example"] = curve.get("example", False)
 
     if curve.get("simulation"):
